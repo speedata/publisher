@@ -45,7 +45,7 @@ local publisher = require("publisher")
 ---@field margin_top? integer
 ---@field margin_right? integer
 ---@field margin_bottom? integer
----@field check_fit? boolean Warn when the cells do not fit evenly into the type area.
+---@field check_fit? boolean Log (info) when the cells do not fit evenly into the type area.
 local M = {}
 
 local colors_module = require("publisher.colors")
@@ -1281,18 +1281,18 @@ function M.set_margin(self, left, top, right, bottom)
     self.margin_bottom = bottom
 end
 
--- Page geometries that already got a warning from warn_uneven_grid.
+-- Page geometries that log_uneven_grid already reported.
 ---@type table<string, boolean>
-local uneven_grid_warned = {}
+local uneven_grid_reported = {}
 
--- Warns when the grid cells do not fit evenly into the type area. The
+-- Logs (info) when the grid cells do not fit evenly into the type area. The
 -- number of cells is rounded up, so the last column or row reaches into
--- the right or bottom margin. Warns only once for each page geometry.
+-- the right or bottom margin. Logs only once for each page geometry.
 ---@param self Grid
 ---@param pagearea_x integer Width of the type area in sp.
 ---@param pagearea_y integer Height of the type area in sp.
 ---@return nil
-local function warn_uneven_grid(self, pagearea_x, pagearea_y)
+local function log_uneven_grid(self, pagearea_x, pagearea_y)
     local overflow_x, overflow_y = 0, 0
     if not (self.grid_nx and self.grid_nx ~= 0) then
         overflow_x = self:width_sp(self:number_of_columns(publisher.default_areaname)) - pagearea_x
@@ -1315,16 +1315,16 @@ local function warn_uneven_grid(self, pagearea_x, pagearea_y)
         self.grid_dx,
         self.grid_dy,
     }, ":")
-    if uneven_grid_warned[key] then
+    if uneven_grid_reported[key] then
         return
     end
-    uneven_grid_warned[key] = true
+    uneven_grid_reported[key] = true
     local function pt(sp)
         return string.format("%gpt", math.round(sp_to_bp(sp), 2))
     end
     if overflow_x > 500 then
         main.log(
-            "warn",
+            "info",
             "Grid width does not fit evenly into the type area, the right margin is reduced",
             "margin",
             pt(self.margin_right),
@@ -1334,7 +1334,7 @@ local function warn_uneven_grid(self, pagearea_x, pagearea_y)
     end
     if overflow_y > 500 then
         main.log(
-            "warn",
+            "info",
             "Grid height does not fit evenly into the type area, the bottom margin is reduced",
             "margin",
             pt(self.margin_bottom),
@@ -1403,7 +1403,7 @@ function M.calculate_number_gridcells(self)
             end
         end
         if self.check_fit then
-            warn_uneven_grid(self, pagearea_x, pagearea_y)
+            log_uneven_grid(self, pagearea_x, pagearea_y)
         end
     end
 

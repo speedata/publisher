@@ -110,7 +110,7 @@ Man kann auch noch Abstände zwischen den Rasterzellen festlegen, wie es z. B.
 
 Wenn das Raster nicht vollständig in den Satzspiegel passt, z. B. bei einer Rasterbreite von 3 Zentimeter und einer Seitenbreite von 10 Zentimeter, führt das zu einem Konflikt im Seitenlayout.
 Dadurch wird der rechte bzw. der untere Rand verschoben und passt nicht mit den im Seitentyp angegebenen Werten überein.
-Der Publisher gibt in diesem Fall eine Warnung mit dem angegebenen und dem tatsächlichen Rand aus (nicht beim voreingestellten Raster auf der voreingestellten Seite).
+Der Publisher schreibt in diesem Fall eine Meldung mit dem angegebenen und dem tatsächlichen Rand in das Protokoll (nicht beim voreingestellten Raster auf der voreingestellten Seite). Die Meldung hat die Stufe `info` und erscheint daher nur mit `sp --loglevel info` in der Protokolldatei `publisher-protocol.xml`, mit `--verbose` zusätzlich auf der Konsole.
 Damit der Rand erhalten bleibt, wählt man eine Rasterhöhe bzw. -breite, die den Satzspiegel ohne Rest teilt, oder gibt die Anzahl der Rasterzellen mit `nx` und `ny` vor.
 
 ## Eigenes Raster in Seitentypen
