@@ -2,6 +2,9 @@
 title: "Gruppen (virtuelle Objekte)"
 weight: 39
 type: docs
+aliases:
+  - /de/kochbuch/optimierung-mit-gruppen/
+  - /de/manual/pagelayout/optimizingwithgroups/
 ---
 
 

@@ -2,6 +2,8 @@
 title: "Struktur der Datendatei"
 weight: 31
 type: docs
+aliases:
+  - /de/grundlagen/datenstrukturierung/
 ---
 
 

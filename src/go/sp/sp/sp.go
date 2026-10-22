@@ -1295,7 +1295,7 @@ func main() {
 		exitProgram(0)
 	case cmdWatch:
 		if pro != "yes" {
-			fmt.Println("The hotfolder is part of the Pro package. See https://doc.speedata.de/publisher/en/speedatapro/")
+			fmt.Println("The hotfolder is part of the Pro package. See https://doc.speedata.de/publisher/en/manual/speedatapro/")
 			break
 		}
 		watchDir := getOptionSection("hotfolder", "hotfolder")

@@ -2,6 +2,8 @@
 title: "Lua-Filter / Vorverarbeitung"
 weight: 63
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/luafilter/
 ---
 
 

@@ -2,6 +2,9 @@
 title: "Längen und Einheiten"
 weight: 150
 type: docs
+aliases:
+  - /de/massangaben/
+  - /de/manual/xpathref/lengthsunits/
 ---
 
 

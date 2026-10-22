@@ -2,6 +2,8 @@
 title: "Lesezeichen"
 weight: 49
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/bookmarks/
 ---
 
 

@@ -2,6 +2,8 @@
 title: "Hyphenation / language settings"
 weight: 43
 type: docs
+aliases:
+  - /en/basics/hyphenation-language/
 ---
 
 

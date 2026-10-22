@@ -3,6 +3,9 @@ title: "How to configure the speedata publisher"
 linkTitle: "Configuration"
 weight: 40
 type: docs
+aliases:
+  - /en/configuration/
+  - /en/manual/setup/configuration/
 ---
 
 

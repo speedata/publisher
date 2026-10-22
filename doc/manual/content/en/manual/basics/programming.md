@@ -2,6 +2,8 @@
 title: "Programming"
 weight: 40
 type: docs
+aliases:
+  - /en/programming/
 ---
 
 

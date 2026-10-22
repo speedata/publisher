@@ -2,6 +2,8 @@
 title: "Bilder & Grafiken"
 weight: 55
 type: docs
+aliases:
+  - /de/bildereinbinden/
 ---
 
 

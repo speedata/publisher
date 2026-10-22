@@ -2,6 +2,9 @@
 title: "XPath-Standardfunktionen"
 weight: 164
 type: docs
+aliases:
+  - /de/xpathfunktionen/
+  - /de/manual/xpathref/xpathfunctions/
 ---
 
 Der Publisher unterstützt die folgenden XPath-Standardfunktionen.

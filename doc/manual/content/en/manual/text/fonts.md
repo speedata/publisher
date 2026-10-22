@@ -2,6 +2,8 @@
 title: "Using fonts"
 weight: 36
 type: docs
+aliases:
+  - /en/basics/fonts/
 ---
 
 

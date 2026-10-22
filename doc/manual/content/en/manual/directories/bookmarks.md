@@ -2,6 +2,8 @@
 title: "Bookmarks"
 weight: 49
 type: docs
+aliases:
+  - /en/advancedtopics/bookmarks/
 ---
 
 

@@ -2,6 +2,8 @@
 title: "Compatibility with other software"
 weight: 220
 type: docs
+aliases:
+  - /en/compatibilitylist/
 ---
 
 

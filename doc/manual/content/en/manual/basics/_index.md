@@ -2,6 +2,8 @@
 title: Basics
 weight: 40
 type: docs
+aliases:
+  - /en/basics/
 ---
 
 The study of this chapter should be sufficient to create layout rules by yourself. Occasionally, more detailed topics will be covered in a later chapter. For example, only the most important formatting for tables is dealt with; a separate chapter ([Tables]({{< relref "tables" >}})) describes tables in detail. In such cases there is of course a cross-reference.

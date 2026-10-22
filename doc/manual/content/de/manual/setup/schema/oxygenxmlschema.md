@@ -2,6 +2,8 @@
 title: "OxygenXML"
 weight: 10
 type: docs
+aliases:
+  - /de/anhang-schemazuweisen/schema-oxygenxml/
 ---
 
 

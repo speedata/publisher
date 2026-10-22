@@ -2,6 +2,8 @@
 title: "Markers"
 weight: 44
 type: docs
+aliases:
+  - /en/cookbook/directories-marker/
 ---
 
 

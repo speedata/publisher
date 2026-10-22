@@ -2,6 +2,8 @@
 title: "Raster"
 weight: 37
 type: docs
+aliases:
+  - /de/grundlagen/raster/
 ---
 
 

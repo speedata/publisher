@@ -2,6 +2,10 @@
 title: "Page types"
 weight: 38
 type: docs
+aliases:
+  - /en/cookbook/pagexofy/
+  - /en/manual/directories/pagexofy/
+  - /en/advancedtopics/pagetypes/
 ---
 
 

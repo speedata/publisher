@@ -2,6 +2,8 @@
 title: "Troubleshooting / Debugging"
 weight: 67
 type: docs
+aliases:
+  - /en/advancedtopics/troubleshooting/
 ---
 
 

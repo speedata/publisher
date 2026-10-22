@@ -2,6 +2,8 @@
 title: "XPath & Functions"
 weight: 20
 type: docs
+aliases:
+  - /en/manual/xpathref/
 ---
 
 XPath expressions and functions for accessing data and controlling the layout.

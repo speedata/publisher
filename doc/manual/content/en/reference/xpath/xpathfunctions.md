@@ -2,6 +2,8 @@
 title: "XPath Standard Functions"
 weight: 164
 type: docs
+aliases:
+  - /en/manual/xpathref/xpathfunctions/
 ---
 
 The Publisher supports the following XPath standard functions.

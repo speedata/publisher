@@ -2,6 +2,8 @@
 title: "Quality assurance and PDF comparison"
 weight: 66
 type: docs
+aliases:
+  - /en/advancedtopics/qa/
 ---
 
 

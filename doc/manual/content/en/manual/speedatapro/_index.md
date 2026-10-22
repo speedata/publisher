@@ -2,6 +2,8 @@
 title: "speedata Publisher Pro plan"
 weight: 110
 type: docs
+aliases:
+  - /en/speedatapro/
 ---
 
 

@@ -2,6 +2,9 @@
 title: "Embed multipage PDF files"
 weight: 53
 type: docs
+aliases:
+  - /en/cookbook/multipagepdf/
+  - /en/manual/integration/multipagepdf/
 ---
 
 

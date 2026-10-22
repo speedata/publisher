@@ -2,6 +2,8 @@
 title: "Textformatierung"
 weight: 35
 type: docs
+aliases:
+  - /de/grundlagen/textformatierung/
 ---
 
 

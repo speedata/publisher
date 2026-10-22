@@ -2,6 +2,9 @@
 title: "Griffmarken"
 weight: 56
 type: docs
+aliases:
+  - /de/kochbuch/griffmarken/
+  - /de/manual/directories/thumbindex/
 ---
 
 

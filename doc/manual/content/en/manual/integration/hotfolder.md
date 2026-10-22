@@ -2,6 +2,8 @@
 title: "Starting the Publisher via the Hotfolder"
 weight: 65
 type: docs
+aliases:
+  - /en/advancedtopics/hotfolder/
 ---
 
 

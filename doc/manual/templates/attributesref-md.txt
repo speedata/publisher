@@ -2,6 +2,9 @@
 title: "{{ translate .Lang "Attribute index" }}"
 weight: 1
 type: docs
+aliases:
+  - /{{ .Lang }}/reference/00attributes/
+  - /{{ .Lang }}/{{ oldCommandreference .Lang }}/ref_attribute_index/
 ---
 
 {{ range $.AttributeNames }}

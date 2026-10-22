@@ -2,6 +2,8 @@
 title: "Barrierefreiheit / getaggtes PDF"
 weight: 81
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/accessibility/
 ---
 
 

@@ -2,6 +2,8 @@
 title: "File organization"
 weight: 33
 type: docs
+aliases:
+  - /en/basics/fileorganization/
 ---
 
 

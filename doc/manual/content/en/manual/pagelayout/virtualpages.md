@@ -2,6 +2,8 @@
 title: "Virtual pages"
 weight: 57
 type: docs
+aliases:
+  - /en/advancedtopics/savepages/
 ---
 
 

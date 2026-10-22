@@ -2,6 +2,8 @@
 title: "Text formats"
 weight: 42
 type: docs
+aliases:
+  - /en/basics/textformats/
 ---
 
 

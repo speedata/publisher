@@ -2,6 +2,8 @@
 title: "Images & Graphics"
 weight: 55
 type: docs
+aliases:
+  - /en/images/
 ---
 
 

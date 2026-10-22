@@ -2,6 +2,8 @@
 title: "Publisher Webservice API"
 weight: 70
 type: docs
+aliases:
+  - /en/saasapi/
 ---
 
 {{< profeature "Available in the Pro plan" >}}

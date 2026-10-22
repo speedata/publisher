@@ -2,6 +2,8 @@
 title: "Lua-Filter / pre-processing"
 weight: 63
 type: docs
+aliases:
+  - /en/advancedtopics/preprocessing/
 ---
 
 

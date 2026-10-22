@@ -2,6 +2,8 @@
 title: "Einführung"
 weight: 10
 type: docs
+aliases:
+  - /de/einleitung/
 ---
 
 Der speedata Publisher erzeugt vollautomatisch PDF-Dateien aus XML-Daten.

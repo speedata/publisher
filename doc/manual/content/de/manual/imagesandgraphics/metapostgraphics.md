@@ -2,6 +2,8 @@
 title: "Bilder mit MetaPost erstellen"
 weight: 62
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/fortgeschrittenethemen-metapostgrafiken/
 ---
 
 

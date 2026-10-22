@@ -2,6 +2,8 @@
 title: "Virtuelle Seiten"
 weight: 57
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/savepages/
 ---
 
 

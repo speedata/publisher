@@ -2,6 +2,8 @@
 title: "Publisher über Hotfolder starten"
 weight: 65
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/hotfolder/
 ---
 
 

@@ -2,6 +2,8 @@
 title: "CSS verwenden"
 weight: 74
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/css/
 ---
 
 

@@ -2,6 +2,8 @@
 title: "Structure of the data file"
 weight: 31
 type: docs
+aliases:
+  - /en/basics/structuredatafile/
 ---
 
 

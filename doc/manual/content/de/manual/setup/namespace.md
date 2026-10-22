@@ -3,6 +3,9 @@ title: "Namensraum des Layoutregelwerks"
 linkTitle: "Namensraum"
 weight: 50
 type: docs
+aliases:
+  - /de/grundlagen/erstellenlayoutwerk/
+  - /de/manual/setup/xmleditor/
 ---
 
 Der XML-Namensraum des Layoutregelwerks ist `urn:speedata.de:2009/publisher/en`.

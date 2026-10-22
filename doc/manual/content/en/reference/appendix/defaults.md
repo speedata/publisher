@@ -2,6 +2,9 @@
 title: "speedata Publisher defaults"
 weight: 10
 type: docs
+aliases:
+  - /en/defaults/
+  - /en/manual/appendix/defaults/
 ---
 
 

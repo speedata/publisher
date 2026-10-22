@@ -2,6 +2,8 @@
 title: "Colors"
 weight: 65
 type: docs
+aliases:
+  - /en/basics/colors/
 ---
 
 

@@ -2,6 +2,8 @@
 title: "Platzierungsbereiche"
 weight: 41
 type: docs
+aliases:
+  - /de/grundlagen/positioningarea/
 ---
 
 

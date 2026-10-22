@@ -123,8 +123,8 @@ Released 2024-04-19
 
 * New defaults for the XPath engine and the font loader (preparation for the version 5)
 * New output / logging backend.
-* New [dpi attribute with PDFOption](https://doc.speedata.de/publisher/en/images/#_image_size_and_resolution) for automatic image resizing.
-* [Markdown](https://doc.speedata.de/publisher/en/advancedtopics/markdown/).
+* New [dpi attribute with PDFOption](https://doc.speedata.de/publisher/en/manual/imagesandgraphics/#image-size-and-resolution) for automatic image resizing.
+* [Markdown](https://doc.speedata.de/publisher/en/manual/webformats/markdown/).
 
 ## Version 4.16
 
@@ -141,7 +141,7 @@ Released 2023-07-03
 * Outline fonts.
 * Tables: new Column spec `minwidth` and new keywords for width (`min` and `max`).
 * New XPath function `matches()` ([#453](https://github.com/speedata/publisher/issues/453)).
-* [Pro package](https://doc.speedata.de/publisher/en/speedatapro/).
+* [Pro package](https://doc.speedata.de/publisher/en/manual/speedatapro/).
 * Bug fixes
 
 ## Version  4.12

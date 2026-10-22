@@ -2,6 +2,8 @@
 title: "Markdown"
 weight: 77
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/markdown/
 ---
 
 

@@ -2,6 +2,8 @@
 title: "Layoutfunktionen"
 weight: 162
 type: docs
+aliases:
+  - /de/manual/xpathref/layoutfunctions/
 ---
 
 Die Layoutfunktionen des Publishers sind im Namensraum `urn:speedata:2009/publisher/functions/en` definiert (im Folgenden mit `sd:` gekennzeichnet).

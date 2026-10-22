@@ -2,6 +2,8 @@
 title: "XPath Expressions"
 weight: 160
 type: docs
+aliases:
+  - /en/manual/xpathref/xpath/
 ---
 
 ## What is XPath?

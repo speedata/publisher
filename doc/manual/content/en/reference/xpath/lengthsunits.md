@@ -2,6 +2,9 @@
 title: "Lengths and units"
 weight: 150
 type: docs
+aliases:
+  - /en/lengthsunits/
+  - /en/manual/xpathref/lengthsunits/
 ---
 
 

@@ -2,6 +2,8 @@
 title: "Anhang"
 weight: 60
 type: docs
+aliases:
+  - /de/manual/appendix/
 ---
 
 Nachschlagewerk für Voreinstellungen, Dateinamen und interne Variablen.

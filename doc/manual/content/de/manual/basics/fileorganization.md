@@ -2,6 +2,8 @@
 title: "Dateiorganisation"
 weight: 33
 type: docs
+aliases:
+  - /de/grundlagen/organisationdaten/
 ---
 
 

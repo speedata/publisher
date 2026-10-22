@@ -2,6 +2,8 @@
 title: "Kompatibilität"
 weight: 100
 type: docs
+aliases:
+  - /de/kompatibilitaet/
 ---
 
 Informationen zur Kompatibilität mit älteren Versionen und anderer Software.

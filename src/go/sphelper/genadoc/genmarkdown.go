@@ -219,6 +219,33 @@ func shortDescriptionMarkdown(lang string, cmd *commandsxml.Command) string {
 	return firstSentence(strings.TrimSpace(cmd.DescriptionText(lang)))
 }
 
+// oldCommandreference returns the directory of the command reference in the
+// manual before the switch to Hugo.
+func oldCommandreference(lang string) string {
+	if lang == "de" {
+		return "befehlsreferenz"
+	}
+	return "commandreference"
+}
+
+// commandAliases returns the URLs of the command page in former versions of
+// the manual, so that Hugo can create redirects from these.
+func commandAliases(lang string, cmd *commandsxml.Command) []string {
+	name := cmd.Mdlink()
+	ret := []string{
+		"/" + lang + "/reference/" + name + "/",
+		"/" + lang + "/" + oldCommandreference(lang) + "/" + name + "/",
+	}
+	// the old manual used different ids for these commands
+	switch name {
+	case "copy-of":
+		ret = append(ret, "/"+lang+"/"+oldCommandreference(lang)+"/copy_of/")
+	case "makeindex":
+		ret = append(ret, "/"+lang+"/"+oldCommandreference(lang)+"/makeindex_/")
+	}
+	return ret
+}
+
 // GenerateMarkdownFiles reads the commands.xml file and creates Markdown files
 // for use with Hugo/Hextra in the doc/manual/content/{lang}/reference/commands/ directory.
 func GenerateMarkdownFiles(cfg *config.Config, lang string) error {
@@ -260,6 +287,8 @@ func GenerateMarkdownFiles(cfg *config.Config, lang string) error {
 		"parentelemsMarkdown": parentelemsMarkdown,
 		"atttypeinfoMarkdown": atttypeinfoMarkdown,
 		"shortDescription":    shortDescriptionMarkdown,
+		"commandAliases":      commandAliases,
+		"oldCommandreference": oldCommandreference,
 	}
 
 	mdTemplates, err := template.New("").Funcs(funcMap).ParseFiles(
@@ -495,7 +524,7 @@ func GenerateChangelogMarkdown(cfg *config.Config, lang string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Fprintf(idxFile, "---\ntitle: \"%s\"\nweight: 900\ntype: docs\n---\n\n", sectionTitle)
+	fmt.Fprintf(idxFile, "---\ntitle: \"%s\"\nweight: 900\ntype: docs\naliases:\n  - /%s/changelog/\n---\n\n", sectionTitle, lang)
 
 	for _, mv := range majorVersions {
 		if len(mv.summaries) == 0 {

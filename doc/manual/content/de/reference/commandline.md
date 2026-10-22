@@ -3,6 +3,9 @@ title: "Starten des Publishers auf der Kommandozeile"
 linkTitle: "Kommandozeile"
 weight: 30
 type: docs
+aliases:
+  - /de/kommandozeile/
+  - /de/manual/setup/commandline/
 ---
 
 

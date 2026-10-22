@@ -2,6 +2,8 @@
 title: "Server mode (REST API)"
 weight: 64
 type: docs
+aliases:
+  - /en/advancedtopics/servermode/
 ---
 
 {{< profeature "Available in the Pro plan" >}}

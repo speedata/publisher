@@ -2,6 +2,8 @@
 title: Placing objects
 weight: 32
 type: docs
+aliases:
+  - /en/basics/outputtingobjects/
 ---
 
 

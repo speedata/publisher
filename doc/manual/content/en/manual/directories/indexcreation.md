@@ -2,6 +2,9 @@
 title: "Sorting and grouping"
 weight: 47
 type: docs
+aliases:
+  - /en/advancedtopics/sortingdata/
+  - /en/manual/directories/sortdata/
 ---
 
 

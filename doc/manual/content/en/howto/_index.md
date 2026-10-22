@@ -2,6 +2,8 @@
 title: "How-to guides"
 weight: 15
 type: docs
+aliases:
+  - /en/cookbook/
 ---
 
 While the [manual]({{< relref "/manual" >}}) explains the concepts and the [reference]({{< relref "/reference" >}}) is there for looking things up, the how-to guides lead to a finished result: each recipe solves a concrete task from practice, with a runnable layout and data to reproduce it.

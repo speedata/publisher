@@ -2,6 +2,8 @@
 title: "OxygenXML"
 weight: 10
 type: docs
+aliases:
+  - /en/appendix-schema-assigning/schema-oxygenxml/
 ---
 
 

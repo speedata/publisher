@@ -39,8 +39,8 @@ There are roughly four modes for the start program to run in:
 |------|--------------|
 | run  | This is the default mode. This starts the LuaTeX binary |
 | filter | This can be used in addition to the mode _run_. It looks for a Lua script and executes it. |
-| compare | This starts the QA mode. It recurses into a directory and compares the publisher output to a given PDF (see the [manual](https://doc.speedata.de/publisher/en/advancedtopics/qa/)) |
-| server | The REST API described in [the manual](https://doc.speedata.de/publisher/en/advancedtopics/servermode/) |
+| compare | This starts the QA mode. It recurses into a directory and compares the publisher output to a given PDF (see the [manual](https://doc.speedata.de/publisher/en/manual/quality/qualityassurance/)) |
+| server | The REST API described in [the manual](https://doc.speedata.de/publisher/en/manual/integration/servermode/) |
 
 ## File lookup
 

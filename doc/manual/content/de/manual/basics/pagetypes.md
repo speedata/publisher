@@ -2,6 +2,9 @@
 title: "Seitentypen"
 weight: 38
 type: docs
+aliases:
+  - /de/kochbuch/seitexvony/
+  - /de/manual/directories/pagexofy/
 ---
 
 

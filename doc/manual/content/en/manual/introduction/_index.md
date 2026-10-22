@@ -2,6 +2,8 @@
 title: "Introduction"
 weight: 10
 type: docs
+aliases:
+  - /en/introduction/
 ---
 
 The speedata Publisher creates PDF files fully automatically from XML data.

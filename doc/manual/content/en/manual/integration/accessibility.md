@@ -2,6 +2,8 @@
 title: "Accessibility / tagged PDF"
 weight: 81
 type: docs
+aliases:
+  - /en/advancedtopics/accessibility/
 ---
 
 

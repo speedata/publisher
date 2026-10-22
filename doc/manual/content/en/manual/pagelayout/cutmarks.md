@@ -2,6 +2,8 @@
 title: "Prepress"
 weight: 55
 type: docs
+aliases:
+  - /en/advancedtopics/outputforprinter/
 ---
 
 

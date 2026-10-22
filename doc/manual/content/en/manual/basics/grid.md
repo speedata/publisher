@@ -2,6 +2,8 @@
 title: "Grid"
 weight: 37
 type: docs
+aliases:
+  - /en/basics/grid/
 ---
 
 

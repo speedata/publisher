@@ -2,6 +2,8 @@
 title: "Visual Studio Code"
 weight: 20
 type: docs
+aliases:
+  - /en/appendix-schema-assigning/schema-vscode/
 ---
 
 

@@ -2,6 +2,8 @@
 title: "Tabellen"
 weight: 60
 type: docs
+aliases:
+  - /de/tabellen2/
 ---
 
 

@@ -2,6 +2,9 @@
 title: "Listen erstellen (XML-Struktur)"
 weight: 45
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/xmlstrukturen/
+  - /de/manual/directories/elementattribut/
 ---
 
 

@@ -2,6 +2,8 @@
 title: "Control of the layout"
 weight: 54
 type: docs
+aliases:
+  - /en/advancedtopics/advanced-controllayout/
 ---
 
 

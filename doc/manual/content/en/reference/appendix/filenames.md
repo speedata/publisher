@@ -2,6 +2,9 @@
 title: "File name in the Publisher"
 weight: 20
 type: docs
+aliases:
+  - /en/filenames/
+  - /en/manual/appendix/filenames/
 ---
 
 

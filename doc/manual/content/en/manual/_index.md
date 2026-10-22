@@ -2,6 +2,8 @@
 title: Manual
 weight: 10
 type: docs
+aliases:
+  - /en/advancedtopics/
 ---
 
 The speedata Publisher creates high-quality PDF documents from XML data — product catalogs, price lists, data sheets and much more.

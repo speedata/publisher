@@ -2,6 +2,8 @@
 title: "Installationsanweisungen"
 weight: 10
 type: docs
+aliases:
+  - /de/installation/
 ---
 
 Den speedata Publisher gibt es als fertiges Binärpaket für macOS, Windows und GNU/Linux.

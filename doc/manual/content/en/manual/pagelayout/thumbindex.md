@@ -2,6 +2,9 @@
 title: "Thumb index"
 weight: 56
 type: docs
+aliases:
+  - /en/cookbook/thumbindex/
+  - /en/manual/directories/thumbindex/
 ---
 
 

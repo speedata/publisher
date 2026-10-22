@@ -3,6 +3,9 @@ title: "Running the speedata publisher on the command line"
 linkTitle: "Command line"
 weight: 30
 type: docs
+aliases:
+  - /en/commandline/
+  - /en/manual/setup/commandline/
 ---
 
 

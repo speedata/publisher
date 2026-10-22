@@ -3,6 +3,8 @@ title: "{{ translate .Lang "Command reference" }}"
 linkTitle: "{{ translate .Lang "Commands" }}"
 weight: 10
 type: docs
+aliases:
+  - /{{ .Lang }}/{{ oldCommandreference .Lang }}/
 ---
 
 {{ if eq .Lang "de" -}}

@@ -2,6 +2,8 @@
 title: "Textformate"
 weight: 42
 type: docs
+aliases:
+  - /de/grundlagen/textformate/
 ---
 
 

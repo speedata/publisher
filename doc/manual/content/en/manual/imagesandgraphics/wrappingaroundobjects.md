@@ -2,6 +2,8 @@
 title: "Wrap around images"
 weight: 51
 type: docs
+aliases:
+  - /en/advancedtopics/wraparoundimages/
 ---
 
 

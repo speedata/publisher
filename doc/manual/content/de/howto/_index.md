@@ -2,6 +2,8 @@
 title: "Anleitungen"
 weight: 15
 type: docs
+aliases:
+  - /de/kochbuch/
 ---
 
 Während das [Handbuch]({{< relref "/manual" >}}) die Konzepte erklärt und die [Referenz]({{< relref "/reference" >}}) zum Nachschlagen dient, führen die Anleitungen zum fertigen Ergebnis: Jedes Rezept löst eine konkrete Aufgabe aus der Praxis, mit lauffähigem Layout und Daten zum Nachbauen.

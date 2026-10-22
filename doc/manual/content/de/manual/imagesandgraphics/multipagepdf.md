@@ -2,6 +2,9 @@
 title: "Mehrseitige PDF-Dateien einbetten"
 weight: 53
 type: docs
+aliases:
+  - /de/kochbuch/mehrseitigepdf/
+  - /de/manual/integration/multipagepdf/
 ---
 
 

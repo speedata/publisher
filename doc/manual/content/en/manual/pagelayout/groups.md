@@ -2,6 +2,9 @@
 title: "Groups (virtual objects)"
 weight: 39
 type: docs
+aliases:
+  - /en/cookbook/layoutoptimizationusinggroups/
+  - /en/manual/pagelayout/optimizingwithgroups/
 ---
 
 

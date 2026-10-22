@@ -15,7 +15,7 @@
    <define name="e_A">
       <element name="A">
          <a:documentation>Insert hyperlink to a URL.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/a/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/a/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -91,7 +91,7 @@
    <define name="e_AddSearchpath">
       <element name="AddSearchpath">
          <a:documentation>Add a directory on the hard-drive to be added to the publisher&#39;s search path.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/addsearchpath/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/addsearchpath/"></lsp:doc>
          <attribute name="select">
             <a:documentation>The path to be added. System dependent.</a:documentation>
             <lsp:references symbol="variable" form="xpath-variable"></lsp:references>
@@ -102,7 +102,7 @@
    <define name="e_AtPageCreation">
       <element name="AtPageCreation">
          <a:documentation>The contents of the element AtPageCreation is executed the first time the page is accessed. This is used in Pagetype.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/atpagecreation/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/atpagecreation/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -241,7 +241,7 @@
    <define name="e_AtPageShipout">
       <element name="AtPageShipout">
          <a:documentation>The enclosed instructions will be executed when the page is placed into the PDF file. Used in Pagetype.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/atpageshipout/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/atpageshipout/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -380,7 +380,7 @@
    <define name="e_AttachFile">
       <element name="AttachFile">
          <a:documentation>Attach a file to the PDF. Can be used to attach a ZUGFeRD electronic invoice.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/attachfile/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/attachfile/"></lsp:doc>
          <optional>
             <attribute name="filename">
                <a:documentation>The name of the local file to be attached to the PDF.</a:documentation>
@@ -411,7 +411,7 @@
    <define name="e_Axis">
       <element name="Axis">
          <a:documentation>Set a design axis of a variable font to a specific value. Use as a child element of LoadFontfile to create a static font instance from a variable font. Any OpenType variation axis can be specified, such as wght (weight), wdth (width), opsz (optical size), ital (italic), slnt (slant), or custom axes.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/axis/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/axis/"></lsp:doc>
          <attribute name="name">
             <a:documentation>The four-letter tag of the variation axis (e.g. wght, wdth, opsz).</a:documentation>
          </attribute>
@@ -424,7 +424,7 @@
    <define name="e_Attribute">
       <element name="Attribute">
          <a:documentation>Create an attribute for the Element data structure that can be saved to the hard drive with SaveDataset.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/attribute/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/attribute/"></lsp:doc>
          <attribute name="name">
             <a:documentation>Name of the attribute that is created.</a:documentation>
          </attribute>
@@ -438,7 +438,7 @@
    <define name="e_B">
       <element name="B">
          <a:documentation>Switch to font weight “bold”</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/b/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/b/"></lsp:doc>
          <interleave>
             <group>
                <zeroOrMore>
@@ -475,7 +475,7 @@
    <define name="e_Barcode">
       <element name="Barcode">
          <a:documentation>Print a 1d or 2d barcode. To be used in PlaceObject.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/barcode/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/barcode/"></lsp:doc>
          <optional>
             <attribute name="color">
                <a:documentation>Color of the barcode. Must be defined with DefineColor before use. Currently only used for QR codes.</a:documentation>
@@ -559,7 +559,7 @@
    <define name="e_Bold">
       <element name="Bold">
          <a:documentation>Name of the font face that should be used when switching to “bold”.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/bold/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/bold/"></lsp:doc>
          <attribute name="fontface">
             <a:documentation>Name of the font for bold.</a:documentation>
             <lsp:references symbol="fontfile"></lsp:references>
@@ -570,7 +570,7 @@
    <define name="e_BoldItalic">
       <element name="BoldItalic">
          <a:documentation>Name of the font face that should be used when switching to “bold italic”.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/bolditalic/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/bolditalic/"></lsp:doc>
          <attribute name="fontface">
             <a:documentation>Name of the font for bold italic.</a:documentation>
             <lsp:references symbol="fontfile"></lsp:references>
@@ -581,7 +581,7 @@
    <define name="e_Bookmark">
       <element name="Bookmark">
          <a:documentation>Create a bookmark for the PDF viewer (e.g. Adobe Reader). When the user clicks on a bookmark, the PDF viewer jumps to that place in the document.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/bookmark/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/bookmark/"></lsp:doc>
          <attribute name="level">
             <a:documentation>1 is the top level, 2 is the next level, etc.</a:documentation>
          </attribute>
@@ -606,7 +606,7 @@
    <define name="e_Box">
       <element name="Box">
          <a:documentation>Create a rectangular colored area. The area must fit the grid cells.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/box/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/box/"></lsp:doc>
          <optional>
             <attribute name="background-color">
                <a:documentation>Color of the box. If the color name is a dash (-), a transparent background is used.</a:documentation>
@@ -706,14 +706,14 @@
    <define name="e_Br">
       <element name="Br">
          <a:documentation>Insert a newline</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/br/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/br/"></lsp:doc>
          <empty></empty>
       </element>
    </define>
    <define name="e_Case">
       <element name="Case">
          <a:documentation>Part of a Switch construct. All cases up to the first case which evaluates to “true” will be executed. If no cases match and there is a Otherwise, this will be executed instead.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/case/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/case/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="test">
@@ -963,7 +963,7 @@
    <define name="e_Circle">
       <element name="Circle">
          <a:documentation>Create a circle or ellipse.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/circle/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/circle/"></lsp:doc>
          <optional>
             <attribute name="background-color">
                <a:documentation>Color of the circle.</a:documentation>
@@ -1005,7 +1005,7 @@
    <define name="e_ClearPage">
       <element name="ClearPage">
          <a:documentation>Finishes the current page.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/clearpage/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/clearpage/"></lsp:doc>
          <optional>
             <attribute name="force">
                <a:documentation>Force the creation of a new page when multiple consecutive ClearPage commands occur.</a:documentation>
@@ -1045,7 +1045,7 @@
    <define name="e_Clip">
       <element name="Clip">
          <a:documentation>Clip an image or other output</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/clip/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/clip/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -1131,7 +1131,7 @@
    <define name="e_Color">
       <element name="Color">
          <a:documentation>Switch to another text color</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/color/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/color/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="name">
@@ -1171,7 +1171,7 @@
    <define name="e_Column">
       <element name="Column">
          <a:documentation>Set the properties of a column in the table.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/column/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/column/"></lsp:doc>
          <optional>
             <attribute name="align">
                <a:documentation>The horizontal alignment of the table cells in this column. Can be overridden in a cell (Td).</a:documentation>
@@ -1230,7 +1230,7 @@
    <define name="e_Columns">
       <element name="Columns">
          <a:documentation>Set the widths and other properties of the columns in a table.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/columns/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/columns/"></lsp:doc>
          <interleave>
             <group>
                <oneOrMore>
@@ -1251,14 +1251,14 @@
    <define name="e_Compatibility">
       <element name="Compatibility">
          <a:documentation>Set compatibility for older layouts. At the moment this command has no settings, it is kept for layouts of earlier versions.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/compatibility/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/compatibility/"></lsp:doc>
          <empty></empty>
       </element>
    </define>
    <define name="e_Contents">
       <element name="Contents">
          <a:documentation>Marks the contents of a Group, a virtual area.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/contents/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/contents/"></lsp:doc>
          <interleave>
             <group>
                <oneOrMore>
@@ -1391,7 +1391,7 @@
    <define name="e_Copy-of">
       <element name="Copy-of">
          <a:documentation>Replace this element by the copy of the selection as an element structure. You can use it to construct more complex data structures.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/copy-of/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/copy-of/"></lsp:doc>
          <attribute name="select">
             <a:documentation>The selection (most likely a variable) that is to be copied.</a:documentation>
             <lsp:references symbol="variable" form="xpath-variable"></lsp:references>
@@ -1402,7 +1402,7 @@
    <define name="e_DefineColorprofile">
       <element name="DefineColorprofile">
          <a:documentation>Associate an external color profile with a name. To be used in PDFOptions.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/definecolorprofile/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/definecolorprofile/"></lsp:doc>
          <optional>
             <attribute name="condition">
                <a:documentation>Description of the output condition.</a:documentation>
@@ -1435,7 +1435,7 @@
    <define name="e_DefineColor">
       <element name="DefineColor">
          <a:documentation>Colors defined with DefineColors can be referenced later by their name.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/definecolor/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/definecolor/"></lsp:doc>
          <lsp:when attribute="model" value="cmyk" requires="c m y k" forbids="r g b value colorname"></lsp:when>
          <lsp:when attribute="model" value="rgb" requires="r g b" forbids="c m y k value colorname"></lsp:when>
          <lsp:when attribute="model" value="RGB" requires="r g b" forbids="c m y k value colorname"></lsp:when>
@@ -1544,7 +1544,7 @@
    <define name="e_DefineGraphic">
       <element name="DefineGraphic">
          <a:documentation>Define a metapost graphic to be used in Box. EXPERIMENTAL!</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/definegraphic/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/definegraphic/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="name">
@@ -1560,7 +1560,7 @@
    <define name="e_DefineFontalias">
       <element name="DefineFontalias">
          <a:documentation>Defines a font alias. When defining a font family, you can use the an alias for the fontname. Aliases are looked up recursively.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/definefontalias/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/definefontalias/"></lsp:doc>
          <attribute name="alias">
             <a:documentation>New (equivalent) name of the font</a:documentation>
             <lsp:defines symbol="fontfamily"></lsp:defines>
@@ -1575,7 +1575,7 @@
    <define name="e_DefineFontfamily">
       <element name="DefineFontfamily">
          <a:documentation>Defines a font family consisting of the shapes “regular”, “bold”, “bold italic” and “italic”. To be used in Paragraph, Textblock, Fontface and Table with the attribute fontfamily.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/definefontfamily/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/definefontfamily/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="fontsize">
@@ -1625,7 +1625,7 @@
    <define name="e_DefineMatter">
       <element name="DefineMatter">
          <a:documentation>Define a new section of the document.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/definematter/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/definematter/"></lsp:doc>
          <attribute name="name">
             <a:documentation>The name of the section to be defined.</a:documentation>
             <lsp:defines symbol="matter"></lsp:defines>
@@ -1676,7 +1676,7 @@
    <define name="e_DefineTextformat">
       <element name="DefineTextformat">
          <a:documentation>Define text formatting instructions. A textformat is used to align and indent text and create margins and rules before and after the text.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/definetextformat/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/definetextformat/"></lsp:doc>
          <optional>
             <attribute name="alignment">
                <a:documentation>Determines the formatting of the text. It defaults to justified.</a:documentation>
@@ -1856,7 +1856,7 @@
    <define name="e_Element">
       <element name="Element">
          <a:documentation>Create a data structure that can be used to save on the hard-drive between consecutive runs (with SaveDataset).</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/element/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/element/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="name">
@@ -1901,7 +1901,7 @@
    <define name="e_Fallback">
       <element name="Fallback">
          <a:documentation>Define a fallback for LoadFontfile</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/fallback/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/fallback/"></lsp:doc>
          <attribute name="filename">
             <a:documentation>The filename of the font to be used as a fallback.</a:documentation>
          </attribute>
@@ -1911,7 +1911,7 @@
    <define name="e_Fontface">
       <element name="Fontface">
          <a:documentation>Switch to another font family.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/fontface/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/fontface/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="fontfamily">
@@ -1952,7 +1952,7 @@
    <define name="e_ForAll">
       <element name="ForAll">
          <a:documentation>Executes the given commands for all elements in the data XML file that match the contents of the attribute select.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/forall/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/forall/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="select">
@@ -2215,7 +2215,7 @@
    <define name="e_Frame">
       <element name="Frame">
          <a:documentation>Manipulate an object&#39;s appearance by drawing a frame. Can be used as a clipping path.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/frame/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/frame/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -2323,7 +2323,7 @@
    <define name="e_Function">
       <element name="Function">
          <a:documentation>Define a function</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/function/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/function/"></lsp:doc>
          <lsp:symbol kind="function" label="{@name}"></lsp:symbol>
          <interleave>
             <group>
@@ -2415,7 +2415,7 @@
    <define name="e_Grid">
       <element name="Grid">
          <a:documentation>Override the grid settings from SetGrid.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/grid/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/grid/"></lsp:doc>
          <optional>
             <attribute name="width">
                <a:documentation>Set the width of a grid cell.</a:documentation>
@@ -2452,7 +2452,7 @@
    <define name="e_Group">
       <element name="Group">
          <a:documentation>Create a virtual page that behaves like a real page but is not placed into the PDF.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/group/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/group/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="name">
@@ -2473,7 +2473,7 @@
    <define name="e_Groupcontents">
       <element name="Groupcontents">
          <a:documentation>Insert the contents of a group (a virtual area)</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/groupcontents/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/groupcontents/"></lsp:doc>
          <attribute name="name">
             <a:documentation>The name of the group</a:documentation>
          </attribute>
@@ -2483,7 +2483,7 @@
    <define name="e_HTML">
       <element name="HTML">
          <a:documentation>Create HTML output</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/html/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/html/"></lsp:doc>
          <lsp:format inline="true"></lsp:format>
          <interleave>
             <group>
@@ -2511,7 +2511,7 @@
    <define name="e_Hyphenation">
       <element name="Hyphenation">
          <a:documentation>Suggest a hyphenation. This hyphenation will be used in the running text. See the example.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/hyphenation/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/hyphenation/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -2664,7 +2664,7 @@
          <a:documentation>Two modes: with a given width, the space takes up the given amount. 
       With no width given: create a horizontal stretching space. The space will take up no width as a minimum but is able to stretch up to infinity. Useful in single line contexts. In normal text there will surprising little stretching involved due to the global paragraph optimization algorithm.
         You will see that all other word spaces will have the minimum width and the excessive whitespace is accumulated at the strechable space.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/hspace/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/hspace/"></lsp:doc>
          <optional>
             <attribute name="leader">
                <a:documentation>The text that should be displayed instead of the space. For example a dot (.).</a:documentation>
@@ -2691,7 +2691,7 @@
    <define name="e_I">
       <element name="I">
          <a:documentation>Switch to italic text.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/i/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/i/"></lsp:doc>
          <interleave>
             <group>
                <zeroOrMore>
@@ -2728,7 +2728,7 @@
    <define name="e_Include">
       <element name="Include">
          <a:documentation>Toplevel element for included layout files.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/include/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/include/"></lsp:doc>
          <optional>
             <attribute name="xml:base">
                <a:documentation>(not intended to be used, for error-free validation purpose only)</a:documentation>
@@ -2786,7 +2786,7 @@
    <define name="e_Initial">
       <element name="Initial">
          <a:documentation>Make some letters appear in a larger font at the beginning of the paragraph.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/initial/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/initial/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -2831,7 +2831,7 @@
       <element name="InsertPages">
          <a:documentation>Insert previously saved pages or reserve space for pages to be generted in the future.
       There are two modes: the first mode is to first save some pages with SavePages and then insert the pages here. The second mode reserves some pages in the PDF (has to be known in advace) that are created in the future (“future mode”) with SavePages.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/insertpages/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/insertpages/"></lsp:doc>
          <attribute name="name">
             <a:documentation>The name of the saved pages.</a:documentation>
          </attribute>
@@ -2846,7 +2846,7 @@
    <define name="e_Image">
       <element name="Image">
          <a:documentation>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). Other file types might be possible with external converters. See below for a limitation on the number of included PDF files.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/image/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/image/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -3119,7 +3119,7 @@
    <define name="e_Italic">
       <element name="Italic">
          <a:documentation>The font face to be used when the user switches to italic.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/italic/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/italic/"></lsp:doc>
          <attribute name="fontface">
             <a:documentation>The name of the fontface.</a:documentation>
             <lsp:references symbol="fontfile"></lsp:references>
@@ -3130,7 +3130,7 @@
    <define name="e_LoadDataset">
       <element name="LoadDataset">
          <a:documentation>Load an XML file previously written by SaveDataset (attribute name) or a well formed XML file (attribute filename). The regular data processing is interrupted and the contents of the data file is taken as a data source. If the file does not exist, the call to LoadDataset is ignored.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/loaddataset/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/loaddataset/"></lsp:doc>
          <optional>
             <attribute name="name">
                <a:documentation>Name of the data file. Example: toc</a:documentation>
@@ -3148,7 +3148,7 @@
       <element name="LoadFontfile">
          <a:documentation>Load a font file (.otf, .ttf) and associate it with an internal name. If a glyph is not found in the font file, an error will be raised (this can be configured via the Options command). You can specify fallbacks as a child element of Loadfontfile.
       Type 1 fonts (.pfb) are not supported since version 6.0. Please convert Type 1 fonts to OpenType.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/loadfontfile/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/loadfontfile/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="name">
@@ -3249,7 +3249,7 @@
    <define name="e_Layout">
       <element name="Layout">
          <a:documentation>This command is the root element in the Layout instructions.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/layout/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/layout/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -3375,7 +3375,7 @@
    <define name="e_Li">
       <element name="Li">
          <a:documentation>List item in an ordered or unordered list.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/li/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/li/"></lsp:doc>
          <interleave>
             <group>
                <zeroOrMore>
@@ -3418,7 +3418,7 @@
    <define name="e_Loop">
       <element name="Loop">
          <a:documentation>Repeat the contents of this element several times.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/loop/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/loop/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="select">
@@ -3677,7 +3677,7 @@
    <define name="e_Makeindex">
       <element name="Makeindex">
          <a:documentation>Sort and split a list of elements to make an index.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/makeindex/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/makeindex/"></lsp:doc>
          <optional>
             <attribute name="pagenumber">
                <a:documentation>The name of the attribute that holds the page numbers. Defaults to &#39;page&#39;.</a:documentation>
@@ -3699,7 +3699,7 @@
    <define name="e_Margin">
       <element name="Margin">
          <a:documentation>Set the margin of the document or master page.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/margin/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/margin/"></lsp:doc>
          <optional>
             <attribute name="left">
                <a:documentation>Left margin</a:documentation>
@@ -3732,7 +3732,7 @@
    <define name="e_Mark">
       <element name="Mark">
          <a:documentation>Sets an invisible mark into the output. This is helpful when you want to know on which page the mark is placed on.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/mark/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/mark/"></lsp:doc>
          <optional>
             <attribute name="append">
                <a:documentation>When yes, append the current page to the previous values of the mark. Useful to get page ranges in an index. (Default is no.)</a:documentation>
@@ -3768,7 +3768,7 @@
    <define name="e_Math">
       <element name="Math">
          <a:documentation>Typeset a mathematical formula. The child elements are interpreted as MathML. The MathML root element &lt;math&gt; and the MathML namespace may be given, but both are optional; several child elements are treated as an implicit mrow. Supported are the token elements mi (with mathvariant=&#34;normal&#34; for upright single letters), mn, mo, mtext (set in the font of the surrounding paragraph) and mspace, the layout elements mrow, mfrac (with linethickness), msqrt, mroot, msup, msub, msubsup, munder, mover, munderover and mstyle (with displaystyle and scriptlevel). Operators get the spacing of their class (binary operators, relations, parentheses, large operators such as sums and integrals), accents are placed with the metrics of the font. The formula takes the color of the paragraph. Parentheses, brackets and braces at the start and end of an mrow grow with the content. Not yet supported are mtable and the other values of mathvariant. Experimental, implementation in progress.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/math/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/math/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -3795,7 +3795,7 @@
    <define name="e_Message">
       <element name="Message">
          <a:documentation>Writes a message onto the console and to the protocol file.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/message/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/message/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -3851,7 +3851,7 @@
    <define name="e_NextFrame">
       <element name="NextFrame">
          <a:documentation>Switch to the next free frame of a positioning area.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/nextframe/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/nextframe/"></lsp:doc>
          <attribute name="area">
             <a:documentation>Name of the positioning area.</a:documentation>
             <lsp:references symbol="area"></lsp:references>
@@ -3862,7 +3862,7 @@
    <define name="e_NextRow">
       <element name="NextRow">
          <a:documentation>The virtual cursor is set on the next free row.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/nextrow/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/nextrow/"></lsp:doc>
          <optional>
             <attribute name="area">
                <a:documentation>Name of the area of the virtual cursor.</a:documentation>
@@ -3885,7 +3885,7 @@
    <define name="e_NoBreak">
       <element name="NoBreak">
          <a:documentation>Don&#39;t allow a line break within this element</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/nobreak/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/nobreak/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -3958,7 +3958,7 @@
    <define name="e_Ol">
       <element name="Ol">
          <a:documentation>Create an ordered list, just like in HTML</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/ol/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/ol/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -4043,7 +4043,7 @@
    <define name="e_Options">
       <element name="Options">
          <a:documentation>Set publisher specific options.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/options/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/options/"></lsp:doc>
          <optional>
             <attribute name="background-color">
                <a:documentation>Render colored background behind each page. Defaults to &#39;white&#39;. State a color name or &#39;-&#39; for no background.</a:documentation>
@@ -4390,7 +4390,7 @@
    <define name="e_Otherwise">
       <element name="Otherwise">
          <a:documentation>Default branch of a Switch command.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/otherwise/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/otherwise/"></lsp:doc>
          <interleave>
             <group>
                <oneOrMore>
@@ -4637,7 +4637,7 @@
    <define name="e_Output">
       <element name="Output">
          <a:documentation>This command is similar to PlaceObject and is currently limited to output text which can be broken across positioning frames and which can wrap around objects.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/output/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/output/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -4711,7 +4711,7 @@
    <define name="e_Overlay">
       <element name="Overlay">
          <a:documentation>Overlays the first element with the following “positions”.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/overlay/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/overlay/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -4758,7 +4758,7 @@
    <define name="e_Paragraph">
       <element name="Paragraph">
          <a:documentation>Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/paragraph/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/paragraph/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -5120,7 +5120,7 @@
    <define name="e_Param">
       <element name="Param">
          <a:documentation>Specify a parameter for a function definition.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/param/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/param/"></lsp:doc>
          <attribute name="name">
             <a:documentation>The name of the parameter.</a:documentation>
          </attribute>
@@ -5130,7 +5130,7 @@
    <define name="e_Pageformat">
       <element name="Pageformat">
          <a:documentation>The size of the PDF pages. Defaults to 210mm width and 297mm height (A4)</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/pageformat/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/pageformat/"></lsp:doc>
          <optional>
             <attribute name="bleedbox">
                <a:documentation>Set the bleed box of the PDF pages. The value has the form “x y width height” (four lengths), where x and y are measured from the top left corner of the page. If not given, the bleed box is derived from the bleed setting in Options.</a:documentation>
@@ -5153,7 +5153,7 @@
    <define name="e_Pagetype">
       <element name="Pagetype">
          <a:documentation>Define a master page. A master page is chosen depending on the criterion given with the attribute “test”.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/pagetype/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/pagetype/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -5234,7 +5234,7 @@
    <define name="e_PDFOptions">
       <element name="PDFOptions">
          <a:documentation>Set PDF options like number of copies and such</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/pdfoptions/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/pdfoptions/"></lsp:doc>
          <optional>
             <attribute name="author">
                <a:documentation>Set the author of the document</a:documentation>
@@ -5402,7 +5402,7 @@
    <define name="e_PlaceObject">
       <element name="PlaceObject">
          <a:documentation>Outputs a rectangular object (image, table, box, barcode or textblock).</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/placeobject/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/placeobject/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -5699,7 +5699,7 @@
    <define name="e_Position">
       <element name="Position">
          <a:documentation>Add an element to the current Overlay.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/position/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/position/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="x">
@@ -5746,7 +5746,7 @@
    <define name="e_PositioningArea">
       <element name="PositioningArea">
          <a:documentation>Describes an area which contains one or more frames. Elements can be placed within these frames.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/positioningarea/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/positioningarea/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="name">
@@ -5780,7 +5780,7 @@
    <define name="e_PositioningFrame">
       <element name="PositioningFrame">
          <a:documentation>Defines a rectangular area for objects.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/positioningframe/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/positioningframe/"></lsp:doc>
          <attribute name="width">
             <a:documentation>The width of the frame in grid cells.</a:documentation>
          </attribute>
@@ -5799,7 +5799,7 @@
    <define name="e_ProcessNode">
       <element name="ProcessNode">
          <a:documentation>Executes all given nodes. The elements, that are to be executed, are given with the attribute selection.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/processnode/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/processnode/"></lsp:doc>
          <optional>
             <attribute name="limit">
                <a:documentation>Limits the number of items processed with this command</a:documentation>
@@ -5820,7 +5820,7 @@
    <define name="e_Record">
       <element name="Record">
          <a:documentation>Contains the instructions when the publisher processes the element in the data file with the given name. The record matching the root element will be called by the software automatically, all further data handling must be done by the user. Either the attribute element or match must be given, but not both.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/record/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/record/"></lsp:doc>
          <lsp:symbol kind="struct" label="{@element}{@match}" detail="{@mode}"></lsp:symbol>
          <interleave>
             <group>
@@ -5969,7 +5969,7 @@
    <define name="e_Regular">
       <element name="Regular">
          <a:documentation>The (symbolic) name of the fontface for regular text, i.e. without bold or italic.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/regular/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/regular/"></lsp:doc>
          <attribute name="fontface">
             <a:documentation>The symbolic name of the font file.</a:documentation>
             <lsp:references symbol="fontfile"></lsp:references>
@@ -5980,7 +5980,7 @@
    <define name="e_Rule">
       <element name="Rule">
          <a:documentation>Draw a horizontal or vertical rule in the grid.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/rule/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/rule/"></lsp:doc>
          <attribute name="direction">
             <a:documentation>The direction of the rule.</a:documentation>
             <choice>
@@ -6021,7 +6021,7 @@
    <define name="e_SaveDataset">
       <element name="SaveDataset">
          <a:documentation>Saves an element/attribute structure to be used in the next publisher run. The contents must have a tree structure.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/savedataset/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/savedataset/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="name">
@@ -6071,7 +6071,7 @@
          <a:documentation>This command is used for two different but similar purposes.
       1: Everything enclosed in SavePages is saved internally and not placed into the PDF. Useful if the output might be discarded.
       2: “Future mode”: Create pages that have been previously reserved by InsertPages.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/savepages/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/savepages/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="name">
@@ -6209,7 +6209,7 @@
    <define name="e_Section">
       <element name="Section">
          <a:documentation>Groups layout instructions. This element has no effect on the output and is used solely for organizing the layout file, e.g. for code folding in text editors.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/section/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/section/"></lsp:doc>
          <lsp:format blank-lines="true"></lsp:format>
          <lsp:symbol kind="namespace" label="{@name}"></lsp:symbol>
          <interleave>
@@ -6314,7 +6314,7 @@
    <define name="e_SetGrid">
       <element name="SetGrid">
          <a:documentation>Set size of the grid cells. All objects are placed in the grid.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/setgrid/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/setgrid/"></lsp:doc>
          <optional>
             <attribute name="width">
                <a:documentation>The width of a grid cell. Use either width or nx, not both.</a:documentation>
@@ -6357,7 +6357,7 @@
    <define name="e_SetVariable">
       <element name="SetVariable">
          <a:documentation>Associates a value with a variable name. The value can be a simple value or a more complex one consisting of several elements.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/setvariable/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/setvariable/"></lsp:doc>
          <lsp:exclusive attributes="select" content="true"></lsp:exclusive>
          <interleave>
             <group>
@@ -6490,7 +6490,7 @@
    <define name="e_SortSequence">
       <element name="SortSequence">
          <a:documentation>Sort a list.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/sortsequence/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/sortsequence/"></lsp:doc>
          <attribute name="select">
             <a:documentation>The data that should be sorted.</a:documentation>
             <lsp:references symbol="variable" form="xpath-variable"></lsp:references>
@@ -6531,7 +6531,7 @@
    <define name="e_Span">
       <element name="Span">
          <a:documentation>Surround text by styling options.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/span/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/span/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -6798,7 +6798,7 @@
    <define name="e_Sub">
       <element name="Sub">
          <a:documentation>Subscript text.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/sub/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/sub/"></lsp:doc>
          <interleave>
             <group>
                <ref name="e_Value"></ref>
@@ -6810,7 +6810,7 @@
    <define name="e_Sup">
       <element name="Sup">
          <a:documentation>Superscript text.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/sup/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/sup/"></lsp:doc>
          <interleave>
             <group>
                <ref name="e_Value"></ref>
@@ -6822,7 +6822,7 @@
    <define name="e_Switch">
       <element name="Switch">
          <a:documentation>Create an if-then-else construct. The test attribute of each Case commands is evaluated until it yields true. The contents of the Case gets executed. If no test succeeds, the (optional) Otherwise gets executed.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/switch/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/switch/"></lsp:doc>
          <interleave>
             <group>
                <oneOrMore>
@@ -6839,7 +6839,7 @@
    <define name="e_StructureElement">
       <element name="StructureElement">
          <a:documentation>Create a structure hierarchy for tagged PDF.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/structureelement/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/structureelement/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -6915,7 +6915,7 @@
    <define name="e_Stylesheet">
       <element name="Stylesheet">
          <a:documentation>Load a CSS file or define CSS rules</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/stylesheet/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/stylesheet/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -6932,7 +6932,7 @@
    <define name="e_Table">
       <element name="Table">
          <a:documentation>Create a table that is similar to the HTML table model.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/table/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/table/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -7139,7 +7139,7 @@
    <define name="e_Tablefoot">
       <element name="Tablefoot">
          <a:documentation>Create a repeating table footer.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/tablefoot/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/tablefoot/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -7183,7 +7183,7 @@
    <define name="e_Tablehead">
       <element name="Tablehead">
          <a:documentation>Create a repeating table head.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/tablehead/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/tablehead/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -7227,14 +7227,14 @@
    <define name="e_TableNewPage">
       <element name="TableNewPage">
          <a:documentation>Switches to a new page within the table.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/tablenewpage/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/tablenewpage/"></lsp:doc>
          <empty></empty>
       </element>
    </define>
    <define name="e_Td">
       <element name="Td">
          <a:documentation>Td wraps a table cell, just like HTML.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/td/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/td/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -7492,7 +7492,7 @@
    <define name="e_Tablerule">
       <element name="Tablerule">
          <a:documentation>Insert a horizontal rule in a table</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/tablerule/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/tablerule/"></lsp:doc>
          <optional>
             <attribute name="rulewidth">
                <a:documentation>The width (thickness) of the rule. Defaults to 0.25pt.</a:documentation>
@@ -7537,7 +7537,7 @@
    <define name="e_Textblock">
       <element name="Textblock">
          <a:documentation>Create a rectangular piece of text.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/textblock/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/textblock/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -7745,7 +7745,7 @@
    <define name="e_Text">
       <element name="Text">
          <a:documentation>Create a text that can be broken across text containers or pages. To be used with Output</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/text/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/text/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -7788,7 +7788,7 @@
    <define name="e_Trace">
       <element name="Trace">
          <a:documentation>Set debugging switches</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/trace/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/trace/"></lsp:doc>
          <optional>
             <attribute name="assignments">
                <a:documentation>Write assignments (SetVariable) to the log file.</a:documentation>
@@ -7917,7 +7917,7 @@
    <define name="e_Tr">
       <element name="Tr">
          <a:documentation>Tablerow</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/tr/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/tr/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -8092,7 +8092,7 @@
    <define name="e_Transformation">
       <element name="Transformation">
          <a:documentation>Manipulate an object&#39;s appearance by applying a matrix. See the PDF reference 4.2.2 Common Transformations and following.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/transformation/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/transformation/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -8164,7 +8164,7 @@
    <define name="e_U">
       <element name="U">
          <a:documentation>Underline text.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/u/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/u/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -8222,7 +8222,7 @@
    <define name="e_Ul">
       <element name="Ul">
          <a:documentation>Create an unordered list, just like in HTML</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/ul/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/ul/"></lsp:doc>
          <interleave>
             <group>
                <optional>
@@ -8302,7 +8302,7 @@
    <define name="e_Until">
       <element name="Until">
          <a:documentation>Create a loop. All child elements are executed repeatedly until the given condition is true.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/until/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/until/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="test">
@@ -8554,7 +8554,7 @@
    <define name="e_URL">
       <element name="URL">
          <a:documentation>enables a better breaking of URLs.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/url/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/url/"></lsp:doc>
          <interleave>
             <group>
                <zeroOrMore>
@@ -8591,7 +8591,7 @@
    <define name="e_Value">
       <element name="Value">
          <a:documentation>Contains a text value that is passed to the surrounding element.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/value/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/value/"></lsp:doc>
          <lsp:format preserve="true"></lsp:format>
          <lsp:exclusive attributes="select" content="true"></lsp:exclusive>
          <interleave>
@@ -8620,7 +8620,7 @@
    <define name="e_VSpace">
       <element name="VSpace">
          <a:documentation>Create a vertically stretching space. The space has a minimum height of 0 but is able to stretch up to infinity. Useful in table cells.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/vspace/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/vspace/"></lsp:doc>
          <optional>
             <attribute name="minheight">
                <a:documentation>The (optional) minimum height of the inserted space.</a:documentation>
@@ -8637,7 +8637,7 @@
    <define name="e_While">
       <element name="While">
          <a:documentation>Create a loop. All child elements are executed as long as the condition in the test attribute evaluates to true.</a:documentation>
-         <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/while/"></lsp:doc>
+         <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/while/"></lsp:doc>
          <interleave>
             <group>
                <attribute name="test">

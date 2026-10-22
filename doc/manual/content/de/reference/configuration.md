@@ -3,6 +3,9 @@ title: "Konfiguration des speedata Publishers"
 linkTitle: "Konfiguration"
 weight: 40
 type: docs
+aliases:
+  - /de/konfiguration/
+  - /de/manual/setup/configuration/
 ---
 
 

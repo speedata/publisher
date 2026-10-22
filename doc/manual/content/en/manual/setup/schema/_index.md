@@ -2,6 +2,9 @@
 title: "Schema validation"
 weight: 60
 type: docs
+aliases:
+  - /en/appendix-schema-assigning/
+  - /en/advancedtopics/schemavalidation/
 ---
 
 

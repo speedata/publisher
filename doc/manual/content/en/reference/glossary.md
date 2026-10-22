@@ -2,6 +2,9 @@
 title: "Glossary"
 weight: 50
 type: docs
+aliases:
+  - /en/glossary/
+  - /en/manual/glossary/
 ---
 
 

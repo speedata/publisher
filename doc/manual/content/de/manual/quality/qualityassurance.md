@@ -2,6 +2,8 @@
 title: "Qualitätssicherung und PDF-Vergleich"
 weight: 66
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/qualitaetssicherung/
 ---
 
 

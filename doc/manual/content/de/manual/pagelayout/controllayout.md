@@ -2,6 +2,8 @@
 title: "Steuerung des Layouts"
 weight: 54
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/fortgeschrittenethemen-steuerunglayout/
 ---
 
 

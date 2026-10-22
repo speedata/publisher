@@ -2,6 +2,8 @@
 title: "Rotation of contents"
 weight: 52
 type: docs
+aliases:
+  - /en/advancedtopics/rotation/
 ---
 
 

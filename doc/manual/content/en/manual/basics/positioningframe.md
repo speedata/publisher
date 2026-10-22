@@ -2,6 +2,8 @@
 title: "Placement areas"
 weight: 41
 type: docs
+aliases:
+  - /en/basics/positioningarea/
 ---
 
 

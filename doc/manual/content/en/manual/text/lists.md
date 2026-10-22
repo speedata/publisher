@@ -4,6 +4,7 @@ weight: 53
 type: docs
 aliases:
   - fakinglists
+  - /en/advancedtopics/fakelists/
 ---
 
 

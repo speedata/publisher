@@ -2,6 +2,9 @@
 title: "Create images with MetaPost"
 weight: 62
 type: docs
+aliases:
+  - /en/advancedtopics/advancedtopics-metapostgraphics/
+  - /en/advancedtopics/fortgeschrittenethemen-metapostgrafiken/
 ---
 
 

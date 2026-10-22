@@ -2,6 +2,8 @@
 title: "File attachments"
 weight: 78
 type: docs
+aliases:
+  - /en/advancedtopics/attachments/
 ---
 
 

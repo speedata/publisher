@@ -2,6 +2,8 @@
 title: "Compatibility with older versions"
 weight: 230
 type: docs
+aliases:
+  - /en/compatibilityolderversions/
 ---
 
 

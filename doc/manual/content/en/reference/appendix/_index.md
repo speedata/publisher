@@ -2,6 +2,8 @@
 title: "Appendix"
 weight: 60
 type: docs
+aliases:
+  - /en/manual/appendix/
 ---
 
 Reference tables for defaults, file names and internal variables.

@@ -2,6 +2,9 @@
 title: "Interne Variablen"
 weight: 170
 type: docs
+aliases:
+  - /de/internevariablen/
+  - /de/manual/appendix/internalvariables/
 ---
 
 

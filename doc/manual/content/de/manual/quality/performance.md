@@ -2,6 +2,8 @@
 title: "Performance-Überlegungen"
 weight: 68
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/performance/
 ---
 
 

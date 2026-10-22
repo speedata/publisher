@@ -2,6 +2,8 @@
 title: "Schriften verwenden"
 weight: 36
 type: docs
+aliases:
+  - /de/grundlagen/einbindungschriftarten/
 ---
 
 

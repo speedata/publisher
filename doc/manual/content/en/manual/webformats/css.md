@@ -2,6 +2,8 @@
 title: "Using CSS with the speedata Publisher"
 weight: 74
 type: docs
+aliases:
+  - /en/advancedtopics/css/
 ---
 
 

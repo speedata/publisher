@@ -2,6 +2,8 @@
 title: "speedata Publisher Pro"
 weight: 110
 type: docs
+aliases:
+  - /de/speedatapro/
 ---
 
 

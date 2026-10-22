@@ -2,6 +2,8 @@
 title: "Dateianhänge"
 weight: 78
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/attachments/
 ---
 
 

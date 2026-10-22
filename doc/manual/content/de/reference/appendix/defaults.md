@@ -2,6 +2,8 @@
 title: "Voreinstellungen des speedata Publishers"
 weight: 10
 type: docs
+aliases:
+  - /de/manual/appendix/defaults/
 ---
 
 

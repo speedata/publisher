@@ -2,6 +2,8 @@
 title: "Create table of contents in one go"
 weight: 46
 type: docs
+aliases:
+  - /en/cookbook/cookbook-tocinonerun/
 ---
 
 

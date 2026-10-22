@@ -2,6 +2,8 @@
 title: "HTML"
 weight: 75
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/html/
 ---
 
 

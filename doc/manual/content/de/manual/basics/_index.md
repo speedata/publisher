@@ -2,6 +2,8 @@
 title: Grundlagen
 weight: 40
 type: docs
+aliases:
+  - /de/grundlagen/
 ---
 
 Das Studium dieses Kapitels sollte ausreichen, um Layoutregelwerke selbständig zu erstellen. Gelegentlich werden weiterführende Themen in einem späteren Kapitel vertieft. Beispielsweise werden für Tabellen nur die wichtigsten Formatierungen behandelt, ein eigenes Kapitel ([Tabellen]({{< relref "tables" >}})) beschreibt Tabellen im Detail. In solchen Fällen gibt es natürlich einen Querverweis.

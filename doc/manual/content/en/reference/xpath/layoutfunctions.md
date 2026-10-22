@@ -2,6 +2,9 @@
 title: "Layout Functions"
 weight: 162
 type: docs
+aliases:
+  - /en/lxpath/
+  - /en/manual/xpathref/layoutfunctions/
 ---
 
 The Publisher's layout functions are defined in the namespace `urn:speedata:2009/publisher/functions/en` (denoted by `sd:` below).

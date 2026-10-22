@@ -2,6 +2,8 @@
 title: "Performance Considerations"
 weight: 68
 type: docs
+aliases:
+  - /en/advancedtopics/performance/
 ---
 
 

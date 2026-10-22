@@ -2,6 +2,8 @@
 title: "Hello, world!"
 weight: 20
 type: docs
+aliases:
+  - /en/helloworld/
 ---
 
 

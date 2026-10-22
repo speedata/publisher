@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <a href="https://doc.speedata.de/publisher/en/installation/"><img src="https://img.shields.io/badge/Platform-macOS%20%7C%20Linux%20%7C%20Windows-FFC72C?labelColor=000000" alt="Platforms"></a>
+  <a href="https://doc.speedata.de/publisher/en/manual/setup/installation/"><img src="https://img.shields.io/badge/Platform-macOS%20%7C%20Linux%20%7C%20Windows-FFC72C?labelColor=000000" alt="Platforms"></a>
   <a href="COPYING"><img src="https://img.shields.io/badge/license-AGPLv3-FFC72C?labelColor=000000" alt="License: AGPLv3"></a>
   <a href="https://doc.speedata.de/"><img src="https://img.shields.io/badge/manual-online-FFC72C?labelColor=000000" alt="Manual"></a>
   <a href="https://constellation.speedata.de"><img src="https://img.shields.io/badge/Explore%20in-Constellation-FFC72C?labelColor=000000" alt="Explore in Constellation"></a>

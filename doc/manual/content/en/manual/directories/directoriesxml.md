@@ -2,6 +2,9 @@
 title: "Creating lists (XML structure)"
 weight: 45
 type: docs
+aliases:
+  - /en/advancedtopics/elementattribute/
+  - /en/manual/directories/elementattribut/
 ---
 
 

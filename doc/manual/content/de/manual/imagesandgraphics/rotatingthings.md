@@ -2,6 +2,8 @@
 title: "Rotation von Inhalten"
 weight: 52
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/rotierenvoninhalten/
 ---
 
 

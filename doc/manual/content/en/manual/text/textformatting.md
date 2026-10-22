@@ -2,6 +2,8 @@
 title: "Text formatting"
 weight: 35
 type: docs
+aliases:
+  - /en/basics/textformatting/
 ---
 
 

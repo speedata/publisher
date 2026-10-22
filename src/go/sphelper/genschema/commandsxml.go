@@ -388,9 +388,9 @@ func (c *commandsXML) lspWhenAnnotations(cmdname string) []*lspWhenXML {
 // lspDocURL returns the URL of the reference page of the command in the
 // online manual for the given schema language.
 func lspDocURL(cmdname, lang string) string {
-	base := "https://doc.speedata.de/publisher/en/commandreference/"
+	base := "https://doc.speedata.de/publisher/en/reference/commands/"
 	if lang == "de" {
-		base = "https://doc.speedata.de/publisher/de/befehlsreferenz/"
+		base = "https://doc.speedata.de/publisher/de/reference/commands/"
 	}
 	return base + strings.ToLower(cmdname) + "/"
 }

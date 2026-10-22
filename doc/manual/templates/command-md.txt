@@ -2,6 +2,10 @@
 linktitle: "{{ .Command.Name }}"
 weight: {{ .Weight }}
 type: docs
+aliases:
+{{- range commandAliases .Lang .Command }}
+  - {{ . }}
+{{- end }}
 ---
 
 # `{{ .Command.Name }}`{{ if .Command.Pro }} {{`{{< profeature "`}}{{ translate $.Lang "profeature tooltip" }}{{`" >}} {#`}}{{ .Command.Mdlink }}{{`}`}}{{ end }}

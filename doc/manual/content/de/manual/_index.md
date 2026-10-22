@@ -2,6 +2,8 @@
 title: Handbuch
 weight: 10
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/
 ---
 
 Der speedata Publisher erzeugt aus XML-Daten hochwertige PDF-Dokumente – Produktkataloge, Preislisten, Datenblätter und vieles mehr.

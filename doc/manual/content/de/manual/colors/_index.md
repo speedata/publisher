@@ -2,6 +2,8 @@
 title: "Farben"
 weight: 65
 type: docs
+aliases:
+  - /de/grundlagen/farben/
 ---
 
 

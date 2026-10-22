@@ -2,6 +2,8 @@
 title: "Silbentrennung / Spracheinstellungen"
 weight: 43
 type: docs
+aliases:
+  - /de/grundlagen/silbentrennung-sprache/
 ---
 
 

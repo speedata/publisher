@@ -2,6 +2,9 @@
 title: "Sortieren und Gruppieren"
 weight: 47
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/sortierenvondaten/
+  - /de/manual/directories/sortdata/
 ---
 
 

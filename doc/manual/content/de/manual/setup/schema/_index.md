@@ -2,6 +2,9 @@
 title: "Schema-Validierung"
 weight: 60
 type: docs
+aliases:
+  - /de/anhang-schemazuweisen/
+  - /de/fortgeschrittenethemen/schemavalidierung/
 ---
 
 

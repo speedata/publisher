@@ -2,6 +2,8 @@
 title: "Inhaltsverzeichnis in einem Durchlauf"
 weight: 46
 type: docs
+aliases:
+  - /de/kochbuch/kochbuch-verzeichnisseeindurchlauf/
 ---
 
 

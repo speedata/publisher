@@ -2,6 +2,8 @@
 title: "Druckvorstufe"
 weight: 55
 type: docs
+aliases:
+  - /de/fortgeschrittenethemen/druckausgabe/
 ---
 
 

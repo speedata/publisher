@@ -2,6 +2,8 @@
 title: "Arrays and Maps"
 weight: 162
 type: docs
+aliases:
+  - /en/manual/xpathref/datastructures/
 ---
 
 The speedata Publisher supports arrays and maps as native data structures.

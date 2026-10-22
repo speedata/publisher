@@ -3,6 +3,9 @@ title: "Namespace of the layout ruleset"
 linkTitle: "Namespace"
 weight: 50
 type: docs
+aliases:
+  - /en/basics/writelayoutfile/
+  - /en/manual/setup/xmleditor/
 ---
 
 The XML namespace of the layout ruleset is `urn:speedata.de:2009/publisher/en`. The additional XPath functions are in the namespace `urn:speedata:2009/publisher/functions/en`. A layout ruleset should therefore always have this frame:
