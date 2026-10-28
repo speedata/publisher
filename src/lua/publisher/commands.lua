@@ -594,9 +594,7 @@ function commands.box(layoutxml, dataxml)
     local tmpattr
     for attname, atttyp in pairs(attribute) do
         tmpattr = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, attname, atttyp)
-        if tmpattr then
-            tab[attname] = tmpattr
-        end
+        tab[attname] = publisher.css.pick(css_rules, css_important, attname, tmpattr)
     end
 
     if tab["padding-top"] then
@@ -610,12 +608,6 @@ function commands.box(layoutxml, dataxml)
     end
     if tab["padding-right"] then
         tab.padding_right = tex.sp(tab["padding-right"])
-    end
-
-    if css_rules and type(css_rules) == "table" then
-        for k, v in pairs(css_rules) do
-            tab[k] = v
-        end
     end
 
     if graphic then

@@ -583,6 +583,20 @@ function Par:indent(width_sp)
     self.padding_left = self.padding_left + width_sp
 end
 
+-- Removes the alignment from the textformat fields from CSS of a copied
+-- paragraph, so that the width measurement uses the alignment of the caller.
+---@param par Par
+local function strip_css_alignment(par)
+    if par.css_textformat and par.css_textformat.alignment then
+        local fields = {}
+        for k, v in pairs(par.css_textformat) do
+            fields[k] = v
+        end
+        fields.alignment = nil
+        par.css_textformat = next(fields) and fields or nil
+    end
+end
+
 -- Returns the minimum width the paragraph would occupy, defined as the
 -- width of its widest non-breakable item.
 ---@param self Par
@@ -594,6 +608,7 @@ function Par:min_width(textformat_name, options, data)
     options = options or {}
     local newpar = publisher.utilities.deepcopy(self)
     newpar.origin = "min_width"
+    strip_css_alignment(newpar)
     options = options or {}
     local new_options = publisher.utilities.copy_table_from_defaults(options)
     new_options.textformat = textformat_name
@@ -633,6 +648,7 @@ end
 function Par:max_width_and_lineheight(options, data)
     local newpar = publisher.utilities.deepcopy(self)
     newpar.origin = "max_width_and_lineheight"
+    strip_css_alignment(newpar)
     local orig_letterspacing = newpar.textformat and newpar.textformat.letterspacing
     local orig_letterspacing_em = newpar.textformat and newpar.textformat.letterspacing_em
     newpar.textformat = nil
