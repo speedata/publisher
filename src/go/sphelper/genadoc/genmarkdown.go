@@ -19,6 +19,19 @@ import (
 
 var wg sync.WaitGroup
 
+// cssMarkdown returns the paragraph about the name of a command in CSS
+// selectors, or an empty string for commands without CSS.
+func cssMarkdown(lang string, c *commandsxml.Command) string {
+	if c.CSS == "" {
+		return ""
+	}
+	link := `{{< relref "/manual/webformats/css#css-layout" >}}`
+	if lang == "de" {
+		return fmt.Sprintf("In CSS-Selektoren heißt dieser Befehl `%s`. Attribute mit dem Hinweis „CSS-Eigenschaft“ lassen sich auch per CSS setzen; das Attribut am Befehl hat Vorrang, außer die CSS-Angabe ist mit `!important` markiert. Weitere Eigenschaften sowie Vorrang und Vererbung beschreibt der Abschnitt [CSS für Layout-Befehle](%s).", c.CSS, link)
+	}
+	return fmt.Sprintf("In CSS selectors, this command is called `%s`. Attributes marked “CSS property” can also be set with CSS; the attribute on the command takes precedence unless the CSS declaration is marked `!important`. The section [CSS for layout commands](%s) describes further properties, precedence and inheritance.", c.CSS, link)
+}
+
 func translate(lang, text string) string {
 	switch text {
 	case "Attributes":
@@ -51,7 +64,7 @@ func translate(lang, text string) string {
 		}
 	case "CSS property":
 		if lang == "de" {
-			return "CSS Eigenschaft"
+			return "CSS-Eigenschaft"
 		}
 	case "since version":
 		if lang == "de" {
@@ -282,6 +295,7 @@ func GenerateMarkdownFiles(cfg *config.Config, lang string) error {
 	sort.Sort(allAttributeNames)
 
 	funcMap := template.FuncMap{
+		"cssMarkdown":         cssMarkdown,
 		"translate":           translate,
 		"childelemsMarkdown":  childelemsMarkdown,
 		"parentelemsMarkdown": parentelemsMarkdown,

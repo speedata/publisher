@@ -5337,7 +5337,7 @@
       * Image
       *************************
   -->
-  <command en="Image">
+  <command en="Image" css="img">
     <description xml:lang="en">
       <para>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). Other file types might be possible with external converters. See below for a limitation on the number of included PDF files.</para>
     </description>
@@ -5549,7 +5549,7 @@
         <para>Setze den Deckungsgrad des Bildes (0-100, 100 = voll deckend).</para>
       </description>
     </attribute>
-    <attribute en="padding" optional="yes" since="2.9.5" type="length">
+    <attribute en="padding" optional="yes" since="2.9.5" type="length" css="padding">
       <description xml:lang="en">
         <para>Set padding for all four sides.</para>
       </description>
@@ -6220,7 +6220,7 @@
       * Li
       *************************
   -->
-  <command en="Li">
+  <command en="Li" css="li">
     <description xml:lang="en">
       <para>List item in an ordered or unordered list.</para>
     </description>
@@ -7102,7 +7102,7 @@
       * Ol
       *************************
   -->
-  <command en="Ol">
+  <command en="Ol" css="ol">
     <description xml:lang="en">
       <para>Create an ordered list, just like in HTML</para>
     </description>
@@ -7125,7 +7125,7 @@
         <para>CSS-Klasse der Liste. Es gelten die Regeln für <tt>ol</tt> und <tt>li::marker</tt> aus dem Stylesheet (<tt>list-style-type</tt>, <tt>list-style-position</tt>, <tt>padding-left</tt>, <tt>color</tt>, beim Aufzählungszeichen <tt>content</tt>, <tt>color</tt> und <tt>padding-right</tt>).</para>
       </description>
     </attribute>
-    <attribute en="color" optional="yes" type="text" since="5.9.7">
+    <attribute en="color" optional="yes" type="text" since="5.9.7" css="color">
       <description xml:lang="en">
         <para>Color of the marker and the text. Must be defined with <cmd name="DefineColor"/> before use.</para>
       </description>
@@ -7189,7 +7189,7 @@
         <para>Breite, die links vom Text für das Aufzählungszeichen reserviert wird. Der Text beginnt in allen Zeilen nach dieser Breite. Voreinstellung ist 5mm.</para>
       </description>
     </attribute>
-    <attribute en="marker" optional="yes" type="text" allowxpath="yes" since="5.9.7">
+    <attribute en="marker" optional="yes" type="text" allowxpath="yes" since="5.9.7" css="list-style-type">
       <description xml:lang="en">
         <para>The numbering style: <tt>decimal</tt> (default), <tt>decimal-leading-zero</tt>, <tt>lower-alpha</tt>, <tt>upper-alpha</tt>, <tt>lower-roman</tt>, <tt>upper-roman</tt> or <tt>none</tt>. The HTML values <tt>1</tt>, <tt>a</tt>, <tt>A</tt>, <tt>i</tt> and <tt>I</tt> are accepted as well.</para>
       </description>
@@ -7197,7 +7197,7 @@
         <para>Die Art der Nummerierung: <tt>decimal</tt> (Voreinstellung), <tt>decimal-leading-zero</tt>, <tt>lower-alpha</tt>, <tt>upper-alpha</tt>, <tt>lower-roman</tt>, <tt>upper-roman</tt> oder <tt>none</tt>. Die HTML-Werte <tt>1</tt>, <tt>a</tt>, <tt>A</tt>, <tt>i</tt> und <tt>I</tt> werden ebenfalls akzeptiert.</para>
       </description>
     </attribute>
-    <attribute en="padding-left" optional="yes" type="length" allowxpath="yes" since="5.9.7">
+    <attribute en="padding-left" optional="yes" type="length" allowxpath="yes" since="5.9.7" css="padding-left">
       <description xml:lang="en">
         <para>Additional indentation of the whole list including the marker.</para>
       </description>
@@ -7976,7 +7976,7 @@
       * Paragraph
       *************************
   -->
-  <command en="Paragraph">
+  <command en="Paragraph" css="paragraph">
     <description xml:lang="en">
       <para>Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element.</para>
     </description>
@@ -8048,7 +8048,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="color" type="text" optional="yes">
+    <attribute en="color" type="text" optional="yes" css="color">
       <description xml:lang="en">
         <para>Color of the paragraph. Must be defined with <cmd name="DefineColor"/> before use.</para>
       </description>
@@ -8857,7 +8857,7 @@
       * PlaceObject
       *************************
   -->
-  <command en="PlaceObject">
+  <command en="PlaceObject" css="placeobject">
     <description xml:lang="en">
       <para>Outputs a rectangular object (image, table, box, barcode or textblock).</para>
     </description>
@@ -8973,7 +8973,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="background-color" type="text" optional="yes">
+    <attribute en="background-color" type="text" optional="yes" css="background-color">
       <description xml:lang="en">
         <para>Color of the background if ›background‹ is set to ›full‹.</para>
       </description>
@@ -11107,7 +11107,7 @@
       * Table
       *************************
   -->
-  <command en="Table">
+  <command en="Table" css="table">
     <description xml:lang="en">
       <para>Create a table that is similar to the HTML table model.</para>
     </description>
@@ -11157,7 +11157,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="border-collapse" optional="yes">
+    <attribute en="border-collapse" optional="yes" css="border-collapse">
       <description xml:lang="en">
         <para>Determine if adjacent table cells share borders. The behavior of border-collapse="collapse" is undefined when the table has columndistance or rowdistance set to a non-zero value and if the adjacent borders don't have the same width and color.</para>
       </description>
@@ -11245,7 +11245,7 @@
         <para>Der Abstand zwischen zwei Zeilen.</para>
       </description>
     </attribute>
-    <attribute en="padding" type="length" optional="yes">
+    <attribute en="padding" type="length" optional="yes" css="padding">
       <description xml:lang="en">
         <para>The distance between the table border and the table contents.</para>
       </description>
@@ -11460,7 +11460,7 @@
       * Tablefoot
       *************************
   -->
-  <command en="Tablefoot">
+  <command en="Tablefoot" css="tablefoot">
     <description xml:lang="en">
       <para>Create a repeating table footer.</para>
     </description>
@@ -11523,7 +11523,7 @@
       * Tablehead
       *************************
   -->
-  <command en="Tablehead">
+  <command en="Tablehead" css="tablehead">
     <description xml:lang="en">
       <para>Create a repeating table head.</para>
     </description>
@@ -12131,7 +12131,7 @@
       * Textblock
       *************************
   -->
-  <command en="Textblock">
+  <command en="Textblock" css="textblock">
     <description xml:lang="en">
       <para>Create a rectangular piece of text.</para>
     </description>
@@ -12171,7 +12171,7 @@
         <para>CSS-Klasse für diesen Textblock.</para>
       </description>
     </attribute>
-    <attribute en="color" type="text" optional="yes">
+    <attribute en="color" type="text" optional="yes" css="color">
       <description xml:lang="en">
         <para>The name of the color of the text.</para>
       </description>
@@ -12179,7 +12179,7 @@
         <para>Name der Farbe im Textblock.</para>
       </description>
     </attribute>
-    <attribute en="columns" type="number" optional="yes">
+    <attribute en="columns" type="number" optional="yes" css="column-count">
       <description xml:lang="en">
         <para>Number of columns in the textblock. Do not use multi columns for any other purposes than simple text.</para>
       </description>
@@ -12187,7 +12187,7 @@
         <para>Anzahl der Spalten in dem Textblock. Mehrere Spalten nur für normalen Text benutzen.</para>
       </description>
     </attribute>
-    <attribute en="columndistance" type="numberorlength" optional="yes">
+    <attribute en="columndistance" type="numberorlength" optional="yes" css="column-gap">
       <description xml:lang="en">
         <para>Distance between two columns. Defaults to 3mm.</para>
       </description>
@@ -12236,7 +12236,7 @@
         <para>Name des zu benutzenden Textformats. Wird kein Textformat angegeben, nimmt das System das Textformat <tt>text</tt>.</para>
       </description>
     </attribute>
-    <attribute en="width" type="number" optional="yes">
+    <attribute en="width" type="number" optional="yes" css="width">
       <description xml:lang="en">
         <para>Number of columns for the text. If not given, the surrounding element determines the width of the element.</para>
       </description>
@@ -12672,7 +12672,7 @@
       * Tr
       *************************
   -->
-  <command en="Tr">
+  <command en="Tr" css="tr">
     <description xml:lang="en">
       <para>Tablerow</para>
     </description>
@@ -12690,7 +12690,7 @@
         <optional><cmd name="Value" /></optional>
       </oneOrMore>
     </childelements>
-    <attribute en="align" optional="yes">
+    <attribute en="align" optional="yes" css="text-align">
       <description xml:lang="en">
         <para>Horizontal alignment of the table cells in this row.</para>
       </description>
@@ -12730,7 +12730,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="background-color" type="text" optional="yes">
+    <attribute en="background-color" type="text" optional="yes" css="background-color">
       <description xml:lang="en">
         <para>Background color of each cell in this row.</para>
       </description>
@@ -12851,7 +12851,7 @@
         <para>Der Leerraum über dieser Zeile, wenn sie nicht die erste Zeile auf einer Seite/Bereich ist</para>
       </description>
     </attribute>
-    <attribute en="valign" optional="yes" allowxpath="yes">
+    <attribute en="valign" optional="yes" allowxpath="yes" css="vertical-align">
       <description xml:lang="en">
         <para>Vertical alignment of the table cells in this row.</para>
       </description>
@@ -13135,7 +13135,7 @@
       * Ul
       *************************
   -->
-  <command en="Ul">
+  <command en="Ul" css="ul">
     <description xml:lang="en">
       <para>Create an unordered list, just like in HTML</para>
     </description>
@@ -13164,7 +13164,7 @@
         <para>CSS-Klasse der Liste. Es gelten die Regeln für <tt>ul</tt> und <tt>li::marker</tt> aus dem Stylesheet (<tt>list-style-type</tt>, <tt>list-style-position</tt>, <tt>padding-left</tt>, <tt>color</tt>, beim Aufzählungszeichen <tt>content</tt>, <tt>color</tt> und <tt>padding-right</tt>).</para>
       </description>
     </attribute>
-    <attribute en="color" optional="yes" type="text" since="5.9.7">
+    <attribute en="color" optional="yes" type="text" since="5.9.7" css="color">
       <description xml:lang="en">
         <para>Color of the marker and the text. Must be defined with <cmd name="DefineColor"/> before use.</para>
       </description>
@@ -13228,7 +13228,7 @@
         <para>Breite, die links vom Text für das Aufzählungszeichen reserviert wird. Der Text beginnt in allen Zeilen nach dieser Breite. Voreinstellung ist 5mm.</para>
       </description>
     </attribute>
-    <attribute en="marker" optional="yes" type="text" allowxpath="yes" since="5.9.7">
+    <attribute en="marker" optional="yes" type="text" allowxpath="yes" since="5.9.7" css="list-style-type">
       <description xml:lang="en">
         <para>The marker of the list items: any text or one of <tt>disc</tt>, <tt>circle</tt>, <tt>square</tt> or <tt>none</tt>. Without this attribute nested lists use disc, circle and square in turn.</para>
       </description>
@@ -13236,7 +13236,7 @@
         <para>Das Aufzählungszeichen: beliebiger Text oder einer der Werte <tt>disc</tt>, <tt>circle</tt>, <tt>square</tt> oder <tt>none</tt>. Ohne dieses Attribut verwenden verschachtelte Listen der Reihe nach disc, circle und square.</para>
       </description>
     </attribute>
-    <attribute en="padding-left" optional="yes" type="length" allowxpath="yes" since="5.9.7">
+    <attribute en="padding-left" optional="yes" type="length" allowxpath="yes" since="5.9.7" css="padding-left">
       <description xml:lang="en">
         <para>Additional indentation of the whole list including the marker.</para>
       </description>

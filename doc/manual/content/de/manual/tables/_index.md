@@ -679,6 +679,9 @@ Um sicherzustellen, dass wieder bei dem ersten Wert angefangen wird, kann man be
 
 Damit wird der Zähler für die angegebene Kennung (`tab`) zurückgesetzt.
 
+Ohne Layoutfunktion gelingen die Streifen auch mit CSS: `tr:nth-child(even) { background-color: gray }` färbt jede zweite Zeile, siehe [Tabellen mit CSS]({{< relref "/manual/webformats/css#css-tables" >}}).
+Die Farbe hängt dann an der Position der Zeile in der Tabelle; auf einer neuen Seite beginnt das Muster nicht von vorn.
+
 ### Abwechselnde Farben bei Seitenumbrüchen
 
 Wenn eine Tabelle mit wechselnden Zeilenfarben über mehrere Seiten geht, werden die Farben in der Erzeugungsreihenfolge fortgesetzt. Das bedeutet, dass die erste Zeile auf einer neuen Seite mit der falschen Farbe beginnen kann. Um das Farbmuster auf jeder Seite neu zu starten, kann das Attribut `eval-on-split` am `<Table>`-Element verwendet werden:

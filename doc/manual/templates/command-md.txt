@@ -28,6 +28,12 @@ aliases:
 : {{ .DescriptionMarkdown $.Lang }}
 {{ end }}{{ else }}({{ translate $.Lang "none" }}){{ end }}
 
+{{ with cssMarkdown $.Lang .Command }}
+## CSS
+
+{{ . }}
+{{ end }}
+
 {{ with (.Command.RemarkMarkdown $.Lang) }}
 ## {{ translate $.Lang "Remarks" }}
 

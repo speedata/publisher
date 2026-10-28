@@ -621,6 +621,9 @@ After the table has been output, there is no guarantee that the next call to `sd
 
 This resets the counter for the specified identifier (tab).
 
+The stripes also work without a layout function, with CSS: `tr:nth-child(even) { background-color: gray }` colors every second row, see [Tables with CSS]({{< relref "/manual/webformats/css#css-tables" >}}).
+The color then depends on the position of the row in the table; on a new page the pattern does not start again.
+
 ### Alternating colors with page breaks
 
 When a table with alternating row colors spans multiple pages, the color pattern continues from the creation order. This means the first row on a new page may start with the wrong color. To restart the alternating pattern on each page, use the `eval-on-split` attribute on the `<Table>` element:
