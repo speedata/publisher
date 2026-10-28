@@ -770,7 +770,7 @@ function M.initialize_page(pagenumber, data, _from)
     local cg = current_page.grid
 
     for k, v in pairs(cg.positioning_frames) do
-        css_rules = publisher.css:matches({ element = "area", class = nil, id = k }) or {}
+        css_rules = publisher.css:standalone("area", nil, k)
         if css_rules["border-width"] then
             for _, frame in ipairs(v) do
                 frame.draw = { color = "green", width = css_rules["border-width"] }

@@ -351,7 +351,7 @@ M.pages = {}
 ---@type table<integer, boolean>
 M.pages_shippedout = {}
 
--- CSS properties. Use `:matches(tbl)` to find a matching rule. `tbl` has the following structure: `{element=..., id=..., class=... }`
+-- CSS rules for the layout commands. Use `:rules()` for the command being executed.
 M.css = do_luafile("css.lua"):new()
 
 ---@class Options

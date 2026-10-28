@@ -151,6 +151,30 @@ local dispatch_table = {
     While = commands.while_do,
 }
 
+-- Layout commands that take part in CSS matching, with their element name
+-- in CSS selectors. They form the element chain for descendant selectors;
+-- commands like Record or Loop are transparent.
+---@type table<string, string>
+local css_elements = {
+    Box = "box",
+    Circle = "circle",
+    Frame = "frame",
+    Image = "img",
+    Li = "li",
+    Ol = "ol",
+    Paragraph = "paragraph",
+    PlaceObject = "placeobject",
+    Rule = "rule",
+    Span = "span",
+    Table = "table",
+    Tablerule = "tablerule",
+    Td = "td",
+    Textblock = "textblock",
+    Tr = "tr",
+    U = "u",
+    Ul = "ul",
+}
+
 -- Compiles a match pattern string into a test function and priority.
 -- Simple element names (no special chars) return `nil` to signal the fast
 -- path so the caller can do a direct table lookup.
@@ -337,7 +361,20 @@ function M.dispatch(layoutxml, dataxml, opts)
 
                 -- The legacy XPath parser calls the commands with a nil
                 -- dataxml; the commands only pass it through in that case.
+                local csselement = css_elements[eltname]
+                local cssdepth
+                if csselement then
+                    local read_attribute = publisher.attribute_helpers.read_attribute
+                    cssdepth = publisher.css:enter(
+                        csselement,
+                        read_attribute(j, dataxml, "class", "string"),
+                        read_attribute(j, dataxml, "id", "string")
+                    )
+                end
                 tmp = dispatch_table[eltname](j, dataxml --[[@as table]], opts)
+                if cssdepth then
+                    publisher.css:leave(cssdepth)
+                end
                 if type(tmp) == "table" and tmp.raw == true then
                     for i = 1, #tmp do
                         ret[#ret + 1] = tmp[i]

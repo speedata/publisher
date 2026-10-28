@@ -6508,6 +6508,11 @@
           <xs:documentation>Radius der Ecke unten links.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="class">
+        <xs:annotation>
+          <xs:documentation>CSS-Klasse für dieses Objekt.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="clipatmargin">
         <xs:annotation>
           <xs:documentation>Schneide Objekte am Seitenrand ab.</xs:documentation>
@@ -6647,6 +6652,11 @@
             </xs:simpleType>
           </xs:union>
         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation>CSS-Id für dieses Objekt.</xs:documentation>
+        </xs:annotation>
       </xs:attribute>
       <xs:attribute name="keepposition">
         <xs:annotation>
@@ -6995,9 +7005,19 @@
           <xs:documentation>Dicke der Linie in Rasterzellen oder als absolute Angabe.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation>CSS-Id für diese Linie.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="length" use="required">
         <xs:annotation>
           <xs:documentation>Länge der Linie in Rasterzellen oder als absolute Angabe.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="class">
+        <xs:annotation>
+          <xs:documentation>CSS-Klasse für diese Linie.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="color">
@@ -10113,9 +10133,19 @@
           </xs:union>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="class">
+        <xs:annotation>
+          <xs:documentation>CSS-Klasse für diese Tabellenzeile.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="data">
         <xs:annotation>
           <xs:documentation>Auf diese Daten können im Tabellenkopf und Tabellenfuß mit $_last_tr_data zugegriffen werden.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation>CSS-Id für diese Tabellenzeile.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="minheight">

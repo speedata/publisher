@@ -6508,6 +6508,11 @@
           <xs:documentation>Radius of corner bottom left.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="class">
+        <xs:annotation>
+          <xs:documentation>CSS class for this object.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="clipatmargin">
         <xs:annotation>
           <xs:documentation>Clip objects at page margin.</xs:documentation>
@@ -6647,6 +6652,11 @@
             </xs:simpleType>
           </xs:union>
         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation>CSS id for this object.</xs:documentation>
+        </xs:annotation>
       </xs:attribute>
       <xs:attribute name="keepposition">
         <xs:annotation>
@@ -6995,9 +7005,19 @@
           <xs:documentation>The rule thickness given in grid cells or as a length.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation>CSS id for this rule.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="length" use="required">
         <xs:annotation>
           <xs:documentation>The length of the rule in grid cells or as an absolute length.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="class">
+        <xs:annotation>
+          <xs:documentation>CSS class for this rule.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="color">
@@ -10113,9 +10133,19 @@
           </xs:union>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="class">
+        <xs:annotation>
+          <xs:documentation>CSS class for this table row.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="data">
         <xs:annotation>
           <xs:documentation>Data that can be accessed via $_last_tr_data in the tablefoot and tablehead.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation>CSS id for this table row.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="minheight">

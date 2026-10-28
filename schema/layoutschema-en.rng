@@ -5483,6 +5483,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="class">
+                     <a:documentation>CSS class for this object.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="clipatmargin">
                      <a:documentation>Clip objects at page margin.</a:documentation>
                      <choice>
@@ -5552,6 +5557,11 @@
                            <param name="pattern">\{.+\}</param>
                         </data>
                      </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation>CSS id for this object.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -5995,9 +6005,19 @@
                <a:documentation>The rule thickness given in grid cells or as a length.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS id for this rule.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="length">
             <a:documentation>The length of the rule in grid cells or as an absolute length.</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS class for this rule.</a:documentation>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="color">
                <a:documentation>The color of the rule. Defaults to black.</a:documentation>
@@ -7956,8 +7976,18 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="class">
+                     <a:documentation>CSS class for this table row.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="data">
                      <a:documentation>Data that can be accessed via $_last_tr_data in the tablefoot and tablehead.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation>CSS id for this table row.</a:documentation>
                   </attribute>
                </optional>
                <optional>

@@ -92,6 +92,8 @@ extern int sdParseHTMLText(lua_State* L);
 extern int sdMarkdown(lua_State* L);
 extern int sdContains(lua_State* L);
 extern int sdMatches(lua_State* L);
+extern int sdCSSAdd(lua_State* L);
+extern int sdCSSMatch(lua_State* L);
 extern int sdTokenize(lua_State* L);
 extern int sdReplace(lua_State* L);
 extern int sdUpperCase(lua_State* L);

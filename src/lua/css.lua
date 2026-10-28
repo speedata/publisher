@@ -1,4 +1,6 @@
--- This file contains the code for the CSS parser.
+-- This file contains the CSS handling for the layout commands. Parsing,
+-- selector matching and the cascade happen in Go (splib); this file keeps
+-- the chain of the layout commands being executed and caches the results.
 --
 --  css.lua
 --  speedata publisher
@@ -6,66 +8,34 @@
 --  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 
-local explode = string.explode
-local string = unicode.utf8
-
-local lua_pattern_escapes = {
-    ["^"] = "%^",
-    ["$"] = "%$",
-    ["("] = "%(",
-    [")"] = "%)",
-    ["%"] = "%%",
-    ["."] = "%.",
-    ["["] = "%[",
-    ["]"] = "%]",
-    ["*"] = "%*",
-    ["+"] = "%+",
-    ["-"] = "%-",
-    ["?"] = "%?",
-    ["\0"] = "%z",
-}
-local function escape_lua_pattern(s)
-    return (s:gsub(".", lua_pattern_escapes))
-end
+local splib = splib
 
 ---@class CSSRules
----@field rules table<integer, table<string, table<string, string>>> `[priority][selector][property] = value`.
----@field priorities integer[] Known priorities, sorted descending after each parse.
----@field text string[] Concatenation of every parsed CSS source (kept for the Go renderer).
+---@field text string[] Concatenation of every parsed CSS source (kept for the Go HTML renderer).
+---@field stack string[] Encoded chain of the layout commands being executed, innermost last.
+---@field cache table<string, CSSResult> Match results by chain.
 ---@field __index? CSSRules Set when the table serves as a metatable in `new`.
+
+---@class CSSResult
+---@field [1] table<string, string> Declarations after the cascade.
+---@field [2] table<string, boolean> Properties whose value comes from an `!important` declaration.
+
+-- Result for elements without matching rules. Shared, like cached results.
+---@type table
+local empty = {}
 
 -- Constructs a fresh empty CSS rule store.
 ---@param self CSSRules
 ---@return CSSRules
 local function new(self)
     local c = {
-        rules = {},
-        priorities = {},
         text = {},
+        stack = {},
+        cache = {},
     }
     setmetatable(c, self)
     self.__index = self
     return c
-end
-
--- Sanitizes the selector string and computes its specificity priority
--- using the simple `id=100, class=10, element=1` rule.
----@param selector string
----@return string sanitized
----@return integer priority
-local function get_priority(selector)
-    local prio = 0
-    string.gsub(selector, "[%.#]?[^%s.]+", function(x)
-        if string.match(x, "^#") then
-            prio = prio + 100
-        elseif string.match(x, "^%.") then
-            prio = prio + 10
-        else
-            prio = prio + 1
-        end
-    end)
-    local sel = string.gsub(selector, "^%s*(.-)%s*$", "%1")
-    return sel, prio
 end
 
 -- Returns the concatenation of every CSS source ever fed into this store.
@@ -76,77 +46,19 @@ local function gettext(self)
     return table.concat(self.text)
 end
 
--- Parses a CSS source string into the rule store. Selectors are split on
--- `,`; rules with the same priority and selector are merged.
+-- Adds the rules of a CSS source string.
 ---@param self CSSRules
 ---@param csstext string
 ---@return nil
 local function parsetxt(self, csstext)
     -- save it for later to pass to the Go routine
     self.text[#self.text + 1] = csstext
-
-    csstext = string.gsub(csstext, "%s+", " ")
-    -- remove comments:
-    csstext = string.gsub(csstext, "/%*.-%*/", " ")
-    local stop, selector, selectors, rules, rule, property, expr, rule_stop, rules_text
-    stop = 0
-    while true do
-        _, stop, selector = string.find(csstext, "^%s*([^{]+)", stop + 1)
-        if not selector then
-            break
-        end
-        _, stop, rules_text = string.find(csstext, "{([^}]+)}%s*", stop + 1)
-        if not rules_text then
-            return
-        end
-        rules = explode(rules_text, ";")
-        local rules_t = {}
-        for i = 1, #rules do
-            rule = rules[i]
-            -- if it's not only whitespace
-            if not string.match(rule, "^%s*$") then
-                _, rule_stop, property = string.find(rule, "%s*([^:]+):")
-                -- a rule without a colon has no property and gets skipped
-                if property then
-                    _, _, expr = string.find(rule, "^%s*(.-)%s*$", rule_stop + 1)
-                    rules_t[property] = expr
-                end
-            end
-        end
-        selectors = explode(selector, ",")
-        local sel, prio
-        for i = 1, #selectors do
-            sel, prio = get_priority(selectors[i])
-            self.rules[prio] = self.rules[prio] or {}
-            self.rules[prio][sel] = self.rules[prio][sel] or {}
-            for k, v in pairs(rules_t) do
-                self.rules[prio][sel][k] = v
-            end
-        end
-    end
-    local prio_found
-    -- We remember the priority for later use.
-    for prio, _ in pairs(self.rules) do
-        prio_found = false
-        for i = 1, #self.priorities do
-            if self.priorities[i] == prio then
-                prio_found = true
-                break
-            end
-        end
-        if prio_found == false then
-            self.priorities[#self.priorities + 1] = prio
-        end
-    end
-    -- now sort the table with the priorities, so we can access the
-    -- rules in the order of priorities (that's the whole point)
-    table.sort(self.priorities, function(a, b)
-        return a > b
-    end)
+    splib.css_add(csstext)
+    self.cache = {}
 end
 
--- Loads a CSS file from disk (resolved via `kpse.find_file`) and merges
--- its rules into the store via `parsetxt`.
+-- Loads a CSS file from disk (resolved via `kpse.find_file`) and adds its
+-- rules via `parsetxt`.
 ---@param self CSSRules
 ---@param filename string
 ---@return nil
@@ -167,109 +79,102 @@ local function parse(self, filename)
     return parsetxt(self, csstext)
 end
 
--- Returns `true` when `selector` matches the description in `tbl`.
----@param tbl { element?: string, class?: string, id?: string, parent?: string }
----@param selector string
----@return boolean
-local function matches_selector(tbl, selector)
-    local element, class, id = tbl.element, tbl.class, tbl.id
-    local id_found, class_found, element_found = false, false, false
-    local id_matches, class_matches, element_matches = false, false, false
-    local id_required, class_required, element_required = tbl.id ~= nil, tbl.class ~= nil, tbl.element ~= nil
-    -- todo: element_required is probably never false since the publisher always presents an element name
-
-    local return_false = false
-    string.gsub(selector, "[%.#]?[^%s.#]+", function(x)
-        if string.match(x, "^#") then
-            if not id_required then
-                return_false = true
-            end
-            id_found = true
-            if id and string.match(id, escape_lua_pattern(string.sub(x, 2))) then
-                id_matches = true
-            end
-        elseif string.match(x, "^%.") then
-            if not class_required then
-                return_false = true
-            end
-            class_found = true
-            if class and string.match(class, escape_lua_pattern(string.sub(x, 2)) .. "$") then
-                class_matches = true
-            end
-        else
-            if not element_required then
-                return_false = true
-            end
-            element_found = true
-            if element and string.match(element, "^" .. escape_lua_pattern(x) .. "$") then
-                element_matches = true
-            end
-        end
-    end)
-    if return_false then
-        return false
-    end
-    -- We return true if we have found something that matches and if these elements, if found, match the requested ones from the tbl
-    return element_found == element_matches
-        and class_found == class_matches
-        and id_found == id_matches
-        and (class_found or element_found or id_found)
+-- Encodes one element of the chain in the format splib.css_match expects.
+---@param element string Lower case element name.
+---@param class? string
+---@param id? string
+---@param position? integer Position among the siblings.
+---@return string
+local function segment(element, class, id, position)
+    return element .. "\1" .. (class or "") .. "\1" .. (id or "") .. "\1" .. (position or "")
 end
 
--- Walks the rule store in priority order and returns the first rule body
--- whose selector matches `tbl`. `level` selects which compound-selector
--- segment is tested (1 = rightmost).
+-- Enters a layout command. Returns the stack depth before the push, which
+-- `leave` restores.
 ---@param self CSSRules
----@param tbl { element?: string, class?: string, id?: string, parent?: string }
----@param level? integer
----@return table<string, string>? rule
-local function matches(self, tbl, level)
-    level = level or 1
-    local interesting_part, parts
-    for _, v in ipairs(self.priorities) do
-        for selector, rule in pairs(self.rules[v]) do
-            parts = explode(selector, " ")
-            -- the interesting part depends on the level:
-            -- level 1: the last part, level 2, the second last part, ...
-            interesting_part = parts[#parts + 1 - level]
-            if matches_selector(tbl, interesting_part) == true then
-                return rule
-            end
-        end
-    end
-    return nil
+---@param element string Lower case element name.
+---@param class? string
+---@param id? string
+---@return integer depth
+local function enter(self, element, class, id)
+    local stack = self.stack
+    local depth = #stack
+    stack[depth + 1] = segment(element, class, id)
+    return depth
 end
 
--- Collects the declarations of all rules whose selector is `last` alone or
--- `<parent> <last>` where `<parent>` matches `parent_tbl`. Used for the
--- `li::marker` rules of a list: `li::marker`, `ul li::marker` and
--- `ul.foo li::marker` all apply to `<Ul class="foo">`. Declarations of
--- rules with a higher priority override those with a lower priority.
+-- Leaves a layout command (and everything entered below it).
 ---@param self CSSRules
----@param parent_tbl { element?: string, class?: string, id?: string }
----@param last string
+---@param depth integer Return value of `enter`.
+---@return nil
+local function leave(self, depth)
+    local stack = self.stack
+    for i = #stack, depth + 1, -1 do
+        stack[i] = nil
+    end
+end
+
+-- Returns the declarations for an encoded chain.
+---@param self CSSRules
+---@param chain string
+---@param pseudo? string
 ---@return table<string, string> declarations
-local function matches_descendant(self, parent_tbl, last)
-    local ret = {}
-    for i = #self.priorities, 1, -1 do
-        for selector, rule in pairs(self.rules[self.priorities[i]]) do
-            local parts = explode(selector, " ")
-            local n = #parts
-            if parts[n] == last and (n == 1 or matches_selector(parent_tbl, parts[n - 1])) then
-                for k, v in pairs(rule) do
-                    ret[k] = v
-                end
-            end
-        end
+---@return table<string, boolean> important
+local function lookup(self, chain, pseudo)
+    if #self.text == 0 then
+        return empty, empty
     end
-    return ret
+    local key = pseudo and chain .. "\3" .. pseudo or chain
+    local res = self.cache[key]
+    if not res then
+        local decls, important = splib.css_match(chain, pseudo)
+        res = { decls or {}, important or {} }
+        self.cache[key] = res
+    end
+    return res[1], res[2]
+end
+
+-- Returns the CSS declarations for the innermost layout command being
+-- executed. With `child`, the declarations are for a child element of that
+-- name (for example `li` in a list), with `pseudo` for a pseudo element
+-- (`marker` for `li::marker`). The returned tables are shared and must not
+-- be changed.
+---@param self CSSRules
+---@param pseudo? string
+---@param child? string
+---@return table<string, string> declarations
+---@return table<string, boolean> important
+local function rules(self, pseudo, child)
+    if #self.stack == 0 then
+        return empty, empty
+    end
+    local chain = table.concat(self.stack, "\2")
+    if child then
+        chain = chain .. "\2" .. segment(child)
+    end
+    return lookup(self, chain, pseudo)
+end
+
+-- Returns the CSS declarations for an element directly below the root,
+-- independent of the commands being executed (for example a positioning
+-- area).
+---@param self CSSRules
+---@param element string
+---@param class? string
+---@param id? string
+---@return table<string, string> declarations
+---@return table<string, boolean> important
+local function standalone(self, element, class, id)
+    return lookup(self, segment(element, class, id))
 end
 
 return {
     new = new,
     parse = parse,
     parsetxt = parsetxt,
-    matches = matches,
-    matches_descendant = matches_descendant,
     gettext = gettext,
+    enter = enter,
+    leave = leave,
+    rules = rules,
+    standalone = standalone,
 }

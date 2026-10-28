@@ -38,6 +38,20 @@ function splib.convertcontents(contents, handler) end
 ---@return string? converted
 function splib.convertimage(filename, handler) end
 
+---Add the rules of a CSS text to the stylesheet for the layout commands.
+---@param csstext string
+function splib.css_add(csstext) end
+
+---Match the layout stylesheet against an element chain (elements separated
+---by `"\2"`, the fields name, class, id and position by `"\1"`). Returns the
+---declarations after the cascade and the set of properties that come from
+---an `!important` declaration.
+---@param chain string
+---@param pseudo? string Pseudo element such as `"marker"`.
+---@return table<string, string>? declarations
+---@return table<string, boolean>? important
+function splib.css_match(chain, pseudo) end
+
 ---Run an external command (given as separate string arguments) that creates
 ---the file outfile. Skips the run when outfile already exists (caching).
 ---@param outfile string

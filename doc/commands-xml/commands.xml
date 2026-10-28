@@ -9013,6 +9013,14 @@
         <para>Radius der Ecke unten links.</para>
       </description>
     </attribute>
+    <attribute en="class" optional="yes" type="text" since="5.9.14">
+      <description xml:lang="en">
+        <para>CSS class for this object.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Klasse für dieses Objekt.</para>
+      </description>
+    </attribute>
     <attribute en="clipatmargin" optional="yes" since="4.21.9" type="boolean" allowxpath="yes">
       <description xml:lang="en">
         <para>Clip objects at page margin.</para>
@@ -9132,6 +9140,14 @@
           <para>Das Objekt wird rechts ausgerichtet.</para>
         </description>
       </choice>
+    </attribute>
+    <attribute en="id" optional="yes" type="text" since="5.9.14">
+      <description xml:lang="en">
+        <para>CSS id for this object.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Id für dieses Objekt.</para>
+      </description>
     </attribute>
     <attribute en="keepposition" optional="yes">
       <description xml:lang="en">
@@ -9797,12 +9813,28 @@
         <para>Dicke der Linie in Rasterzellen oder als absolute Angabe.</para>
       </description>
     </attribute>
+    <attribute en="id" optional="yes" type="text" since="5.9.14">
+      <description xml:lang="en">
+        <para>CSS id for this rule.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Id für diese Linie.</para>
+      </description>
+    </attribute>
     <attribute en="length" type="numberorlength" optional="no">
       <description xml:lang="en">
         <para>The length of the rule in grid cells or as an absolute length.</para>
       </description>
       <description xml:lang="de">
         <para>Länge der Linie in Rasterzellen oder als absolute Angabe.</para>
+      </description>
+    </attribute>
+    <attribute en="class" optional="yes" type="text" since="5.9.14">
+      <description xml:lang="en">
+        <para>CSS class for this rule.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Klasse für diese Linie.</para>
       </description>
     </attribute>
     <attribute en="color" type="text" optional="yes" css="background-color">
@@ -12698,12 +12730,28 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="class" optional="yes" type="text" since="5.9.14">
+      <description xml:lang="en">
+        <para>CSS class for this table row.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Klasse für diese Tabellenzeile.</para>
+      </description>
+    </attribute>
     <attribute en="data" type="xpath" optional="yes">
       <description xml:lang="en">
         <para>Data that can be accessed via <tt>$_last_tr_data</tt> in the tablefoot and tablehead.</para>
       </description>
       <description xml:lang="de">
         <para>Auf diese Daten können im Tabellenkopf und Tabellenfuß mit <tt>$_last_tr_data</tt> zugegriffen werden.</para>
+      </description>
+    </attribute>
+    <attribute en="id" optional="yes" type="text" since="5.9.14">
+      <description xml:lang="en">
+        <para>CSS id for this table row.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Id für diese Tabellenzeile.</para>
       </description>
     </attribute>
     <attribute en="minheight" type="numberorlength" optional="yes">

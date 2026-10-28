@@ -41,7 +41,7 @@ func (c *CSS) FillComputedMaps(r *Result) error {
 	// Inline default + user CSS are already in c.Stylesheet (as in your ParseHTMLFragment).
 	for _, stylesheet := range c.Stylesheet {
 		for _, block := range stylesheet.Blocks {
-			selector := block.ComponentValues.String()
+			selector := sourceString(block.ComponentValues)
 			selectors, err := cascadia.ParseGroupWithPseudoElements(selector)
 			if err != nil {
 				// Keep going; bad selectors should not break the whole tree

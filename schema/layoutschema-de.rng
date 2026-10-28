@@ -5483,6 +5483,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="class">
+                     <a:documentation>CSS-Klasse für dieses Objekt.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="clipatmargin">
                      <a:documentation>Schneide Objekte am Seitenrand ab.</a:documentation>
                      <choice>
@@ -5552,6 +5557,11 @@
                            <param name="pattern">\{.+\}</param>
                         </data>
                      </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation>CSS-Id für dieses Objekt.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -5995,9 +6005,19 @@
                <a:documentation>Dicke der Linie in Rasterzellen oder als absolute Angabe.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="id">
+               <a:documentation>CSS-Id für diese Linie.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="length">
             <a:documentation>Länge der Linie in Rasterzellen oder als absolute Angabe.</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="class">
+               <a:documentation>CSS-Klasse für diese Linie.</a:documentation>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="color">
                <a:documentation>Farbe der Linie. Vorgabe: Schwarz</a:documentation>
@@ -7956,8 +7976,18 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="class">
+                     <a:documentation>CSS-Klasse für diese Tabellenzeile.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="data">
                      <a:documentation>Auf diese Daten können im Tabellenkopf und Tabellenfuß mit $_last_tr_data zugegriffen werden.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation>CSS-Id für diese Tabellenzeile.</a:documentation>
                   </attribute>
                </optional>
                <optional>

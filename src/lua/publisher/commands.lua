@@ -563,10 +563,7 @@ function commands.box(layoutxml, dataxml)
     local valign = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "vertical-align", "string")
     local width = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "width", "length")
 
-    local class = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "class", "string")
-    local id = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "id", "string")
-
-    local css_rules = publisher.css:matches({ element = "box", class = class, id = id }) or {}
+    local css_rules = publisher.css:rules()
     colorname = colorname or css_rules["background-color"] or "black"
 
     local attribute = {
@@ -750,10 +747,8 @@ function commands.circle(layoutxml, dataxml)
     local rulewidth_sp = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "rulewidth", "length_sp", 0)
     local colorname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "background-color", "string")
     colorname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "backgroundcolor", "string", colorname)
-    local class = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "class", "string")
-    local id = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "id", "string")
 
-    local css_rules = publisher.css:matches({ element = "circle", class = class, id = id }) or {}
+    local css_rules = publisher.css:rules()
     colorname = colorname or css_rules["background-color"] or "black"
     framecolorname = framecolorname or css_rules["color"] or "black"
 
@@ -1468,11 +1463,9 @@ function commands.frame(layoutxml, dataxml)
     backgroundcolor =
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "backgroundcolor", "string", backgroundcolor)
     local rulewidth_sp = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "rulewidth", "length_sp", 26312) -- 0.4bp
-    local class = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "class", "string")
-    local id = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "id", "string")
     local clip = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "clip", "boolean", true)
 
-    local css_rules = publisher.css:matches({ element = "frame", class = class, id = id }) or {}
+    local css_rules = publisher.css:rules()
 
     b_b_r_radius = b_b_r_radius or b_radius or css_rules["border-bottom-right-radius"]
     b_b_l_radius = b_b_l_radius or b_radius or css_rules["border-bottom-left-radius"]
@@ -2511,14 +2504,12 @@ local box_lookup = {
 ---@return any
 function commands.image(layoutxml, dataxml)
     local bleed = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "bleed", "string")
-    local class = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "class", "string")
     local clip = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "clip", "boolean")
     local description = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "description", "string")
     local dpiwarn = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "dpiwarn", "number")
     local fallback = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "fallback", "string")
     local filename = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "file", "string")
     local height = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "height", "string")
-    local id = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "id", "string")
     local imageshape = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "imageshape", "boolean", false)
     local imagetype = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "imagetype", "string")
     local margin_bottom = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "margin-bottom", "length_sp")
@@ -2542,7 +2533,7 @@ function commands.image(layoutxml, dataxml)
     local vis_box = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "visiblebox", "string")
     local width = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "width", "string")
 
-    local css_rules = publisher.css:matches({ element = "img", class = class, id = id }) or {}
+    local css_rules = publisher.css:rules()
 
     -- fallback for older versions (< 2.7.5)
     vis_box = vis_box or max_box
@@ -4147,10 +4138,8 @@ local listnumbering_names = {
 local function list_common(layoutxml, dataxml, kind)
     local read_attribute = publisher.attribute_helpers.read_attribute
     local cmdname = kind == "ul" and "Ul" or "Ol"
-    local class = read_attribute(layoutxml, dataxml, "class", "string")
     local colorname = read_attribute(layoutxml, dataxml, "color", "string")
     local fontfamilyname = read_attribute(layoutxml, dataxml, "fontfamily", "string")
-    local id = read_attribute(layoutxml, dataxml, "id", "string")
     local labelalign = read_attribute(layoutxml, dataxml, "label-align", "string")
     local labeldistance = read_attribute(layoutxml, dataxml, "label-distance", "width_sp")
     local labelwidth = read_attribute(layoutxml, dataxml, "label-width", "width_sp")
@@ -4164,8 +4153,8 @@ local function list_common(layoutxml, dataxml, kind)
 
     -- CSS: rules for ul / ol and for the marker (li::marker). Attributes
     -- take precedence over CSS, CSS over the built-in defaults.
-    local css_rules = publisher.css:matches({ element = kind, class = class, id = id }) or {}
-    local marker_rules = publisher.css:matches_descendant({ element = kind, class = class, id = id }, "li::marker")
+    local css_rules = publisher.css:rules()
+    local marker_rules = publisher.css:rules("marker", "li")
 
     local fontfamily
     if fontfamilyname then
@@ -5428,10 +5417,8 @@ function commands.place_object(layoutxml, dataxml)
     local allocate_top = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "allocate-top", "height_sp")
     local allocate_bottom =
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "allocate-bottom", "height_sp")
-    local class = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "class", "string")
-    local id = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "id", "string")
 
-    local css_rules = publisher.css:matches({ element = "placeobject", class = class, id = id }) or {}
+    local css_rules = publisher.css:rules()
     if rotate and tonumber(rotate) % 360 ~= 0 then
         allocate = "no"
     end
@@ -6130,10 +6117,8 @@ function commands.rule(layoutxml, dataxml)
     local rulewidth = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "rulewidth", "string")
     local dashed = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "dashed", "boolean")
     local color = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "color", "string")
-    local class = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "class", "string")
-    local id = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "id", "string")
 
-    local css_rules = publisher.css:matches({ element = "rule", class = class, id = id }) or {}
+    local css_rules = publisher.css:rules()
 
     local colorname = color or css_rules["background-color"] or "black"
     -- #hexvalue -> colorname
@@ -6641,9 +6626,7 @@ function commands.span(layoutxml, dataxml)
     local language_name = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "language", "string")
     local letterspacing =
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "letter-spacing", "booleanorlength")
-    local class = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "class", "string")
-    local id = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "id", "string")
-    local css_rules = publisher.css:matches({ element = "span", class = class, id = id }) or {}
+    local css_rules = publisher.css:rules()
     local role = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "role", "string")
 
     local letterspacing_em
@@ -7050,10 +7033,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.tablerule(layoutxml, dataxml)
-    local class = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "class", "string")
-    local id = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "id", "string")
-
-    local css_rules = publisher.css:matches({ element = "tablerule", class = class, id = id }) or {}
+    local css_rules = publisher.css:rules()
 
     local tab = {}
     local tmp = css_rules["height"]
@@ -7096,12 +7076,10 @@ function commands.tr(layoutxml, dataxml)
     local tab = {}
     local tab_tmp = publisher.dispatch.dispatch(layoutxml, dataxml)
 
-    local class = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "class", "string")
-    local id = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "id", "string")
     local parent = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "parent", "string")
     local role = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "role", "string")
 
-    local css_rules = publisher.css:matches({ element = "tr", class = class, id = id })
+    local css_rules = publisher.css:rules()
 
     if css_rules and type(css_rules) == "table" then
         for k, v in pairs(css_rules) do
@@ -7269,10 +7247,7 @@ function commands.td(layoutxml, dataxml)
     local parent = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "parent", "string")
     local role = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "role", "string")
 
-    local class = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "class", "string")
-    local id = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "id", "string")
-
-    local css_rules = publisher.css:matches({ element = "td", class = class, id = id })
+    local css_rules = publisher.css:rules()
 
     if css_rules and type(css_rules) == "table" then
         for k, v in pairs(css_rules) do
@@ -7856,10 +7831,8 @@ end
 ---@return any
 function commands.underline(layoutxml, dataxml)
     local dashed = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "dashed", "boolean")
-    local class = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "class", "string")
-    local id = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "id", "string")
 
-    local css_rules = publisher.css:matches({ element = "u", class = class, id = id }) or {}
+    local css_rules = publisher.css:rules()
     if dashed == nil then
         dashed = (css_rules["border-style"] == "dashed")
     end

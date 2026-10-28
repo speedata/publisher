@@ -9,6 +9,8 @@ static const struct luaL_Reg myfuncs[] = {
     {"convert_svg_image", sdConvertSVGImage},
     {"convertcontents", sdConvertContents},
     {"convertimage", sdConvertImage},
+    {"css_add", sdCSSAdd},
+    {"css_match", sdCSSMatch},
     {"errcount", sdGetErrCount},
     {"error", sdError},
     {"htmltoxml", sdHtmlToXml},

@@ -267,14 +267,19 @@ func consumeBlock(toks tokenstream, inblock bool) sBlock {
 		if t := toks[i]; t.Type == scanner.Delim {
 			switch t.Value {
 			case ":":
-				if inblock {
+				// only the first colon separates key and value
+				if inblock && colon == 0 {
 					colon = i
 				}
 			case ";":
-				key := trimSpace(toks[start:colon])
-				value := trimSpace(toks[colon+1 : i])
-				q := qrule{Key: key, Value: value}
-				b.Rules = append(b.Rules, q)
+				// A semicolon without a preceding colon ends an at-rule
+				// statement such as @import, which has no declaration.
+				if colon > start {
+					key := trimSpace(toks[start:colon])
+					value := trimSpace(toks[colon+1 : i])
+					q := qrule{Key: key, Value: value}
+					b.Rules = append(b.Rules, q)
+				}
 				colon = 0
 				start = i + 1
 			case "{":
