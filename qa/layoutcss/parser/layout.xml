@@ -1,0 +1,28 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- Braces in strings and at-rules must not break the rules that
+         follow. -->
+    <Pageformat width="120mm" height="60mm"/>
+
+    <Stylesheet>
+        span.one { background-color: green }
+        ol.brace li::marker { content: "}"; padding-right: 2mm }
+        span.two { background-color: green }
+        @media print { span.three { letter-spacing: 2pt } }
+        span.four { background-color: green }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Span class="one"><Value>green (before the string)</Value></Span></Paragraph>
+                <Ol class="brace">
+                    <Li><Value>marker is a closing brace</Value></Li>
+                </Ol>
+                <Paragraph><Span class="two"><Value>green (after the string)</Value></Span></Paragraph>
+                <Paragraph><Span class="four"><Value>green (after @media)</Value></Span></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

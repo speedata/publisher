@@ -1,0 +1,28 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- A descendant selector only matches inside the named ancestor.
+         Nothing red may appear. -->
+    <Pageformat width="120mm" height="60mm"/>
+
+    <Stylesheet>
+        div td { background-color: red }
+        ul span { background-color: red }
+        tr td.x { background-color: green }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Span><Value>no background (not in ul)</Value></Span></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Table stretch="no">
+                <Columns><Column width="6cm"/></Columns>
+                <Tr><Td><Paragraph><Value>no background (not in div)</Value></Paragraph></Td></Tr>
+                <Tr><Td class="x"><Paragraph><Value>green (tr td.x)</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

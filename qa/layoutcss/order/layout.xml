@@ -1,0 +1,27 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- With equal specificity the later rule wins. -->
+    <Pageformat width="120mm" height="40mm"/>
+
+    <Stylesheet>
+        tr td { background-color: red }
+        table td { background-color: green }
+        span.b { background-color: red }
+        span.a { background-color: green }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Table stretch="no">
+                <Columns><Column width="6cm"/></Columns>
+                <Tr><Td><Paragraph><Value>green (table td)</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Span class="a b"><Value>green (span.a)</Value></Span></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

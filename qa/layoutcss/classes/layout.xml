@@ -1,0 +1,23 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- A class selector matches whole words in the class attribute. -->
+    <Pageformat width="120mm" height="60mm"/>
+
+    <Stylesheet>
+        .warn { background-color: yellow }
+        .a { background-color: orange }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Span class="warn"><Value>yellow (warn)</Value></Span></Paragraph>
+                <Paragraph><Span class="superwarn"><Value>no background (superwarn)</Value></Span></Paragraph>
+                <Paragraph><Span class="a b"><Value>orange (a b)</Value></Span></Paragraph>
+                <Paragraph><Span class="b a"><Value>orange (b a)</Value></Span></Paragraph>
+                <Paragraph><Span class="aa"><Value>no background (aa)</Value></Span></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

@@ -1,0 +1,85 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- An attribute on the element wins over a CSS rule. Every rule sets
+         red or a large value, every attribute green or a small value.
+         Nothing red may appear. -->
+    <Pageformat width="210mm" height="297mm"/>
+    <SetGrid width="5mm" height="5mm"/>
+
+    <Stylesheet>
+        box.c { background-color: red }
+        circle.c { background-color: red; color: red }
+        rule.c { background-color: red; height: 6pt }
+        img.c { padding-left: 2cm }
+        placeobject.c { background-color: red }
+        span.c { background-color: red; letter-spacing: 3pt; background-padding-top: 5pt }
+        u.c { border-style: dashed }
+        tr.c { background-color: red; vertical-align: bottom }
+        td.c { background-color: red; text-align: right; padding-left: 1cm }
+        tablerule.c { height: 4pt }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject row="1" column="1">
+            <Textblock width="8"><Paragraph><Value>Box: green</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="1" column="10"><Box width="3" height="2" class="c" background-color="green"/></PlaceObject>
+
+        <PlaceObject row="4" column="1">
+            <Textblock width="8"><Paragraph><Value>Circle: green fill and frame</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="5" column="12">
+            <Circle radiusx="5mm" class="c" background-color="green" framecolor="green" rulewidth="2pt"/>
+        </PlaceObject>
+
+        <PlaceObject row="8" column="1">
+            <Textblock width="8"><Paragraph><Value>Rule: green, 1pt</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="8" column="10">
+            <Rule direction="horizontal" length="6" class="c" color="green" rulewidth="1pt"/>
+        </PlaceObject>
+
+        <PlaceObject row="10" column="1">
+            <Textblock width="8"><Paragraph><Value>Image: no padding</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="10" column="10" frame="solid">
+            <Image file="_samplea.pdf" width="3" class="c" padding-left="0pt"/>
+        </PlaceObject>
+
+        <PlaceObject row="17" column="1">
+            <Textblock width="8"><Paragraph><Value>PlaceObject: green background</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="17" column="10" class="c" background="full" background-color="green">
+            <Textblock width="6"><Paragraph><Value>Text on green</Value></Paragraph></Textblock>
+        </PlaceObject>
+
+        <PlaceObject row="20" column="1">
+            <Textblock width="36">
+                <Paragraph><Value>Span: </Value><Span class="c" background-color="green" letter-spacing="no" background-padding-top="0pt"><Value>green background, no letter spacing</Value></Span></Paragraph>
+                <Paragraph><Value>U: </Value><U class="c" dashed="no"><Value>solid underline</Value></U></Paragraph>
+            </Textblock>
+        </PlaceObject>
+
+        <PlaceObject row="25" column="1">
+            <Textblock width="8"><Paragraph><Value>Table: green row and cell, text top left, thin rule</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="25" column="10">
+            <Table stretch="no" padding="1mm">
+                <Columns>
+                    <Column width="5"/>
+                    <Column width="5"/>
+                </Columns>
+                <Tr class="c" background-color="green" valign="top" minheight="2">
+                    <Td><Paragraph><Value>row: top</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>row: top</Value></Paragraph></Td>
+                </Tr>
+                <Tablerule class="c" rulewidth="0.5pt"/>
+                <Tr>
+                    <Td class="c" background-color="green" align="left" padding-left="1mm"><Paragraph><Value>cell: left</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>plain</Value></Paragraph></Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

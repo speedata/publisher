@@ -1,0 +1,23 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- Specificity: id beats class, class beats element. -->
+    <Pageformat width="120mm" height="60mm"/>
+
+    <Stylesheet>
+        span { background-color: lightgray }
+        span.x { background-color: yellow }
+        #y { background-color: green }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Span><Value>gray (span)</Value></Span></Paragraph>
+                <Paragraph><Span class="x"><Value>yellow (span.x)</Value></Span></Paragraph>
+                <Paragraph><Span class="x" id="y"><Value>green (#y beats span.x)</Value></Span></Paragraph>
+                <Paragraph><Span id="y"><Value>green (#y)</Value></Span></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

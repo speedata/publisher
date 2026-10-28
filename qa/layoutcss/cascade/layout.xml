@@ -1,0 +1,31 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- All matching rules apply, not only the one with the highest
+         specificity. Each marked line needs both properties. -->
+    <Pageformat width="120mm" height="80mm"/>
+
+    <Stylesheet>
+        span { letter-spacing: 2pt }
+        .warn { background-color: yellow }
+        td { padding-left: 1cm }
+        td.warn { text-align: right }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Span><Value>letter spacing only</Value></Span></Paragraph>
+                <Paragraph><Span class="warn"><Value>letter spacing and yellow</Value></Span></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Table stretch="no">
+                <Columns><Column width="6cm"/></Columns>
+                <Tr><Td><Paragraph><Value>indented 1cm</Value></Paragraph></Td></Tr>
+                <Tr><Td class="warn"><Paragraph><Value>right, yellow</Value></Paragraph></Td></Tr>
+                <Tr><Td class="warn" padding-left="0pt"><Paragraph><Value>right, yellow</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

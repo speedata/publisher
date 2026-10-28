@@ -1,0 +1,24 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- An id selector matches the whole id. A compound selector with an
+         id has the specificity of the id. -->
+    <Pageformat width="120mm" height="60mm"/>
+
+    <Stylesheet>
+        span { background-color: lightgray }
+        #head { background-color: yellow }
+        span#foot { background-color: green }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Span id="head"><Value>yellow (head)</Value></Span></Paragraph>
+                <Paragraph><Span id="pagehead"><Value>gray (pagehead)</Value></Span></Paragraph>
+                <Paragraph><Span id="headline"><Value>gray (headline)</Value></Span></Paragraph>
+                <Paragraph><Span id="foot"><Value>green (span#foot beats span)</Value></Span></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

@@ -1,0 +1,122 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- Every layout command that reads CSS today, with the properties it
+         understands. Secures the current behavior before the selector
+         engine is replaced. -->
+    <Pageformat width="210mm" height="297mm"/>
+    <SetGrid width="5mm" height="5mm"/>
+
+    <Pagetype name="page" test="true()">
+        <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+        <PositioningArea name="side">
+            <PositioningFrame width="6" height="4" row="50" column="30"/>
+        </PositioningArea>
+    </Pagetype>
+
+    <Stylesheet>
+        box { background-color: gray }
+        box.hl { background-color: orange }
+        #special { background-color: green }
+        circle.c { background-color: yellow; color: blue }
+        frame.round { border-top-left-radius: 4mm; border-bottom-right-radius: 4mm }
+        img.pad { padding-left: 1cm }
+        placeobject.bg { background-color: yellow }
+        rule.thick { background-color: red; height: 3pt }
+        span.mark { background-color: yellow; background-padding-top: 2pt; background-padding-bottom: 2pt }
+        span.wide { letter-spacing: 2pt }
+        u.dash { border-style: dashed }
+        tablerule.thick { height: 2pt }
+        tr.head { background-color: lightgray; vertical-align: bottom }
+        td.right { text-align: right }
+        td.cell { background-color: yellow; padding-left: 3mm; border-bottom-width: 1pt }
+        #side { border-width: 1pt }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject row="1" column="1">
+            <Textblock width="8"><Paragraph><Value>Box: element, class, id</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="1" column="10"><Box width="3" height="2"/></PlaceObject>
+        <PlaceObject row="1" column="14"><Box width="3" height="2" class="hl"/></PlaceObject>
+        <PlaceObject row="1" column="18"><Box width="3" height="2" id="special"/></PlaceObject>
+
+        <PlaceObject row="4" column="1">
+            <Textblock width="8"><Paragraph><Value>Circle: fill yellow, frame blue</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="5" column="12">
+            <Circle radiusx="5mm" class="c" rulewidth="2pt"/>
+        </PlaceObject>
+
+        <PlaceObject row="8" column="1">
+            <Textblock width="8"><Paragraph><Value>Frame: two rounded corners</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="8" column="10">
+            <Frame framecolor="black" class="round">
+                <Box width="4" height="2" background-color="lightgray"/>
+            </Frame>
+        </PlaceObject>
+
+        <PlaceObject row="11" column="1">
+            <Textblock width="8"><Paragraph><Value>Image: 1cm padding left (frame shows the object)</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="11" column="10" frame="solid">
+            <Image file="_samplea.pdf" width="3" class="pad"/>
+        </PlaceObject>
+
+        <PlaceObject row="18" column="1">
+            <Textblock width="8"><Paragraph><Value>PlaceObject: yellow background</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="18" column="10" class="bg">
+            <Textblock width="6"><Paragraph><Value>Text on yellow</Value></Paragraph></Textblock>
+        </PlaceObject>
+
+        <PlaceObject row="21" column="1">
+            <Textblock width="8"><Paragraph><Value>Rule: red, 3pt</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="21" column="10">
+            <Rule direction="horizontal" length="6" class="thick"/>
+        </PlaceObject>
+
+        <PlaceObject row="23" column="1">
+            <Textblock width="36">
+                <Paragraph><Value>Span: </Value><Span class="mark"><Value>yellow background with padding</Value></Span></Paragraph>
+                <Paragraph><Value>Span: </Value><Span class="wide"><Value>letter spacing 2pt</Value></Span></Paragraph>
+                <Paragraph><Value>U: </Value><U class="dash"><Value>dashed underline</Value></U></Paragraph>
+            </Textblock>
+        </PlaceObject>
+
+        <PlaceObject row="29" column="1">
+            <Textblock width="8"><Paragraph><Value>Table: Tr, Td, Tablerule</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="29" column="10">
+            <Table stretch="no" padding="1mm">
+                <Columns>
+                    <Column width="4"/>
+                    <Column width="4"/>
+                </Columns>
+                <Tr class="head" minheight="2">
+                    <Td><Paragraph><Value>head, bottom</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>gray row</Value></Paragraph></Td>
+                </Tr>
+                <Tablerule class="thick"/>
+                <Tr>
+                    <Td class="right"><Paragraph><Value>right</Value></Paragraph></Td>
+                    <Td class="cell"><Paragraph><Value>yellow</Value></Paragraph></Td>
+                </Tr>
+                <Tablerule/>
+                <Tr>
+                    <Td><Paragraph><Value>plain</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>plain</Value></Paragraph></Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+
+        <PlaceObject row="45" column="1">
+            <Textblock width="20"><Paragraph><Value>Positioning area "side": green frame at the bottom right</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject area="side">
+            <Textblock><Paragraph><Value>in area side</Value></Paragraph></Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
