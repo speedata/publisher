@@ -1,0 +1,59 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- An !important declaration wins over the attribute. Every attribute
+         sets red or a large value, every important rule green or a small
+         value. Nothing red may appear. -->
+    <Pageformat width="120mm" height="160mm"/>
+    <SetGrid width="5mm" height="5mm"/>
+    <DefineTextformat name="tf-right" alignment="rightaligned"/>
+
+    <Stylesheet>
+        box.i { background-color: green !important }
+        circle.i { background-color: green !important; color: green !important }
+        rule.i { background-color: green !important; height: 1pt !important }
+        placeobject.i { background-color: green !important }
+        span.i { background-color: green !important; letter-spacing: 0pt !important }
+        u.i { border-style: solid !important }
+        tr.i { background-color: green !important }
+        td.i { background-color: green !important; text-align: left !important }
+        paragraph.i { color: green !important; text-align: left !important }
+        textblock.i { color: green !important }
+        span.normal { background-color: red }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject row="1" column="1"><Box width="3" height="2" class="i" background-color="red"/></PlaceObject>
+        <PlaceObject row="1" column="6"><Circle radiusx="5mm" class="i" background-color="red" framecolor="red" rulewidth="2pt"/></PlaceObject>
+        <PlaceObject row="1" column="10"><Rule direction="horizontal" length="6" class="i" color="red" rulewidth="6pt"/></PlaceObject>
+        <PlaceObject row="4" column="1" class="i" background="full" background-color="red">
+            <Textblock width="8"><Paragraph><Value>PlaceObject green</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="6" column="1">
+            <Textblock width="20">
+                <Paragraph><Span class="i" background-color="red" letter-spacing="3pt"><Value>Span green, not spaced</Value></Span></Paragraph>
+                <Paragraph><Span class="normal" background-color="green"><Value>Span without important: attribute green</Value></Span></Paragraph>
+                <Paragraph><U class="i" dashed="yes"><Value>solid underline</Value></U></Paragraph>
+                <Paragraph class="i" color="red" textformat="tf-right"><Value>Paragraph green, left</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject row="11" column="1">
+            <Textblock width="20" class="i" color="red">
+                <Paragraph><Value>Text block green</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject row="13" column="1">
+            <Table stretch="no">
+                <Columns><Column width="5"/><Column width="5"/></Columns>
+                <Tr class="i" background-color="red">
+                    <Td><Paragraph><Value>row green</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>row green</Value></Paragraph></Td>
+                </Tr>
+                <Tr>
+                    <Td class="i" background-color="red" align="right"><Paragraph><Value>cell left</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>plain</Value></Paragraph></Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

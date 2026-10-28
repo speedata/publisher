@@ -1,0 +1,47 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- CSS properties of Paragraph. Each paragraph names what it shows. -->
+    <Pageformat width="120mm" height="230mm"/>
+    <DefineFontfamily name="big" fontsize="14" leading="16">
+        <Regular fontface="TeXGyreHeros-Regular"/>
+    </DefineFontfamily>
+
+    <Stylesheet>
+        paragraph.small { font-size: 8pt; color: gray }
+        paragraph.large { font-size: 14pt; line-height: 1.5 }
+        paragraph.em { font-size: 1.2em; line-height: 18pt }
+        paragraph.bold { font-weight: bold }
+        paragraph.italic { font-style: italic }
+        paragraph.center { text-align: center }
+        paragraph.right { text-align: right }
+        paragraph.indent { text-indent: 1cm; margin-top: 4mm; margin-bottom: 4mm }
+        paragraph.hl { background-color: yellow }
+        paragraph.spaced { letter-spacing: 1pt }
+        paragraph.serif { font-family: serif }
+        paragraph.family { font-family: big }
+        paragraph.hex { color: #336699 }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock width="100mm">
+                <Paragraph><Value>Without CSS. </Value><Value select="substring(sd:dummytext(),1,120)"/></Paragraph>
+                <Paragraph class="small"><Value>8pt, gray. </Value><Value select="substring(sd:dummytext(),1,160)"/></Paragraph>
+                <Paragraph class="large"><Value>14pt, line height 1.5. </Value><Value select="substring(sd:dummytext(),1,80)"/></Paragraph>
+                <Paragraph class="em"><Value>1.2em (12pt), line height 18pt. </Value><Value select="substring(sd:dummytext(),1,80)"/></Paragraph>
+                <Paragraph class="bold"><Value>Bold, </Value><I><Value>bold italic with I</Value></I></Paragraph>
+                <Paragraph class="italic"><Value>Italic</Value></Paragraph>
+                <Paragraph class="center"><Value>Centered</Value></Paragraph>
+                <Paragraph class="right"><Value>Right aligned</Value></Paragraph>
+                <Paragraph class="indent"><Value>Indent 1cm, 4mm space above and below. </Value><Value select="substring(sd:dummytext(),1,120)"/></Paragraph>
+                <Paragraph class="hl"><Value>Yellow background, </Value><Span background-color="lightgray"><Value>gray with Span</Value></Span></Paragraph>
+                <Paragraph class="spaced"><Value>Letter spacing 1pt</Value></Paragraph>
+                <Paragraph class="serif"><Value>Generic family serif</Value></Paragraph>
+                <Paragraph class="family"><Value>Font family big (14pt)</Value></Paragraph>
+                <Paragraph class="hex"><Value>Color #336699</Value></Paragraph>
+                <Paragraph class="small large"><Value>Two classes: the later rule wins for font-size (14pt), gray from the first</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

@@ -1,0 +1,30 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- font-family with @font-face, a LoadFontfile name and a generic
+         family. -->
+    <Pageformat width="120mm" height="60mm"/>
+    <LoadFontfile name="Mono" filename="CamingoCode-Regular.ttf"/>
+
+    <Stylesheet>
+        @font-face { font-family: "Body"; src: local("CrimsonPro-Regular") }
+        @font-face { font-family: "Body"; font-weight: bold; src: local("CrimsonPro-Bold") }
+        paragraph.body { font-family: Body, sans-serif; font-size: 12pt }
+        paragraph.bodybold { font-family: "Body"; font-weight: bold }
+        paragraph.mono { font-family: Mono }
+        paragraph.generic { font-family: monospace; font-size: 9pt }
+        paragraph.unknown { font-family: Unknown, serif }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock width="100mm">
+                <Paragraph class="body"><Value>@font-face Body (Crimson Pro), 12pt</Value></Paragraph>
+                <Paragraph class="bodybold"><Value>@font-face Body bold</Value></Paragraph>
+                <Paragraph class="mono"><Value>LoadFontfile Mono (Camingo Code)</Value></Paragraph>
+                <Paragraph class="generic"><Value>Generic monospace, 9pt</Value></Paragraph>
+                <Paragraph class="unknown"><Value>Unknown family, fallback serif</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

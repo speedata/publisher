@@ -1,0 +1,53 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- Paragraphs inherit from the text block. Attributes on the text block
+         replace the inherited values they stand for. -->
+    <Pageformat width="120mm" height="250mm"/>
+    <DefineTextformat name="tf-right" alignment="rightaligned"/>
+    <DefineFontfamily name="big" fontsize="14" leading="16">
+        <Regular fontface="TeXGyreHeros-Regular"/>
+        <Italic fontface="TeXGyreHeros-Italic"/>
+    </DefineFontfamily>
+
+    <Stylesheet>
+        textblock.note { color: #336699; font-size: 9pt; text-align: right; font-style: italic }
+        textblock.em { font-size: 1.5em; text-indent: 1em }
+        textblock.cols { column-count: 2; column-gap: 1cm; width: 80mm }
+        paragraph.center { text-align: center }
+        paragraph.large { font-size: 14pt }
+        paragraph.upright { font-style: normal }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock width="100mm" class="note">
+                <Paragraph><Value>Inherited: blue, 9pt, right, italic.</Value></Paragraph>
+                <Paragraph class="center"><Value>Own rule centered, the rest inherited.</Value></Paragraph>
+                <Paragraph class="large upright"><Value>Own 14pt and upright, blue and right inherited.</Value></Paragraph>
+                <Paragraph color="green"><Value>Attribute color green.</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Textblock width="100mm" class="note" color="red" textformat="tf-right" fontfamily="big">
+                <Paragraph><Value>Text block attributes: red, big (14pt), right; italic from CSS.</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Textblock width="100mm" class="note" textformat="text">
+                <Paragraph><Value>Text block textformat text: justified, the line is not right aligned. </Value><Value select="substring(sd:dummytext(),1,60)"/></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Textblock width="100mm" class="em">
+                <Paragraph><Value>1.5em is 15pt, indent 1em is 15pt. </Value><Value select="substring(sd:dummytext(),1,100)"/></Paragraph>
+                <Paragraph class="center"><Value>Inherited 15pt, not 22.5pt</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Textblock class="cols">
+                <Paragraph><Value>Two columns, 1cm apart, 80mm wide in total. </Value><Value select="substring(sd:dummytext(),1,300)"/></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
