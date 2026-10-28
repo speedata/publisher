@@ -1,0 +1,123 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- Tables: inherited font, color and alignment from Table, Tr and Td;
+         attributes replace the inherited values; :nth-child() and
+         :first-child for rows and cells; padding and border-collapse for the
+         table. Nothing may be red. -->
+    <Pageformat width="120mm" height="250mm"/>
+    <DefineFontfamily name="big" fontsize="14" leading="16">
+        <Regular fontface="TeXGyreHeros-Regular"/>
+        <Bold fontface="TeXGyreHeros-Bold"/>
+    </DefineFontfamily>
+
+    <Stylesheet>
+        table.inherit { color: #336699; font-size: 8pt }
+        tr.bold { font-weight: bold }
+        td.right { text-align: right }
+        td.large { font-size: 1.5em }
+        tr.center { text-align: center }
+        table.inherit tr.green { color: green }
+        table.align { text-align: right }
+
+        table.zebra tr:nth-child(even) { background-color: #ddd }
+        table.zebra td:first-child { font-weight: bold }
+        table.zebra tr:last-child { background-color: red }
+        table.zebra td:last-child { color: red }
+        table.zebra tablehead td { color: #336699 }
+
+        table.formula tr:nth-child(3n+2) { background-color: #ddd }
+        table.formula tr:nth-child(5) { color: #336699 }
+        table.formula td + td { text-align: right }
+
+        table.pad { padding: 1mm 4mm; border-collapse: collapse }
+        table.pad td { border-bottom-width: 0.5pt }
+        table#padtop { padding-top: 3mm }
+
+        table.dyn tablehead tr { background-color: #ddd }
+        table.dyn tablehead td { color: #336699; font-weight: bold }
+        table.dyn tablefoot { color: #336699; text-align: right }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Table width="100mm" class="inherit" stretch="max">
+                <Tr><Td><Paragraph><Value>Table: blue, 8pt</Value></Paragraph></Td></Tr>
+                <Tr class="bold"><Td><Paragraph><Value>Row: bold, blue, 8pt</Value></Paragraph></Td></Tr>
+                <Tr class="green"><Td><Paragraph><Value>Row: green</Value></Paragraph></Td></Tr>
+                <Tr><Td class="right"><Paragraph><Value>Cell: right aligned</Value></Paragraph></Td></Tr>
+                <Tr><Td class="large"><Paragraph><Value>Cell: 1.5em = 12pt</Value></Paragraph></Td></Tr>
+                <Tr><Td class="large"><Paragraph class="large"><Value>Paragraph 1.5em inside cell 1.5em = 18pt</Value></Paragraph></Td></Tr>
+                <Tr class="center"><Td><Paragraph><Value>Row: centered</Value></Paragraph></Td></Tr>
+                <Tr class="center" align="left"><Td><Paragraph><Value>Row attribute align left</Value></Paragraph></Td></Tr>
+                <Tr class="center"><Td align="right"><Paragraph><Value>Cell attribute align right</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph color="green"><Value>Paragraph attribute green</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject>
+            <Table width="100mm" class="inherit" fontfamily="big" stretch="max">
+                <Tr><Td><Paragraph><Value>Table fontfamily big (14pt), blue</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject>
+            <Table width="100mm" class="align" stretch="max">
+                <Tr><Td><Paragraph><Value>Table: right aligned</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject>
+            <Table width="100mm" class="align" textformat="text" stretch="max">
+                <Tr><Td><Paragraph><Value>Table textformat text: left aligned</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject>
+            <Table width="100mm" class="zebra" stretch="max">
+                <Tablehead>
+                    <Tr><Td><Paragraph><Value>Head 1 (blue)</Value></Paragraph></Td><Td><Paragraph><Value>Head 2 (blue)</Value></Paragraph></Td></Tr>
+                    <Tr><Td><Paragraph><Value>Head row 2 gray</Value></Paragraph></Td><Td><Paragraph><Value>blue</Value></Paragraph></Td></Tr>
+                </Tablehead>
+                <Loop select="5" variable="i">
+                    <Tr><Td><Paragraph><Value select="concat('Row ', $i, ' bold')"/></Paragraph></Td><Td><Paragraph><Value select="if ($i mod 2 = 0) then 'gray' else 'white'"/></Paragraph></Td></Tr>
+                </Loop>
+            </Table>
+        </PlaceObject>
+        <PlaceObject>
+            <Table width="100mm" class="formula" stretch="max">
+                <Columns><Column width="1*"/><Column width="1*"/></Columns>
+                <Loop select="11" variable="i">
+                    <Tr><Td><Paragraph><Value select="concat('Row ', $i, if ($i mod 3 = 2) then ' gray' else '', if ($i = 5) then ' blue' else '')"/></Paragraph></Td><Td><Paragraph><Value>right</Value></Paragraph></Td></Tr>
+                </Loop>
+            </Table>
+        </PlaceObject>
+        <PlaceObject>
+            <Table width="100mm" class="pad" stretch="max">
+                <Tr><Td><Paragraph><Value>Padding 1mm 4mm, collapsed borders</Value></Paragraph></Td><Td><Paragraph><Value>Cell 2</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>Row 2</Value></Paragraph></Td><Td><Paragraph><Value>Cell 2</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject>
+            <Table width="100mm" class="pad" padding="0pt" stretch="max">
+                <Tr><Td><Paragraph><Value>Attribute padding 0pt</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject>
+            <Table width="100mm" class="pad" id="padtop" stretch="max">
+                <Tr><Td><Paragraph><Value>Padding top 3mm, sides 4mm</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <ClearPage/>
+        <SetVariable variable="_last_tr_data" select="0"/>
+        <PlaceObject>
+            <Table width="100mm" class="dyn" stretch="max">
+                <Tablehead>
+                    <Tr><Td><Paragraph><Value select="concat('Head blue bold on gray, last row: ', $_last_tr_data)"/></Paragraph></Td></Tr>
+                </Tablehead>
+                <Tablefoot>
+                    <Tr><Td><Paragraph><Value select="concat('Foot blue right, last row: ', $_last_tr_data)"/></Paragraph></Td></Tr>
+                </Tablefoot>
+                <Loop select="70" variable="i">
+                    <Tr data="$i"><Td><Paragraph><Value select="concat('Row ', $i)"/></Paragraph></Td></Tr>
+                </Loop>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>
