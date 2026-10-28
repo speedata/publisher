@@ -170,12 +170,12 @@ Die Schrift des Absatzes bleibt dabei maßgeblich: `font-family` und `font-size`
 Die folgenden Eigenschaften werden bei der HTML-Verarbeitung ausgewertet:
 
 * Schrift: `font-family`, `font-size`, `font-style`, `font-weight`
-* Text: `color`, `text-align`, `text-decoration` (bzw. `text-decoration-line`, `text-decoration-style`, `text-decoration-color`), `line-height`, `white-space` (`normal`, `pre`), `vertical-align` (`super`, `sub`) und `hyphens` (`none` bzw. `manual` schaltet die Silbentrennung aus)
-* Box-Modell: `margin-*`, `padding-*`, `border-*` (Breite, Stil und Farbe je Seite sowie `border-radius` je Ecke), `width`
+* Text: `color`, `text-align`, `text-decoration` (bzw. `text-decoration-line` mit `underline` und `line-through`, `text-decoration-style` mit `solid`, `double`, `dotted`, `dashed` und `wavy`, `text-decoration-color`), `line-height`, `white-space` (`normal`, `pre`), `vertical-align` (`super`, `sub`) und `hyphens` (`none` bzw. `manual` schaltet die Silbentrennung aus)
+* Box-Modell: `margin-*`, `padding-*`, `border-*` (Breite, Stil und Farbe je Seite sowie `border-radius` je Ecke), `width`, `height`
 * Hintergrund: `background-color`
 * Listen: `list-style-type`, `list-style-position`, `list-style` sowie das Pseudoelement `li::marker` (`content`, `color`, `font-family`, `font-size`, `padding-right`, `padding-bottom`)
 * Tabellen: `border-collapse`
 * Umbruch: `break-before`, `break-after`
 
-Nicht jede Eigenschaft ist in jeder Situation vollständig umgesetzt; so wird bei `text-decoration` derzeit nur `underline` gezeichnet.
+Nicht jede Eigenschaft ist in jeder Situation vollständig umgesetzt.
 Den aktuellen Stand einzelner Eigenschaften dokumentiert der [Teststatus im HTML-Kapitel]({{< relref "html#teststatus" >}}).

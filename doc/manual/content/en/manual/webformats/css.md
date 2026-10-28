@@ -170,12 +170,12 @@ The font of the paragraph remains authoritative: `font-family` and `font-size` o
 The following properties are evaluated by the HTML processing:
 
 * Font: `font-family`, `font-size`, `font-style`, `font-weight`
-* Text: `color`, `text-align`, `text-decoration` (or `text-decoration-line`, `text-decoration-style`, `text-decoration-color`), `line-height`, `white-space` (`normal`, `pre`), `vertical-align` (`super`, `sub`) and `hyphens` (`none` or `manual` turns off hyphenation)
-* Box model: `margin-*`, `padding-*`, `border-*` (width, style and color per side plus `border-radius` per corner), `width`
+* Text: `color`, `text-align`, `text-decoration` (or `text-decoration-line` with `underline` and `line-through`, `text-decoration-style` with `solid`, `double`, `dotted`, `dashed` and `wavy`, `text-decoration-color`), `line-height`, `white-space` (`normal`, `pre`), `vertical-align` (`super`, `sub`) and `hyphens` (`none` or `manual` turns off hyphenation)
+* Box model: `margin-*`, `padding-*`, `border-*` (width, style and color per side plus `border-radius` per corner), `width`, `height`
 * Background: `background-color`
 * Lists: `list-style-type`, `list-style-position`, `list-style` and the pseudo-element `li::marker` (`content`, `color`, `font-family`, `font-size`, `padding-right`, `padding-bottom`)
 * Tables: `border-collapse`
 * Breaks: `break-before`, `break-after`
 
-Not every property is fully implemented in every situation; for example, only `underline` is currently drawn for `text-decoration`.
+Not every property is fully implemented in every situation.
 The current state of individual properties is documented in the [test status in the HTML chapter]({{< relref "html#test-status" >}}).

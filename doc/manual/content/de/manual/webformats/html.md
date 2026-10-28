@@ -165,38 +165,33 @@ Im Repository gibt es unter `qa/htmloutput` eine Reihe von HTML/CSS-Tests, die d
 
 ### Funktioniert
 
+* [*background-color*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/background-color) – Hintergrundfarben mit unterschiedlichen Angabeformaten (Named Color, Hex, RGB)
+* [*border-color*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-color) – Rahmenfarben mit Einzelfarbensetzung pro Seite und currentcolor
+* [*border-radius*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-radius) – Abgerundete Ecken mit einheitlichem und individuellen Radius-Werten
+* [*border-shorthand*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-shorthand) – Kurzschreibweise für Rahmen mit verschiedenen Stilen, Breiten und Farben
+* [*border-style*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-style) – Verschiedene Rahmenstile (none, solid, dashed, dotted, double, groove, ridge, inset, outset)
+* [*border-width*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-width) – Rahmenbreiten in unterschiedlichen Einheiten und mit individuellen Werten pro Seite
+* [*box-margin*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/box-margin) – Äußere Abstände mit Kurzschreibweisen und Einzelwerten pro Seite
+* [*box-padding*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/box-padding) – Innere Abstände mit Kurzschreibweisen und Einzelwerten pro Seite
+* [*box-width-height*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/box-width-height) – Breite mit Prozent-, Pixel- und Em-Angaben
 * [*break-after*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/break-after) – Seitenumbrüche nach HTML-Elementen
 * [*break-before*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/break-before) – Seitenumbrüche vor HTML-Elementen
 * [*color*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/color) – Textfarben mit unterschiedlichen Angabeformaten
+* [*font-size*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/font-size) – Verschiedene Schriftgrößenangaben (pt, px, em, rem, %, Schlüsselwörter)
 * [*font-style-weight*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/font-style-weight) – Schriftstil (italic) und Schriftgewicht (bold) sowie Kombinationen
+* [*line-height*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/line-height) – Verschiedene Zeilenhöhen-Werte (normal, Zahlenwert, Prozent, Punkte)
+* [*list-style-position*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/list-style-position) – Listenmarkerposition (outside, inside)
 * [*list-style-type*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/list-style-type) – Verschiedene Listenmarker-Typen (disc, circle, square, decimal, alpha, roman) (benötigt evtl. Schriftart mit entsprechenden Glyphen)
 * [*table-border*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/table-border) – Tabellenzellen mit Rahmen und verschiedenen Formatierungen
 * [*table-border-collapse*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/table-border-collapse) – Unterschiede zwischen border-collapse: separate und collapse
 * [*tablebreak*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/tablebreak) – Mehrseitige Tabellen mit wiederholendem Tabellenkopf
 * [*text-align*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/text-align) – Textausrichtung (left, right, center, justify)
+* [*text-decoration*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/text-decoration) – Textdekorationen (underline, line-through, verschiedene Stile und Farben)
 * [*vertical-align*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/vertical-align) – Hochgestellter und tiefgestellter Text (*prüfen: Schriftgröße*)
 * [*white-space*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/white-space) – Leerzeichenbehandlung (normal, pre)
 
-### Funktioniert teilweise
+### Bekannte Einschränkungen
 
-Tests, die erfolgreich sind, aber möglicherweise noch Verbesserungen benötigen:
-
-* [*border-color*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-color) – Rahmenfarben mit Einzelfarbensetzung pro Seite und currentcolor
-* [*border-radius*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-radius) – Abgerundete Ecken mit einheitlichem und individuellen Radius-Werten
-* [*border-shorthand*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-shorthand) – Kurzschreibweise für Rahmen mit verschiedenen Stilen, Breiten und Farben
-* [*border-width*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-width) – Rahmenbreiten in unterschiedlichen Einheiten und mit individuellen Werten pro Seite
-* [*box-margin*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/box-margin) – Äußere Abstände mit Kurzschreibweisen und Einzelwerten pro Seite
-* [*box-padding*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/box-padding) – Innere Abstände mit Kurzschreibweisen und Einzelwerten pro Seite
-* [*font-size*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/font-size) – Verschiedene Schriftgrößenangaben (pt, px, em, rem, %, Schlüsselwörter). *oberer Rand auf 2. Seite ist zu klein*
-* [*list-style-position*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/list-style-position) – Listenmarkerposition (outside, inside) *Die Marker sind höchstwahrscheinlich nicht richtig platziert.*
-* [*text-decoration*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/text-decoration) – Textdekorationen (underline, line-through, verschiedene Stile und Farben) *Nur underline wird unterstützt.*
-
-### Defekt
-
-Tests, die derzeit nicht korrekt funktionieren:
-
-* [*background-color*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/background-color) – Hintergrundfarben mit unterschiedlichen Angabeformaten (Named Color, Hex, RGB)
-* [*border-style*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-style) – Verschiedene Rahmenstile (none, solid, dashed, dotted, double, groove, ridge, inset, outset)
-* [*box-width-height*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/box-width-height) – Breite und Höhe mit Prozent-, Pixel- und Em-Angaben
-* [*line-height*](https://github.com/speedata/publisher/tree/develop/qa/htmloutput/line-height) – Verschiedene Zeilenhöhen-Werte (normal, Zahlenwert, Prozent, Punkte)
-
+* Bricht eine Box mit Rahmen über eine Seite um, ist sie an der Umbruchstelle offen (wie `box-decoration-break: slice`). Gestrichelte und gepunktete Rahmen links und rechts beginnen ihr Muster in jeder Zeile neu.
+* Die Außenabstände benachbarter Elemente fallen zusammen (der größere gewinnt), die von Eltern- und Kindelement nicht.
+* Nach einem automatischen Seitenumbruch entfällt der obere Außenabstand des ersten Elements, nach einem erzwungenen Umbruch (`break-before`) bleibt er erhalten.
