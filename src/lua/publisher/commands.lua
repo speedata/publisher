@@ -1952,6 +1952,13 @@ function commands.html(layoutxml, dataxml)
 
         local elements = ret._elements
         local current_y_sp = parameters.start_y_sp
+        -- margins don't collapse with the bottom margin of the previous page
+        if not parameters.page_has_content then
+            ret._prev_margin_bottom = 0
+        end
+        -- this page starts after an automatic page break
+        local continued = ret._started and not parameters.page_has_content
+        ret._started = true
         local margin_top = cg.margin_top or 0
         local margin_left = cg.margin_left or 0
         local extra_margin = cg.extra_margin or 0
@@ -2068,6 +2075,9 @@ function commands.html(layoutxml, dataxml)
                         local pmargin_bottom = pitem.marginbottom
 
                         local margin_overlap = math.min(ret._prev_margin_bottom, pmargin_top)
+                        if continued and not parameters.page_has_content then
+                            margin_overlap = pmargin_top
+                        end
                         local pactual_y = current_y_sp - margin_overlap
 
                         -- Check if it fits
@@ -2129,6 +2139,9 @@ function commands.html(layoutxml, dataxml)
                 -- Calculate actual starting position with margin collapse from what's already on page
                 local pending_margin_top = ret._pending_output[1] and ret._pending_output[1].margintop or 0
                 local margin_overlap_prev = math.min(ret._prev_margin_bottom, pending_margin_top)
+                if continued and not parameters.page_has_content then
+                    margin_overlap_prev = pending_margin_top
+                end
                 local actual_y = current_y_sp - margin_overlap_prev
                 local remaining_height = parameters.page_height_sp - actual_y
 
@@ -2151,6 +2164,9 @@ function commands.html(layoutxml, dataxml)
                     local pmargin_bottom = pitem.marginbottom
 
                     local margin_overlap = math.min(ret._prev_margin_bottom, pmargin_top)
+                    if continued and not parameters.page_has_content then
+                        margin_overlap = pmargin_top
+                    end
                     local pactual_y = current_y_sp - margin_overlap
 
                     publisher.page_helpers.output_absolute_position({
@@ -2186,6 +2202,11 @@ function commands.html(layoutxml, dataxml)
                 -- With collapse: should be max(20pt, 20pt) = 20pt gap
                 -- So we subtract min(20pt, 20pt) = 20pt to get the correct gap
                 local margin_overlap = math.min(ret._prev_margin_bottom, margin_top_block)
+                -- The top margin is truncated after an automatic page break
+                -- but kept after a forced one (CSS fragmentation).
+                if continued and not parameters.page_has_content and not item.break_before_done then
+                    margin_overlap = margin_top_block
+                end
 
                 -- Calculate actual Y position with margin collapse correction
                 local actual_y = current_y_sp - margin_overlap
@@ -2212,7 +2233,9 @@ function commands.html(layoutxml, dataxml)
                 end
 
                 -- Check if object fits on current page
-                if obj_height > remaining_height then
+                -- The bottom margin may extend beyond the page (it is
+                -- truncated at a page break anyway).
+                if obj_height - margin_bottom_block > remaining_height then
                     -- Check if object has dont_format attribute (e.g. table parts that shouldn't be split)
                     local dont_split = node.has_attribute(obj, publisher.att_dont_format)
 
@@ -2242,6 +2265,8 @@ function commands.html(layoutxml, dataxml)
                             -- If there's remaining content, store it for next page
                             if objects_for_split[1] then
                                 item.obj = objects_for_split[1]
+                                -- the top margin stays with the first part
+                                item.margintop = 0
                                 -- Don't increment obj_index - we'll continue with the rest
                                 return {
                                     need_new_page = true,
@@ -2342,6 +2367,9 @@ function commands.html(layoutxml, dataxml)
                 local pmargin_bottom = pitem.marginbottom
 
                 local margin_overlap = math.min(ret._prev_margin_bottom, pmargin_top)
+                if continued and not parameters.page_has_content then
+                    margin_overlap = pmargin_top
+                end
                 local pactual_y = current_y_sp - margin_overlap
 
                 -- Check if it fits

@@ -1461,13 +1461,6 @@ function M.vsplit(objects_t, parameter)
     while vlist do
         local head = vlist.head
         while head do
-            local bordernumber = publisher.attribute_helpers.get_attribute(head, "bordernumber")
-            if bordernumber then
-                -- move bordernumber to vlist
-                publisher.attribute_helpers.set_attribute(vlist, "bordernumber", bordernumber)
-                publisher.attribute_helpers.clear_attribute(vlist, "bordernumber")
-            end
-
             local tmp_margin_newcolumn = node.has_attribute(head, publisher.att_margin_newcolumn)
 
             if tmp_margin_newcolumn then
@@ -1619,7 +1612,11 @@ function M.vsplit(objects_t, parameter)
                 -- This is for a different margin-top at the beginning of a new column.
                 if hbox.id == publisher.vlist_node then
                     local vbox = hbox
-                    if vbox.list and vbox.list.id == publisher.glue_node then
+                    if
+                        vbox.list
+                        and vbox.list.id == publisher.glue_node
+                        and not publisher.attribute_helpers.getprop(vbox.list, "cssbox")
+                    then
                         local margin_top_boxstart = node.has_attribute(vbox.list, publisher.att_margin_top_boxstart)
                         vbox.list.width = margin_top_boxstart
                         hbox = node.vpack(vbox.list)

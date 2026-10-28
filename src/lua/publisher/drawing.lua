@@ -890,153 +890,6 @@ function M.do_metapostimage(dataxml, txt, width, height, clip)
     return { box, nil }
 end
 
--- Wraps a MetaPost graphic in an hbox using the named template from
--- `publisher.metapostgraphics`.
----@param parameter table Per-call MetaPost parameters (variable values, name).
----@param width integer Target width in sp.
----@param height integer Target height in sp.
----@return Node? hbox
-function M.mpbox(parameter, width, height)
-    local width_sp = width
-    local height_sp = height
-    local extra_parameter = {}
-
-    extra_parameter.bordertopwidth = sp_to_bp(parameter.border_top_width) .. "bp"
-    extra_parameter.borderbottomwidth = sp_to_bp(parameter.border_bottom_width) .. "bp"
-    extra_parameter.borderleftwidth = sp_to_bp(parameter.border_left_width) .. "bp"
-    extra_parameter.borderrightwidth = sp_to_bp(parameter.border_right_width) .. "bp"
-    -- no width if style is none
-    if parameter.border_top_style == "none" then
-        extra_parameter.bordertopwidth = "0bp"
-    end
-    if parameter.border_bottom_style == "none" then
-        extra_parameter.borderbottomwidth = "0bp"
-    end
-    if parameter.border_left_style == "none" then
-        extra_parameter.borderleftwidth = "0bp"
-    end
-    if parameter.border_right_style == "none" then
-        extra_parameter.borderrightwidth = "0bp"
-    end
-
-    extra_parameter.paddingtop = sp_to_bp(parameter.padding_top or 0) .. "bp"
-    extra_parameter.paddingbottom = sp_to_bp(parameter.padding_bottom or 0) .. "bp"
-    extra_parameter.paddingleft = sp_to_bp(parameter.padding_left or 0) .. "bp"
-    extra_parameter.paddingright = sp_to_bp(parameter.padding_right or 0) .. "bp"
-
-    extra_parameter.colors = {
-        bordertopcolor = parameter.border_top_color,
-        borderbottomcolor = parameter.border_bottom_color,
-        borderleftcolor = parameter.border_left_color,
-        borderrightcolor = parameter.border_right_color,
-    }
-    extra_parameter.strings = {
-        bordertopstyle = parameter.border_top_style,
-        borderbottomstyle = parameter.border_bottom_style,
-        borderleftstyle = parameter.border_left_style,
-        borderrightstyle = parameter.border_right_style,
-    }
-    extra_parameter.boolean = {
-        debug = parameter.debug == true,
-    }
-
-    local mptext = [[
-        wd = box.width  ;
-        ht = box.height - bordertopwidth - borderbottomwidth ;
-        if ht < 0: ht := 0; fi;
-        if wd < 0: wd := 0; fi;
-        z1 = (0,-borderbottomwidth - paddingbottom);
-        x2 = borderleftwidth;
-        x3 = x2 + wd + paddingleft + paddingright;
-        x4 = x3 + borderrightwidth;
-
-        y2 = y1 + borderbottomwidth;
-        y3 = y2 + ht + borderbottomwidth + paddingtop + paddingbottom;
-        y4 = y3 + bordertopwidth;
-
-        % draw z1 -- (x4,y1) -- z4 -- (x1,y4) -- cycle;
-        % draw z2 -- (x3,y2) -- z3 -- (x2,y3) -- cycle;
-
-        picture border; border = nullpicture;
-
-        path clip_top, clip_bottom, clip_left, clip_right;
-        clip_top = (x1,y4) -- (x2,y3) -- z3 -- z4 -- cycle;
-        clip_bottom = (x1,y1) -- (x2,y2) -- (x3,y2) -- (x4,y1) -- cycle;
-        clip_left = (x1,y1) -- (x2,y2) -- (x2,y3) -- (x1,y4) -- cycle;
-        clip_right = (x4,y1) -- (x3,y2) -- (x3,y3) -- (x4,y4) -- cycle;
-        def isdarkcolor(expr c) =
-            (redpart c < 0.2) and (greenpart c < 0.2) and (bluepart c < 0.2 )
-        enddef;
-
-        def drawborder(expr bordercolor, bwd, style, a, b, clippath, pos) =
-            begingroup;
-            interim linecap := butt;
-
-            color col; col = bordercolor;
-            string str;
-            str = "withcolor col withpen pencircle scaled " & decimal bwd ;
-            if style = "dashed":
-                str := str & " dashed dashpattern(on 4bp off 5bp)"
-            elseif ( style = "inset" )  and  (  (pos = "top" )  or (pos = "left") ):
-                if isdarkcolor(col):
-                    str := str & " withcolor 0.2[col, white] ";
-                else:
-                    str := str & " withcolor 0.5[col, black] ";
-                fi;
-            elseif ( style = "inset" ) and isdarkcolor(col) and ( (pos = "bottom" ) or (pos = "right") ):
-                str := str & " withcolor 0.5[col, white] ";
-            elseif ( style = "outset" )  and  (  (pos = "right" ) or (pos = "bottom") ):
-                str := str & " withcolor 0.5[col, black] ";
-            fi;
-            drawoptions(scantokens(str));
-
-            draw a -- b ;
-            clip currentpicture to clippath ;
-            addto border also currentpicture ;
-            endgroup;
-        enddef;
-
-        y34 = 0.5[y3,y4];
-        y12 = 0.5[y1,y2];
-        x12 = 0.5[x1,x2];
-        x34 = 0.5[x3,x4];
-
-        drawborder(bordertopcolor,bordertopwidth, bordertopstyle, (x1,y34),(x4,y34), clip_top, "top" );
-        drawborder(borderbottomcolor,borderbottomwidth,borderbottomstyle, (x1,y12),(x4,y12), clip_bottom, "bottom");
-        drawborder(borderleftcolor,borderleftwidth, borderleftstyle,(x12,y1),(x12,y4), clip_left, "left" );
-        drawborder(borderrightcolor,borderrightwidth, borderrightstyle,(x34,y1),(x34,y4), clip_right, "right" );
-
-        currentpicture := border;
-        if debug:
-            drawoptions(scaled 3bp withcolor black );
-            drawdot(z1) withcolor blue;
-            drawdot(z2) withcolor red;
-            drawdot(z3) withcolor red;
-            drawdot(z4) withcolor blue;
-        fi;
-    ]]
-    publisher.metapostgraphics.__htmlbox = mptext
-
-    local instr = metapost.boxgraphic(width_sp, height_sp, "__htmlbox", extra_parameter)
-    if not instr then
-        main.log("error", "Could not create metapost image")
-        return
-    end
-
-    local ret = node.hpack(instr, width, "exactly") ---@type Node
-    ret.height = height
-    if parameter.shiftdown then
-        ret.height = ret.height + parameter.shiftdown
-    end
-    ret = node.vpack(ret)
-
-    node.set_attribute(ret, publisher.att_dontadjustlineheight, 1)
-    ret.height = 0
-    ret.depth = 0
-    ret.shift = parameter.margin_left
-    return ret
-end
-
 -- Create a colored area. width and height are in scaled points.
 -- Optional border_color (color name) and border_width (in sp) draw a stroke
 -- rectangle at the outer edge; the fill area shrinks inward by border_width.
@@ -1531,6 +1384,349 @@ function M.rotate_textblock(nodelist, angle)
     tmp.height = math.abs(ht * math.sin(math.rad(90 - angle))) + math.abs(wd * sin)
     tmp.depth = 0
     return tmp
+end
+
+---@class CSSBoxSide
+---@field width integer Border width in sp.
+---@field style string CSS border style (`solid`, `dashed`, …).
+---@field color string Color name.
+
+---@class CSSBoxStyle
+---@field top CSSBoxSide
+---@field right CSSBoxSide
+---@field bottom CSSBoxSide
+---@field left CSSBoxSide
+---@field radius_tl integer
+---@field radius_tr integer
+---@field radius_br integer
+---@field radius_bl integer
+---@field background? string Background color name.
+
+---@class CSSBoxSpec : CSSBoxStyle
+---@field x integer Left edge of the border box in sp, relative to the origin.
+---@field y integer Top edge of the border box in sp, measured downwards from the origin.
+---@field width integer Width of the border box in sp.
+---@field height integer Height of the border box in sp.
+---@field open_top? boolean The box continues above (no top border, no top radii).
+---@field open_bottom? boolean The box continues below.
+
+local kappa = 0.551915024494
+
+-- Returns the PDF path of a rectangle with elliptical corners. Coordinates
+-- in bp, y grows upwards. `r` holds the horizontal and vertical radius of
+-- each corner (tlx, tly, trx, try, brx, bry, blx, bly).
+---@param l number
+---@param t number
+---@param r number
+---@param b number
+---@param rad number[]
+---@return string
+local function rounded_rect_path(l, t, r, b, rad)
+    local tlx, tly, trx, try, brx, bry, blx, bly = table.unpack(rad)
+    local k = 1 - kappa
+    return string.format(
+        "%g %g m %g %g l %g %g %g %g %g %g c %g %g l %g %g %g %g %g %g c "
+            .. "%g %g l %g %g %g %g %g %g c %g %g l %g %g %g %g %g %g c h",
+        l + tlx,
+        t,
+        r - trx,
+        t,
+        r - trx * k,
+        t,
+        r,
+        t - try * k,
+        r,
+        t - try,
+        r,
+        b + bry,
+        r,
+        b + bry * k,
+        r - brx * k,
+        b,
+        r - brx,
+        b,
+        l + blx,
+        b,
+        l + blx * k,
+        b,
+        l,
+        b + bly * k,
+        l,
+        b + bly,
+        l,
+        t - tly,
+        l,
+        t - tly * k,
+        l + tlx * k,
+        t,
+        l + tlx,
+        t
+    )
+end
+
+-- Returns a lighter (factor > 0) or darker (factor < 0) variant of the fill
+-- and stroke operators in `pdfstring`. Used for the 3D border styles.
+-- Colors that can't be shaded (spot colors) are returned unchanged.
+---@param pdfstring string
+---@param factor number Between -1 and 1.
+---@return string
+local function shaded_pdfstring(pdfstring, factor)
+    local function shade(v)
+        v = tonumber(v) or 0
+        if factor < 0 then
+            return math.round(v * (1 + factor), 3)
+        end
+        return math.round(v + (1 - v) * factor, 3)
+    end
+    local r, g, b = string.match(pdfstring, "([%d.]+)%s+([%d.]+)%s+([%d.]+)%s+rg")
+    if r then
+        r, g, b = shade(r), shade(g), shade(b)
+        return string.format("%g %g %g rg %g %g %g RG", r, g, b, r, g, b)
+    end
+    local c, m, y, k = string.match(pdfstring, "([%d.]+)%s+([%d.]+)%s+([%d.]+)%s+([%d.]+)%s+k")
+    if c then
+        -- for cmyk, darker means more ink
+        local function ink(v)
+            v = tonumber(v) or 0
+            if factor < 0 then
+                return math.round(v + (1 - v) * -factor, 3)
+            end
+            return math.round(v * (1 - factor), 3)
+        end
+        c, m, y, k = ink(c), ink(m), ink(y), ink(k)
+        return string.format("%g %g %g %g k %g %g %g %g K", c, m, y, k, c, m, y, k)
+    end
+    local gray = string.match(pdfstring, "([%d.]+)%s+g")
+    if gray then
+        gray = shade(gray)
+        return string.format("%g g %g G", gray, gray)
+    end
+    return pdfstring
+end
+
+-- Returns the PDF instructions to draw the background and the borders of a
+-- CSS box (or a slice of it). All lengths in `spec` are in scaled points,
+-- the origin is the upper left corner of the surrounding object.
+---@param spec CSSBoxSpec
+---@return string
+function M.cssbox_pdfstring(spec)
+    local l = sp_to_bp(spec.x)
+    local r = sp_to_bp(spec.x + spec.width)
+    local t = -sp_to_bp(spec.y)
+    local b = -sp_to_bp(spec.y + spec.height)
+    local wd, ht = r - l, t - b
+
+    local sides = {
+        top = spec.top,
+        right = spec.right,
+        bottom = spec.bottom,
+        left = spec.left,
+    }
+    local w = {}
+    for name, side in pairs(sides) do
+        if side.style == "none" or side.style == "hidden" then
+            w[name] = 0
+        else
+            w[name] = sp_to_bp(side.width or 0)
+        end
+    end
+    local tl, tr = sp_to_bp(spec.radius_tl or 0), sp_to_bp(spec.radius_tr or 0)
+    local br, bl = sp_to_bp(spec.radius_br or 0), sp_to_bp(spec.radius_bl or 0)
+    if spec.open_top then
+        w.top, tl, tr = 0, 0, 0
+    end
+    if spec.open_bottom then
+        w.bottom, bl, br = 0, 0, 0
+        -- The next slice is drawn later and covers this overlap. Without
+        -- it, anti-aliasing shows a thin gap between the slices.
+        b = b - 0.5
+        ht = t - b
+    end
+    -- radii that don't fit are scaled down (CSS backgrounds 5.5)
+    local scale = 1
+    if tl + tr > wd then
+        scale = math.min(scale, wd / (tl + tr))
+    end
+    if bl + br > wd then
+        scale = math.min(scale, wd / (bl + br))
+    end
+    if tl + bl > ht then
+        scale = math.min(scale, ht / (tl + bl))
+    end
+    if tr + br > ht then
+        scale = math.min(scale, ht / (tr + br))
+    end
+    tl, tr, br, bl = tl * scale, tr * scale, br * scale, bl * scale
+
+    -- path of the outer edge, inset by the given fraction of the border widths
+    local function edge(fraction)
+        local it, ir, ib, il = w.top * fraction, w.right * fraction, w.bottom * fraction, w.left * fraction
+        return rounded_rect_path(l + il, t - it, r - ir, b + ib, {
+            math.max(0, tl - il),
+            math.max(0, tl - it),
+            math.max(0, tr - ir),
+            math.max(0, tr - it),
+            math.max(0, br - ir),
+            math.max(0, br - ib),
+            math.max(0, bl - il),
+            math.max(0, bl - ib),
+        })
+    end
+
+    local ret = { "q" }
+    if spec.background then
+        local col = colors_module.get_colentry_from_name(spec.background, "black")
+        ret[#ret + 1] = string.format("%s %s f", col.pdfstring, edge(0))
+    end
+
+    -- Without rounded corners each side is a trapezoid between the outer and
+    -- the inner edge. With rounded corners each side is clipped to the area
+    -- between the outer and the inner edge and to the trapezoid between the
+    -- diagonals through its corners. The diagonals end at the middle of the
+    -- box, so opposite sides don't overlap.
+    local rounded = tl > 0 or tr > 0 or br > 0 or bl > 0
+
+    -- corner `c` of the edge inset by the fraction `f` of the border widths
+    local function corner(c, f)
+        if c == "tl" then
+            return l + w.left * f, t - w.top * f
+        elseif c == "tr" then
+            return r - w.right * f, t - w.top * f
+        elseif c == "br" then
+            return r - w.right * f, b + w.bottom * f
+        end
+        return l + w.left * f, b + w.bottom * f
+    end
+    local side_corners = {
+        top = { "tl", "tr" },
+        right = { "tr", "br" },
+        bottom = { "br", "bl" },
+        left = { "bl", "tl" },
+    }
+
+    local function diagonal_end(x, y, dx, dy)
+        if dx == 0 and dy == 0 then
+            return x, y
+        end
+        local s = math.huge
+        if dx ~= 0 then
+            s = math.min(s, wd / 2 / math.abs(dx))
+        end
+        if dy ~= 0 then
+            s = math.min(s, ht / 2 / math.abs(dy))
+        end
+        return x + dx * s, y + dy * s
+    end
+    local tlx, tly = diagonal_end(l, t, w.left, -w.top)
+    local trx, try = diagonal_end(r, t, -w.right, -w.top)
+    local brx, bry = diagonal_end(r, b, -w.right, w.bottom)
+    local blx, bly = diagonal_end(l, b, w.left, w.bottom)
+    local trapezoids = {
+        top = { l, t, r, t, trx, try, tlx, tly },
+        right = { r, t, r, b, brx, bry, trx, try },
+        bottom = { r, b, l, b, blx, bly, brx, bry },
+        left = { l, b, l, t, tlx, tly, blx, bly },
+    }
+    local ring = edge(0) .. " " .. edge(1)
+
+    -- The area of side `name` between the fractions f1 and f2 of the
+    -- border width, to be filled with f*.
+    local function region(name, f1, f2)
+        if rounded then
+            return edge(f1) .. " " .. edge(f2)
+        end
+        local c1, c2 = side_corners[name][1], side_corners[name][2]
+        local x1, y1 = corner(c1, f1)
+        local x2, y2 = corner(c2, f1)
+        local x3, y3 = corner(c2, f2)
+        local x4, y4 = corner(c1, f2)
+        return string.format("%g %g m %g %g l %g %g l %g %g l h", x1, y1, x2, y2, x3, y3, x4, y4)
+    end
+    -- the line in the middle of side `name`, to be stroked
+    local function centerline(name)
+        if rounded then
+            return edge(0.5)
+        end
+        local x1, y1 = corner(side_corners[name][1], 0.5)
+        local x2, y2 = corner(side_corners[name][2], 0.5)
+        return string.format("%g %g m %g %g l", x1, y1, x2, y2)
+    end
+
+    for _, name in ipairs({ "top", "right", "bottom", "left" }) do
+        local side = sides[name]
+        local bw = w[name]
+        if bw > 0 then
+            local col = colors_module.get_colentry_from_name(side.color, "black")
+            local pdfcolor = col.pdfstring
+            ret[#ret + 1] = "q"
+            if rounded then
+                local tz = trapezoids[name]
+                ret[#ret + 1] = string.format(
+                    "%s W* n %g %g m %g %g l %g %g l %g %g l h W n",
+                    ring,
+                    tz[1],
+                    tz[2],
+                    tz[3],
+                    tz[4],
+                    tz[5],
+                    tz[6],
+                    tz[7],
+                    tz[8]
+                )
+            end
+            local style = side.style
+            local topleft = (name == "top" or name == "left")
+            if style == "dashed" or style == "dotted" then
+                local dash
+                if style == "dashed" then
+                    dash = string.format("[%g %g] 0 d", 3 * bw, 2 * bw)
+                else
+                    dash = string.format("1 J [0 %g] 0 d", 2 * bw)
+                end
+                ret[#ret + 1] = string.format("%s %g w %s %s S", pdfcolor, bw, dash, centerline(name))
+            elseif style == "double" then
+                ret[#ret + 1] =
+                    string.format("%s %s f* %s f*", pdfcolor, region(name, 0, 1 / 3), region(name, 2 / 3, 1))
+            elseif style == "groove" or style == "ridge" then
+                local dark, light = shaded_pdfstring(pdfcolor, -0.5), shaded_pdfstring(pdfcolor, 0.5)
+                local outer, inner = dark, light
+                if (style == "groove") ~= topleft then
+                    outer, inner = light, dark
+                end
+                ret[#ret + 1] =
+                    string.format("%s %s f* %s %s f*", outer, region(name, 0, 0.5), inner, region(name, 0.5, 1))
+            elseif style == "inset" or style == "outset" then
+                local shade = -0.5
+                if (style == "inset") ~= topleft then
+                    shade = 0.5
+                end
+                ret[#ret + 1] = string.format("%s %s f*", shaded_pdfstring(pdfcolor, shade), region(name, 0, 1))
+            else
+                ret[#ret + 1] = string.format("%s %s f*", pdfcolor, region(name, 0, 1))
+            end
+            ret[#ret + 1] = "Q"
+        end
+    end
+    ret[#ret + 1] = "Q"
+    return table.concat(ret, " ")
+end
+
+-- Returns a box of size 0 that draws the background and the borders of a
+-- CSS box (see `cssbox_pdfstring`) relative to its own position. Placed at
+-- the top of a vertical list, it draws downwards into that list.
+---@param spec CSSBoxSpec
+---@return Node vbox
+function M.cssbox(spec)
+    local literal = node.new("whatsit", "pdf_literal") --[[@as PdfLiteralWhatsitNode]]
+    literal.mode = 0
+    literal.data = M.cssbox_pdfstring(spec)
+    publisher.attribute_helpers.setprop(literal, "origin", "cssbox")
+    local hbox = node.hpack(literal)
+    hbox.width, hbox.height, hbox.depth = 0, 0, 0
+    local vbox = node.vpack(hbox)
+    vbox.width, vbox.height, vbox.depth = 0, 0, 0
+    publisher.attribute_helpers.setprop(vbox, "origin", "cssbox")
+    return vbox
 end
 
 file_end("drawing.lua")

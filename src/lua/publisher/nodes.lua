@@ -121,12 +121,8 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
     local roles_lookup = publisher.roles_a
     local pdf_reserveobj = pdf.reserveobj
     local attr_table_reuse = {}
-    local borderattrs = publisher.borderattributes
     local colors = colors_module.colors
     local colorname_table = colors_module.colortable
-    local attr_num_bordernumber = attribute_name_number_map["bordernumber"]
-    local attr_num_borderwd = attribute_name_number_map["borderwd"]
-    local attr_num_borderht = attribute_name_number_map["borderht"]
     local node_has_attribute = node.has_attribute
     local node_getproperty = node.getproperty
     if not head then
@@ -146,55 +142,6 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
             local r = insert_nm(head.list, head, "horizontal", curx, cury, pagewidth, pageheight)
             for _, rule in ipairs(r) do
                 rules[#rules + 1] = rule
-            end
-            local bordernumber = node_has_attribute(head, attr_num_bordernumber)
-            if bordernumber then
-                -- bordered nodes always sit inside a box, so parent is set here
-                ---@cast parent Node
-                local ba = borderattrs[bordernumber]
-                local wd = node_has_attribute(head, attr_num_borderwd)
-                local ht = node_has_attribute(head, attr_num_borderht)
-                wd = wd - ba.border_left_width - ba.margin_right + ba.padding_left
-                setp(head, "border_bottom_color", ba.border_bottom_color)
-                setp(head, "border_bottom_left_radius", ba.border_bottom_left_radius)
-                setp(head, "border_bottom_right_radius", ba.border_bottom_right_radius)
-                setp(head, "border_bottom_style", ba.border_bottom_style)
-                setp(head, "border_bottom_width", ba.border_bottom_width)
-                setp(head, "border_left_color", ba.border_left_color)
-                setp(head, "border_left_style", ba.border_left_style)
-                setp(head, "border_left_width", ba.border_left_width)
-                setp(head, "border_right_color", ba.border_right_color)
-                setp(head, "border_right_style", ba.border_right_style)
-                setp(head, "border_right_width", ba.border_right_width)
-                setp(head, "border_top_color", ba.border_top_color)
-                setp(head, "border_top_left_radius", ba.border_top_left_radius)
-                setp(head, "border_top_right_radius", ba.border_top_right_radius)
-                setp(head, "border_top_style", ba.border_top_style)
-                setp(head, "border_top_width", ba.border_top_width)
-                setp(head, "borderstart", "true")
-                setp(head, "debug", "false")
-                setp(head, "margin_bottom", ba.margin_bottom)
-                setp(head, "margin_left", ba.margin_left)
-                setp(head, "margin_right", ba.margin_right)
-                setp(head, "margin_top", ba.margin_top)
-                setp(head, "padding_bottom", ba.padding_bottom)
-                setp(head, "padding_left", ba.padding_left)
-                setp(head, "padding_right", ba.padding_right)
-                setp(head, "padding_top", ba.padding_top)
-                setp(head, "lineheight", ht)
-                setp(head, "depth", parent.depth)
-                local boxnode = assert(publisher.htmlbox("horizontal", head, wd, parent.height, parent.depth))
-                local hbox = node.hpack(boxnode)
-                local g
-                g = set_glue(nil, { width = ba.border_left_width + ba.margin_left + ba.padding_left })
-                hbox.head = node.insert_before(hbox.head, boxnode, g)
-                g = set_glue(nil, { width = parent.height })
-                local vl = node.vpack(g)
-                node.insert_after(vl, g, hbox)
-                g = set_glue(nil, { width = -parent.height })
-                node.insert_after(vl, hbox, g)
-                vl.height = 0
-                parent.head = node.insert_before(parent.head, head, vl)
             end
             if blockinline == "vertical" then
                 cury = cury + head.height + head.depth
@@ -217,14 +164,6 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                 end
             end
             if not skip_descent then
-                local bordernumber = node_has_attribute(head, attr_num_bordernumber)
-                if bordernumber then
-                    -- bordered nodes always sit inside a box, so parent is set here
-                    ---@cast parent Node
-                    local boxnode =
-                        assert(publisher.drawing.mpbox(borderattrs[bordernumber], head.width, head.height + head.depth))
-                    parent.head = node_insert_before(parent.head, head, boxnode)
-                end
                 if head.id == publisher.hlist_node then
                     local r = insert_nm(head.list, head, "horizontal", curx, cury, pagewidth, pageheight)
                     for _, rule in ipairs(r) do
@@ -273,56 +212,6 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
             end
 
             local fgcolor = node_has_attribute(head, attr_num_color)
-            local bordernumber = node_has_attribute(head, attr_num_bordernumber)
-
-            if bordernumber then
-                -- bordered nodes always sit inside a box, so parent is set here
-                ---@cast parent Node
-                local ba = borderattrs[bordernumber]
-                local wd, ht
-                wd = node_has_attribute(head, attr_num_borderwd)
-                ht = node_has_attribute(head, attr_num_borderht)
-                setp(head, "border_bottom_color", ba.border_bottom_color)
-                setp(head, "border_bottom_left_radius", ba.border_bottom_left_radius)
-                setp(head, "border_bottom_right_radius", ba.border_bottom_right_radius)
-                setp(head, "border_bottom_style", ba.border_bottom_style)
-                setp(head, "border_bottom_width", ba.border_bottom_width)
-                setp(head, "border_left_color", ba.border_left_color)
-                setp(head, "border_left_style", ba.border_left_style)
-                setp(head, "border_left_width", ba.border_left_width)
-                setp(head, "border_right_color", ba.border_right_color)
-                setp(head, "border_right_style", ba.border_right_style)
-                setp(head, "border_right_width", ba.border_right_width)
-                setp(head, "border_top_color", ba.border_top_color)
-                setp(head, "border_top_left_radius", ba.border_top_left_radius)
-                setp(head, "border_top_right_radius", ba.border_top_right_radius)
-                setp(head, "border_top_style", ba.border_top_style)
-                setp(head, "border_top_width", ba.border_top_width)
-                setp(head, "borderstart", "true")
-                setp(head, "debug", "false")
-                setp(head, "margin_bottom", ba.margin_bottom)
-                setp(head, "margin_left", ba.margin_left)
-                setp(head, "margin_right", ba.margin_right)
-                setp(head, "margin_top", ba.margin_top)
-                setp(head, "padding_bottom", ba.padding_bottom)
-                setp(head, "padding_left", ba.padding_left)
-                setp(head, "padding_right", ba.padding_right)
-                setp(head, "padding_top", ba.padding_top)
-                setp(head, "lineheight", ht)
-                if blockinline == "vertical" then
-                    wd = wd - ba.border_left_width - ba.margin_left - ba.padding_left - ba.margin_right
-                    setp(head, "shiftdown", ht + ba.padding_top + ba.border_top_width + ba.margin_top)
-                    setp(head, "shiftright", ba.border_left_width + ba.margin_left + ba.padding_left)
-                else
-                    ht = parent.height + parent.depth
-                    setp(head, "lineheight", ht)
-                    wd = parent.width - ba.border_left_width - ba.margin_left - ba.border_right_width - ba.margin_right
-                end
-
-                local boxnode = assert(publisher.htmlbox(blockinline, head, wd, parent.height, parent.depth))
-                parent.head = node_insert_before(parent.head, head, boxnode)
-                setp(head, "borderstart", false)
-            end
             -- Re-read properties if border/rule code may have created them
             if not head_props_t then
                 head_props = node_getproperty(head)
@@ -1101,6 +990,12 @@ function M.hbglyphlist(arguments)
         style_attrs[style_attrs_len - 1] = att_color
         style_attrs[style_attrs_len] = parameter.color
     end
+    -- an explicit decoration color (CSS text-decoration-color) wins over the text color
+    if parameter.textdecorationline and parameter.textdecorationcolor then
+        style_attrs_len = style_attrs_len + 2
+        style_attrs[style_attrs_len - 1] = att_td_color
+        style_attrs[style_attrs_len] = parameter.textdecorationcolor
+    end
     if parameter.hyperlink then
         style_attrs_len = style_attrs_len + 2
         style_attrs[style_attrs_len - 1] = att_hyperlink
@@ -1394,7 +1289,7 @@ function M.hbglyphlist(arguments)
             if decoration_active then
                 node_set_attribute(n, att_td_line, attval_td_line[parameter.textdecorationline])
                 node_set_attribute(n, att_td_style, attval_td_style[parameter.textdecorationstyle])
-                node_set_attribute(n, att_td_color, publisher.current_fgcolor)
+                node_set_attribute(n, att_td_color, parameter.textdecorationcolor or publisher.current_fgcolor)
             end
 
             if background_active then

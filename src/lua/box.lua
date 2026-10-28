@@ -8,33 +8,15 @@
 
 file_start("box.lua")
 
----@class BoxBorder
----@field borderstart? boolean
----@field border_top_style? string
----@field border_right_style? string
----@field border_bottom_style? string
----@field border_left_style? string
----@field padding_top? number
----@field padding_right? number
----@field padding_bottom? number
----@field padding_left? number
----@field border_top_width? number
----@field border_right_width? number
----@field border_bottom_width? number
----@field border_left_width? number
----@field border_top_color? string
----@field border_right_color? string
----@field border_bottom_color? string
----@field border_left_color? string
----@field border_top_left_radius? number
----@field border_top_right_radius? number
----@field border_bottom_left_radius? number
----@field border_bottom_right_radius? number
----@field margin_top? number
----@field margin_right? number
----@field margin_bottom? number
----@field margin_left? number
----@field debug? boolean
+---@class CSSBlock
+---@field x integer Left edge of the border box relative to the containing block (the left margin).
+---@field width integer Width of the border box.
+---@field border_top_width integer
+---@field border_bottom_width integer
+---@field padding_top integer
+---@field padding_bottom integer
+---@field height? integer Content height from the CSS height property.
+---@field decoration? CSSBoxStyle Background and borders.
 
 ---@class Box
 ---@field prependbox any[] Items injected at the head of the formatted output.
@@ -42,16 +24,11 @@ file_start("box.lua")
 ---@field eltname? string Name of the element that creates the box (div for example)
 ---@field margintop? number
 ---@field marginbottom? number
----@field padding_top? number
----@field padding_bottom? number
----@field border_top_width? number
----@field border_bottom_width? number
 ---@field indent_amount? number
 ---@field width? number
----@field draw_border? boolean
 ---@field break_before? "page"|"always"
 ---@field break_after? "avoid"
----@field border? BoxBorder
+---@field css? CSSBlock Box model of an HTML block element.
 Box = {}
 Box.__index = Box
 

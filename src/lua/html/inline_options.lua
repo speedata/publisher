@@ -131,7 +131,12 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
     local style = styles["text-decoration-style"]
     local color = styles["text-decoration-color"]
     if color and color ~= "currentcolor" then
-        options.textdecorationcolor = color
+        local col = colors_module.colors[color]
+        if col then
+            options.textdecorationcolor = col.index
+        else
+            splib.log("warning", "HTML: color not defined", "color", color)
+        end
     end
     if line == "underline" or line == "line-through" then
         options.textdecorationline = line

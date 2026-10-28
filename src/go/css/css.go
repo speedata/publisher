@@ -119,7 +119,7 @@ type FontFamily struct {
 
 // cssdefaults defines the built-in UA stylesheet that seeds every parsed document.
 var cssdefaults = `
-:root           { font-family: sans-serif;  font-size: 10pt; line-height: 1.2; }
+:root           { font-family: sans-serif;  font-size: 10pt; line-height: normal; }
 a               { text-decoration: underline; color: blue; }
 li              { display: list-item; padding-inline-start: 40pt; }
 head            { display: none }

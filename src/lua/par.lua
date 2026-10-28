@@ -11,13 +11,9 @@ local publisher = require("publisher")
 ---@field margin_bottom? integer Margin below the paragraph in sp.
 ---@field padding_left? integer Padding on the left in sp.
 ---@field padding_right? integer Padding on the right in sp.
----@field padding_top? integer Padding above the paragraph in sp.
----@field padding_bottom? integer Padding below the paragraph in sp.
----@field border_top_width? integer Width of the rule above the paragraph in sp.
----@field border_bottom_width? integer Width of the rule below the paragraph in sp.
----@field startborder? integer Index into `publisher.borderattributes` (border starts here).
----@field startendborder? integer Index into `publisher.borderattributes` (border starts and ends here).
----@field borderstart? integer Index into `publisher.borderattributes`.
+---@field css_chain? CSSChainEntry[] Surrounding HTML block boxes, outermost first (set by flatten_boxes).
+---@field firstbox? boolean First paragraph of its box.
+---@field lastbox? boolean Last paragraph of its box.
 ---@field break_before? "page"|"always"|"" Break behaviour before this paragraph.
 ---@field break_after? string Break behaviour after this paragraph ("avoid").
 ---@field width? integer Requested width in sp.
@@ -477,23 +473,20 @@ local function flatten(self, items, options, data)
                                             "margin_bottom",
                                             thisblock.margin_bottom
                                         )
-                                        if thisblock.startendborder then
-                                            local border_attributes =
-                                                publisher.borderattributes[thisblock.startendborder]
-                                            publisher.attribute_helpers.set_attribute(
-                                                tbc,
-                                                "bordernumber",
-                                                thisblock.startendborder
-                                            )
-                                            local wd, ht, dp = node.dimensions(tbc)
-                                            publisher.attribute_helpers.set_attribute(tbc, "borderwd", wd)
-                                            publisher.attribute_helpers.set_attribute(tbc, "borderht", ht + dp)
-                                            if border_attributes then
-                                                padding_left = padding_left + border_attributes.border_left_width
-                                                margin_top = margin_top
-                                                    + border_attributes.border_top_width
-                                                    + border_attributes.padding_top
+                                        if thisblock.css_chain then
+                                            -- margins are controlled by htmlverticalspacing
+                                            local chain = {}
+                                            for c, entry in ipairs(thisblock.css_chain) do
+                                                chain[c] = {
+                                                    css = entry.css,
+                                                    x = entry.x,
+                                                    margin_top = 0,
+                                                    margin_bottom = 0,
+                                                    first = entry.first,
+                                                    last = entry.last,
+                                                }
                                             end
+                                            publisher.attribute_helpers.setprop(tbc, "css_chain", chain)
                                         end
                                         publisher.attribute_helpers.setprop(tbc, "margin_top", margin_top)
                                         publisher.attribute_helpers.setprop(tbc, "padding_left", padding_left)
@@ -741,7 +734,10 @@ function get_lineheight(nodelist)
     local head = nodelist
     while head do
         if head.id == publisher.vlist_node or head.id == publisher.hlist_node then
-            return get_lineheight(head.list)
+            -- skip the background and borders of HTML boxes
+            if publisher.attribute_helpers.getprop(head, "origin") ~= "cssbox" then
+                return get_lineheight(head.list)
+            end
         end
         if head.id == publisher.glyph_node then
             local ffnumber = publisher.attribute_helpers.get_attribute(head, "fontfamily")
@@ -758,32 +754,157 @@ function get_lineheight(nodelist)
     return 0
 end
 
--- Computes the border-width contribution, content height and margin-top
--- for a node list with HTML border properties attached.
----@param nodelist Node
----@return integer border_width Total border width in sp.
----@return integer height Content height in sp.
----@return integer margin_top sp.
-local function get_border_width_height_margintop(nodelist)
-    local sum_ht = 0
-    local sum_margin_top = 0
-    local head = nodelist.head
-    while head do
-        if head.id == publisher.glue_node then
-            local margintop = publisher.attribute_helpers.get_attribute(head, "margintop")
-            local paddingtop = publisher.attribute_helpers.get_attribute(head, "paddingtop")
-            local paddingbottom = publisher.attribute_helpers.get_attribute(head, "paddingbottom")
-            if margintop then
-                sum_margin_top = sum_margin_top + head.width
-            elseif paddingtop or paddingbottom then
-                sum_ht = sum_ht + head.width
-            end
-        elseif node.has_field(head, "height") then
-            sum_ht = sum_ht + head.height + head.depth
-        end
-        head = head.next
+---@class CSSChainEntry
+---@field css CSSBlock
+---@field x integer Left edge of the border box relative to the paragraph.
+---@field margin_top integer
+---@field margin_bottom integer
+---@field first boolean The paragraph is at the start of the box.
+---@field last boolean The paragraph is at the end of the box.
+
+-- Adds the space above and below the linebroken vbox `nodelist` that the
+-- surrounding HTML block boxes (`chain`, outermost first) need and inserts
+-- their backgrounds and borders at the top of the list. `first` and `last`
+-- are false when the object is not the first or last object of the
+-- paragraph, then the boxes continue above or below.
+---@param nodelist Node Linebroken vbox; its list is changed in place.
+---@param chain CSSChainEntry[]
+---@param first boolean
+---@param last boolean
+---@return nil
+local function add_css_boxes(nodelist, chain, first, last)
+    local n = #chain
+    local is_first, is_last = {}, {}
+    for k, entry in ipairs(chain) do
+        is_first[k] = entry.first and first
+        is_last[k] = entry.last and last
     end
-    return nodelist.width, sum_ht, sum_margin_top
+    -- CSS height: extra space below the content of a box, innermost first
+    local inner = nodelist.height + nodelist.depth
+    local extra = {}
+    for k = n, 1, -1 do
+        local css = chain[k].css
+        extra[k] = 0
+        if css.height and is_first[k] and is_last[k] and css.height > inner then
+            extra[k] = css.height - inner
+        end
+        inner = inner + extra[k]
+        if is_first[k] then
+            inner = inner + css.border_top_width + css.padding_top
+        end
+        if is_last[k] then
+            inner = inner + css.border_bottom_width + css.padding_bottom
+        end
+    end
+
+    local add_glue = publisher.nodes.add_glue
+    local list = nodelist.list
+    for k = n, 1, -1 do
+        local entry, css = chain[k], chain[k].css
+        if is_first[k] then
+            for _, wd in ipairs({ css.padding_top, css.border_top_width, entry.margin_top }) do
+                if wd ~= 0 then
+                    list = add_glue(list, "head", { width = wd }, "par.lua/css box top")
+                    -- not a textformat margin, see margin-top-boxstart in vsplit
+                    publisher.attribute_helpers.setprop(list, "cssbox", true)
+                end
+            end
+        end
+        if is_last[k] then
+            for _, wd in ipairs({ extra[k], css.padding_bottom, css.border_bottom_width }) do
+                if wd ~= 0 then
+                    list = add_glue(list, "tail", { width = wd }, "par.lua/css box bottom")
+                end
+            end
+            if entry.margin_bottom ~= 0 then
+                list = add_glue(list, "tail", { width = entry.margin_bottom }, "par.lua/css box margin bottom")
+                node.set_attribute(node.tail(list), publisher.att_omit_at_top, 1)
+            end
+        end
+    end
+
+    -- Background and borders. Each line gets its own slice (together with
+    -- the space above the first and below the last line), so the slices fit
+    -- whatever the page breaking does with the lines. A unit starts at a box
+    -- node and holds the nodes up to the next box node.
+    local units = {}
+    local cur = list
+    local unit
+    while cur do
+        local is_box = (cur.id == publisher.hlist_node or cur.id == publisher.vlist_node)
+        if not unit or (is_box and unit.has_box) then
+            unit = { head = cur, height = 0 }
+            units[#units + 1] = unit
+        end
+        if is_box then
+            unit.has_box = true
+            unit.height = unit.height + cur.height + cur.depth
+        elseif cur.id == publisher.glue_node then
+            unit.height = unit.height + cur.width
+        elseif cur.id == publisher.kern_node then
+            unit.height = unit.height + cur.kern
+        elseif cur.id == publisher.rule_node then
+            unit.height = unit.height + cur.height + cur.depth
+        end
+        unit.tail = cur
+        cur = cur.next
+    end
+    local att_break_below = publisher.att_break_below_forbidden
+    for u, thisunit in ipairs(units) do
+        local first_unit, last_unit = (u == 1), (u == #units)
+        local above, below = 0, 0
+        local decorations = {}
+        for k = 1, n do
+            local entry, css = chain[k], chain[k].css
+            local box_starts = first_unit and is_first[k]
+            local box_ends = last_unit and is_last[k]
+            local margin_top = box_starts and entry.margin_top or 0
+            local margin_bottom = box_ends and entry.margin_bottom or 0
+            local deco = css.decoration
+            if deco then
+                ---@type CSSBoxSpec
+                local spec = {
+                    x = entry.x,
+                    y = above + margin_top,
+                    width = css.width,
+                    height = thisunit.height - above - margin_top - below - margin_bottom,
+                    open_top = not box_starts,
+                    open_bottom = not box_ends,
+                    top = deco.top,
+                    right = deco.right,
+                    bottom = deco.bottom,
+                    left = deco.left,
+                    radius_tl = deco.radius_tl,
+                    radius_tr = deco.radius_tr,
+                    radius_br = deco.radius_br,
+                    radius_bl = deco.radius_bl,
+                    background = deco.background,
+                }
+                decorations[#decorations + 1] = publisher.drawing.cssbox(spec)
+            end
+            if box_starts then
+                above = above + margin_top + css.border_top_width + css.padding_top
+            end
+            if box_ends then
+                below = below + margin_bottom + css.border_bottom_width + css.padding_bottom + extra[k]
+            end
+        end
+        -- no page break inside a unit
+        cur = thisunit.head
+        while cur ~= thisunit.tail do
+            if not node.has_attribute(cur, att_break_below) then
+                node.set_attribute(cur, att_break_below, 8)
+            end
+            cur = cur.next
+        end
+        for k = #decorations, 1, -1 do
+            local deco = decorations[k]
+            node.set_attribute(deco, att_break_below, 8)
+            list = node.insert_before(list, thisunit.head, deco)
+            thisunit.head = deco
+        end
+    end
+    nodelist.list = list
 end
 
 -- Builds the glyph node list, applies the textformat, runs line breaking
@@ -1018,11 +1139,8 @@ function Par:format(width_sp, options, data)
     local self_padding_right = self.padding_right or 0
     local self_prependlist = self.prependlist
     local self_initial = self.initial
-    local self_startendborder = self.startendborder
-    local self_startborder = self.startborder
     local self_margin_top = self.margin_top
-    local self_border_top_width = self.border_top_width
-    local self_padding_top = self.padding_top
+    local self_css_chain = self.css_chain
 
     -- Cache publisher node/attribute IDs
     local penalty_node_id = publisher.penalty_node
@@ -1056,6 +1174,7 @@ function Par:format(width_sp, options, data)
         end
         prop_padding_left = publisher.attribute_helpers.getprop(nodelist, "padding_left")
         local prop_prependlist = publisher.attribute_helpers.getprop(nodelist, "prependlist")
+        local prop_css_chain = publisher.attribute_helpers.getprop(nodelist, "css_chain")
 
         if prop_pardir == "rtl" then
             tex.shapemode = 1
@@ -1112,10 +1231,6 @@ function Par:format(width_sp, options, data)
             end
         end
         parameter.hangafter = rows or tf.rows or 0
-        if self_startendborder or self_startborder then
-            local ba = publisher.borderattributes[self.borderstart or self_startendborder]
-            thispaddingleft = thispaddingleft + ba.border_left_width
-        end
 
         if self_initial then
             parameter.hangindent = parameter.hangindent + self_initial.width
@@ -1270,23 +1385,18 @@ function Par:format(width_sp, options, data)
             end
 
             publisher.fonts.post_linebreak(nodelist)
-            if self_margin_top then
+            -- HTML block boxes: space, background and borders
+            if prop_css_chain then
+                add_css_boxes(nodelist, prop_css_chain, true, true)
+            elseif self_css_chain then
+                add_css_boxes(nodelist, self_css_chain, i == 1, i == objects_len)
+            elseif self_margin_top then
                 nodelist.list = publisher.nodes.add_glue(
                     nodelist.list,
                     "head",
                     { width = self_margin_top },
                     "par.lua/if self.margin_top"
                 )
-                publisher.attribute_helpers.set_attribute(nodelist.list, "margintop", 1)
-            end
-            if self_border_top_width and self_border_top_width > 0 then
-                nodelist.list = publisher.nodes.add_glue(
-                    nodelist.list,
-                    "head",
-                    { width = self_border_top_width },
-                    "par.lua/if self.border_top_width"
-                )
-                publisher.attribute_helpers.set_attribute(nodelist.list, "margintop", 1)
             end
             if has_margin_top then
                 nodelist.list = publisher.nodes.add_glue(
@@ -1295,16 +1405,6 @@ function Par:format(width_sp, options, data)
                     { width = has_margin_top },
                     "par.lua/if has_margin_top"
                 )
-                publisher.attribute_helpers.set_attribute(nodelist.list, "margintop", 1)
-            end
-            if self_padding_top and self_padding_top > 0 then
-                nodelist.list = publisher.nodes.add_glue(
-                    nodelist.list,
-                    "head",
-                    { width = self_padding_top },
-                    "par.lua/self.padding_top"
-                )
-                publisher.attribute_helpers.set_attribute(nodelist.list, "margintop", 1)
             end
             if tf.paddingtop and tf.paddingtop ~= 0 then
                 nodelist.list = publisher.nodes.add_glue(nodelist.list, "head", { width = tf.paddingtop })
@@ -1335,17 +1435,19 @@ function Par:format(width_sp, options, data)
                 node.set_attribute(nodelist.list, publisher.att_break_before, 2)
             end
 
-            if self.padding_bottom and self.padding_bottom > 0 then
-                local glue
-                nodelist.list, glue = publisher.nodes.add_glue(
+            if self.margin_bottom and not self_css_chain then
+                nodelist.list = publisher.nodes.add_glue(
                     nodelist.list,
                     "tail",
-                    { width = self.padding_bottom },
-                    "par.lua/self.padding_bottom"
+                    { width = self.margin_bottom },
+                    "par.lua/self.margin_bottom"
                 )
-                publisher.attribute_helpers.set_attribute(glue, "paddingbottom", 1)
+                node.set_attribute(node.tail(nodelist.list), publisher.att_omit_at_top, 1)
             end
-
+            if has_margin_bottom then
+                nodelist.list = publisher.nodes.add_glue(nodelist.list, "tail", { width = has_margin_bottom })
+                node.set_attribute(node.tail(nodelist.list), publisher.att_omit_at_top, 1)
+            end
             if tf.borderbottom and tf.borderbottom ~= 0 then
                 nodelist.list = publisher.nodes.add_rule(
                     nodelist.list,
@@ -1362,27 +1464,6 @@ function Par:format(width_sp, options, data)
                     { width = tf.marginbottom },
                     "par.lua/tf.marginbottom"
                 )
-                node.set_attribute(node.tail(nodelist.list), publisher.att_omit_at_top, 1)
-            end
-            if self.border_bottom_width and self.border_bottom_width > 0 then
-                nodelist.list = publisher.nodes.add_glue(
-                    nodelist.list,
-                    "tail",
-                    { width = self.border_bottom_width },
-                    "par.lua/if self.border_bottom_width"
-                )
-            end
-            if self.margin_bottom then
-                nodelist.list = publisher.nodes.add_glue(
-                    nodelist.list,
-                    "tail",
-                    { width = self.margin_bottom },
-                    "par.lua/self.margin_bottom"
-                )
-                node.set_attribute(node.tail(nodelist.list), publisher.att_omit_at_top, 1)
-            end
-            if has_margin_bottom then
-                nodelist.list = publisher.nodes.add_glue(nodelist.list, "tail", { width = has_margin_bottom })
                 node.set_attribute(node.tail(nodelist.list), publisher.att_omit_at_top, 1)
             end
 
@@ -1463,16 +1544,6 @@ function Par:format(width_sp, options, data)
 
     local nodelist = node.vpack(objects[1])
 
-    if self.startendborder or self.startborder then
-        local wd, ht, margintop = get_border_width_height_margintop(nodelist)
-        local bordernumber = self.startendborder or self.startborder
-        local ba = publisher.borderattributes[bordernumber]
-        ba.shiftdown = margintop
-
-        publisher.attribute_helpers.set_attribute(nodelist.list, "bordernumber", bordernumber)
-        publisher.attribute_helpers.set_attribute(nodelist.list, "borderwd", wd)
-        publisher.attribute_helpers.set_attribute(nodelist.list, "borderht", ht)
-    end
     publisher.attribute_helpers.setprop(nodelist, "origin", "par:format")
     -- Transfer feature flags from Par to the vlist so insert_nonmoving_whatsits can skip clean paragraphs
     if self.has_color then

@@ -393,53 +393,76 @@ function M.build_nodelist(elt, options, before_box, _caller, prevdir, dataxml)
             box.eltname = thiseltname
             box.margintop = margin_top or 0
             box.marginbottom = margin_bottom or 0
-            box.border_top_width = border_top_width
-            box.border_bottom_width = border_bottom_width
-            box.indent_amount = margin_left + padding_left
-            styles.calculated_width = styles.calculated_width
-                - margin_left
-                - padding_left
-                - border_left_width
-                - border_right_width
-            box.width = styles.calculated_width
-            box.draw_border = thiselt_styles.has_border
-            box.padding_top = padding_top
-            box.padding_bottom = padding_bottom
+            -- a border without style has no width
+            if border_top_style == "none" or border_top_style == "hidden" then
+                border_top_width = 0
+            end
+            if border_right_style == "none" or border_right_style == "hidden" then
+                border_right_width = 0
+            end
+            if border_bottom_style == "none" or border_bottom_style == "hidden" then
+                border_bottom_width = 0
+            end
+            if border_left_style == "none" or border_left_style == "hidden" then
+                border_left_width = 0
+            end
+            -- styles.calculated_width is the content width of the parent
+            -- unless the element has a width of its own.
+            local content_width = styles.calculated_width
+            if not thiselt_styles.width or thiselt_styles.width == "auto" then
+                content_width = styles.calculated_width
+                    - margin_left
+                    - border_left_width
+                    - padding_left
+                    - padding_right
+                    - border_right_width
+                    - margin_right
+            end
+            styles.calculated_width = content_width
+            box.width = content_width
+            box.indent_amount = margin_left + border_left_width + padding_left
             if break_before == "page" or break_before == "always" then
                 box.break_before = break_before
             end
             if break_after == "avoid" then
                 box.break_after = "avoid"
             end
-            if thiselt_styles.has_border then
-                box.border = {
-                    borderstart = true,
-                    border_top_style = border_top_style,
-                    border_right_style = border_right_style,
-                    border_bottom_style = border_bottom_style,
-                    border_left_style = border_left_style,
-                    padding_top = padding_top,
-                    padding_right = padding_right,
-                    padding_bottom = padding_bottom,
-                    padding_left = padding_left,
+            if thiseltname ~= "table" then
+                local background = thiselt_styles["background-color"]
+                if background == "transparent" then
+                    background = nil
+                end
+                local content_height
+                if thiselt_styles.height and thiselt_styles.height ~= "auto" then
+                    content_height = units.getsize(styles, thiselt_styles.height, styles_fontsize_sp)
+                end
+                ---@type CSSBlock
+                box.css = {
+                    x = margin_left,
+                    width = border_left_width + padding_left + content_width + padding_right + border_right_width,
                     border_top_width = border_top_width,
-                    border_right_width = border_right_width,
                     border_bottom_width = border_bottom_width,
-                    border_left_width = border_left_width,
-                    border_top_color = border_top_color,
-                    border_right_color = border_right_color,
-                    border_bottom_color = border_bottom_color,
-                    border_left_color = border_left_color,
-                    border_bottom_right_radius = tex.sp(border_bottom_right_radius),
-                    border_bottom_left_radius = tex.sp(border_bottom_left_radius),
-                    border_top_right_radius = tex.sp(border_top_right_radius),
-                    border_top_left_radius = tex.sp(border_top_left_radius),
-                    margin_top = margin_top,
-                    margin_right = margin_right,
-                    margin_bottom = margin_bottom,
-                    margin_left = margin_left,
-                    debug = (styles["sp-debugbox"] == "border") or false,
+                    padding_top = padding_top,
+                    padding_bottom = padding_bottom,
+                    height = content_height,
                 }
+                if background or thiselt_styles.has_border then
+                    box.css.decoration = {
+                        top = { width = border_top_width, style = border_top_style, color = border_top_color },
+                        right = { width = border_right_width, style = border_right_style, color = border_right_color },
+                        bottom = {
+                            width = border_bottom_width,
+                            style = border_bottom_style,
+                            color = border_bottom_color,
+                        },
+                        left = { width = border_left_width, style = border_left_style, color = border_left_color },
+                        radius_tl = units.getsize(styles, border_top_left_radius, styles_fontsize_sp),
+                        radius_tr = units.getsize(styles, border_top_right_radius, styles_fontsize_sp),
+                        radius_br = units.getsize(styles, border_bottom_right_radius, styles_fontsize_sp),
+                        radius_bl = units.getsize(styles, border_bottom_left_radius, styles_fontsize_sp),
+                        background = background,
+                    }
+                end
             end
 
             if thiseltname == "table" then
@@ -600,8 +623,8 @@ function M.build_nodelist(elt, options, before_box, _caller, prevdir, dataxml)
                 ret[#ret + 1] = a
                 prevdir = "vertical"
             elseif thiseltname == "hr" then
+                -- the border is drawn around the (usually empty) content
                 local ht = units.getsize(styles, styles.height, styles.fontsize_sp)
-                ht = ht + border_top_width + border_bottom_width
                 local bx = publisher.nodes.create_empty_vbox_width_width_height(styles.calculated_width, ht)
                 local a = publisher.par:new(nil, "html.lua (hr)")
                 a:append(bx)
@@ -646,13 +669,13 @@ function M.build_nodelist(elt, options, before_box, _caller, prevdir, dataxml)
         end
         inherit.pop(stylesstack)
     end
-    -- two adjacent box elements collapse their margin
+    -- two adjacent box elements collapse their margin, the larger one wins
     -- https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Mastering_margin_collapsing
-    -- This simple implementation is not enough, but a start
+    -- Margins of parent and child don't collapse yet.
     for i = 1, #ret - 1 do
         local max = math.max(ret[i].marginbottom or 0, ret[i + 1].margintop or 0)
-        ret[i].marginbottom = max / 2
-        ret[i + 1].margintop = max / 2
+        ret[i].marginbottom = max
+        ret[i + 1].margintop = 0
     end
 
     return ret, prevdir

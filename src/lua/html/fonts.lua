@@ -23,6 +23,25 @@ local function familyname(fontfamilies, fontgroup, family_table)
     return "sans-serif", fontgroup["sans-serif"]
 end
 
+-- Returns the distance between two baselines for the CSS line-height in
+-- `styles`. A plain number is a factor of the current font size (and inherited
+-- as such), lengths and percentages are resolved where they are declared
+-- (`styles.lineheight_sp`). `normal` keeps the traditional factor 1.12.
+---@param styles table
+---@param size_sp number Font size in sp.
+---@return integer
+function M.lineheight(styles, size_sp)
+    local lh = styles["line-height"]
+    if lh == nil or lh == "normal" then
+        return math.round(size_sp * 1.12)
+    end
+    local factor = tonumber(lh)
+    if factor then
+        return math.round(size_sp * factor)
+    end
+    return styles.lineheight_sp or math.round(size_sp * 1.12)
+end
+
 ---Resolve a CSS font-family + size to a Publisher font family number.
 ---@param families string                   -- CSS "font-family" value, comma-separated
 ---@param size_sp number                    -- font size in sp
@@ -49,9 +68,11 @@ function M.get_fontfamily(families, size_sp, name, styles, publisher, fontfamili
         end
     end
 
-    -- Pick first known family
+    -- Pick first known family. The line height is part of the name, so a
+    -- family is defined once for each combination of size and line height.
     local chosen, def = familyname(fontfamilies, publisher.fontgroup, family_table)
-    local singlefont = chosen .. "/" .. name
+    local baselineskip = M.lineheight(styles, size_sp)
+    local singlefont = string.format("%s/%d/%d", chosen, math.round(size_sp), baselineskip)
 
     -- Already defined at this size?
     local predefined = publisher.fonts.lookup_fontfamily_name_number[singlefont]
@@ -79,7 +100,7 @@ function M.get_fontfamily(families, size_sp, name, styles, publisher, fontfamili
 
     -- Define family at the given size
     local fam =
-        publisher.fontfamilies.define_fontfamily(regular, bold, italic, bolditalic, singlefont, size_sp, size_sp * 1.12)
+        publisher.fontfamilies.define_fontfamily(regular, bold, italic, bolditalic, singlefont, size_sp, baselineskip)
     return fam
 end
 

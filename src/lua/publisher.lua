@@ -131,9 +131,6 @@ M.attributes = {
     ["background-color"] = true,
     ["bgpaddingbottom"] = true,
     ["bgpaddingtop"] = true,
-    ["bordernumber"] = true,
-    ["borderwd"] = true,
-    ["borderht"] = true,
     ["borderdp"] = true,
     ["color"] = true,
     ["font-style"] = { "italic", "oblique" },
@@ -141,11 +138,8 @@ M.attributes = {
     ["fontfamily"] = true,
     ["hyperlink"] = true,
     ["indent"] = true,
-    ["margintop"] = true,
     ["marginbottom"] = true,
     ["newline"] = true,
-    ["paddingtop"] = true,
-    ["paddingbottom"] = true,
     ["rows"] = true,
     ["spaceglue"] = true,
     ["text-decoration-color"] = true,
@@ -1012,8 +1006,6 @@ function M.define_image_callback(extensionhandler)
     callback.register("find_image_file", find_image_file)
 end
 
----@type table<integer, table>
-M.borderattributes = {}
 do
     -- the idea of flatten_boxes is to return an array that only has
     -- par objects.
@@ -1027,20 +1019,20 @@ do
     -- Recursively flattens a tree of Box objects (similar to HTML `<div>`s)
     -- and Par objects (similar to `<p>`s) into a flat array of Par objects,
     -- propagating margin/padding/border settings down to the actual paragraphs.
+    -- Each paragraph gets the list of the surrounding HTML block boxes
+    -- (`css_chain`, outermost first). An entry knows whether the paragraph is
+    -- at the start and/or at the end of the box, so the paragraph can add the
+    -- space above and below and draw its part of the background and borders.
     ---@param box table Mixed tree of Box and Par objects.
-    ---@param parameter? table Inherited parameters (currently `indent`).
+    ---@param parameter? table Inherited parameters (`indent`, `chain`).
     ---@param ret? table Accumulator for the flat result; created if absent.
     ---@return table ret Array of Par objects.
     function M.flatten_boxes(box, parameter, ret)
         ret = ret or {}
         parameter = parameter or {}
-        local indent = box.indent_amount or 0
-        if indent and parameter.indent then
-            indent = parameter.indent + indent
-        end
-        local new_parameter = {
-            indent = indent,
-        }
+        local outer_indent = parameter.indent or 0
+        local indent = outer_indent + (box.indent_amount or 0)
+        local chain = parameter.chain or {}
         if box.prependbox and #box.prependbox > 0 then
             prependbox = prependbox or {}
             for i = 1, #box.prependbox do
@@ -1048,53 +1040,50 @@ do
             end
         end
 
-        if box.padding_bottom and box.padding_bottom ~= 0 then
-            box[1].padding_bottom = box.padding_bottom
-        end
-        if box.padding_top and box.padding_top ~= 0 then
-            box[1].padding_top = box.padding_top
-        end
-        if box.draw_border then
-            M.borderattributes[#M.borderattributes + 1] = box.border
-            if #box > 1 then
-                box[1].startborder = #M.borderattributes
-            else
-                box[1].startendborder = #M.borderattributes
-            end
-        end
-        if box.startendborder then
-            box[1].startendborder = box.startendborder
-        end
-
-        for i = 1, #box do
+        local nboxes = #box
+        for i = 1, nboxes do
             local thisbox = box[i]
+            local is_first, is_last = (i == 1), (i == nboxes)
+            -- the chain for this child, seen from the child's position
+            local thischain = {}
+            for _, entry in ipairs(chain) do
+                thischain[#thischain + 1] = {
+                    css = entry.css,
+                    x = entry.x,
+                    margin_top = entry.margin_top,
+                    margin_bottom = entry.margin_bottom,
+                    first = entry.first and is_first,
+                    last = entry.last and is_last,
+                }
+            end
+            if box.css then
+                thischain[#thischain + 1] = {
+                    css = box.css,
+                    x = outer_indent + box.css.x,
+                    margin_top = box.margintop or 0,
+                    margin_bottom = box.marginbottom or 0,
+                    first = is_first,
+                    last = is_last,
+                }
+            end
             if not thisbox.min_width then
                 -- a box with paragraphs inside
                 -- Pass break_before to first child, break_after to last child
-                if i == 1 and box.break_before then
+                if is_first and box.break_before then
                     thisbox.break_before = box.break_before
                 end
-                if i == #box and box.break_after then
+                if is_last and box.break_after then
                     thisbox.break_after = box.break_after
                 end
-                M.flatten_boxes(thisbox, new_parameter, ret)
+                M.flatten_boxes(thisbox, { indent = indent, chain = thischain }, ret)
                 if thisbox.mode == "block" then
                     ret.mode = "block"
                 end
             else
                 -- a regular paragraph
-                if parameter.indent then
-                    thisbox:indent(indent)
-                end
+                thisbox:indent(indent)
                 if box.width then
-                    thisbox.width = box.width
-                end
-                if box.draw_border then
-                    thisbox.draw_border = true
-                    thisbox.border = box.border
-                end
-                if box.startborder then
-                    thisbox.startborder = box.startborder
+                    thisbox.width = box.width + indent
                 end
                 if prependbox then
                     for p = #prependbox, 1, -1 do
@@ -1102,28 +1091,47 @@ do
                     end
                     prependbox = nil
                 end
-                if i == 1 then
+                if #thischain > 0 then
+                    thisbox.css_chain = thischain
+                end
+                if is_first then
                     thisbox.firstbox = true
-                    if box.border_top_width then
-                        thisbox.border_top_width = box.border_top_width
-                    end
-                    if box.margintop then
-                        thisbox.margin_top = box.margintop
-                    end
                     if box.break_before then
                         thisbox.break_before = box.break_before
                     end
                 end
-                if i == #box then
+                if is_last then
                     thisbox.lastbox = true
-                    if box.marginbottom then
-                        thisbox.margin_bottom = box.marginbottom
-                    end
-                    if box.border_bottom_width then
-                        thisbox.border_bottom_width = box.border_bottom_width
-                    end
                     if box.break_after then
                         thisbox.break_after = box.break_after
+                    end
+                end
+                -- The margins at the very top and bottom of the paragraph
+                -- (used for margin collapsing in Output). The margins of
+                -- nested boxes add up until a border or padding separates them.
+                if #thischain > 0 then
+                    local margin_top, margin_bottom = 0, 0
+                    local top_open, bottom_open = true, true
+                    for _, entry in ipairs(thischain) do
+                        local css = entry.css
+                        if entry.first and top_open then
+                            margin_top = margin_top + entry.margin_top
+                            top_open = css.border_top_width == 0 and css.padding_top == 0
+                        end
+                        if entry.last and bottom_open then
+                            margin_bottom = margin_bottom + entry.margin_bottom
+                            bottom_open = css.border_bottom_width == 0 and css.padding_bottom == 0
+                        end
+                    end
+                    thisbox.margin_top = margin_top
+                    thisbox.margin_bottom = margin_bottom
+                end
+                if not box.css then
+                    if is_first and box.margintop then
+                        thisbox.margin_top = box.margintop
+                    end
+                    if is_last and box.marginbottom then
+                        thisbox.margin_bottom = box.marginbottom
                     end
                 end
 

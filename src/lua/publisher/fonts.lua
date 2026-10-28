@@ -560,21 +560,60 @@ function M.insert_underline(parent, head, start, typ, style, colornumber)
     local rule_width = math.round(ht / 13, 3)
     if stylename == "dashed" then
         dashpattern = string.format("[%g] 0 d", 3 * rule_width)
+    elseif stylename == "dotted" then
+        dashpattern = string.format("1 J [0 %g] 0 d", 2 * rule_width)
     end
 
     local shift_down = (dp - rule_width) / 1.5
     if typname == "line-through" then
         shift_down = -1.6 * shift_down
     end
-    rule.data = string.format(
-        "q %s %g w %s 0 %g m %g %g l S Q",
-        pdfstring,
-        rule_width,
-        dashpattern,
-        -1 * shift_down,
-        -wd,
-        -1 * shift_down
-    )
+    local y = -1 * shift_down
+    local path
+    if stylename == "double" then
+        -- two thinner lines, the second one further away from the text
+        local gap = 2 * rule_width
+        if typname == "line-through" then
+            path = string.format(
+                "0 %g m %g %g l 0 %g m %g %g l",
+                y + gap / 2,
+                -wd,
+                y + gap / 2,
+                y - gap / 2,
+                -wd,
+                y - gap / 2
+            )
+        else
+            path = string.format("0 %g m %g %g l 0 %g m %g %g l", y, -wd, y, y - gap, -wd, y - gap)
+        end
+        rule_width = rule_width * 0.7
+    elseif stylename == "wavy" then
+        -- a sine-like curve made of half waves, drawn from right to left
+        local amplitude = rule_width * 1.5
+        local halfwave = rule_width * 4
+        local parts = { string.format("0 %g m", y) }
+        local x = 0
+        local sign = 1
+        while x > -wd do
+            local x_next = math.max(x - halfwave, -wd)
+            local step = (x - x_next) / 4
+            parts[#parts + 1] = string.format(
+                "%g %g %g %g %g %g c",
+                x - step,
+                y + sign * amplitude,
+                x_next + step,
+                y + sign * amplitude,
+                x_next,
+                y
+            )
+            x = x_next
+            sign = -sign
+        end
+        path = table.concat(parts, " ")
+    else
+        path = string.format("0 %g m %g %g l", y, -wd, y)
+    end
+    rule.data = string.format("q %s %g w %s %s S Q", pdfstring, rule_width, dashpattern, path)
     rule.mode = 0
     local attribs = publisher.attribute_helpers.get_attributes(start)
     publisher.attribute_helpers.set_attributes(rule, attribs)

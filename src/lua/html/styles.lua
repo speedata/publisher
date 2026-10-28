@@ -1,6 +1,8 @@
 -- Style helpers for HTML parser: width calculation and attribute copying.
 -- Uses global `tex` and `math` like the legacy code.
 -- The `HtmlStyles` class is defined in `html/inherit.lua`, where instances are created.
+local units = require("html.units")
+
 local M = {}
 
 ---Recompute styles.calculated_width based on CSS-like width and box extras.
@@ -11,11 +13,10 @@ function M.set_calculated_width(styles)
     local cw = styles.calculated_width
 
     if type(sw) == "string" and string.match(sw, "%%$") then
-        local amount = string.match(sw, "(%d+)%%$")
+        local amount = string.match(sw, "([%d.]+)%%$")
         cw = math.round(cw * tonumber(amount) / 100, 0)
     elseif type(sw) == "string" and string.match(sw, "em$") then
-        local amount = string.match(sw, "(%d+)em$")
-        cw = math.round(styles.fontsize_sp * tonumber(amount), 0)
+        cw = units.getsize(styles, sw, styles.fontsize_sp)
     elseif sw == "auto" then
         cw = styles.calculated_width
 
@@ -77,15 +78,16 @@ function M.copy_attributes(styles, attributes, _elementname)
         styles[remember_currentcolor[i]] = styles.color
     end
 
-    -- line-height post-processing
+    -- line-height post-processing: lengths and percentages are resolved
+    -- here and inherited as an absolute value. Plain numbers and "normal"
+    -- depend on the font size of each element (see html.fonts.lineheight).
     local lh = attributes["line-height"]
-    if lh then
-        if lh == "normal" then
-            styles.lineheight_sp = 1.2 * styles.fontsize_sp
-        elseif tonumber(lh) then
-            styles.lineheight_sp = styles.fontsize_sp * tonumber(lh)
+    if lh and lh ~= "normal" and not tonumber(lh) then
+        local percent = string.match(lh, "^([%d.]+)%%$")
+        if percent then
+            styles.lineheight_sp = math.round(styles.fontsize_sp * tonumber(percent) / 100)
         else
-            styles.lineheight_sp = tex.sp(lh)
+            styles.lineheight_sp = units.getsize(styles, lh, styles.fontsize_sp)
         end
     end
 end
