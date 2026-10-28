@@ -136,7 +136,9 @@ func (ls *LayoutStylesheet) AddCSS(csstext string) {
 
 // buildChain creates a small DOM below a root element "layout" and returns
 // the innermost element. Elements with a position get empty preceding
-// siblings, so that structural pseudo classes like :nth-child work.
+// siblings, so that structural pseudo classes like :nth-child work, and an
+// empty following sibling, because the elements after them are not known
+// yet (:last-child does not match).
 func buildChain(chain []LayoutElement) *html.Node {
 	doc := &html.Node{Type: html.DocumentNode}
 	n := &html.Node{Type: html.ElementNode, Data: "layout"}
@@ -154,6 +156,9 @@ func buildChain(chain []LayoutElement) *html.Node {
 			n.Attr = append(n.Attr, html.Attribute{Key: "id", Val: elt.ID})
 		}
 		parent.AppendChild(n)
+		if elt.Position > 0 {
+			parent.AppendChild(&html.Node{Type: html.ElementNode, Data: elt.Name})
+		}
 	}
 	return n
 }

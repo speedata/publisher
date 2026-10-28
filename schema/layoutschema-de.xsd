@@ -8423,6 +8423,11 @@
           <xs:documentation>Wenn die Tabelle an einem Seitenumbruch geteilt wird, wird zwischen den beiden Teilen der Tabelle eine zusätzliche Seite mit dem angegebenen Seitentyp eingefügt. Der Inhalt dieser Seite muss in AtPageCreation des Seitentyps erzeugt werden. Die Seitennummerierung läuft normal weiter. Ein leerer Wert schaltet das Einfügen aus.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="class">
+        <xs:annotation>
+          <xs:documentation>CSS-Klasse für diese Tabelle.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="columndistance">
         <xs:annotation>
           <xs:documentation>Der Abstand zwischen zwei Spalten.</xs:documentation>
@@ -8441,6 +8446,11 @@
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Name der Schriftfamilie, die benutzt werden soll. Wenn keine Schriftart angegeben ist, wird auf die Schriftart ›text‹ umgeschaltet.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation>CSS-Id für diese Tabelle.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="leading">

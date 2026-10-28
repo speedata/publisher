@@ -8423,6 +8423,11 @@
           <xs:documentation>When the table is split at a page break, an extra page of the given page type is inserted between the two parts of the table. The contents of that page must be created with AtPageCreation of the page type. The page numbering continues as usual. An empty value disables the insertion.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="class">
+        <xs:annotation>
+          <xs:documentation>CSS class for this table.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="columndistance">
         <xs:annotation>
           <xs:documentation>Distance between two table columns.</xs:documentation>
@@ -8441,6 +8446,11 @@
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Name of the font family for the table. If not given, the font face ‘text’ is used.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation>CSS id for this table.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="leading">

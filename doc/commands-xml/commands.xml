@@ -11189,6 +11189,14 @@
         <para>Wenn die Tabelle an einem Seitenumbruch geteilt wird, wird zwischen den beiden Teilen der Tabelle eine zusätzliche Seite mit dem angegebenen Seitentyp eingefügt. Der Inhalt dieser Seite muss in <tt>AtPageCreation</tt> des Seitentyps erzeugt werden. Die Seitennummerierung läuft normal weiter. Ein leerer Wert schaltet das Einfügen aus.</para>
       </description>
     </attribute>
+    <attribute en="class" optional="yes" type="text" since="5.9.14">
+      <description xml:lang="en">
+        <para>CSS class for this table.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Klasse für diese Tabelle.</para>
+      </description>
+    </attribute>
     <attribute en="columndistance" type="length" optional="yes">
       <description xml:lang="en">
         <para>Distance between two table columns.</para>
@@ -11219,6 +11227,14 @@
       </description>
       <description xml:lang="de">
         <para>Name der Schriftfamilie, die benutzt werden soll. Wenn keine Schriftart angegeben ist, wird auf die Schriftart ›text‹ umgeschaltet.</para>
+      </description>
+    </attribute>
+    <attribute en="id" optional="yes" type="text" since="5.9.14">
+      <description xml:lang="en">
+        <para>CSS id for this table.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Id für diese Tabelle.</para>
       </description>
     </attribute>
     <attribute en="leading" type="length" optional="yes">

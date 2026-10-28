@@ -73,12 +73,19 @@ func TestLayoutImportant(t *testing.T) {
 
 func TestLayoutNthChild(t *testing.T) {
 	ls := NewLayoutStylesheet()
-	ls.AddCSS(`tr:nth-child(even) { background-color: gray } layout > td { color: red }`)
+	ls.AddCSS(`tr:nth-child(even) { background-color: gray } tr:first-child { color: blue } tr:last-child { color: green } layout > td { color: red }`)
 	for pos, want := range map[int]string{1: "", 2: "gray", 3: ""} {
 		chain := []LayoutElement{elt("table", "", ""), {Name: "tr", Position: pos}}
 		decls, _ := ls.Match(chain, "")
 		if got := decls["background-color"]; got != want {
 			t.Errorf("row %d: got %q, want %q", pos, got, want)
+		}
+		wantcolor := ""
+		if pos == 1 {
+			wantcolor = "blue"
+		}
+		if got := decls["color"]; got != wantcolor {
+			t.Errorf("row %d: got color %q, want %q", pos, got, wantcolor)
 		}
 	}
 	decls, _ := ls.Match([]LayoutElement{elt("td", "", "")}, "")

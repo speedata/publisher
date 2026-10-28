@@ -92,7 +92,7 @@ return {
     ["Switch"] = { },
     ["StructureElement"] = {["id"] = true, ["parent"] = true, ["role"] = true },
     ["Stylesheet"] = {["filename"] = true },
-    ["Table"] = {["balance"] = true, ["border-collapse"] = true, ["break-pagetype"] = true, ["columndistance"] = true, ["eval"] = true, ["eval-on-split"] = true, ["fontfamily"] = true, ["leading"] = true, ["padding"] = true, ["stretch"] = true, ["parent"] = true, ["role"] = true, ["textformat"] = true, ["width"] = true, ["vexcess"] = true },
+    ["Table"] = {["balance"] = true, ["border-collapse"] = true, ["break-pagetype"] = true, ["class"] = true, ["columndistance"] = true, ["eval"] = true, ["eval-on-split"] = true, ["fontfamily"] = true, ["id"] = true, ["leading"] = true, ["padding"] = true, ["stretch"] = true, ["parent"] = true, ["role"] = true, ["textformat"] = true, ["width"] = true, ["vexcess"] = true },
     ["Tablefoot"] = {["page"] = true },
     ["Tablehead"] = {["page"] = true },
     ["TableNewPage"] = { },

@@ -6983,6 +6983,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="class">
+                     <a:documentation>CSS-Klasse für diese Tabelle.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="columndistance">
                      <a:documentation>Der Abstand zwischen zwei Spalten.</a:documentation>
                   </attribute>
@@ -7001,6 +7006,11 @@
                   <attribute name="fontfamily">
                      <a:documentation>Name der Schriftfamilie, die benutzt werden soll. Wenn keine Schriftart angegeben ist, wird auf die Schriftart ›text‹ umgeschaltet.</a:documentation>
                      <lsp:references symbol="fontfamily"></lsp:references>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation>CSS-Id für diese Tabelle.</a:documentation>
                   </attribute>
                </optional>
                <optional>

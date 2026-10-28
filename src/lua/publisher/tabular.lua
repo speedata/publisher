@@ -63,6 +63,7 @@ local metapost = require("publisher.metapost")
 ---@field eval_on_split_layoutxml? table
 ---@field eval_on_split_dataxml? table
 ---@field textformat? string
+---@field css_chain? CSSChain CSS chain of the table, for the table head and foot on new pages.
 local tabular = {}
 
 ---@type table<string, any>
@@ -2785,7 +2786,10 @@ function tabular:reformat_foot(pagenumber, max_splits)
     local y_layoutxml, y_dataxml = tabular.get_origin(y)
     assert(y_layoutxml, "no layout XML origin registered for the table foot")
     assert(y_dataxml, "no data XML origin registered for the table foot")
+    local previous = publisher.css:set_chain(self.css_chain)
+    publisher.css:enter("tablefoot")
     local x = publisher.dispatch.dispatch(y_layoutxml, y_dataxml)
+    publisher.css:set_chain(previous)
     ---@cast x TableheadFootContents
     local page = publisher.attribute_helpers.read_attribute(y_layoutxml, y_dataxml, "page", "string", "all")
     x.page = page
@@ -2805,7 +2809,10 @@ function tabular:reformat_head()
     local y_layoutxml, y_dataxml = tabular.get_origin(y)
     assert(y_layoutxml, "no layout XML origin registered for the table head")
     assert(y_dataxml, "no data XML origin registered for the table head")
+    local previous = publisher.css:set_chain(self.css_chain)
+    publisher.css:enter("tablehead")
     local x = publisher.dispatch.dispatch(y_layoutxml, y_dataxml)
+    publisher.css:set_chain(previous)
     ---@cast x TableheadFootContents
     self:attach_objects(x)
     local tmp1, tmp2 = {}, {}
@@ -3025,6 +3032,9 @@ end
 ---@param dataxml table XML data for the table
 ---@return Node|SplitTableResult
 function tabular:make_table(dataxml)
+    -- the table head and foot are created again on new pages (see
+    -- reformat_head), with the CSS chain of the table
+    self.css_chain = publisher.css:get_chain()
     -- Determine total number of columns from <Columns> or max cells per row
     self.total_columns = 0
     for _, tr in ipairs(self.tab) do

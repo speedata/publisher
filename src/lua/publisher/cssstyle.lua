@@ -2,8 +2,8 @@
 --  cssstyle.lua
 --  speedata publisher
 --
---  Turns the CSS properties of Paragraph and Textblock (see css.lua, `style`)
---  into textformats, font families and paragraph options.
+--  Turns the CSS properties of Paragraph, Textblock and tables (see css.lua,
+--  `style`) into textformats, font families and paragraph options.
 --
 --  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
@@ -329,6 +329,55 @@ function M.absolute_font_values(fontfamily)
         return nil, nil
     end
     return fam.size .. "sp", fam.baselineskip .. "sp"
+end
+
+-- Returns the font family of an element whose CSS properties the elements
+-- inside inherit (Textblock, Table, Tr, Td), based on the font family
+-- `base`. Relative values (`em`, `%`) are passed on as absolute values, so
+-- that the elements inside do not apply them again.
+---@param props table<string, string> Return value of `style`.
+---@param base integer Font family number.
+---@return integer
+function M.inherit_fontfamily(props, base)
+    if not next(props) then
+        return base
+    end
+    local fontfamily = M.fontfamily(props, base)
+    local relative_lineheight = props["line-height"] and not tonumber(props["line-height"])
+    if props["font-size"] or relative_lineheight then
+        local fs, lh = M.absolute_font_values(fontfamily)
+        publisher.css:set_inherited("font-size", fs)
+        if relative_lineheight then
+            publisher.css:set_inherited("line-height", lh)
+        end
+    end
+    local fontsize = fontsize_of(fontfamily)
+    for _, property in ipairs({ "letter-spacing", "text-indent" }) do
+        local sp = props[property] and length_sp(props[property], fontsize)
+        if sp then
+            publisher.css:set_inherited(property, sp .. "sp")
+        end
+    end
+    return fontfamily
+end
+
+-- Splits the value of a CSS shorthand property with one to four values
+-- (such as padding) into the values for the top, right, bottom and left
+-- side.
+---@param value string
+---@return string top
+---@return string right
+---@return string bottom
+---@return string left
+function M.box_sides(value)
+    local v = {}
+    for part in string.gmatch(value, "%S+") do
+        v[#v + 1] = part
+    end
+    local top = v[1] or value
+    local right = v[2] or top
+    local bottom = v[3] or top
+    return top, right, bottom, v[4] or right
 end
 
 -- Sets the options for `Par:append` from the CSS properties of a paragraph:

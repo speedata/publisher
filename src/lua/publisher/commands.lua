@@ -5010,7 +5010,9 @@ function commands.paragraph(layoutxml, dataxml, textblockoptions)
     if next(css) then
         local base = fontfamily or publisher.current_fontfamily
         local cssfontfamily = publisher.cssstyle.fontfamily(css, base)
-        if cssfontfamily ~= base then
+        -- An inherited font must be set explicitly: in a table cell it may
+        -- differ from the font of the table that is used otherwise.
+        if cssfontfamily ~= base or css["font-family"] or css["font-size"] or css["line-height"] then
             fontfamily = cssfontfamily
         end
     end
@@ -6852,8 +6854,7 @@ end
 function commands.table(layoutxml, dataxml, options)
     local autostretch = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "stretch", "string")
     local balance = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "balance", "boolean", false)
-    local collapse =
-        publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "border-collapse", "string", "separate")
+    local collapse = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "border-collapse", "string")
     local columndistance = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "columndistance", "length")
     -- The XPath in @eval is evaluated for its side-effects only; the result
     -- is intentionally discarded.
@@ -6863,8 +6864,7 @@ function commands.table(layoutxml, dataxml, options)
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "fontfamily", "string", fontname)
     local padding = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "padding", "length")
     local rowdistance = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "leading", "length")
-    local textformat =
-        publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "textformat", "string", "__leftaligned")
+    local textformat = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "textformat", "string")
     local width = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "width", "length")
     local vexcess = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "vexcess", "string", "stretch")
     local parent = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "parent", "string")
@@ -6874,8 +6874,31 @@ function commands.table(layoutxml, dataxml, options)
         main.log("warn", "Table/fontface is deprecated and will be removed in version 5. Please use fontfamily instead")
     end
 
+    -- CSS: the rows and cells inherit the values in `css` (see css.lua)
+    local css = publisher.css:style({
+        fontfamily = fontfamilyname ~= nil or fontname ~= nil,
+        textformat = textformat ~= nil,
+    })
+    local css_rules, css_important = publisher.css:rules()
+    collapse = publisher.css.pick(css_rules, css_important, "border-collapse", collapse) or "separate"
+    textformat = textformat or "__leftaligned"
+
+    -- the padding of the cells: attribute or CSS padding, then the single
+    -- sides from CSS
+    local paddings = {}
+    local padding_attribute = padding ~= nil and not css_important.padding
+    padding = publisher.css.pick(css_rules, css_important, "padding", padding)
+    if padding then
+        paddings.top, paddings.right, paddings.bottom, paddings.left = publisher.cssstyle.box_sides(padding)
+    end
+    for _, side in ipairs({ "top", "right", "bottom", "left" }) do
+        local property = "padding-" .. side
+        if css_rules[property] and (not padding_attribute or css_important[property]) then
+            paddings[side] = css_rules[property]
+        end
+    end
+
     -- FIXME: leading -> row distance or so
-    padding = tex.sp(padding or "0pt") or 0
     columndistance = tex.sp(columndistance or "0pt") or 0
     rowdistance = tex.sp(rowdistance or "0pt") or 0
     publisher.page_helpers.setup_page(nil, "commands#table", dataxml)
@@ -6910,12 +6933,13 @@ function commands.table(layoutxml, dataxml, options)
         fontfamilyname = "text"
     end
     local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
-    publisher.current_fontfamily = fontfamily
 
     if fontfamily == nil then
         main.log("error", string.format("Fontfamily %q not found.", fontfamilyname or "???"))
         fontfamily = 1
     end
+    fontfamily = publisher.cssstyle.inherit_fontfamily(css, fontfamily)
+    publisher.current_fontfamily = fontfamily
     local tab = {}
     local tab_tmp = publisher.dispatch.dispatch(layoutxml, dataxml)
 
@@ -6948,10 +6972,23 @@ function commands.table(layoutxml, dataxml, options)
     tabular.dataxml = dataxml
     tabular.width = width
     tabular.fontfamily = fontfamily
-    tabular.padding_left = padding
-    tabular.padding_top = padding
-    tabular.padding_right = padding
-    tabular.padding_bottom = padding
+    local fontsize = publisher.cssstyle.fontsize_of(fontfamily)
+    local function padding_sp(side)
+        local value = paddings[side]
+        if not value then
+            return 0
+        end
+        local sp = publisher.cssstyle.length_sp(value, fontsize)
+        if not sp then
+            main.log("error", "Table: invalid padding", "value", value)
+            return 0
+        end
+        return sp
+    end
+    tabular.padding_left = padding_sp("left")
+    tabular.padding_top = padding_sp("top")
+    tabular.padding_right = padding_sp("right")
+    tabular.padding_bottom = padding_sp("bottom")
     tabular.colsep = columndistance
     tabular.rowsep = rowdistance
     tabular.autostretch = autostretch
@@ -7103,7 +7140,13 @@ end
 ---@return any
 function commands.tr(layoutxml, dataxml)
     local tab = {}
+    local align = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "align", "string", nil, "align")
+    -- CSS: the cells inherit the values in `css` (see css.lua)
+    local css = publisher.css:style({ ["text-align"] = align ~= nil })
+    local save_fontfamily = publisher.current_fontfamily
+    publisher.current_fontfamily = publisher.cssstyle.inherit_fontfamily(css, save_fontfamily)
     local tab_tmp = publisher.dispatch.dispatch(layoutxml, dataxml)
+    publisher.current_fontfamily = save_fontfamily
 
     local parent = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "parent", "string")
     local role = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "role", "string")
@@ -7157,7 +7200,7 @@ function commands.tr(layoutxml, dataxml)
     end
 
     tabular_module.set_origin(tab, layoutxml, dataxml)
-    tab.align = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "align", "string", nil, "align")
+    tab.align = align
     -- !important declarations take precedence over the attributes
     for k in pairs(css_important) do
         apply_css(k, css_rules[k])
@@ -7275,7 +7318,13 @@ end
 ---@param dataxml table
 ---@return any
 function commands.td(layoutxml, dataxml)
+    local align = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "align", "string", nil, "align")
+    -- CSS: the cell contents inherit the values in `css` (see css.lua)
+    local css = publisher.css:style({ ["text-align"] = align ~= nil })
+    local save_fontfamily = publisher.current_fontfamily
+    publisher.current_fontfamily = publisher.cssstyle.inherit_fontfamily(css, save_fontfamily)
     local tab = publisher.dispatch.dispatch(layoutxml, dataxml)
+    publisher.current_fontfamily = save_fontfamily
     ---@cast tab TdContents
     local parent = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "parent", "string")
     local role = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "role", "string")
@@ -7294,8 +7343,6 @@ function commands.td(layoutxml, dataxml)
             tab["border-top"] = v
         elseif k == "border-bottom-width" then
             tab["border-bottom"] = v
-        elseif k == "text-align" then
-            tab.align = v
         elseif k == "background-text" then
             local x = string.match(v, '"(.*)"')
             tab["background-text"] = x
@@ -7357,14 +7404,12 @@ function commands.td(layoutxml, dataxml)
         tab.graphic = tab.graphics
     end
 
-    local tmp = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "align", "string", nil, "align")
-    if tmp then
-        tab.align = tmp
-    end
     -- !important declarations take precedence over the attributes
     for k in pairs(css_important) do
         apply_css(k, css_rules[k])
     end
+    -- own or inherited text-align, unless the attribute takes precedence
+    tab.align = css["text-align"] or align
 
     if tab["background-transform"] then
         local angle = string.match(tab["background-transform"], "rotate%((.-)deg%)")
@@ -7372,10 +7417,11 @@ function commands.td(layoutxml, dataxml)
     end
 
     if tab.padding then
-        tab.padding_left = tex.sp(tab.padding)
-        tab.padding_right = tex.sp(tab.padding)
-        tab.padding_top = tex.sp(tab.padding)
-        tab.padding_bottom = tex.sp(tab.padding)
+        local top, right, bottom, left = publisher.cssstyle.box_sides(tab.padding)
+        tab.padding_top = tex.sp(top)
+        tab.padding_right = tex.sp(right)
+        tab.padding_bottom = tex.sp(bottom)
+        tab.padding_left = tex.sp(left)
     end
     if tab["padding-top"] then
         tab.padding_top = tex.sp(tab["padding-top"])
@@ -7707,22 +7753,8 @@ function commands.textblock(layoutxml, dataxml)
         main.log("error", string.format("Fontfamily %q not found.", fontfamilyname or "???"))
         fontfamily = 1
     end
-    fontfamily = publisher.cssstyle.fontfamily(css, fontfamily)
+    fontfamily = publisher.cssstyle.inherit_fontfamily(css, fontfamily)
     local fontsize = publisher.cssstyle.fontsize_of(fontfamily)
-    -- the paragraphs inherit absolute values
-    if css["font-size"] or (css["line-height"] and not tonumber(css["line-height"])) then
-        local fs, lh = publisher.cssstyle.absolute_font_values(fontfamily)
-        publisher.css:set_inherited("font-size", fs)
-        if css["line-height"] and not tonumber(css["line-height"]) then
-            publisher.css:set_inherited("line-height", lh)
-        end
-    end
-    for _, property in ipairs({ "letter-spacing", "text-indent" }) do
-        local sp = css[property] and publisher.cssstyle.length_sp(css[property], fontsize)
-        if sp then
-            publisher.css:set_inherited(property, sp .. "sp")
-        end
-    end
     local tf = publisher.textformats[textformat]
     local tffields = publisher.cssstyle.textformat_fields(css, fontsize, true)
     if tffields then
