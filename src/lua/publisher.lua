@@ -2697,5 +2697,6 @@ M.dispatch = require("publisher.dispatch")
 M.nodes = require("publisher.nodes")
 M.math = require("publisher.math")
 M.tabstops = require("publisher.tabstops")
+M.cssstyle = require("publisher.cssstyle")
 
 return M

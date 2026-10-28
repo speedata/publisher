@@ -563,8 +563,8 @@ function commands.box(layoutxml, dataxml)
     local valign = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "vertical-align", "string")
     local width = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "width", "length")
 
-    local css_rules = publisher.css:rules()
-    colorname = colorname or css_rules["background-color"] or "black"
+    local css_rules, css_important = publisher.css:rules()
+    colorname = publisher.css.pick(css_rules, css_important, "background-color", colorname) or "black"
 
     local attribute = {
         ["padding-top"] = "length",
@@ -748,9 +748,9 @@ function commands.circle(layoutxml, dataxml)
     local colorname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "background-color", "string")
     colorname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "backgroundcolor", "string", colorname)
 
-    local css_rules = publisher.css:rules()
-    colorname = colorname or css_rules["background-color"] or "black"
-    framecolorname = framecolorname or css_rules["color"] or "black"
+    local css_rules, css_important = publisher.css:rules()
+    colorname = publisher.css.pick(css_rules, css_important, "background-color", colorname) or "black"
+    framecolorname = publisher.css.pick(css_rules, css_important, "color", framecolorname) or "black"
 
     return publisher.drawing.circle(radiusx, radiusy, colorname, framecolorname, rulewidth_sp)
 end
@@ -1465,12 +1465,12 @@ function commands.frame(layoutxml, dataxml)
     local rulewidth_sp = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "rulewidth", "length_sp", 26312) -- 0.4bp
     local clip = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "clip", "boolean", true)
 
-    local css_rules = publisher.css:rules()
+    local css_rules, css_important = publisher.css:rules()
 
-    b_b_r_radius = b_b_r_radius or b_radius or css_rules["border-bottom-right-radius"]
-    b_b_l_radius = b_b_l_radius or b_radius or css_rules["border-bottom-left-radius"]
-    b_t_r_radius = b_t_r_radius or b_radius or css_rules["border-top-right-radius"]
-    b_t_l_radius = b_t_l_radius or b_radius or css_rules["border-top-left-radius"]
+    b_b_r_radius = publisher.css.pick(css_rules, css_important, "border-bottom-right-radius", b_b_r_radius or b_radius)
+    b_b_l_radius = publisher.css.pick(css_rules, css_important, "border-bottom-left-radius", b_b_l_radius or b_radius)
+    b_t_r_radius = publisher.css.pick(css_rules, css_important, "border-top-right-radius", b_t_r_radius or b_radius)
+    b_t_l_radius = publisher.css.pick(css_rules, css_important, "border-top-left-radius", b_t_l_radius or b_radius)
 
     for i = 1, #tab do
         local contents = publisher.xml_helpers.element_contents(tab[i])
@@ -2533,7 +2533,7 @@ function commands.image(layoutxml, dataxml)
     local vis_box = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "visiblebox", "string")
     local width = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "width", "string")
 
-    local css_rules = publisher.css:rules()
+    local css_rules, css_important = publisher.css:rules()
 
     -- fallback for older versions (< 2.7.5)
     vis_box = vis_box or max_box
@@ -2558,6 +2558,10 @@ function commands.image(layoutxml, dataxml)
         if tmpattr then
             tab[attname] = tmpattr
         end
+    end
+    -- !important declarations take precedence over the attributes
+    for k in pairs(css_important) do
+        tab[k] = css_rules[k]
     end
     if tab["padding"] then
         tab.padding_top = tex.sp(tab["padding"])
@@ -4153,8 +4157,8 @@ local function list_common(layoutxml, dataxml, kind)
 
     -- CSS: rules for ul / ol and for the marker (li::marker). Attributes
     -- take precedence over CSS, CSS over the built-in defaults.
-    local css_rules = publisher.css:rules()
-    local marker_rules = publisher.css:rules("marker", "li")
+    local css_rules, css_important = publisher.css:rules()
+    local marker_rules, marker_important = publisher.css:rules("marker", "li")
 
     local fontfamily
     if fontfamilyname then
@@ -4169,7 +4173,8 @@ local function list_common(layoutxml, dataxml, kind)
     -- the surrounding text block unless fontfamily is given.
     local labelfontfamily = fontfamily or publisher.fonts.lookup_fontfamily_name_number["text"]
 
-    local colorindex = colors_module.get_colorindex_from_name(colorname or css_rules.color)
+    local colorindex =
+        colors_module.get_colorindex_from_name(publisher.css.pick(css_rules, css_important, "color", colorname))
     local markercolorindex = colors_module.get_colorindex_from_name(marker_rules.color) or colorindex
 
     local textformat
@@ -4180,7 +4185,12 @@ local function list_common(layoutxml, dataxml, kind)
         end
     end
 
-    if marker == nil then
+    -- !important declarations take precedence over the marker attribute
+    if marker_important.content then
+        marker = css_content_string(marker_rules.content)
+    elseif css_important["list-style-type"] then
+        marker = css_rules["list-style-type"]
+    elseif marker == nil then
         if marker_rules.content then
             marker = css_content_string(marker_rules.content)
         else
@@ -4202,14 +4212,14 @@ local function list_common(layoutxml, dataxml, kind)
     local position = css_rules["list-style-position"] or "outside"
     labelwidth = labelwidth or tex.sp("5mm")
     labelalign = labelalign or "right"
-    if labeldistance == nil then
+    if labeldistance == nil or marker_important["padding-right"] then
         if marker_rules["padding-right"] then
             labeldistance = tex.sp(marker_rules["padding-right"])
         else
             labeldistance = tex.sp("4pt")
         end
     end
-    if paddingleft == nil then
+    if paddingleft == nil or css_important["padding-left"] then
         if css_rules["padding-left"] then
             paddingleft = tex.sp(css_rules["padding-left"])
         else
@@ -4991,6 +5001,19 @@ function commands.paragraph(layoutxml, dataxml, textblockoptions)
     else
         fontfamily = nil
     end
+    -- CSS: values in `css` take precedence over the attributes (see css.lua)
+    local css = publisher.css:style({
+        color = colorname ~= nil,
+        fontfamily = fontfamilyname ~= nil,
+        textformat = textformat ~= nil,
+    })
+    if next(css) then
+        local base = fontfamily or publisher.current_fontfamily
+        local cssfontfamily = publisher.cssstyle.fontfamily(css, base)
+        if cssfontfamily ~= base then
+            fontfamily = cssfontfamily
+        end
+    end
     local colorindex = colors_module.get_colorindex_from_name(colorname)
     local languagecode
     if language_name then
@@ -5024,6 +5047,7 @@ function commands.paragraph(layoutxml, dataxml, textblockoptions)
         padding_right = paddingright,
         textformat = publisher.textformats[textformat],
     }
+    publisher.cssstyle.paragraph_options(css, params)
 
     if publisher.options.format == "PDF/UA" then
         publisher.rolecounter = publisher.rolecounter + 1
@@ -5045,6 +5069,7 @@ function commands.paragraph(layoutxml, dataxml, textblockoptions)
     local p = publisher.par:new(nil, "commands.paragraph")
     p.fontfamily = fontfamily
     p.html = html
+    p.css_textformat = publisher.cssstyle.textformat_fields(css, publisher.cssstyle.fontsize_of(fontfamily))
     -- A paragraph without content behaves like a paragraph with a single
     -- non breaking space and creates an empty line. This applies to a
     -- literally empty <Paragraph></Paragraph> as well as to child elements
@@ -5418,7 +5443,7 @@ function commands.place_object(layoutxml, dataxml)
     local allocate_bottom =
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "allocate-bottom", "height_sp")
 
-    local css_rules = publisher.css:rules()
+    local css_rules, css_important = publisher.css:rules()
     if rotate and tonumber(rotate) % 360 ~= 0 then
         allocate = "no"
     end
@@ -5648,8 +5673,11 @@ function commands.place_object(layoutxml, dataxml)
         objecttype = objects[i].objecttype
 
         if background == "full" or css_rules["background-color"] then
-            object =
-                publisher.drawing.background(object, backgroundcolor or css_rules["background-color"], "PlaceObject")
+            object = publisher.drawing.background(
+                object,
+                publisher.css.pick(css_rules, css_important, "background-color", backgroundcolor),
+                "PlaceObject"
+            )
         end
         if frame == "solid" then
             framewidth = rulewidth_sp
@@ -6118,9 +6146,9 @@ function commands.rule(layoutxml, dataxml)
     local dashed = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "dashed", "boolean")
     local color = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "color", "string")
 
-    local css_rules = publisher.css:rules()
+    local css_rules, css_important = publisher.css:rules()
 
-    local colorname = color or css_rules["background-color"] or "black"
+    local colorname = publisher.css.pick(css_rules, css_important, "background-color", color) or "black"
     -- #hexvalue -> colorname
 
     if tonumber(length) then
@@ -6139,7 +6167,7 @@ function commands.rule(layoutxml, dataxml)
     end
     length = sp_to_bp(length)
 
-    rulewidth = rulewidth or css_rules["height"] or "1pt"
+    rulewidth = publisher.css.pick(css_rules, css_important, "height", rulewidth) or "1pt"
     if tonumber(rulewidth) then
         if direction == "horizontal" then
             rulewidth = publisher.current_grid.gridwidth * rulewidth
@@ -6626,11 +6654,11 @@ function commands.span(layoutxml, dataxml)
     local language_name = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "language", "string")
     local letterspacing =
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "letter-spacing", "booleanorlength")
-    local css_rules = publisher.css:rules()
+    local css_rules, css_important = publisher.css:rules()
     local role = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "role", "string")
 
     local letterspacing_em
-    if letterspacing == nil then
+    if letterspacing == nil or css_important["letter-spacing"] then
         if css_rules["letter-spacing"] then
             letterspacing = tex.sp(css_rules["letter-spacing"])
         end
@@ -6641,15 +6669,13 @@ function commands.span(layoutxml, dataxml)
         letterspacing_em = 100
     end
 
-    if backgroundcolor == nil then
-        backgroundcolor = css_rules["background-color"]
-    end
-    if bg_padding_top == nil then
+    backgroundcolor = publisher.css.pick(css_rules, css_important, "background-color", backgroundcolor)
+    if bg_padding_top == nil or css_important["background-padding-top"] then
         if css_rules["background-padding-top"] then
             bg_padding_top = tex.sp(css_rules["background-padding-top"])
         end
     end
-    if bg_padding_bottom == nil then
+    if bg_padding_bottom == nil or css_important["background-padding-bottom"] then
         if css_rules["background-padding-bottom"] then
             bg_padding_bottom = tex.sp(css_rules["background-padding-bottom"])
         end
@@ -7033,7 +7059,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.tablerule(layoutxml, dataxml)
-    local css_rules = publisher.css:rules()
+    local css_rules, css_important = publisher.css:rules()
 
     local tab = {}
     local tmp = css_rules["height"]
@@ -7058,10 +7084,13 @@ function commands.tablerule(layoutxml, dataxml)
     if tab["break-below"] == nil then
         tab["break-below"] = true
     end
+    if css_important["height"] then
+        tab.rulewidth = tex.sp(css_rules["height"])
+    end
 
     local rulewidth = tab.rulewidth or tex.sp("0.25pt")
-    local color = tab.color or css_rules["background-color"]
-    local start = tab.start or tonumber(css_rules["rule-start"])
+    local color = publisher.css.pick(css_rules, css_important, "background-color", tab.color)
+    local start = tonumber(publisher.css.pick(css_rules, css_important, "rule-start", tab.start))
 
     return { rulewidth = rulewidth, color = color, start = start, breakbelow = tab["break-below"] }
 end
@@ -7079,18 +7108,18 @@ function commands.tr(layoutxml, dataxml)
     local parent = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "parent", "string")
     local role = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "role", "string")
 
-    local css_rules = publisher.css:rules()
-
-    if css_rules and type(css_rules) == "table" then
-        for k, v in pairs(css_rules) do
-            if k == "vertical-align" then
-                tab.valign = v
-            elseif k == "background-color" then
-                tab.backgroundcolor = v
-            else
-                tab[k] = v
-            end
+    local css_rules, css_important = publisher.css:rules()
+    local function apply_css(k, v)
+        if k == "vertical-align" then
+            tab.valign = v
+        elseif k == "background-color" then
+            tab.backgroundcolor = v
+        else
+            tab[k] = v
         end
+    end
+    for k, v in pairs(css_rules) do
+        apply_css(k, v)
     end
 
     local eltname
@@ -7129,6 +7158,10 @@ function commands.tr(layoutxml, dataxml)
 
     tabular_module.set_origin(tab, layoutxml, dataxml)
     tab.align = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "align", "string", nil, "align")
+    -- !important declarations take precedence over the attributes
+    for k in pairs(css_important) do
+        apply_css(k, css_rules[k])
+    end
     local sethead = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "sethead", "string")
     if sethead == "yes" then
         tab.sethead = 1
@@ -7247,33 +7280,33 @@ function commands.td(layoutxml, dataxml)
     local parent = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "parent", "string")
     local role = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "role", "string")
 
-    local css_rules = publisher.css:rules()
-
-    if css_rules and type(css_rules) == "table" then
-        for k, v in pairs(css_rules) do
-            if k == "vertical-align" then
-                tab.valign = v
-            elseif k == "background-color" then
-                tab.backgroundcolor = v
-            elseif k == "border-left-width" then
-                tab["border-left"] = v
-            elseif k == "border-right-width" then
-                tab["border-right"] = v
-            elseif k == "border-top-width" then
-                tab["border-top"] = v
-            elseif k == "border-bottom-width" then
-                tab["border-bottom"] = v
-            elseif k == "text-align" then
-                tab.align = v
-            elseif k == "background-text" then
-                local x = string.match(v, '"(.*)"')
-                tab["background-text"] = x
-            elseif k == "background-size" then
-                tab["background-size"] = v
-            else
-                tab[k] = v
-            end
+    local css_rules, css_important = publisher.css:rules()
+    local function apply_css(k, v)
+        if k == "vertical-align" then
+            tab.valign = v
+        elseif k == "background-color" then
+            tab.backgroundcolor = v
+        elseif k == "border-left-width" then
+            tab["border-left"] = v
+        elseif k == "border-right-width" then
+            tab["border-right"] = v
+        elseif k == "border-top-width" then
+            tab["border-top"] = v
+        elseif k == "border-bottom-width" then
+            tab["border-bottom"] = v
+        elseif k == "text-align" then
+            tab.align = v
+        elseif k == "background-text" then
+            local x = string.match(v, '"(.*)"')
+            tab["background-text"] = x
+        elseif k == "background-size" then
+            tab["background-size"] = v
+        else
+            tab[k] = v
         end
+    end
+    for k, v in pairs(css_rules) do
+        apply_css(k, v)
     end
 
     local attribute = {
@@ -7327,6 +7360,10 @@ function commands.td(layoutxml, dataxml)
     local tmp = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "align", "string", nil, "align")
     if tmp then
         tab.align = tmp
+    end
+    -- !important declarations take precedence over the attributes
+    for k in pairs(css_important) do
+        apply_css(k, css_rules[k])
     end
 
     if tab["background-transform"] then
@@ -7597,7 +7634,7 @@ end
 function commands.textblock(layoutxml, dataxml)
     local fontfamily
     local angle = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "angle", "number")
-    local colorname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "color", "string", "black")
+    local colorname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "color", "string")
     local columns = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "columns", "number")
     local columndistance = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "columndistance", "string")
     local fontname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "fontface", "string")
@@ -7605,8 +7642,17 @@ function commands.textblock(layoutxml, dataxml)
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "fontfamily", "string", fontname)
     local language_name = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "language", "string")
     local minheight = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "minheight", "height_sp")
-    local textformat = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "textformat", "string", "text")
+    local textformat = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "textformat", "string")
     local width = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "width", "length_sp")
+    -- CSS: values in `css` take precedence over the attributes (see css.lua)
+    local css = publisher.css:style({
+        color = colorname ~= nil,
+        fontfamily = fontfamilyname ~= nil or fontname ~= nil,
+        textformat = textformat ~= nil,
+    })
+    colorname = css.color or colorname or "black"
+    textformat = textformat or "text"
+    columns = columns or tonumber(css["column-count"])
     if fontname then
         main.log(
             "warn",
@@ -7619,6 +7665,14 @@ function commands.textblock(layoutxml, dataxml)
     end
     local save_width
     save_width = dataxml.vars["__maxwidth"]
+    if not width and css.width then
+        local pct = string.match(css.width, "^([%d.]+)%%$")
+        if pct and save_width then
+            width = math.round(save_width * tonumber(pct) / 100)
+        else
+            width = publisher.cssstyle.length_sp(css.width, publisher.cssstyle.fontsize_of(nil))
+        end
+    end
     width = width or save_width
     dataxml.vars["__maxwidth"] = width
     if not width then
@@ -7637,7 +7691,7 @@ function commands.textblock(layoutxml, dataxml)
 
     columns = columns or 1
     if not columndistance then
-        columndistance = "3mm"
+        columndistance = css["column-gap"] or "3mm"
     end
     if tonumber(columndistance) then
         columndistance = publisher.current_grid.gridwidth * columndistance
@@ -7652,6 +7706,27 @@ function commands.textblock(layoutxml, dataxml)
     if fontfamily == nil then
         main.log("error", string.format("Fontfamily %q not found.", fontfamilyname or "???"))
         fontfamily = 1
+    end
+    fontfamily = publisher.cssstyle.fontfamily(css, fontfamily)
+    local fontsize = publisher.cssstyle.fontsize_of(fontfamily)
+    -- the paragraphs inherit absolute values
+    if css["font-size"] or (css["line-height"] and not tonumber(css["line-height"])) then
+        local fs, lh = publisher.cssstyle.absolute_font_values(fontfamily)
+        publisher.css:set_inherited("font-size", fs)
+        if css["line-height"] and not tonumber(css["line-height"]) then
+            publisher.css:set_inherited("line-height", lh)
+        end
+    end
+    for _, property in ipairs({ "letter-spacing", "text-indent" }) do
+        local sp = css[property] and publisher.cssstyle.length_sp(css[property], fontsize)
+        if sp then
+            publisher.css:set_inherited(property, sp .. "sp")
+        end
+    end
+    local tf = publisher.textformats[textformat]
+    local tffields = publisher.cssstyle.textformat_fields(css, fontsize, true)
+    if tffields then
+        tf = publisher.cssstyle.derive_textformat(tf, tffields)
     end
 
     local save_fontfamily = publisher.current_fontfamily
@@ -7688,7 +7763,7 @@ function commands.textblock(layoutxml, dataxml)
         color = colorindex,
         fontfamily = fontfamily,
         languagecode = languagecode,
-        textformat = publisher.textformats[textformat],
+        textformat = tf,
     }
 
     local tab = publisher.dispatch.dispatch(layoutxml, dataxml, options)
@@ -7736,7 +7811,7 @@ function commands.textblock(layoutxml, dataxml)
                 publisher.nodes.set_fontfamily_if_necessary(nodelist, fontfamily)
                 paragraph.nodelist = publisher.nodes.set_color_if_necessary(nodelist, colorindex)
                 node.slide(nodelist)
-                nodelist = paragraph:format(width_sp, { textformat = publisher.textformats[textformat] }, dataxml)
+                nodelist = paragraph:format(width_sp, { textformat = tf }, dataxml)
             end
 
             nodes[#nodes + 1] = nodelist
@@ -7832,8 +7907,8 @@ end
 function commands.underline(layoutxml, dataxml)
     local dashed = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "dashed", "boolean")
 
-    local css_rules = publisher.css:rules()
-    if dashed == nil then
+    local css_rules, css_important = publisher.css:rules()
+    if dashed == nil or css_important["border-style"] then
         dashed = (css_rules["border-style"] == "dashed")
     end
 

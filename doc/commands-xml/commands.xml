@@ -12147,6 +12147,14 @@
         <para>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile, in der der Text ausgegeben wird, bleibt gleich, die Breite und die Höhe des Textes ändert sich gegenüber dem ursprünglichen Text.</para>
       </description>
     </attribute>
+    <attribute en="class" optional="yes" type="text" since="5.9.14">
+      <description xml:lang="en">
+        <para>CSS class for this text block.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Klasse für diesen Textblock.</para>
+      </description>
+    </attribute>
     <attribute en="color" type="text" optional="yes">
       <description xml:lang="en">
         <para>The name of the color of the text.</para>
@@ -12177,6 +12185,14 @@
       </description>
       <description xml:lang="de">
         <para>Name der Schriftfamilie, die benutzt werden soll.</para>
+      </description>
+    </attribute>
+    <attribute en="id" optional="yes" type="text" since="5.9.14">
+      <description xml:lang="en">
+        <para>CSS id for this text block.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Id für diesen Textblock.</para>
       </description>
     </attribute>
     <attribute en="language" optional="yes" allowxpath="yes" since="4.1.1">

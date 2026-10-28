@@ -39,11 +39,13 @@ type layoutRule struct {
 // are kept in source order.
 type LayoutStylesheet struct {
 	rules []layoutRule
+	// Fontfamilies contains the font families from @font-face rules.
+	Fontfamilies map[string]FontFamily
 }
 
 // NewLayoutStylesheet returns an empty stylesheet.
 func NewLayoutStylesheet() *LayoutStylesheet {
-	return &LayoutStylesheet{}
+	return &LayoutStylesheet{Fontfamilies: map[string]FontFamily{}}
 }
 
 // sourceString serializes tokens close to their source form. Unlike
@@ -95,10 +97,16 @@ func splitImportant(toks tokenstream) (tokenstream, bool) {
 	return toks[:i], true
 }
 
-// AddCSS parses csstext and appends its rules. At-rules such as @media or
-// @font-face are not used for layout commands and are skipped.
+// AddCSS parses csstext and appends its rules. @font-face rules are
+// collected in Fontfamilies, other at-rules such as @media are skipped.
 func (ls *LayoutStylesheet) AddCSS(csstext string) {
 	block := consumeBlock(parseCSSString(csstext), false)
+	c := &CSS{Fontfamilies: ls.Fontfamilies}
+	for _, atrule := range block.ChildAtRules {
+		if atrule.Name == "font-face" {
+			c.doFontFace(atrule.Rules)
+		}
+	}
 	for _, b := range block.Blocks {
 		decls := make([]layoutDecl, 0, len(b.Rules))
 		for _, r := range b.Rules {

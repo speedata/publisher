@@ -7566,6 +7566,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="class">
+                     <a:documentation>CSS class for this text block.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="color">
                      <a:documentation>The name of the color of the text.</a:documentation>
                      <lsp:references symbol="color"></lsp:references>
@@ -7585,6 +7590,11 @@
                   <attribute name="fontfamily">
                      <a:documentation>The name of the font family. Defaults to text.</a:documentation>
                      <lsp:references symbol="fontfamily"></lsp:references>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation>CSS id for this text block.</a:documentation>
                   </attribute>
                </optional>
                <optional>

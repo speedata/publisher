@@ -42,6 +42,11 @@ function splib.convertimage(filename, handler) end
 ---@param csstext string
 function splib.css_add(csstext) end
 
+---Return the font families from the @font-face rules of the layout stylesheet,
+---in the shape of `publisher.fontgroup`.
+---@return table<string, table> fontfamilies
+function splib.css_fontfaces() end
+
 ---Match the layout stylesheet against an element chain (elements separated
 ---by `"\2"`, the fields name, class, id and position by `"\1"`). Returns the
 ---declarations after the cascade and the set of properties that come from

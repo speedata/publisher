@@ -6,6 +6,7 @@ local publisher = require("publisher")
 
 ---@class Par
 ---@field textformat? Textformat Resolved textformat of the paragraph.
+---@field css_textformat? table Textformat fields from CSS, applied on top of the textformat (see `get_textformat`).
 ---@field origin? string Caller identifier (debugging only).
 ---@field margin_top? integer Margin above the paragraph in sp.
 ---@field margin_bottom? integer Margin below the paragraph in sp.
@@ -53,6 +54,19 @@ function Par:new(textformat, origin)
         instance[i] = nil
     end
     return instance
+end
+
+-- Returns the textformat of the paragraph: its own textformat or
+-- `fallback`, with the fields from CSS applied.
+---@param self Par
+---@param fallback? Textformat
+---@return Textformat?
+function Par:get_textformat(fallback)
+    local tf = self.textformat or fallback
+    if self.css_textformat then
+        return publisher.cssstyle.derive_textformat(tf, self.css_textformat)
+    end
+    return tf
 end
 
 -- Adds glue of width `wd` at the end of every line in the linebroken
@@ -302,7 +316,7 @@ local function flatten(self, items, options, data)
                 new_options.parentid = options.id
             end
             new_options.direction = new_options.direction or self.direction
-            local effective_textformat = self.textformat or options.textformat
+            local effective_textformat = self:get_textformat(options.textformat)
             if not new_options.letterspacing and not new_options.letterspacing_em and effective_textformat then
                 new_options.letterspacing = effective_textformat.letterspacing
                 new_options.letterspacing_em = effective_textformat.letterspacing_em
@@ -929,7 +943,7 @@ function Par:format(width_sp, options, data)
         end
     end
 
-    local current_textformat = self.textformat or options.textformat
+    local current_textformat = self:get_textformat(options.textformat)
     if not current_textformat then
         if self.textformat or options.textformat then
             main.log("error", "textformat undefined, using text instead")

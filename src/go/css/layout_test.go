@@ -95,3 +95,14 @@ func BenchmarkLayoutMatch(b *testing.B) {
 		ls.Match(chain, "")
 	}
 }
+
+func TestLayoutFontFace(t *testing.T) {
+	ls := NewLayoutStylesheet()
+	ls.AddCSS(`@font-face { font-family: "Body"; src: local("CrimsonPro-Regular") }
+		@font-face { font-family: "Body"; font-weight: bold; src: url("crimson-bold.otf") }
+		p { color: red }`)
+	ff, ok := ls.Fontfamilies["Body"]
+	if !ok || ff.Regular.Local != "CrimsonPro-Regular" || ff.Bold.URL != "crimson-bold.otf" {
+		t.Errorf("got %#v", ls.Fontfamilies)
+	}
+}

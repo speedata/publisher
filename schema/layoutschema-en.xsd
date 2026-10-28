@@ -9180,6 +9180,11 @@
           <xs:documentation>The angle (counter clockwise) that the text gets turned.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="class">
+        <xs:annotation>
+          <xs:documentation>CSS class for this text block.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="color">
         <xs:annotation>
           <xs:documentation>The name of the color of the text.</xs:documentation>
@@ -9198,6 +9203,11 @@
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>The name of the font family. Defaults to text.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation>CSS id for this text block.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="language">

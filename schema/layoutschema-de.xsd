@@ -9180,6 +9180,11 @@
           <xs:documentation>Winkel (Drehrichtung gegen den Uhrzeigersinn), um der der Text gedreht wird. Die Spalte und die Zeile, in der der Text ausgegeben wird, bleibt gleich, die Breite und die Höhe des Textes ändert sich gegenüber dem ursprünglichen Text.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="class">
+        <xs:annotation>
+          <xs:documentation>CSS-Klasse für diesen Textblock.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="color">
         <xs:annotation>
           <xs:documentation>Name der Farbe im Textblock.</xs:documentation>
@@ -9198,6 +9203,11 @@
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Name der Schriftfamilie, die benutzt werden soll.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation>CSS-Id für diesen Textblock.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="language">

@@ -71,3 +71,37 @@ func sdCSSMatch(L *C.lua_State) int {
 		return 2
 	})
 }
+
+// sdCSSFontfaces returns the font families from the @font-face rules of the
+// layout stylesheet in the same shape as the fontfamilies table of HTML
+// content: { family = { regular = { local = …, url = … }, bold = …, … } }.
+//
+//export sdCSSFontfaces
+func sdCSSFontfaces(L *C.lua_State) int {
+	return luaEntry(L, func(l *LuaState) int {
+		l.createTable(0, len(layoutStylesheet.Fontfamilies))
+		for name, ff := range layoutStylesheet.Fontfamilies {
+			l.pushString(name)
+			l.createTable(0, 4)
+			for _, v := range []struct {
+				key string
+				src css.FontSource
+			}{{"regular", ff.Regular}, {"bold", ff.Bold}, {"italic", ff.Italic}, {"bolditalic", ff.BoldItalic}} {
+				if v.src.Local == "" && v.src.URL == "" {
+					continue
+				}
+				l.pushString(v.key)
+				l.createTable(0, 2)
+				if v.src.Local != "" {
+					l.addStringValueToTable(-1, "local", v.src.Local)
+				}
+				if v.src.URL != "" {
+					l.addStringValueToTable(-1, "url", v.src.URL)
+				}
+				l.rawSet(-3)
+			}
+			l.rawSet(-3)
+		}
+		return 1
+	})
+}

@@ -34,6 +34,7 @@ local fonts = require("publisher.fonts")
 ---@field fontfacebold? string
 ---@field fontfaceitalic? string
 ---@field fontfacebolditalic? string
+---@field cssroot? integer Family a CSS font size or line height was derived from (see cssstyle.fontfamily).
 
 -- Resolves a font name through `publisher.fontaliases` until it points at a
 -- concrete font face (or hits a name that is not aliased). A face registered
