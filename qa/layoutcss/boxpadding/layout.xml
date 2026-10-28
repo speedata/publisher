@@ -1,0 +1,24 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- Box takes padding-* from CSS. The first two boxes must look the
+         same, the third is not padded (attribute wins), the fourth is
+         padded again (!important). -->
+    <Pageformat width="120mm" height="90mm"/>
+    <SetGrid width="5mm" height="5mm"/>
+    <Stylesheet>
+        box.pad { background-color: #336699; padding-left: 5mm; padding-top: 5mm }
+        box.padimportant { background-color: #336699; padding-left: 5mm !important; padding-top: 5mm !important }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject row="1" column="1"><Textblock width="5"><Paragraph><Value>CSS</Value></Paragraph></Textblock></PlaceObject>
+        <PlaceObject row="2" column="1"><Box width="5" height="3" class="pad"/></PlaceObject>
+        <PlaceObject row="1" column="7"><Textblock width="5"><Paragraph><Value>Attributes</Value></Paragraph></Textblock></PlaceObject>
+        <PlaceObject row="2" column="7"><Box width="5" height="3" background-color="#336699" padding-left="5mm" padding-top="5mm"/></PlaceObject>
+        <PlaceObject row="7" column="1"><Textblock width="5"><Paragraph><Value>Attribute 0mm</Value></Paragraph></Textblock></PlaceObject>
+        <PlaceObject row="8" column="1"><Box width="5" height="3" class="pad" padding-left="0mm" padding-top="0mm"/></PlaceObject>
+        <PlaceObject row="7" column="7"><Textblock width="5"><Paragraph><Value>!important</Value></Paragraph></Textblock></PlaceObject>
+        <PlaceObject row="8" column="7"><Box width="5" height="3" class="padimportant" padding-left="0mm" padding-top="0mm"/></PlaceObject>
+    </Record>
+</Layout>

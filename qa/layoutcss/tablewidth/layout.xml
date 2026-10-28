@@ -1,0 +1,29 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- Columns with width="max" measure the natural width of the cells.
+         An alignment from CSS must not change the measurement: both tables
+         must have the same column widths. -->
+    <Pageformat width="120mm" height="60mm"/>
+    <Stylesheet>
+        td.right { text-align: right }
+        paragraph.right { text-align: right }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Table width="100mm" stretch="max" padding="2pt">
+                <Columns><Column width="max"/><Column width="1*"/><Column width="max"/></Columns>
+                <Tr><Td><Paragraph><Value>Row 1</Value></Paragraph></Td><Td><Paragraph><Value>wide column</Value></Paragraph></Td><Td align="right"><Paragraph><Value>12.50</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>Row 2</Value></Paragraph></Td><Td><Paragraph><Value>wide column</Value></Paragraph></Td><Td align="right"><Paragraph textformat="right"><Value>7.00</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject>
+            <Table width="100mm" stretch="max" padding="2pt">
+                <Columns><Column width="max"/><Column width="1*"/><Column width="max"/></Columns>
+                <Tr><Td><Paragraph><Value>Row 1</Value></Paragraph></Td><Td><Paragraph><Value>wide column</Value></Paragraph></Td><Td class="right"><Paragraph><Value>12.50</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>Row 2</Value></Paragraph></Td><Td><Paragraph><Value>wide column</Value></Paragraph></Td><Td><Paragraph class="right"><Value>7.00</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>
