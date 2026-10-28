@@ -3446,7 +3446,7 @@
       <listing><![CDATA[<DefineGraphic name="dottedbox">
    beginfig(1);
         pickup pencircle scaled 0.4mm;
-        draw (0,0) -- (box_width,0) -- (box_width, box_height) -- (0, box_height) -- cycle dashed withdots ;
+        draw (0,0) -- (box.width,0) -- (box.width, box.height) -- (0, box.height) -- cycle dashed withdots ;
     endfig;
 </DefineGraphic>
 
@@ -3461,7 +3461,7 @@
       <listing><![CDATA[<DefineGraphic name="dottedbox">
    beginfig(1);
         pickup pencircle scaled 0.4mm;
-        draw (0,0) -- (box_width,0) -- (box_width, box_height) -- (0, box_height) -- cycle dashed withdots ;
+        draw (0,0) -- (box.width,0) -- (box.width, box.height) -- (0, box.height) -- cycle dashed withdots ;
     endfig;
 </DefineGraphic>
 
