@@ -1,0 +1,14 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Options imagenotfound="warning" />
+
+	<!-- Empty image files (0 bytes) use the fallback image -->
+	<Record element="data">
+		<PlaceObject>
+			<Image file="empty1.png" width="4cm" />
+		</PlaceObject>
+		<PlaceObject>
+			<Image file="empty2.png" width="4cm" fallback="_samplea.pdf" />
+		</PlaceObject>
+	</Record>
+</Layout>
