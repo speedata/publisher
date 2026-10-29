@@ -180,7 +180,7 @@ end
 -- the fly via `splib.convert_svg_image`. Returns the path to use for
 -- subsequent `img.scan` calls.
 ---@param filename string
----@return string? localfilename `nil` when the file cannot be opened.
+---@return string? localfilename `nil` when the file cannot be opened or is empty.
 function M.validateimagetype(filename)
     local localfilename = kpse.find_file(filename)
     if not localfilename then
@@ -193,10 +193,15 @@ function M.validateimagetype(filename)
         return nil
     end
     local whatever = f:read(5)
+    f:close()
+    if not whatever then
+        local level = publisher.options.imagenotfounderror and "error" or "warn"
+        main.log(level, "Image is empty", "filename", filename, publisher.lineinfo())
+        return nil
+    end
     if string.match(whatever, "<svg") then
         localfilename = splib.convert_svg_image(localfilename)
     end
-    f:close()
     return localfilename
 end
 
@@ -310,14 +315,21 @@ function M.imageinfo(filename, page, box, fallback, imageshape)
 
     if not images[new_name] then
         if string.match(filename, ".svg$") then
-            filename = splib.convert_svg_image(filename)
-            if filename == nil or filename == "" then
-                filename = "filenotfound.pdf"
+            local converted = splib.convert_svg_image(filename)
+            if converted == nil or converted == "" then
+                filename = M.get_fallback_image_name(fallback, filename)
+                page = 1
             else
+                filename = converted
                 main.log("info", string.format("Using converted file %q instead", filename))
             end
         end
-        filename = M.validateimagetype(filename) or "filenotfound.pdf"
+        local validated = M.validateimagetype(filename)
+        if not validated then
+            validated = M.validateimagetype(M.get_fallback_image_name(fallback, filename)) or "filenotfound.pdf"
+            page = 1
+        end
+        filename = validated
         local image_info = img.scan({ filename = filename, pagebox = box, page = page, keepopen = true })
         if image_info.orientation == 0 then
             -- good, no transformation
