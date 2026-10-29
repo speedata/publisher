@@ -247,8 +247,7 @@ function M.define_font_hb(name, size, extra_parameter)
 
     local fallback_fontdefinitions = {}
     if extra_parameter.fallbacks then
-        for i = #extra_parameter.fallbacks, 1, -1 do
-            local fallbackname = extra_parameter.fallbacks[i]
+        for _, fallbackname in ipairs(extra_parameter.fallbacks) do
             main.log(
                 "info",
                 "Create font metrics for fallback font",

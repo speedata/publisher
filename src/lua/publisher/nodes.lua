@@ -829,62 +829,89 @@ function M.addstrut(nodelist, _where, origin)
     return strut
 end
 
--- Resolves missing glyphs in a HarfBuzz cluster by trying each fallback
--- font definition in turn.
----@param cluster table HarfBuzz shaping cluster.
----@param glyphslist table List of glyph entries to fill in.
----@param fallback_fontdefinitions table[] Fallback fonts to try.
----@return table[] fallbacks Replacement entries (`pos`, `fonttable`, `fontnumber`, `remove_len`, glyphs).
-function M.getfallbacks(cluster, glyphslist, fallback_fontdefinitions)
-    local fontnum
-    local ret = {}
-    local fallback = fallback_fontdefinitions[1]
-    fontnum = fallback.fontnum
-    local tbl = fallback
-    local i = 1
-
-    while i <= #glyphslist do
-        local buf = publisher.harfbuzz.Buffer.new()
-        local pos = glyphslist[i][1]
-        local thisglyph = glyphslist[i][2]
-        ret[#ret + 1] = {
-            pos = pos,
-            fonttable = tbl,
-            fontnumber = fontnum,
-        }
-        local curret = ret[#ret]
-        -- the cluster may have more than one unicode character, so I
-        -- create a list
-        local uclist = {}
-        local uc = cluster[thisglyph.cluster]
-        uclist[#uclist + 1] = uc
-        buf:add_utf8(unicode.utf8.char(uc))
-        while #glyphslist > i and glyphslist[i + 1][1] == pos + 1 do
-            i = i + 1
-            pos = pos + 1
-            thisglyph = glyphslist[i][2]
-            uc = cluster[thisglyph.cluster]
-            uclist[#uclist + 1] = uc
-            buf:add_utf8(unicode.utf8.char(uc))
+-- Resolves missing glyphs with the fallback fonts. Each run of
+-- consecutive missing glyphs is shaped with the first fallback, whatever
+-- is still missing there with the next one, and so on. Glyphs that no
+-- fallback has keep their original entry, so they are reported as
+-- missing from the main font.
+---@param cluster table<integer, integer> Codepoint at each byte offset of the shaped string.
+---@param glyphslist table[] `{ position, glyph }` pairs of the glyphs with codepoint 0.
+---@param fallback_fontdefinitions table[] Fallback fonts in declared order.
+---@param direction? string Direction of the main buffer.
+---@return table[] runs Replacement entries (`pos`, `remove_len`, `items`).
+function M.getfallbacks(cluster, glyphslist, fallback_fontdefinitions, direction)
+    -- entries: original glyph tables of consecutive characters
+    local function resolve(entries, k, items)
+        local tbl = fallback_fontdefinitions[k]
+        if not tbl then
+            for _, e in ipairs(entries) do
+                items[#items + 1] = e
+            end
+            return
         end
-        buf:set_cluster_level(buf.CLUSTER_LEVEL_MONOTONE_CHARACTERS)
-        buf:set_flags(publisher.harfbuzz.Buffer.FLAG_REMOVE_DEFAULT_IGNORABLES)
-        buf:guess_segment_properties()
-        publisher.shape(tbl, buf)
+        local chars = {}
+        local index_at = {}
+        local offset = 0
+        for i, e in ipairs(entries) do
+            local c = unicode.utf8.char(cluster[e.cluster])
+            chars[i] = c
+            index_at[offset] = i
+            offset = offset + #c
+        end
+        local buf = publisher.harfbuzz.Buffer.new()
+        buf:add_utf8(table.concat(chars))
+        publisher.shape(tbl, buf, { direction = direction })
         local nglyphs = buf:get_glyphs()
-        curret.remove_len = #uclist
-        for j = 1, #nglyphs do
-            curret[#curret + 1] = {
-                glyph = nglyphs[j],
-                codepoint = nglyphs[j].codepoint,
-            }
-            local jcp = nglyphs[j].codepoint
-            if jcp == 0 then
-                curret[#curret].uc = uclist[j]
-            else
-                curret[#curret].uc = tbl.backmap[jcp]
+        local is_clusterstart = {}
+        for _, g in ipairs(nglyphs) do
+            is_clusterstart[index_at[g.cluster]] = true
+        end
+        local missing = {}
+        local function flush()
+            if #missing > 0 then
+                resolve(missing, k + 1, items)
+                missing = {}
             end
         end
+        local lastmissing
+        for _, g in ipairs(nglyphs) do
+            local i = index_at[g.cluster]
+            if g.codepoint == 0 then
+                -- a cluster can span more than one character
+                if i ~= lastmissing then
+                    repeat
+                        missing[#missing + 1] = entries[i]
+                        i = i + 1
+                    until i > #entries or is_clusterstart[i]
+                    lastmissing = index_at[g.cluster]
+                end
+            else
+                flush()
+                items[#items + 1] = {
+                    pos = true,
+                    fonttable = tbl,
+                    fontnumber = tbl.fontnum,
+                    glyph = g,
+                    codepoint = g.codepoint,
+                    uc = tbl.backmap[g.codepoint],
+                }
+            end
+        end
+        flush()
+    end
+
+    local ret = {}
+    local i = 1
+    while i <= #glyphslist do
+        local pos = glyphslist[i][1]
+        local entries = { glyphslist[i][2] }
+        while i < #glyphslist and glyphslist[i + 1][1] == pos + #entries do
+            i = i + 1
+            entries[#entries + 1] = glyphslist[i][2]
+        end
+        local items = {}
+        resolve(entries, 1, items)
+        ret[#ret + 1] = { pos = pos, remove_len = #entries, items = items }
         i = i + 1
     end
     return ret
@@ -931,21 +958,14 @@ function M.hbglyphlist(arguments)
     -- re-insert a more complex table at these positions.
     -- detect the other table type in the loop below (for i=1,#glyphs do .. end)
     if #zeroglyphs > 0 and #tbl.fallback_fontdefinitions > 0 then
-        fallbacks = M.getfallbacks(cluster, zeroglyphs, tbl.fallback_fontdefinitions)
+        fallbacks = M.getfallbacks(cluster, zeroglyphs, tbl.fallback_fontdefinitions, direction)
         for i = #fallbacks, 1, -1 do
             local fb = fallbacks[i]
             for _ = 1, fb.remove_len do
                 table.remove(glyphs, fb.pos)
             end
-            for j = #fb, 1, -1 do
-                table.insert(glyphs, fb.pos, {
-                    pos = fb.pos,
-                    fonttable = fb.fonttable,
-                    fontnumber = fb.fontnumber,
-                    glyph = fb[j].glyph,
-                    codepoint = fb[j].codepoint,
-                    uc = fb[j].uc,
-                })
+            for j = #fb.items, 1, -1 do
+                table.insert(glyphs, fb.pos, fb.items[j])
             end
         end
     end
@@ -1198,7 +1218,7 @@ function M.hbglyphlist(arguments)
         end
         if false then
             -- just for simple adding at the beginning
-        elseif uc == 127 then
+        elseif uc == 127 or (cp == 0 and cluster[thisglyph.cluster] == 127) then
             -- ignore DEL
         elseif uc == 160 and #glyphs == 1 then
             -- ignore
