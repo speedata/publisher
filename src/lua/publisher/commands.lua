@@ -3787,6 +3787,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.next_frame(layoutxml, dataxml)
+    publisher.page_helpers.setup_page(nil, "commands#next_frame", dataxml)
     local areaname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "area", "string")
     publisher.page_helpers.next_area(areaname, nil, dataxml, "cmd next_frame")
 end
