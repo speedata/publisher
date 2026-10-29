@@ -7859,7 +7859,6 @@ function commands.textblock(layoutxml, dataxml)
 
     if #objects == 0 then
         main.log("warn", "Textblock: no objects found", lineinfo(layoutxml))
-        main.log("warn", "Textblock: no objects found!")
         local vrule = { width = 10 * 2 ^ 16, height = -1073741824 }
         nodes[1] = publisher.nodes.add_rule(nil, "head", vrule, "empty textblock")
     end
