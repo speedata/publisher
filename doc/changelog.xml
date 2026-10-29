@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.9">
+    <entry version="5.9.16" date="2026-10-29" sha1="b4c879ec">
+        <en summary="NextFrame at the beginning of the document.">When <tt>NextFrame</tt> came before anything was placed on the first page, the publisher stopped with an internal error. Now the first page is created and the next frame is used.</en>
+        <de summary="NextFrame am Anfang des Dokuments.">Stand <tt>NextFrame</tt> vor der ersten Ausgabe auf der ersten Seite, brach der Publisher mit einem internen Fehler ab. Jetzt wird die erste Seite angelegt und der nächste Rahmen verwendet.</de>
+    </entry>
     <entry version="5.9.15" date="2026-10-29" sha1="b91b3d89">
         <en summary="All font fallbacks are used.">When a font has more than one <tt>Fallback</tt>, only the last one was used. Now the fallbacks are tried in the order they are declared, and a glyph is reported as missing only when none of them has it. The warning now also names the right character.</en>
         <de summary="Alle Ersatzschriften werden verwendet.">Hatte eine Schrift mehr als ein <tt>Fallback</tt>, wurde nur das letzte verwendet. Jetzt werden die Ersatzschriften in der angegebenen Reihenfolge durchsucht, und ein Zeichen wird nur dann als fehlend gemeldet, wenn keine davon es enthält. Die Warnung nennt jetzt auch das richtige Zeichen.</de>
