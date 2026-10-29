@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.9">
+    <entry version="5.9.15" date="2026-10-29" sha1="b91b3d89">
+        <en summary="All font fallbacks are used.">When a font has more than one <tt>Fallback</tt>, only the last one was used. Now the fallbacks are tried in the order they are declared, and a glyph is reported as missing only when none of them has it. The warning now also names the right character.</en>
+        <de summary="Alle Ersatzschriften werden verwendet.">Hatte eine Schrift mehr als ein <tt>Fallback</tt>, wurde nur das letzte verwendet. Jetzt werden die Ersatzschriften in der angegebenen Reihenfolge durchsucht, und ein Zeichen wird nur dann als fehlend gemeldet, wenn keine davon es enthält. Die Warnung nennt jetzt auch das richtige Zeichen.</de>
+    </entry>
+    <entry version="5.9.15" date="2026-10-29" sha1="b1378d66">
+        <en summary="Empty image files use the fallback image.">An empty image file (0 bytes) no longer stops the publisher with an error. It is reported like a missing image, and the image given in <tt>fallback</tt> is used instead.</en>
+        <de summary="Leere Bilddateien verwenden das Ersatzbild.">Eine leere Bilddatei (0 Byte) bricht den Publisher nicht mehr mit einem Fehler ab. Sie wird wie ein fehlendes Bild gemeldet, und stattdessen wird das unter <tt>fallback</tt> angegebene Bild verwendet.</de>
+    </entry>
     <entry version="5.9.14" date="2026-10-28" sha1="9550e769">
         <en summary="Background colors and borders of HTML blocks.">In HTML content, block elements such as <tt>div</tt>, <tt>p</tt> or <tt>ul</tt> now show their <tt>background-color</tt>. Borders are drawn in all styles (<tt>dashed</tt>, <tt>dotted</tt>, <tt>double</tt>, <tt>groove</tt>, <tt>ridge</tt>, <tt>inset</tt> and <tt>outset</tt>), with a color per side and rounded corners. Nested boxes work, and a box that continues on the next page is drawn correctly on both pages.</en>
         <de summary="Hintergrundfarben und Rahmen von HTML-Blöcken.">In HTML-Inhalten zeigen Block-Elemente wie <tt>div</tt>, <tt>p</tt> oder <tt>ul</tt> jetzt ihre Hintergrundfarbe (<tt>background-color</tt>). Rahmen werden in allen Stilen gezeichnet (<tt>dashed</tt>, <tt>dotted</tt>, <tt>double</tt>, <tt>groove</tt>, <tt>ridge</tt>, <tt>inset</tt> und <tt>outset</tt>), mit einer Farbe je Seite und abgerundeten Ecken. Verschachtelte Boxen funktionieren, und eine Box, die auf der nächsten Seite weitergeht, wird auf beiden Seiten richtig gezeichnet.</de>
