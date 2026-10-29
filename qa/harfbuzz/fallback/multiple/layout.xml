@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<!-- CamingoCode has the arrow but no Greek, TeX Gyre Heros has both.
+	     The fallbacks must be tried in the declared order. -->
+	<LoadFontfile name="main" filename="CrimsonPro-Regular.ttf">
+		<Fallback filename="CamingoCode-Regular.ttf" />
+		<Fallback filename="texgyreheros-regular.otf" />
+	</LoadFontfile>
+
+	<DefineFontfamily name="text" fontsize="12" leading="14">
+		<Regular fontface="main" />
+	</DefineFontfamily>
+
+	<Record element="data">
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value>Arrow → lambda λ sigma σ</Value>
+				</Paragraph>
+				<Paragraph>
+					<Value>Runs →λ→ and λ→λ</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>
