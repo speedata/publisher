@@ -1,0 +1,30 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <!-- Serbian (Cyrillic) selects the Serbian forms (locl SRB) of the font,
+         for example б. Lines: Serbian (cyrillic) from mainlanguage,
+         sr-Cyrl, Russian, Other. Only the first two use the Serbian б. -->
+    <Options mainlanguage="Serbian (cyrillic)" />
+    <LoadFontfile name="OpenSans" filename="OpenSans-subset.ttf" />
+    <Pageformat height="4cm" width="6cm" />
+    <DefineFontfamily fontsize="10" leading="12" name="text">
+        <Regular fontface="OpenSans" />
+    </DefineFontfamily>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>бгдпт</Value>
+                </Paragraph>
+                <Paragraph language="sr-Cyrl">
+                    <Value>бгдпт</Value>
+                </Paragraph>
+                <Paragraph language="Russian">
+                    <Value>бгдпт</Value>
+                </Paragraph>
+                <Paragraph language="Other">
+                    <Value>бгдпт</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

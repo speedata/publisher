@@ -1595,21 +1595,21 @@ function M.mknodes(str, parameter, _origin, bidi_offset)
         str = segments[i][2]
         ---@type 0|1|string|nil 0/"ltr" or 1/"rtl"; later the shape() result.
         local direction = segments[i][1]
-        ---@type string?
-        local thislang = "en"
+        local locale = "en"
         if languagecode and publisher.languages_id_lang[languagecode].locale then
-            thislang = publisher.languages_id_lang[languagecode].locale
+            locale = publisher.languages_id_lang[languagecode].locale
         end
+        -- HarfBuzz needs a BCP 47 tag: the internal locale `sc` would be
+        -- Sardinian instead of Serbian (Cyrillic). `nil` for "Other" (`--`).
+        ---@type string?
+        local thislang = publisher.language.bcp47(locale)
         local thissegment
         local script = nil
-        if thislang == "--" then
-            thislang = nil
-            script = nil
-        elseif thislang then
+        if thislang then
             -- Fix the script for CJK languages, otherwise HarfBuzz takes it
             -- from the first character (Latin in "XML数据"). The OpenType
             -- language tag selects the regional glyph forms.
-            local langcode, region = string.match(thislang, "^(%a+)[_-]?(%a*)")
+            local langcode, region = string.match(locale, "^(%a+)_?(%a*)")
             if langcode == "zh" then
                 if region == "tw" or region == "hk" or region == "mo" or region == "hant" then
                     script = "Hant"
