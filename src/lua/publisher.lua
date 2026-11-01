@@ -1708,8 +1708,9 @@ function M.initialize_luatex_and_generate_pdf()
     end
     local langtbl = M.language.get_language(M.defaultlanguage)
 
-    if langtbl and langtbl.locale then
-        pdfcatalog[#pdfcatalog + 1] = string.format(" /Lang (%s)", string.gsub(langtbl.locale, "^(%a+).*", "%1"))
+    local langtag = type(langtbl) == "table" and langtbl.locale and M.language.bcp47(langtbl.locale)
+    if langtag then
+        pdfcatalog[#pdfcatalog + 1] = string.format(" /Lang (%s)", langtag)
     end
 
     local vp = {}

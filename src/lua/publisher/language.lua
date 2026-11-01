@@ -169,12 +169,13 @@ function M.get_language(id_or_locale_or_name)
     if num then
         return publisher.languages_id_lang[num]
     end
-    local locale = string.lower(id_or_locale_or_name)
-
-    if language_mapping[id_or_locale_or_name] then
-        locale = language_mapping[id_or_locale_or_name]
-    end
+    local locale = language_mapping[id_or_locale_or_name] or id_or_locale_or_name
+    -- BCP 47 tags use a hyphen (`en-US`), the internal locales an underscore
+    -- (`en_us`). `--` stands for "Other" and stays as it is.
     locale = string.lower(locale)
+    if locale ~= "--" then
+        locale = string.gsub(locale, "%-", "_")
+    end
     if publisher.languages[locale] then
         return publisher.languages[locale]
     end
@@ -183,11 +184,7 @@ function M.get_language(id_or_locale_or_name)
     if language_filename[locale] then
         filename_part = language_filename[locale]
     else
-        local sep = "_"
-        if string.match(locale, "%-") then
-            sep = "-"
-        end
-        local langcode, _ = table.unpack(string.explode(locale, sep))
+        local langcode, _ = table.unpack(string.explode(locale, "_"))
         if language_filename[langcode] then
             filename_part = language_filename[langcode]
         end
@@ -235,6 +232,41 @@ function M.get_languagecode(locale_or_name)
         return 0
     end
     return tmp.id
+end
+
+-- Internal locales that are not valid BCP 47 tags.
+---@type table<string, string>
+local bcp47_special = {
+    ["sc"] = "sr-Cyrl",
+}
+
+-- Returns the BCP 47 language tag (`en-US`) for an internal locale (`en_us`),
+-- or `nil` if the locale names no language (`--`).
+---@param locale string
+---@return string?
+function M.bcp47(locale)
+    if bcp47_special[locale] then
+        return bcp47_special[locale]
+    end
+    if not string.match(locale, "^%a") then
+        return nil
+    end
+    local parts = string.explode(locale, "_")
+    local ret = { string.lower(parts[1]) }
+    for i = 2, #parts do
+        local subtag = parts[i]
+        if #subtag == 4 and string.match(subtag, "^%a+$") then
+            -- script: Hant, Cyrl
+            subtag = string.upper(string.sub(subtag, 1, 1)) .. string.lower(string.sub(subtag, 2))
+        elseif #subtag == 2 then
+            -- region: US, TW
+            subtag = string.upper(subtag)
+        else
+            subtag = string.lower(subtag)
+        end
+        ret[#ret + 1] = subtag
+    end
+    return table.concat(ret, "-")
 end
 
 -- Sets `publisher.defaultlanguage` to the id resolved from `mainlanguage`.
