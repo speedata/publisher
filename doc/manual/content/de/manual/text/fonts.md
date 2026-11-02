@@ -314,6 +314,7 @@ Alternativ dazu kann man auch bei  [`<LoadFontfile>`]({{< relref "/reference/com
 ```
 
 So wird erst die Schriftart `texgyreheros-regular.otf` durchsucht, anschließend `fontawesome-webfont.ttf` und zum Schluss  `line-awesome.ttf`.
+Wie man Symbole aus solchen Icon-Schriften einsetzt, zeigt die Anleitung [Icons aus einer Icon-Schrift]({{< relref "/howto/icons" >}}).
 
 ## Aliasnamen
 

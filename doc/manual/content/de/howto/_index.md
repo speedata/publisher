@@ -41,6 +41,12 @@ Zwei Fragen stellen sich in jedem Projekt, noch bevor das erste Rezept zum Einsa
   {{< card link="datasheet" title="Grundgerüst eines Datenblatts" subtitle="Seitentyp mit Kopf, Fuß und Satzspiegel, millimetergenau" >}}
 {{< /cards >}}
 
+## Text
+
+{{< cards >}}
+  {{< card link="icons" title="Icons aus einer Icon-Schrift" subtitle="Symbole aus Font Awesome und ähnlichen Schriften, im Layout oder per CSS aus HTML-Daten" >}}
+{{< /cards >}}
+
 ## Verzeichnisse
 
 {{< cards >}}

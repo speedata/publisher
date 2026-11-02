@@ -212,6 +212,9 @@ Die Befehlsreferenz vermerkt bei jedem Attribut, das einer CSS-Eigenschaft entsp
 `font-family` nennt eine Schriftfamilie aus [`<DefineFontfamily>`]({{< relref "/reference/commands/definefontfamily" >}}), eine Schrift aus `@font-face` oder [`<LoadFontfile>`]({{< relref "/reference/commands/loadfontfile" >}}) oder eine der allgemeinen Familien `serif`, `sans-serif` und `monospace`.
 Mehrere Namen, durch Kommas getrennt, werden der Reihe nach probiert.
 Mit `font-size` oder `line-height` entsteht bei Bedarf eine neue Schriftfamilie; vorher muss keine passende definiert werden.
+Bei `@font-face` bestimmt `font-weight` den Schnitt: `bold` oder ein Zahlenwert ab 600 ergibt den fetten Schnitt, `normal` oder ein kleinerer Wert den normalen.
+`font-style: italic` oder `oblique` ergibt den kursiven Schnitt.
+Hat eine Familie keinen normalen Schnitt, zum Beispiel weil nur `font-weight: 900` deklariert ist, wird ein vorhandener Schnitt auch für normalen Text verwendet.
 
 ```xml
 <Stylesheet>
@@ -303,17 +306,20 @@ kann man mit CSS das Element einfärben:
 ![Elemente in Daten kann man nun einfärben](/img/32-hellogreenworld.png)
 
 Neben der Farbe lassen sich auf diesem Weg auch weitere Eigenschaften setzen, zum Beispiel `font-weight: bold`, `font-style: italic`, `text-decoration: underline` und `background-color`.
-Die Schrift des Absatzes bleibt dabei maßgeblich: `font-family` und `font-size` wirken in Absatzinhalten nur, wenn das verwendete Textformat `cssfontsize="yes"` gesetzt hat (siehe [`<DefineTextformat>`]({{< relref "/reference/commands/definetextformat" >}})).
+Die Schrift des Absatzes bleibt dabei maßgeblich: `font-size` allein wirkt in Absatzinhalten nur, wenn das verwendete Textformat `cssfontsize="yes"` gesetzt hat (siehe [`<DefineTextformat>`]({{< relref "/reference/commands/definetextformat" >}})).
+Ein Element mit eigener `font-family` wird in dieser Schrift gesetzt, und zwar in der Größe des Absatzes, sofern `font-size` am Element nichts anderes angibt.
+So lassen sich zum Beispiel Symbole aus einer Icon-Schrift in den Text einfügen, siehe die Anleitung [Icons aus einer Icon-Schrift]({{< relref "/howto/icons" >}}).
 
 ### Unterstützte CSS-Eigenschaften
 
 Die folgenden Eigenschaften werden bei der HTML-Verarbeitung ausgewertet:
 
-* Schrift: `font-family`, `font-size`, `font-style`, `font-weight`
+* Schrift: `font-family`, `font-size`, `font-style`, `font-weight` (`bold`, `normal` oder Zahlenwerte, ab 600 fett)
 * Text: `color`, `text-align`, `text-decoration` (bzw. `text-decoration-line` mit `underline` und `line-through`, `text-decoration-style` mit `solid`, `double`, `dotted`, `dashed` und `wavy`, `text-decoration-color`), `line-height`, `white-space` (`normal`, `pre`), `vertical-align` (`super`, `sub`) und `hyphens` (`none` bzw. `manual` schaltet die Silbentrennung aus)
 * Box-Modell: `margin-*`, `padding-*`, `border-*` (Breite, Stil und Farbe je Seite sowie `border-radius` je Ecke), `width`, `height`
 * Hintergrund: `background-color`
 * Listen: `list-style-type`, `list-style-position`, `list-style` sowie das Pseudoelement `li::marker` (`content`, `color`, `font-family`, `font-size`, `padding-right`, `padding-bottom`)
+* Pseudoelemente `::before` und `::after` an Block- und Inline-Elementen: `content` sowie `color`, `font-family`, `font-style` und `font-weight`; bei Blockelementen für `::before` zusätzlich `width` und `margin-left`. Das Pseudoelement erbt die Eigenschaften seines Elements.
 * Tabellen: `border-collapse`
 * Umbruch: `break-before`, `break-after`
 

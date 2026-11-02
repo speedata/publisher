@@ -298,6 +298,7 @@ Alternatively, you can also specify a replacement font at `<LoadFontfile>`, whic
 ```
 
 First the font `texgyreheros-regular.otf` is searched, then `fontawesome-webfont.ttf` and finally `line-awesome.ttf`.
+The how-to [Icons from an icon font]({{< relref "/howto/icons" >}}) shows how to use the symbols of such icon fonts.
 
 ## Aliases
 

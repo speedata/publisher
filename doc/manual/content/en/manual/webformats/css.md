@@ -212,6 +212,9 @@ The command reference notes the name of the CSS property for every attribute tha
 `font-family` names a font family from [`<DefineFontfamily>`]({{< relref "/reference/commands/definefontfamily" >}}), a font from `@font-face` or [`<LoadFontfile>`]({{< relref "/reference/commands/loadfontfile" >}}), or one of the generic families `serif`, `sans-serif` and `monospace`.
 Several names, separated by commas, are tried in order.
 With `font-size` or `line-height`, a new font family is created when needed; there is no need to define a matching one first.
+In `@font-face`, `font-weight` selects the face: `bold` or a number of 600 or more gives the bold face, `normal` or a smaller number the regular face.
+`font-style: italic` or `oblique` gives the italic face.
+If a family has no regular face, for example because only `font-weight: 900` is declared, one of the declared faces is also used for normal text.
 
 ```xml
 <Stylesheet>
@@ -303,17 +306,20 @@ you can use CSS to color the element:
 ![Elements in data can now be colored](/img/32-hellogreenworld.png)
 
 Besides the color, other properties can be set this way, for example `font-weight: bold`, `font-style: italic`, `text-decoration: underline` and `background-color`.
-The font of the paragraph remains authoritative: `font-family` and `font-size` only take effect in paragraph contents if the text format in use has `cssfontsize="yes"` set (see [`<DefineTextformat>`]({{< relref "/reference/commands/definetextformat" >}})).
+The font of the paragraph remains authoritative: `font-size` alone only takes effect in paragraph contents if the text format in use has `cssfontsize="yes"` set (see [`<DefineTextformat>`]({{< relref "/reference/commands/definetextformat" >}})).
+An element with a `font-family` of its own is set in this font, in the size of the paragraph unless `font-size` on the element says otherwise.
+This way you can, for example, insert symbols from an icon font into the text, see the how-to [Icons from an icon font]({{< relref "/howto/icons" >}}).
 
 ### Supported CSS properties
 
 The following properties are evaluated by the HTML processing:
 
-* Font: `font-family`, `font-size`, `font-style`, `font-weight`
+* Font: `font-family`, `font-size`, `font-style`, `font-weight` (`bold`, `normal` or numbers, bold from 600 on)
 * Text: `color`, `text-align`, `text-decoration` (or `text-decoration-line` with `underline` and `line-through`, `text-decoration-style` with `solid`, `double`, `dotted`, `dashed` and `wavy`, `text-decoration-color`), `line-height`, `white-space` (`normal`, `pre`), `vertical-align` (`super`, `sub`) and `hyphens` (`none` or `manual` turns off hyphenation)
 * Box model: `margin-*`, `padding-*`, `border-*` (width, style and color per side plus `border-radius` per corner), `width`, `height`
 * Background: `background-color`
 * Lists: `list-style-type`, `list-style-position`, `list-style` and the pseudo-element `li::marker` (`content`, `color`, `font-family`, `font-size`, `padding-right`, `padding-bottom`)
+* Pseudo-elements `::before` and `::after` on block and inline elements: `content` as well as `color`, `font-family`, `font-style` and `font-weight`; on block elements, `::before` also supports `width` and `margin-left`. The pseudo-element inherits the properties of its element.
 * Tables: `border-collapse`
 * Breaks: `break-before`, `break-after`
 

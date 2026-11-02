@@ -41,6 +41,12 @@ Two questions come up in every project, even before the first recipe is used:
   {{< card link="datasheet" title="Basic structure of a data sheet" subtitle="Page type with head, foot and type area, millimeter-exact" >}}
 {{< /cards >}}
 
+## Text
+
+{{< cards >}}
+  {{< card link="icons" title="Icons from an icon font" subtitle="Symbols from Font Awesome and similar fonts, in the layout or via CSS from HTML data" >}}
+{{< /cards >}}
+
 ## Directories
 
 {{< cards >}}
