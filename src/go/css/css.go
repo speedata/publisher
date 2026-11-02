@@ -325,6 +325,24 @@ func consumeBlock(toks tokenstream, inblock bool) sBlock {
 	return b
 }
 
+// isBoldWeight reports whether the font-weight of an @font-face rule
+// selects the bold face: bold, bolder or a number of at least 600. For a
+// range ("100 900", variable fonts) the first value counts.
+func isBoldWeight(weight string) bool {
+	if weight == "bold" || weight == "bolder" {
+		return true
+	}
+	fields := strings.Fields(weight)
+	if len(fields) == 0 {
+		return false
+	}
+	var num float64
+	if _, err := fmt.Sscan(fields[0], &num); err != nil {
+		return false
+	}
+	return num >= 600
+}
+
 // doFontFace updates the Fontfamilies map with the sources defined in @font-face.
 func (c *CSS) doFontFace(ff []qrule) {
 	var fontfamily, fontstyle, fontweight string
@@ -350,14 +368,15 @@ func (c *CSS) doFontFace(ff []qrule) {
 		}
 	}
 	fam := c.Fontfamilies[fontfamily]
-	if fontweight == "bold" {
-		if fontstyle == "italic" {
+	italic := fontstyle == "italic" || strings.HasPrefix(fontstyle, "oblique")
+	if isBoldWeight(fontweight) {
+		if italic {
 			fam.BoldItalic = fontsource
 		} else {
 			fam.Bold = fontsource
 		}
 	} else {
-		if fontstyle == "italic" {
+		if italic {
 			fam.Italic = fontsource
 		} else {
 			fam.Regular = fontsource

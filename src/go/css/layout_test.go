@@ -113,3 +113,27 @@ func TestLayoutFontFace(t *testing.T) {
 		t.Errorf("got %#v", ls.Fontfamilies)
 	}
 }
+
+func TestFontFaceNumericWeight(t *testing.T) {
+	ls := NewLayoutStylesheet()
+	ls.AddCSS(`@font-face { font-family: "Icons"; font-weight: 400; src: url("regular-400.ttf") }
+		@font-face { font-family: "Icons"; font-weight: 900; src: url("solid-900.ttf") }
+		@font-face { font-family: "Icons"; font-weight: 600; font-style: oblique 10deg; src: url("semibold-oblique.ttf") }
+		@font-face { font-family: "Icons"; font-weight: 300; font-style: italic; src: url("light-italic.ttf") }`)
+	ff := ls.Fontfamilies["Icons"]
+	if ff.Regular.URL != "regular-400.ttf" || ff.Bold.URL != "solid-900.ttf" ||
+		ff.BoldItalic.URL != "semibold-oblique.ttf" || ff.Italic.URL != "light-italic.ttf" {
+		t.Errorf("got %#v", ff)
+	}
+}
+
+func TestIsBoldWeight(t *testing.T) {
+	for weight, want := range map[string]bool{
+		"": false, "normal": false, "bold": true, "bolder": true, "lighter": false,
+		"400": false, "599": false, "600": true, "900": true, "100 900": false, "700 900": true,
+	} {
+		if got := isBoldWeight(weight); got != want {
+			t.Errorf("isBoldWeight(%q) = %v, want %v", weight, got, want)
+		}
+	}
+}

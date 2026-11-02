@@ -1,0 +1,21 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat width="8cm" height="5cm" />
+    <Stylesheet>
+        @font-face { font-family: "Crimson"; font-weight: 400; src: url("CrimsonPro-Regular.ttf"); }
+        @font-face { font-family: "Crimson"; font-weight: 700; src: url("CrimsonPro-Bold.ttf"); }
+        @font-face { font-family: "Crimson"; font-weight: 400; font-style: italic; src: url("CrimsonPro-Italic.ttf"); }
+        @font-face { font-family: "OnlyBold"; font-weight: 900; src: url("CrimsonPro-Bold.ttf"); }
+        .c { font-family: "Crimson"; }
+        .onlybold { font-family: "OnlyBold"; }
+        Paragraph.onlybold { font-family: "OnlyBold"; }
+    </Stylesheet>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Value select="*"/></Paragraph>
+                <Paragraph class="onlybold"><Value>4 only a bold face (layout CSS)</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

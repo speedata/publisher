@@ -92,13 +92,16 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
     -- Font style & weight
     local fontstyle = styles["font-style"]
     local fontweight = styles["font-weight"]
-    -- "normal" resets the value copied from the parent's options
-    if fontweight == "bold" then
+    -- Bold from 600 on, as in cssstyle.paragraph_options. "normal" and the
+    -- like reset the value copied from the parent's options; unknown values
+    -- (such as var()) keep it, as a browser ignores them.
+    local weightnum = tonumber(fontweight)
+    if fontweight == "bold" or fontweight == "bolder" or (weightnum and weightnum >= 600) then
         options.bold = 1
-    elseif fontweight == "normal" then
+    elseif fontweight == "normal" or fontweight == "lighter" or weightnum then
         options.bold = nil
     end
-    if fontstyle == "italic" then
+    if fontstyle == "italic" or (fontstyle and string.match(fontstyle, "^oblique")) then
         options.italic = 1
     elseif fontstyle == "normal" then
         options.italic = nil

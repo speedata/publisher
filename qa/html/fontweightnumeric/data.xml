@@ -1,0 +1,5 @@
+<data>
+  <p class="c">1 regular <span style="font-weight: 700">700</span> <span style="font-weight: 600">600</span> <span style="font-weight: 500">500</span></p>
+  <p class="c">2 <b>bold <span style="font-weight: 400">400</span></b> <span style="font-style: oblique">oblique</span></p>
+  <p class="onlybold">3 only a bold face (HTML)</p>
+</data>

@@ -98,6 +98,11 @@ function M.get_fontfamily(families, size_sp, name, styles, publisher, fontfamili
         end
     end
 
+    -- A family declared only with other faces (for example an icon font
+    -- with font-weight: 900) uses one of them as regular face, as a
+    -- browser picks the nearest face.
+    regular = regular or bold or italic or bolditalic
+
     -- Define family at the given size
     local fam =
         publisher.fontfamilies.define_fontfamily(regular, bold, italic, bolditalic, singlefont, size_sp, baselineskip)

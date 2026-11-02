@@ -293,6 +293,9 @@ function M.fontfamily(props, base)
             end
         end
         regular, bold, italic, bolditalic = face("regular"), face("bold"), face("italic"), face("bolditalic")
+        -- only other faces declared (for example font-weight: 900): use one
+        -- of them as regular face, as a browser picks the nearest face
+        regular = regular or bold or italic or bolditalic
         name = string.format("__css:%s/%d/%d", definitionname, newsize, leading)
     else
         -- derive from the family the base was derived from, so that the
