@@ -248,7 +248,13 @@ task :regenerateqa do
 		Dir.chdir(d) do
 			if test(?f,"layout.xml") then
 				puts "=== #{d} ==="
-				sh "sp -s --jobname reference"
+				started = Time.now
+				sh "sp -s --jobname reference" do |ok, res|
+					# Like sp compare: a test with a file "expected-error" fails on
+					# purpose, its exit status is ignored if a new PDF was written.
+					expected = test(?f, "expected-error") && test(?f, "reference.pdf") && File.mtime("reference.pdf") >= started - 1
+					fail "sp failed in #{d} (exit status #{res.exitstatus})" unless ok || expected
+				end
 				sh "sp --jobname reference clean"
 			end
 		end
