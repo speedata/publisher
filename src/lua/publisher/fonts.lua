@@ -121,7 +121,18 @@ function M.get_fontname(localname, url)
     if localname and lookup_fontname_filename[localname] then
         return localname
     elseif url then
-        M.load_fontfile(url, url)
+        -- A relative URL (such as "../webfonts/x.ttf" in a stylesheet that
+        -- comes with a font package) refers to the directory of the
+        -- stylesheet in a browser. The Publisher finds files by name, so the
+        -- file name alone is used if the path is not found.
+        local filename = url
+        if not kpse.find_file(url) then
+            local basename = string.match(url, "([^/\\]+)$")
+            if basename and basename ~= url and kpse.find_file(basename) then
+                filename = basename
+            end
+        end
+        M.load_fontfile(url, filename)
         return url
     end
     return nil

@@ -1,0 +1,17 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat width="8cm" height="3cm" />
+    <Stylesheet>
+        /* a relative path as in a stylesheet from a font package: the
+           file is found by its name */
+        @font-face { font-family: "Crimson"; src: url("../webfonts/CrimsonPro-Regular.ttf"); }
+        .c { font-family: "Crimson"; }
+    </Stylesheet>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Value select="*"/></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
