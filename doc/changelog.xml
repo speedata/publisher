@@ -1,5 +1,65 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.9">
+    <entry version="5.9.17" date="2026-11-02" sha1="6d800e1e">
+        <en summary="Loading a font again.">When <tt>LoadFontfile</tt> loads a font name again that is already in use, for example <tt>TeXGyreHeros-Regular</tt> with a <tt>Fallback</tt>, the font families defined before now use the new settings, including the predefined family <tt>text</tt>. Previously, the new settings only applied to font families defined afterwards.</en>
+        <de summary="Schrift erneut laden.">Lädt <tt>LoadFontfile</tt> einen bereits verwendeten Schriftnamen erneut, zum Beispiel <tt>TeXGyreHeros-Regular</tt> mit einem <tt>Fallback</tt>, verwenden jetzt auch die vorher definierten Schriftfamilien die neuen Einstellungen, einschließlich der vordefinierten Familie <tt>text</tt>. Bisher galten die neuen Einstellungen nur für danach definierte Schriftfamilien.</de>
+    </entry>
+    <entry version="5.9.17" date="2026-11-02" sha1="fc5f30ba">
+        <en summary="Stylesheets written for browsers.">Stylesheets that come with font packages or web applications now work better. A rule with a selector list such as <tt>:root, :host</tt> is no longer dropped completely when one selector is not supported; the other selectors apply, and <tt>:host</tt> is ignored without an error. Custom properties (<tt>--name: …</tt>) are ignored without a warning. Relative paths in <tt>@font-face</tt>, such as <tt>url("../webfonts/font.ttf")</tt>, now find the font file by its name. The complete stylesheet of Font Awesome can now be used without changes.</en>
+        <de summary="Stylesheets für Browser.">Stylesheets aus Schriftpaketen oder Webanwendungen funktionieren jetzt besser. Eine Regel mit einer Selektorliste wie <tt>:root, :host</tt> wird nicht mehr komplett verworfen, wenn ein Selektor nicht unterstützt wird; die übrigen Selektoren gelten, und <tt>:host</tt> wird ohne Fehlermeldung ignoriert. Benutzerdefinierte Eigenschaften (<tt>--name: …</tt>) werden ohne Warnung ignoriert. Relative Pfade in <tt>@font-face</tt> wie <tt>url("../webfonts/font.ttf")</tt> finden die Schriftdatei jetzt über ihren Namen. Das vollständige Stylesheet von Font Awesome lässt sich jetzt unverändert verwenden.</de>
+    </entry>
+    <entry version="5.9.17" date="2026-11-02" sha1="15c871b5">
+        <en summary="Comments in stylesheets.">An at-rule such as <tt>@font-face</tt> that followed a comment after another rule was not recognized, and the font was missing. An empty rule such as <tt>p {}</tt> could also break the following rule. Both now work.</en>
+        <de summary="Kommentare in Stylesheets.">Eine At-Regel wie <tt>@font-face</tt>, die nach einer anderen Regel auf einen Kommentar folgte, wurde nicht erkannt, und die Schrift fehlte. Auch eine leere Regel wie <tt>p {}</tt> konnte die folgende Regel unwirksam machen. Beides funktioniert jetzt.</de>
+    </entry>
+    <entry version="5.9.17" date="2026-11-02" sha1="457b2d6a">
+        <en summary="Font size of other fonts in paragraphs.">When text in a <tt>Paragraph</tt> switches to another font with <tt>font-family</tt> (for example <tt>&lt;span class="icon"&gt;</tt> with an icon font), this font now has the size of the paragraph. Previously, it was always set in 10pt, so that a symbol in a larger heading was too small.</en>
+        <de summary="Schriftgröße anderer Schriften in Absätzen.">Wechselt Text in einem <tt>Paragraph</tt> mit <tt>font-family</tt> in eine andere Schrift (zum Beispiel <tt>&lt;span class="icon"&gt;</tt> mit einer Icon-Schrift), hat diese Schrift jetzt die Größe des Absatzes. Bisher wurde sie immer in 10pt gesetzt, sodass ein Symbol in einer größeren Überschrift zu klein war.</de>
+    </entry>
+    <entry version="5.9.17" date="2026-11-02" sha1="23fae5f8">
+        <en summary="Numeric font weights.">Numeric font weights such as <tt>700</tt> or <tt>900</tt> now work in <tt>@font-face</tt> rules and in HTML content: from <tt>600</tt> on, the bold face is used. Previously, a <tt>@font-face</tt> with <tt>font-weight: 900</tt> replaced the regular face of the family. Icon fonts like Font Awesome now show the right icons, because they use the weights <tt>400</tt> and <tt>900</tt> for regular and solid icons. A family with only a bold face is also used for normal text, and <tt>font-style: oblique</tt> selects the italic face.</en>
+        <de summary="Schriftstärken als Zahl.">Schriftstärken als Zahl wie <tt>700</tt> oder <tt>900</tt> funktionieren jetzt in <tt>@font-face</tt>-Regeln und in HTML-Inhalten: Ab <tt>600</tt> wird der fette Schnitt verwendet. Bisher ersetzte ein <tt>@font-face</tt> mit <tt>font-weight: 900</tt> den normalen Schnitt der Familie. Icon-Schriften wie Font Awesome zeigen jetzt die richtigen Icons, weil sie die Stärken <tt>400</tt> und <tt>900</tt> für normale und gefüllte Icons verwenden. Eine Familie, die nur einen fetten Schnitt hat, wird auch für normalen Text verwendet, und <tt>font-style: oblique</tt> wählt den kursiven Schnitt.</de>
+    </entry>
+    <entry version="5.9.17" date="2026-11-02" sha1="14ffe974">
+        <en summary="::before and ::after on inline HTML elements.">In HTML content, the CSS pseudo-elements <tt>::before</tt> and <tt>::after</tt> now also work on inline elements such as <tt>i</tt>, <tt>span</tt> or <tt>b</tt>. This makes it possible to use icon fonts like Font Awesome with their stylesheet, for example <tt>&lt;i class="fas fa-university"&gt;&lt;/i&gt;</tt>. A <tt>font-family</tt> in a <tt>::before</tt> rule is now used. <tt>::after</tt> also works on block elements, and <tt>::before</tt> also on empty block elements.</en>
+        <de summary="::before und ::after an Inline-Elementen in HTML.">In HTML-Inhalten funktionieren die CSS-Pseudoelemente <tt>::before</tt> und <tt>::after</tt> jetzt auch an Inline-Elementen wie <tt>i</tt>, <tt>span</tt> oder <tt>b</tt>. Damit lassen sich Icon-Schriften wie Font Awesome mit ihrem Stylesheet verwenden, zum Beispiel <tt>&lt;i class="fas fa-university"&gt;&lt;/i&gt;</tt>. Eine Schriftart (<tt>font-family</tt>) in einer <tt>::before</tt>-Regel wird jetzt berücksichtigt. <tt>::after</tt> funktioniert auch an Blockelementen und <tt>::before</tt> auch an leeren Blockelementen.</de>
+    </entry>
+    <entry version="5.9.17" date="2026-11-02" sha1="14ffe974">
+        <en summary="::before in front of formatted text.">When an HTML block with a <tt>::before</tt> rule started with an inline element (for example <tt>&lt;p class="note"&gt;&lt;b&gt;Note:&lt;/b&gt; …&lt;/p&gt;</tt>), the publisher stopped with an error. Now the content of <tt>::before</tt> is placed in front of the text.</en>
+        <de summary="::before vor formatiertem Text.">Begann ein HTML-Block mit einer <tt>::before</tt>-Regel mit einem Inline-Element (zum Beispiel <tt>&lt;p class="hinweis"&gt;&lt;b&gt;Hinweis:&lt;/b&gt; …&lt;/p&gt;</tt>), brach der Publisher mit einem Fehler ab. Jetzt wird der Inhalt von <tt>::before</tt> vor den Text gesetzt.</de>
+    </entry>
+    <entry version="5.9.17" date="2026-11-02" sha1="14ffe974">
+        <en summary="Borders around inline HTML elements with formatting.">The border of an inline HTML element such as <tt>span</tt> now surrounds the whole content, even if the content contains other formatting such as <tt>b</tt>. Previously, the border ended at the first formatted part.</en>
+        <de summary="Rahmen um Inline-Elemente mit Auszeichnungen in HTML.">Der Rahmen eines Inline-Elements wie <tt>span</tt> umschließt jetzt den ganzen Inhalt, auch wenn darin weitere Auszeichnungen wie <tt>b</tt> vorkommen. Bisher endete der Rahmen beim ersten ausgezeichneten Teil.</de>
+    </entry>
+    <entry version="5.9.17" date="2026-11-02" sha1="b2b41e73">
+        <en summary="font-style: normal and font-weight: normal in HTML.">In HTML content, <tt>font-style: normal</tt> and <tt>font-weight: normal</tt> now switch off italic or bold text inherited from an enclosing element, for example in <tt>&lt;i&gt;italic &lt;span style="font-style: normal"&gt;upright&lt;/span&gt;&lt;/i&gt;</tt>.</en>
+        <de summary="font-style: normal und font-weight: normal in HTML.">In HTML-Inhalten schalten <tt>font-style: normal</tt> und <tt>font-weight: normal</tt> jetzt die kursive oder fette Schrift eines umgebenden Elements ab, zum Beispiel in <tt>&lt;i&gt;kursiv &lt;span style="font-style: normal"&gt;aufrecht&lt;/span&gt;&lt;/i&gt;</tt>.</de>
+    </entry>
+    <entry version="5.9.17" date="2026-11-02" sha1="f2a3e0c9">
+        <en summary="Transparent colors in tables over several pages.">When a table with transparent background colors continued on the next page, the transparency was missing on the following pages, and some PDF viewers reported an error. Now the colors are transparent on all pages.</en>
+        <de summary="Transparente Farben in Tabellen über mehrere Seiten.">Ging eine Tabelle mit transparenten Hintergrundfarben auf der nächsten Seite weiter, fehlte auf den Folgeseiten die Transparenz, und manche PDF-Betrachter meldeten einen Fehler. Jetzt sind die Farben auf allen Seiten transparent.</de>
+    </entry>
+    <entry version="5.9.17" date="2026-11-02" sha1="ffa6fe62">
+        <en summary="Cell colors with eval-on-split.">With <tt>eval-on-split</tt> on <tt>Table</tt>, cells with their own <tt>background-color</tt> lost their color on the following pages and got the row color instead. Now they keep their color on all pages.</en>
+        <de summary="Zellfarben mit eval-on-split.">Mit <tt>eval-on-split</tt> an <tt>Table</tt> verloren Zellen mit eigener Hintergrundfarbe (<tt>background-color</tt>) auf den Folgeseiten ihre Farbe und bekamen stattdessen die Reihenfarbe. Jetzt behalten sie ihre Farbe auf allen Seiten.</de>
+    </entry>
+    <entry version="5.9.17" date="2026-11-02" sha1="ffa6fe62">
+        <en summary="Empty background color in tables.">An empty <tt>background-color</tt> on <tt>Td</tt> or <tt>Tr</tt> now means that no color is set, so the row or column color applies. This makes it possible to write <tt>background-color="{@color}"</tt> when not every data element has this attribute. Before, the cell got no background and a warning was shown.</en>
+        <de summary="Leere Hintergrundfarbe in Tabellen.">Eine leere Hintergrundfarbe (<tt>background-color</tt>) an <tt>Td</tt> oder <tt>Tr</tt> bedeutet jetzt, dass keine Farbe gesetzt ist. Es gilt dann die Farbe der Zeile oder Spalte. So kann man <tt>background-color="{@color}"</tt> schreiben, auch wenn nicht jedes Datenelement dieses Attribut hat. Bisher bekam die Zelle keinen Hintergrund, und es gab eine Warnung.</de>
+    </entry>
+    <entry version="5.9.17" date="2026-11-01" sha1="ba9281c5">
+        <en summary="Serbian letter forms.">With the language <tt>Serbian (cyrillic)</tt>, the Serbian forms of letters such as б are now used if the font contains them. Previously, the Russian forms were used.</en>
+        <de summary="Serbische Buchstabenformen.">Bei der Sprache <tt>Serbian (cyrillic)</tt> werden jetzt die serbischen Formen von Buchstaben wie б verwendet, sofern die Schrift sie enthält. Bisher wurden die russischen Formen verwendet.</de>
+    </entry>
+    <entry version="5.9.17" date="2026-11-01" sha1="bd898fb9">
+        <en summary="Language codes with a hyphen.">Language codes such as <tt>en-US</tt> (with a hyphen instead of an underscore) now select the right hyphenation patterns. Previously, <tt>en-US</tt> used British English hyphenation.</en>
+        <de summary="Sprachkürzel mit Bindestrich.">Sprachkürzel wie <tt>en-US</tt> (mit Bindestrich statt Unterstrich) wählen jetzt die richtigen Trennmuster. Bisher wurde bei <tt>en-US</tt> nach britischem Englisch getrennt.</de>
+    </entry>
+    <entry version="5.9.17" date="2026-11-01" sha1="bd898fb9">
+        <en summary="Complete document language in the PDF.">The document language in the PDF now contains the region or script, for example <tt>en-US</tt> or <tt>sr-Cyrl</tt> instead of just <tt>en</tt> or <tt>sc</tt>. This improves accessibility. For the language <tt>Other</tt> no document language is written.</en>
+        <de summary="Vollständige Dokumentsprache im PDF.">Die Dokumentsprache im PDF enthält jetzt auch Region oder Schrift, zum Beispiel <tt>en-US</tt> oder <tt>sr-Cyrl</tt> statt nur <tt>en</tt> oder <tt>sc</tt>. Das verbessert die Barrierefreiheit. Bei der Sprache <tt>Other</tt> wird keine Dokumentsprache eingetragen.</de>
+    </entry>
     <entry version="5.9.16" date="2026-10-29" sha1="b4c879ec">
         <en summary="NextFrame at the beginning of the document.">When <tt>NextFrame</tt> came before anything was placed on the first page, the publisher stopped with an internal error. Now the first page is created and the next frame is used.</en>
         <de summary="NextFrame am Anfang des Dokuments.">Stand <tt>NextFrame</tt> vor der ersten Ausgabe auf der ersten Seite, brach der Publisher mit einem internen Fehler ab. Jetzt wird die erste Seite angelegt und der nächste Rahmen verwendet.</de>
