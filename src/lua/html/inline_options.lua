@@ -92,11 +92,16 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
     -- Font style & weight
     local fontstyle = styles["font-style"]
     local fontweight = styles["font-weight"]
+    -- "normal" resets the value copied from the parent's options
     if fontweight == "bold" then
         options.bold = 1
+    elseif fontweight == "normal" then
+        options.bold = nil
     end
     if fontstyle == "italic" then
         options.italic = 1
+    elseif fontstyle == "normal" then
+        options.italic = nil
     end
 
     -- Colors (foreground + background)
