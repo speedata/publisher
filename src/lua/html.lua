@@ -131,18 +131,64 @@ local stylesstack = inherit.new_stack(inherited)
 -- }
 -- (attributes not shown)
 
--- Collects the horizontal node lists for an inline element subtree.
--- Returns an array of node lists (one per inline run) so the caller can
--- pack them into a paragraph.
----@param elt table HTML element subtree (with `elementname`, children).
----@param parameter? table Inherited style parameters.
----@param before_box? Node Whether the run starts a fresh line.
----@param _origin? string Caller identifier (debugging).
+-- Splits the styles of an element into its own styles and the styles of
+-- its pseudo-elements (keys like "before::content"). The element is not
+-- changed, so its tree can be rendered more than once.
+---@param eltstyles table<string, any> Computed styles of the element.
+---@return table<string, any> own Styles of the element itself.
+---@return table<string, table<string, any>> pseudo Styles per pseudo-element ("before", "after", "marker").
+local function split_pseudo_styles(eltstyles)
+    local own, pseudo = {}, {}
+    for k, v in pairs(eltstyles) do
+        local pseudoname, rawstyle = string.match(k, "^(%a+)::(.*)$")
+        if pseudoname then
+            pseudo[pseudoname] = pseudo[pseudoname] or {}
+            pseudo[pseudoname][rawstyle] = v
+        else
+            own[k] = v
+        end
+    end
+    return own, pseudo
+end
+
+-- Pushes the styles of a ::before or ::after pseudo-element onto the
+-- styles stack and builds its nodes. The styles of the element must be
+-- on top of the stack, the pseudo-element inherits from them. The caller
+-- pops the styles again.
+---@param pseudo_styles table<string, any> Declarations of the pseudo-element.
+---@param name string Element and pseudo-element, e.g. "i::before" (for messages).
+---@param options table Options of the element (copied, not changed).
+---@return Node? nodes Nodes of the content, nil if there is no content (then there is no pseudo-element).
+---@return HtmlStyles pstyles Styles of the pseudo-element.
+local function push_pseudo_element(pseudo_styles, name, options)
+    local pstyles = inherit.push(stylesstack)
+    styles_mod.copy_attributes(pstyles, pseudo_styles, name)
+    -- A font-family of its own must be resolved again, otherwise the font
+    -- family number inherited from the element wins.
+    if pseudo_styles["font-family"] and not pseudo_styles["font-family-number"] then
+        pstyles["font-family-number"] = 0
+    end
+    local pseudo_options = {}
+    for k, v in pairs(options) do
+        pseudo_options[k] = v
+    end
+    inline_options.set_options_for_mknodes(pstyles, pseudo_options, publisher, fontfamilies)
+    local content = pstyles.content
+    if not content or content == "" then
+        return nil, pstyles
+    end
+    return publisher.nodes.mknodes(content, pseudo_options), pstyles
+end
+
+-- Recursive part of collect_horizontal_nodes. pending.box is the
+-- ::before box of the enclosing block. It goes in front of the first
+-- run that is created and is then removed from pending.
+---@param elt table HTML element subtree.
+---@param parameter table Inherited style parameters.
+---@param pending { box: Node? } The ::before box not yet placed.
 ---@param dataxml table Data XML context.
 ---@return table[] runs Array of inline node lists.
-function M.collect_horizontal_nodes(elt, parameter, before_box, _origin, dataxml)
-    -- w("collect_horizontal_nodes %s",_origin or "?")
-    parameter = parameter or {}
+local function collect_runs(elt, parameter, pending, dataxml)
     if elt.elementname == "br" then
         local nodes = publisher.nodes.mknodes("\n", parameter)
         return { nodes }
@@ -158,7 +204,7 @@ function M.collect_horizontal_nodes(elt, parameter, before_box, _origin, dataxml
         local thiselt = elt[i]
         local typ = type(thiselt)
 
-        local thiselt_styles = thiselt.styles or {}
+        local thiselt_styles, pseudo = split_pseudo_styles(thiselt.styles or {})
         styles_mod.copy_attributes(styles, thiselt_styles, thiselt.elementname or "(string)")
 
         inline_options.set_options_for_mknodes(styles, options, publisher, fontfamilies)
@@ -166,10 +212,10 @@ function M.collect_horizontal_nodes(elt, parameter, before_box, _origin, dataxml
         local thisret = {}
         if typ == "string" then
             local nodes = publisher.nodes.mknodes(thiselt, options)
-            if before_box then
-                nodes = node.insert_before(nodes, nodes, before_box)
+            if pending.box then
+                nodes = node.insert_before(nodes, nodes, pending.box)
+                pending.box = nil
             end
-            before_box = nil
             publisher.attribute_helpers.setprop(nodes, "direction", elt.direction)
             thisret[#thisret + 1] = nodes
         elseif typ == "table" then
@@ -178,21 +224,36 @@ function M.collect_horizontal_nodes(elt, parameter, before_box, _origin, dataxml
             if eltname == "a" then
                 local href = attributes["href"]
                 options.add_attributes = { { "hyperlink", links_module.hlurl(publisher.options, href) } }
-            elseif eltname == "img" then
+            end
+            if pseudo.before and eltname ~= "img" then
+                local nodes = push_pseudo_element(pseudo.before, eltname .. "::before", options)
+                inherit.pop(stylesstack)
+                if nodes then
+                    if pending.box then
+                        nodes = node.insert_before(nodes, nodes, pending.box)
+                        pending.box = nil
+                    end
+                    publisher.attribute_helpers.setprop(nodes, "direction", thiselt.direction)
+                    thisret[#thisret + 1] = nodes
+                end
+            end
+            if eltname == "img" then
                 local box = inline_images.build_image_box(styles, attributes, dataxml)
                 thisret[#thisret + 1] = box
             elseif eltname == "wbr" then
                 thisret[#thisret + 1] = "\xE2\x80\x8B"
             end
-            local n = M.collect_horizontal_nodes(
-                thiselt,
-                options,
-                before_box,
-                string.format("collect horizontal mode element %s", eltname),
-                dataxml
-            )
+            local n = collect_runs(thiselt, options, pending, dataxml)
             for j = 1, #n do
                 thisret[#thisret + 1] = n[j]
+            end
+            if pseudo.after and eltname ~= "img" then
+                local nodes = push_pseudo_element(pseudo.after, eltname .. "::after", options)
+                inherit.pop(stylesstack)
+                if nodes then
+                    publisher.attribute_helpers.setprop(nodes, "direction", thiselt.direction)
+                    thisret[#thisret + 1] = nodes
+                end
             end
         end
 
@@ -205,13 +266,42 @@ function M.collect_horizontal_nodes(elt, parameter, before_box, _origin, dataxml
             for index, value in pairs(options.border) do
                 publisher.attribute_helpers.setprop(thisret[1], index, value)
             end
-            publisher.attribute_helpers.setprop(node.tail(thisret[1]), "borderend", 1)
+            -- the border ends after the last run of the element (runs can
+            -- also be strings, they carry no properties)
+            local lastrun = thisret[1]
+            for j = #thisret, 2, -1 do
+                if type(thisret[j]) ~= "string" then
+                    lastrun = thisret[j]
+                    break
+                end
+            end
+            publisher.attribute_helpers.setprop(node.tail(lastrun), "borderend", 1)
         end
 
         for j = 1, #thisret do
             ret[#ret + 1] = thisret[j]
         end
         inherit.pop(stylesstack)
+    end
+    return ret
+end
+
+-- Collects the horizontal node lists for an inline element subtree.
+-- Returns an array of node lists (one per inline run) so the caller can
+-- pack them into a paragraph.
+---@param elt table HTML element subtree (with `elementname`, children).
+---@param parameter? table Inherited style parameters.
+---@param before_box? Node The ::before box of the enclosing block, placed in front of the first run.
+---@param _origin? string Caller identifier (debugging).
+---@param dataxml table Data XML context.
+---@return table[] runs Array of inline node lists.
+function M.collect_horizontal_nodes(elt, parameter, before_box, _origin, dataxml)
+    -- w("collect_horizontal_nodes %s",_origin or "?")
+    local pending = { box = before_box }
+    local ret = collect_runs(elt, parameter or {}, pending, dataxml)
+    -- no text in the block (for example only an image): the box is a run of its own
+    if pending.box then
+        table.insert(ret, 1, pending.box)
     end
     return ret
 end
@@ -245,36 +335,19 @@ function M.build_nodelist(elt, options, before_box, _caller, prevdir, dataxml)
             styles.listlevel = 0
         end
 
-        local thiselt_styles = thiselt.styles or {}
+        local thiselt_styles, pseudo = split_pseudo_styles(thiselt.styles or {})
+        local marker_styles = pseudo.marker or {}
+        local has_marker_styles = pseudo.marker ~= nil
 
-        local before_styles = {}
-        local has_before_styles = false
-        local marker_styles = {}
-        local has_marker_styles = false
-        for k, v in pairs(thiselt_styles) do
-            if string.match(k, "^before::") then
-                local rawstyle = string.gsub(k, "^before::(.*)", "%1")
-                before_styles[rawstyle] = v
-                thiselt_styles[k] = nil
-                has_before_styles = true
-            elseif string.match(k, "^marker::") then
-                local rawstyle = string.gsub(k, "^marker::(.*)", "%1")
-                marker_styles[rawstyle] = v
-                thiselt_styles[k] = nil
-                has_marker_styles = true
-            end
+        styles_mod.copy_attributes(styles, thiselt_styles, thiseltname)
+        local styles_fontsize_sp = styles.fontsize_sp
+        if thiseltname == "html" then
+            styles.rootfontsize_sp = styles.fontsize_sp
         end
 
-        if has_before_styles then
-            local bstyles = inherit.push(stylesstack)
-            styles_mod.copy_attributes(bstyles, before_styles, thiseltname .. "::before")
-
-            local before_options = {}
-            inline_options.set_options_for_mknodes(bstyles, before_options, publisher, fontfamilies)
-            local content = bstyles.content
-            -- a ::before rule without content generates no pseudo-element
-            if content then
-                local nl = publisher.nodes.mknodes(content, before_options)
+        if pseudo.before then
+            local nl, bstyles = push_pseudo_element(pseudo.before, thiseltname .. "::before", {})
+            if nl then
                 local margin_left = units.getsize(bstyles, bstyles["margin-left"], bstyles.fontsize_sp)
 
                 local hss = publisher.nodes.hss_glue()
@@ -289,11 +362,6 @@ function M.build_nodelist(elt, options, before_box, _caller, prevdir, dataxml)
                 before_box = node.hpack(before_box)
             end
             inherit.pop(stylesstack)
-        end
-        styles_mod.copy_attributes(styles, thiselt_styles, thiseltname)
-        local styles_fontsize_sp = styles.fontsize_sp
-        if thiseltname == "html" then
-            styles.rootfontsize_sp = styles.fontsize_sp
         end
         local margin_top = units.getsize(styles, styles["margin-top"], styles_fontsize_sp)
         local margin_right = units.getsize(styles, styles["margin-right"], styles_fontsize_sp)
@@ -369,6 +437,7 @@ function M.build_nodelist(elt, options, before_box, _caller, prevdir, dataxml)
             options.textformat = tf
             local n =
                 M.collect_horizontal_nodes(thiselt, options, before_box, "build nodelist horizontal mode", dataxml)
+            before_box = nil
 
             local a = publisher.par:new(tf, "html.lua (horizontal)")
             local appended = false
@@ -649,15 +718,44 @@ function M.build_nodelist(elt, options, before_box, _caller, prevdir, dataxml)
                 if thiselt.block then
                     prevdir = "vertical"
                 end
+                -- without content nothing has placed the ::before box yet
+                local unplaced_before = #thiselt == 0 and before_box or nil
                 before_box = nil
+                if pseudo.after then
+                    local nl = push_pseudo_element(pseudo.after, thiseltname .. "::after", {})
+                    inherit.pop(stylesstack)
+                    if nl then
+                        -- at the end of the last paragraph, or in a paragraph
+                        -- of its own if the element ends with a block
+                        local last = n[#n]
+                        if not (last and last.typ == "par") then
+                            local tf = publisher.dispatch.new_textformat("", "text", { alignment = alignment })
+                            last = publisher.par:new(tf, "html.lua (::after)")
+                            n[#n + 1] = last
+                        end
+                        if unplaced_before then
+                            last:append(unplaced_before)
+                            unplaced_before = nil
+                        end
+                        last:append(nl)
+                    end
+                end
                 local mode
                 if thiselt.block then
                     mode = "block"
                 end
                 if thiselt.block and #n == 0 then
-                    local list = publisher.nodes.newline(fam)
                     local a = publisher.par:new(nil, "html.lua (p)")
-                    a:append(list)
+                    if unplaced_before then
+                        -- the strut gives the line the height of the font, as for text
+                        local bs = publisher.fonts.lookup_fontfamily_number_instance[fam].baselineskip
+                        local strut = { height = 0.75 * bs, depth = 0.25 * bs, width = 0 }
+                        local nl = publisher.nodes.add_rule(unplaced_before, "head", strut, "html.lua (::before)")
+                        publisher.attribute_helpers.set_attribute(nl, "fontfamily", fam)
+                        a:append(nl)
+                    else
+                        a:append(publisher.nodes.newline(fam))
+                    end
                     box[#box + 1] = a
                 end
                 for j = 1, #n do

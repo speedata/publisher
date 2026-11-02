@@ -1,0 +1,13 @@
+<data>
+  <p>1 <span class="icon">&#x2767;</span></p>
+  <p>2 <i class="fleuron"></i> <i class="mark"></i></p>
+  <p class="fleuron">3</p>
+  <p class="mark">4</p>
+  <p>5 <span class="mark">a<b>b</b>c</span> d<sup>+13<i class="fleuron"></i></sup></p>
+  <p>6 <span class="end">a<b>b</b>c</span> d</p>
+  <p class="end">7 text</p>
+  <p class="mark"><b>8</b> starts with inline</p>
+  <p class="mark"></p>
+  <div class="end"><p>10</p><p>11</p></div>
+  <p>12 <span style="border: 1px solid green" class="mark">a<b>b</b>c</span> d</p>
+</data>

@@ -1,0 +1,18 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat width="8cm" height="9cm" />
+    <Stylesheet>
+        @font-face { font-family: "Crimson"; src: url("CrimsonPro-Regular.ttf"); }
+        .icon { font-family: "Crimson"; }
+        .fleuron::before { content: "\2767"; font-family: "Crimson"; font-style: normal; }
+        .mark::before { content: "X"; color: red; }
+        .end::after { content: "Y"; color: blue; }
+    </Stylesheet>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Value select="*"/></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
