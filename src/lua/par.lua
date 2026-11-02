@@ -431,6 +431,13 @@ local function flatten(self, items, options, data)
                     -- ignore
                 else
                     csstext = csstext .. string.format(" body {font-family-number: %d ;}", options.fontfamily)
+                    -- The size of the paragraph's font family, so that an
+                    -- element with a font-family of its own (an icon font)
+                    -- gets the size of the paragraph, not the default size.
+                    local fi = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily]
+                    if fi then
+                        csstext = csstext .. string.format(" body {font-size: %dsp;}", fi.size)
+                    end
                 end
                 local htmltree = splib.parse_html_text(htmltext, csstext)
                 if not htmltree then

@@ -1,0 +1,17 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="8cm" height="4cm"/>
+  <DefineFontfamily name="big" fontsize="20" leading="24"><Regular fontface="TeXGyreHeros-Regular"/></DefineFontfamily>
+  <Stylesheet>
+    @font-face { font-family: "Crimson"; src: url("CrimsonPro-Regular.ttf"); }
+    .c { font-family: "Crimson"; }
+  </Stylesheet>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph><Value select="p"/></Paragraph>
+        <Paragraph fontfamily="big"><Value select="p"/></Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
