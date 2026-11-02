@@ -1,7 +1,6 @@
 package css
 
 import (
-	"log/slog"
 	"sort"
 	"strings"
 
@@ -118,12 +117,7 @@ func (ls *LayoutStylesheet) AddCSS(csstext string) {
 			decls = append(decls, layoutDecl{key: key, value: sourceString(valtoks), important: important})
 		}
 		selector := sourceString(b.ComponentValues)
-		group, err := cascadia.ParseGroupWithPseudoElements(selector)
-		if err != nil {
-			slog.Error("CSS: cannot parse selector", "selector", selector, "msg", err.Error())
-			continue
-		}
-		for _, sel := range group {
+		for _, sel := range parseSelectorGroup(selector) {
 			ls.rules = append(ls.rules, layoutRule{
 				sel:    sel,
 				spec:   sel.Specificity(),

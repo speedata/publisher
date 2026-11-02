@@ -1,0 +1,4 @@
+<data>
+  <p class="green">1 green</p>
+  <p>2 <span>blue</span> <span class="a">black</span></p>
+</data>

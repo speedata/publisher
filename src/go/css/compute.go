@@ -3,6 +3,7 @@ package css
 import (
 	"fmt"
 	"sort"
+	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/andybalholm/cascadia"
@@ -42,13 +43,7 @@ func (c *CSS) FillComputedMaps(r *Result) error {
 	for _, stylesheet := range c.Stylesheet {
 		for _, block := range stylesheet.Blocks {
 			selector := sourceString(block.ComponentValues)
-			selectors, err := cascadia.ParseGroupWithPseudoElements(selector)
-			if err != nil {
-				// Keep going; bad selectors should not break the whole tree
-				// (previous code printed error, we do the same semantics-wise)
-				continue
-			}
-			for _, sel := range selectors {
+			for _, sel := range parseSelectorGroup(selector) {
 				sp := sel.Specificity()
 				s := sp[0]*100 + sp[1]*10 + sp[2]
 				rulesBySpec[s] = append(rulesBySpec[s], selRule{selector: sel, rule: block.Rules})
@@ -125,6 +120,13 @@ func (c *CSS) FillComputedMaps(r *Result) error {
 				}
 				virt := nodeVirtAttrs[n]
 				for _, single := range sr.rule {
+					// Custom properties are only used through var(), which
+					// is not supported. Their values can have any syntax.
+					// (The scanner splits "--name" into "-" and "-name", so
+					// check the source text.)
+					if strings.HasPrefix(strings.TrimSpace(single.Key.String()), "--") {
+						continue
+					}
 					bareKey := stringValue(single.Key)
 					k := prefix + bareKey
 					v := stringValue(single.Value)
