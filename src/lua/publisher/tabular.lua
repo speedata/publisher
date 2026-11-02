@@ -1372,6 +1372,9 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
     -- Collects background colors per cell (indexed by cell position).
     -- Stored on the row hbox after packing, applied later by apply_deferred_backgrounds().
     local deferred_bgcolors = {}
+    -- Cells (indexed like deferred_bgcolors) whose Td has its own background-color.
+    -- eval-on-split must not replace these with the re-evaluated row color.
+    local td_bgcolor_cells = {}
     -- Set to false if any cell has colspan > 1 or rowspan > 1, which
     -- prevents row-level background optimization.
     local row_bg_simple = true
@@ -1595,6 +1598,9 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         if deferred_bg_color then
             deferred_bgcolors[#row + 1] = deferred_bg_color
         end
+        if td_contents.backgroundcolor then
+            td_bgcolor_cells[#row + 1] = true
+        end
 
         ---@type Node
         local head = hlist
@@ -1680,6 +1686,9 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
             if row_bg_simple and self.colsep == 0 then
                 publisher.attribute_helpers.setprop(row, "row_bg_simple", true)
             end
+        end
+        if next(td_bgcolor_cells) then
+            publisher.attribute_helpers.setprop(row, "td_bgcolor_cells", td_bgcolor_cells)
         end
     else
         main.log("error", "(Internal error) Table is not complete.")
@@ -2666,6 +2675,7 @@ function tabular:typeset_table(dataxml)
         -- Note: only Tr-level background-color is re-evaluated, not Td-level.
         -- To use eval-on-split with alternating colors, the alternating expression
         -- must be in the Tr background-color attribute (not in Td or SetVariable).
+        -- Cells with their own Td background-color keep their color.
         if s > 2 and self.eval_on_split_layoutxml then
             publisher.attribute_helpers.read_attribute(
                 self.eval_on_split_layoutxml,
@@ -2699,14 +2709,21 @@ function tabular:typeset_table(dataxml)
                         "backgroundcolor",
                         "string"
                     )
-                    if new_bgcolor and new_bgcolor ~= "-" then
+                    if new_bgcolor and new_bgcolor ~= "-" and new_bgcolor ~= "" then
+                        -- Cells with their own Td background-color keep it (Td has priority over Tr).
+                        local old_bgcolors = publisher.attribute_helpers.getprop(rows[i], "deferred_bgcolors") or {}
+                        local td_cells = publisher.attribute_helpers.getprop(rows[i], "td_bgcolor_cells") or {}
                         local bgcolors = {}
                         local cell_idx = 0
                         local cell = rows[i].list
                         while cell do
                             if node.type(cell.id) == "vlist" then
                                 cell_idx = cell_idx + 1
-                                bgcolors[cell_idx] = new_bgcolor
+                                if td_cells[cell_idx] then
+                                    bgcolors[cell_idx] = old_bgcolors[cell_idx]
+                                else
+                                    bgcolors[cell_idx] = new_bgcolor
+                                end
                             end
                             cell = cell.next
                         end

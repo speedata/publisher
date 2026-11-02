@@ -7191,6 +7191,10 @@ function commands.tr(layoutxml, dataxml)
             tab[attname] = tmpattr
         end
     end
+    -- An empty background color means "not set" (see commands.td).
+    if tab.backgroundcolor == "" then
+        tab.backgroundcolor = nil
+    end
 
     tabular_module.set_origin(tab, layoutxml, dataxml)
     tab.align = align
@@ -7395,6 +7399,11 @@ function commands.td(layoutxml, dataxml)
     if tab.graphics then
         main.log("warn", "deprecation note: attribute graphics on Td should be graphic (without s)")
         tab.graphic = tab.graphics
+    end
+    -- An empty background color (e.g. from background-color="{@color}" with a
+    -- missing attribute) means "not set", so the row or column color applies.
+    if tab.backgroundcolor == "" then
+        tab.backgroundcolor = nil
     end
 
     -- !important declarations take precedence over the attributes

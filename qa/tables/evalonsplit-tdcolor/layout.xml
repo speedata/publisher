@@ -1,0 +1,16 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat height="6cm" width="7cm" />
+  <Record element="data">
+    <PlaceObject>
+      <Table eval-on-split="sd:reset-alternating('tab')" stretch="max">
+        <ForAll select="row">
+          <Tr background-color="{sd:alternating('tab','lightgray','white')}">
+            <Td><Paragraph><Value select="@n"/></Paragraph></Td>
+            <Td background-color="{@c}"><Paragraph><Value select="@c"/></Paragraph></Td>
+          </Tr>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
