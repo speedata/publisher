@@ -190,6 +190,39 @@ function M.define_fontfamily(
     return fontnumber
 end
 
+-- The faces of a font family: the field with the font name and the fields
+-- with the instance ids at normal and script size.
+local family_faces = {
+    { "fontfaceregular", "normal", "normalscript" },
+    { "fontfacebold", "bold", "boldscript" },
+    { "fontfaceitalic", "italic", "italicscript" },
+    { "fontfacebolditalic", "bolditalic", "bolditalicscript" },
+}
+
+-- Called when `LoadFontfile` registers a font name again. Font families
+-- defined before with this name (for example the predefined family `text`
+-- with TeXGyreHeros-Regular) get new instances, so that the new file and its
+-- parameters such as `Fallback` take effect. Text typeset before keeps its
+-- fonts.
+---@param name string Font name that was registered again.
+---@return nil
+function M.reload_fontface(name)
+    for _, fam in ipairs(fonts.lookup_fontfamily_number_instance) do
+        for _, face in ipairs(family_faces) do
+            if fam[face[1]] == name then
+                local id, err = fonts.make_font_instance(name, fam.size)
+                local scriptid = id and fonts.make_font_instance(name, fam.scriptsize)
+                if id and scriptid then
+                    fam[face[2]] = id
+                    fam[face[3]] = scriptid
+                else
+                    main.log("error", "Cannot reload font", "name", name, "msg", tostring(err))
+                end
+            end
+        end
+    end
+end
+
 -- Called once from `dothings()` during startup. Defines the default `text`
 -- family at 10pt (TeX Gyre Heros) and registers the standard sans/serif/
 -- monospace aliases used by HTML/CSS rendering.

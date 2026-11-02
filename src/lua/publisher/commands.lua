@@ -3300,7 +3300,11 @@ function commands.load_fontfile(layoutxml, dataxml)
         filename = unicode.utf8.lower(filename)
     end
     main.log("info", "Load font file", "filename", filename or "?")
+    local reload = publisher.fonts.is_registered(name)
     publisher.fonts.load_fontfile(name, filename, extra_parameter)
+    if reload then
+        publisher.fontfamilies.reload_fontface(name)
+    end
 end
 
 -- Load Dataset

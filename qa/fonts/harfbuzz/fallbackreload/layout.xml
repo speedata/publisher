@@ -1,0 +1,21 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="80mm" height="40mm"/>
+  <!-- defined before TeXGyreHeros-Regular is loaded again -->
+  <DefineFontfamily name="big" fontsize="16" leading="18">
+    <Regular fontface="TeXGyreHeros-Regular"/>
+  </DefineFontfamily>
+  <!-- a predefined name loaded again: the families text and big get the fallback -->
+  <LoadFontfile name="TeXGyreHeros-Regular" filename="texgyreheros-regular.otf">
+    <Fallback filename="CrimsonPro-Regular.ttf"/>
+  </LoadFontfile>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph><Value>text &#x2767; fallback</Value></Paragraph>
+        <Paragraph fontfamily="big"><Value>big &#x2767; fallback</Value></Paragraph>
+        <Paragraph><Value>sub </Value><Sub><Value>&#x2767;</Value></Sub></Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
