@@ -498,7 +498,11 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                     colstart.data = string.format("/TRP%d gs", transparency)
                     colstart.command = 1
                     colstart.stack = default_stack
-                    publisher.current_page.transparenttext[transparency] = true
+                    -- Register on the page being shipped out. publisher.current_page
+                    -- can point to a different page here (e.g. split tables).
+                    local thispage = publisher.pages[publisher.current_pagenumber]
+                    thispage.transparenttext = thispage.transparenttext or {}
+                    thispage.transparenttext[transparency] = true
 
                     local colend = node_new("whatsit", "pdf_colorstack")
                     colend.command = 2

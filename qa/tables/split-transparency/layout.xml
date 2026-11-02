@@ -1,0 +1,17 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat height="6cm" width="7cm" />
+  <DefineColor name="tblue" model="RGB" r="0" g="0" b="255" alpha="40"/>
+  <Record element="data">
+    <PlaceObject>
+      <Table stretch="max">
+        <ForAll select="row">
+          <Tr background-color="lightgray">
+            <Td><Paragraph><Value select="@n"/></Paragraph></Td>
+            <Td background-color="{@c}"><Paragraph><Value select="@c"/></Paragraph></Td>
+          </Tr>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
