@@ -283,30 +283,32 @@ func consumeBlock(toks tokenstream, inblock bool) sBlock {
 				colon = 0
 				start = i + 1
 			case "{":
-				var nb sBlock
-				// l is the length of the sub block
+				// l is the length of the sub block including the closing
+				// brace; an empty block {} (l == 1) has no rules and is
+				// skipped.
 				l := findClosingBrace(toks[i+1:])
-				if l == 1 {
-					break
-				}
-				subblock := toks[i+1 : i+l]
-				// subblock is without the enclosing curly braces
-				starttok := toks[start]
-				startsWithATKeyword := starttok.Type == scanner.AtKeyword && (starttok.Value == "media" || starttok.Value == "supports")
-				nb = consumeBlock(subblock, !startsWithATKeyword)
-				if toks[start].Type == scanner.AtKeyword {
-					nb.Name = toks[start].Value
-					b.ChildAtRules = append(b.ChildAtRules, &nb)
-					nb.ComponentValues = fixupComponentValues(toks[start+1 : i])
-				} else {
-					b.Blocks = append(b.Blocks, &nb)
-					nb.ComponentValues = fixupComponentValues(toks[start:i])
+				if l > 1 {
+					var nb sBlock
+					subblock := toks[i+1 : i+l]
+					// subblock is without the enclosing curly braces
+					starttok := toks[start]
+					startsWithATKeyword := starttok.Type == scanner.AtKeyword && (starttok.Value == "media" || starttok.Value == "supports")
+					nb = consumeBlock(subblock, !startsWithATKeyword)
+					if toks[start].Type == scanner.AtKeyword {
+						nb.Name = toks[start].Value
+						b.ChildAtRules = append(b.ChildAtRules, &nb)
+						nb.ComponentValues = fixupComponentValues(toks[start+1 : i])
+					} else {
+						b.Blocks = append(b.Blocks, &nb)
+						nb.ComponentValues = fixupComponentValues(toks[start:i])
+					}
 				}
 
 				i = i + l
 				start = i + 1
-				// skip over whitespace
-				if start < len(toks) && toks[start].Type == scanner.S {
+				// skip over whitespace (several tokens when a comment was
+				// in between, comments are removed by the tokenizer)
+				for start < len(toks) && toks[start].Type == scanner.S {
 					start++
 					i++
 				}
