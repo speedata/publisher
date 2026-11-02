@@ -662,6 +662,22 @@ Here, `{sd:reset-alternating('tab')}` evaluates to an empty string (as a side ef
 `eval-on-split` only re-evaluates the `background-color` attribute of `<Tr>` elements. If the alternating color is set on `<Td>` or via `<SetVariable>`, it will not be re-evaluated at page breaks. To use `eval-on-split`, the `sd:alternating()` call must be in the `<Tr>` `background-color` attribute.
 {{< /callout >}}
 
+Single cells can still have their own background color. The color on `<Td>` takes precedence over the row color, and since version 5.9.17 it is kept on the following pages as well. An empty `background-color` means "no color of its own", so the row color applies. This way the cell color can be taken directly from the data, even if not every element has a color:
+
+```xml
+<Table eval-on-split="sd:reset-alternating('tab')">
+  <ForAll select="row">
+    <Tr background-color="{sd:alternating('tab', 'white', 'gray')}">
+      <Td><Paragraph><Value select="@name"/></Paragraph></Td>
+      <Td background-color="{@color}">
+        <Paragraph><Value select="@status"/></Paragraph>
+      </Td>
+    </Tr>
+  </ForAll>
+</Table>
+```
+{{% codecaption %}}If the data element has no `color` attribute, the value is empty and the cell gets the alternating row color.{{% /codecaption %}}
+
 ## Background in table rows
 
 ### Text in the background

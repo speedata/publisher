@@ -720,6 +720,22 @@ Hier wird `{sd:reset-alternating('tab')}` ausgewertet (als Seiteneffekt wird der
 `eval-on-split` wertet nur das `background-color`-Attribut von `<Tr>`-Elementen neu aus. Wenn die Alternierungsfarbe auf `<Td>`-Ebene oder über `<SetVariable>` gesetzt wird, wird sie bei Seitenumbrüchen nicht neu berechnet. Damit `eval-on-split` funktioniert, muss der `sd:alternating()`-Aufruf im `background-color`-Attribut des `<Tr>`-Elements stehen.
 {{< /callout >}}
 
+Einzelne Zellen können trotzdem eine eigene Hintergrundfarbe bekommen. Die Farbe am `<Td>` hat Vorrang vor der Zeilenfarbe und bleibt seit Version 5.9.17 auch auf den Folgeseiten erhalten. Ein leerer Wert bei `background-color` bedeutet »keine eigene Farbe«, dann gilt die Zeilenfarbe. So lässt sich die Zellfarbe direkt aus den Daten übernehmen, auch wenn nicht jedes Element eine Farbe hat:
+
+```xml
+<Table eval-on-split="sd:reset-alternating('tab')">
+  <ForAll select="row">
+    <Tr background-color="{sd:alternating('tab', 'white', 'gray')}">
+      <Td><Paragraph><Value select="@name"/></Paragraph></Td>
+      <Td background-color="{@color}">
+        <Paragraph><Value select="@status"/></Paragraph>
+      </Td>
+    </Tr>
+  </ForAll>
+</Table>
+```
+{{% codecaption %}}Hat das Datenelement kein Attribut `color`, ist der Wert leer, und die Zelle bekommt die wechselnde Zeilenfarbe.{{% /codecaption %}}
+
 ## Hintergrund in Tabellenzeilen
 
 ### Text im Hintergrund
