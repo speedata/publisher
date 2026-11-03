@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.9">
+    <entry version="5.9.18" date="2026-11-03" sha1="24b7234d">
+        <en summary="Schema for Barcode.">The schema now allows XPath expressions in curly braces for the attributes <tt>type</tt>, <tt>showtext</tt> and <tt>eclevel</tt> of <tt>Barcode</tt>, for example <tt>type="{@type}"</tt>. The publisher already accepted them, but validators reported an error.</en>
+        <de summary="Schema für Barcode.">Das Schema erlaubt jetzt XPath-Ausdrücke in geschweiften Klammern für die Attribute <tt>type</tt>, <tt>showtext</tt> und <tt>eclevel</tt> von <tt>Barcode</tt>, zum Beispiel <tt>type="{@type}"</tt>. Der Publisher hat sie schon bisher verarbeitet, aber Validatoren meldeten einen Fehler.</de>
+    </entry>
     <entry version="5.9.17" date="2026-11-02" sha1="6d800e1e">
         <en summary="Loading a font again.">When <tt>LoadFontfile</tt> loads a font name again that is already in use, for example <tt>TeXGyreHeros-Regular</tt> with a <tt>Fallback</tt>, the font families defined before now use the new settings, including the predefined family <tt>text</tt>. Previously, the new settings only applied to font families defined afterwards.</en>
         <de summary="Schrift erneut laden.">Lädt <tt>LoadFontfile</tt> einen bereits verwendeten Schriftnamen erneut, zum Beispiel <tt>TeXGyreHeros-Regular</tt> mit einem <tt>Fallback</tt>, verwenden jetzt auch die vorher definierten Schriftfamilien die neuen Einstellungen, einschließlich der vordefinierten Familie <tt>text</tt>. Bisher galten die neuen Einstellungen nur für danach definierte Schriftfamilien.</de>
