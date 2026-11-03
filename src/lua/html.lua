@@ -354,12 +354,16 @@ function M.build_nodelist(elt, options, before_box, _caller, prevdir, dataxml)
                 local ml_box = node.hpack(hss, margin_left, "exactly")
 
                 if bstyles.width then
-                    node.insert_after(nl, nl, publisher.nodes.hss_glue())
+                    local tail = node.tail(nl)
+                    node.insert_after(nl, tail, publisher.nodes.hss_glue())
                     nl = node.hpack(nl, bstyles.calculated_width, "exactly")
                 end
 
-                before_box = node.insert_after(ml_box, ml_box, nl)
-                before_box = node.hpack(before_box)
+                -- nl can be a list (for example glyph and space), so link
+                -- it instead of node.insert_after, which inserts one node
+                ml_box.next = nl
+                nl.prev = ml_box
+                before_box = node.hpack(ml_box)
             end
             inherit.pop(stylesstack)
         end
