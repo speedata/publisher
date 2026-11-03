@@ -1,0 +1,15 @@
+This is a copy of github.com/andybalholm/cascadia, used by the speedata
+Publisher through the replace directive in src/go/go.mod.
+
+Base: upstream master, commit 8dee753 ("Stop matching links with
+:enabled"), after v1.3.5.
+
+Changes:
+
+- Support for :is() and :where() with forgiving selector lists
+  (parser.go, pseudo_classes.go, serialize.go, is_test.go).
+
+Only the source files are copied; the upstream tests, test resources
+and fuzz data are left out. The working copy with the full history is
+the fork https://github.com/speedata/cascadia (branch is-where). Make
+changes there, run the tests, and copy the files over.

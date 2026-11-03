@@ -21,7 +21,7 @@ require (
 	github.com/speedata/optionparser v1.2.1
 	github.com/yuin/goldmark v1.7.1
 	github.com/yuin/goldmark-highlighting/v2 v2.0.0-20230729083705-37449abec8cc
-	golang.org/x/net v0.53.0
+	golang.org/x/net v0.55.0
 	golang.org/x/sys v0.47.0
 	golang.org/x/text v0.41.0
 )
@@ -34,3 +34,5 @@ require (
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
 	golang.org/x/image v0.45.0 // indirect
 )
+
+replace github.com/andybalholm/cascadia => ./third_party/cascadia
