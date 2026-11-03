@@ -10495,12 +10495,12 @@
       </xs:attribute>
       <xs:attribute name="origin-x">
         <xs:annotation>
-          <xs:documentation>Der Ursprung für Matrix-Transformation. Muss links, mitte oder rechts oder eine Zahl von 0 bis 100 (0 = links, 100 = rechts) sein.</xs:documentation>
+          <xs:documentation>Der Ursprung für Matrix-Transformation. Muss left, center oder right oder eine Zahl von 0 bis 100 (0 = links, 100 = rechts) sein.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="origin-y">
         <xs:annotation>
-          <xs:documentation>Der vertikale Ursprung der der Matrix-Transformation. Muss oben, mitte oder unten sein oder eine Zahl von 0 bis 100 (0 = oben, 100 = unten)</xs:documentation>
+          <xs:documentation>Der vertikale Ursprung der Matrix-Transformation. Muss top, center oder bottom oder eine Zahl von 0 bis 100 (0 = oben, 100 = unten) sein.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
