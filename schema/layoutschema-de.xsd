@@ -298,28 +298,49 @@
           <xs:documentation>Setzt den Fehlerkorrekturlevel für QR-Codes. Wenn nicht angegeben, nutzt das System den maximalen Level für die kleinste QR-Code Größe. Je höher der Level, desto mehr Fehlerkorrektur ist im QR-Code.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="L">
-              <xs:annotation>
-                <xs:documentation>Setzt den kleinsten Fehlerkorrekturwert (1) mit ca. 7% Korrektur.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="M">
-              <xs:annotation>
-                <xs:documentation>Setzt den zweitkleinsten Fehlerkorrekturwert (2) mit ca. 15% Korrektur.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="Q">
-              <xs:annotation>
-                <xs:documentation>Setzt den zweitgrößten Fehlerkorrekturwert (3) mit ca. 25% Korrektur.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="H">
-              <xs:annotation>
-                <xs:documentation>Setzt den größten Fehlerkorrekturwert (4) mit ca. 35% Korrektur.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="L">
+                  <xs:annotation>
+                    <xs:documentation>Setzt den kleinsten Fehlerkorrekturwert (1) mit ca. 7% Korrektur.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="M">
+                  <xs:annotation>
+                    <xs:documentation>Setzt den zweitkleinsten Fehlerkorrekturwert (2) mit ca. 15% Korrektur.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Q">
+                  <xs:annotation>
+                    <xs:documentation>Setzt den zweitgrößten Fehlerkorrekturwert (3) mit ca. 25% Korrektur.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="H">
+                  <xs:annotation>
+                    <xs:documentation>Setzt den größten Fehlerkorrekturwert (4) mit ca. 35% Korrektur.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="fontfamily">
@@ -358,18 +379,31 @@
           <xs:documentation>Bestimmt, ob unterhalb des Barcodes der Text erscheint.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="yes">
-              <xs:annotation>
-                <xs:documentation>Text unterhalb des Barcodes schreiben.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="no">
-              <xs:annotation>
-                <xs:documentation>Keinen Text anzeigen.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes">
+                  <xs:annotation>
+                    <xs:documentation>Text unterhalb des Barcodes schreiben.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="no">
+                  <xs:annotation>
+                    <xs:documentation>Keinen Text anzeigen.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="type" use="required">
@@ -377,23 +411,40 @@
           <xs:documentation>Typ des Strichcodes. Kann EAN13, Code128 oder QRCode sein.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="QRCode">
-              <xs:annotation>
-                <xs:documentation>Erzeugt einen QR-Code, der für den Inhalt die kleinstmögliche Größe und den besten Fehlerkorrekturwert hat, sofern kein Fehlerkorrekturlevel angegeben ist.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="Code128">
-              <xs:annotation>
-                <xs:documentation>Erzeugt einen Code 128 Barcode für Ziffern und Text (ohne Umlaute)</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="EAN13">
-              <xs:annotation>
-                <xs:documentation>Erzeugt einen EAN13 Barcode mit genau 13 Ziffern.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="QRCode">
+                  <xs:annotation>
+                    <xs:documentation>Erzeugt einen QR-Code, der für den Inhalt die kleinstmögliche Größe und den besten Fehlerkorrekturwert hat, sofern kein Fehlerkorrekturlevel angegeben ist.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Code128">
+                  <xs:annotation>
+                    <xs:documentation>Erzeugt einen Code 128 Barcode für Ziffern und Text (ohne Umlaute)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="EAN13">
+                  <xs:annotation>
+                    <xs:documentation>Erzeugt einen EAN13 Barcode mit genau 13 Ziffern.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="width">

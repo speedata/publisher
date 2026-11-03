@@ -1715,7 +1715,7 @@
         <para>Farbe des Strichcodes. Muss vorher mit <cmd name="DefineColor"/> definiert worden sein. Derzeit nur für QR-Codes.</para>
       </description>
     </attribute>
-    <attribute en="eclevel" optional="yes" since="2.7.10">
+    <attribute en="eclevel" optional="yes" since="2.7.10" allowxpath="yes">
       <description xml:lang="en">
         <para>Set the error correction level for QR-codes. If not provided, the system uses the maximum level for minimum size. The higher the level, the more error correction is in the QR-code.</para>
       </description>
@@ -1795,7 +1795,7 @@
         <para>Wert, der als Strichcode kodiert werden soll.</para>
       </description>
     </attribute>
-    <attribute en="showtext" optional="yes">
+    <attribute en="showtext" optional="yes" allowxpath="yes">
       <description xml:lang="en">
         <para>Should the text be written under the barcode?</para>
       </description>
@@ -1819,7 +1819,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="type" optional="no">
+    <attribute en="type" optional="no" allowxpath="yes">
       <description xml:lang="en">
         <para>Type of the barcode. One of <tt>EAN13</tt>, <tt>Code128</tt> or <tt>QRCode</tt>.</para>
       </description>
