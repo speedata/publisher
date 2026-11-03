@@ -181,7 +181,6 @@ The runnable project, including the font files, is also available in the [exampl
 
 ## Limits
 
-* **The class `fa` on its own:** in the Font Awesome stylesheet, it sets the font weight through a CSS variable (`var()`), which the Publisher does not evaluate; such symbols come from the regular face. With `fa-solid`/`fas` and `fa-regular`/`far` this does not happen.
 * **Missing symbols:** the regular face of the free version contains only part of the symbols. If a symbol is missing, the Publisher reports a missing character, as with any font.
 * **Meaning in the text:** in the PDF, the symbols are characters from the Unicode Private Use Area. When copied or read aloud by a screen reader, they make no sense. What a symbol means should therefore also be in the text, as “Indoor only” here.
 * **Multicolored symbols:** icon fonts like Font Awesome have one color per character. For multicolored symbols or logos, images in SVG or PDF format with [`<Image>`]({{< relref "/reference/commands/image" >}}) are the better way.

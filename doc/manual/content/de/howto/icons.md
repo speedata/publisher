@@ -181,7 +181,6 @@ Das lauffähige Projekt gibt es auch im [Beispiel-Repository](https://github.com
 
 ## Grenzen
 
-* **Die Klasse `fa` allein:** Sie setzt im Stylesheet von Font Awesome die Schriftstärke über eine CSS-Variable (`var()`), die der Publisher nicht auswertet; solche Symbole kommen aus dem normalen Schnitt. Mit `fa-solid`/`fas` und `fa-regular`/`far` tritt das nicht auf.
 * **Fehlende Symbole:** Der Regular-Schnitt der freien Fassung enthält nur einen Teil der Symbole. Fehlt ein Symbol, meldet der Publisher wie bei jeder Schrift ein fehlendes Zeichen.
 * **Bedeutung im Text:** Im PDF stehen die Symbole als Zeichen aus dem privaten Unicode-Bereich. Beim Kopieren oder beim Vorlesen durch einen Screenreader ergeben sie keinen Sinn. Was ein Symbol aussagt, sollte deshalb auch im Text stehen, wie hier »Nur innen«.
 * **Mehrfarbige Symbole:** Icon-Schriften wie Font Awesome haben je Zeichen eine Farbe. Für mehrfarbige Symbole oder Logos sind Bilder im SVG- oder PDF-Format mit [`<Image>`]({{< relref "/reference/commands/image" >}}) der bessere Weg.

@@ -325,3 +325,40 @@ The following properties are evaluated by the HTML processing:
 
 Not every property is fully implemented in every situation.
 The current state of individual properties is documented in the [test status in the HTML chapter]({{< relref "html#test-status" >}}).
+
+## CSS variables {#css-variables}
+
+CSS variables (custom properties) let you define a value once and use it in many places, for example a corporate color or a standard spacing.
+A variable is a property whose name starts with two hyphens.
+`var()` inserts its value.
+
+```xml
+<Stylesheet>
+  :root {
+    --brand-color: #c00;
+    --spacing: 2mm;
+  }
+  paragraph.title { color: var(--brand-color) }
+  td { padding: var(--spacing) 0 }
+  table.compact { --spacing: 1mm }
+  html h2 { color: var(--brand-color) }
+</Stylesheet>
+```
+
+Variables apply to layout commands and HTML content alike:
+
+* `:root` matches the root of both (`layout` and `html`). Variables set there apply everywhere.
+* Variables are always inherited, by every command and every HTML element inside. An inner command can override them: with `table.compact { --spacing: 1mm }`, all cells of this table get the smaller spacing.
+* HTML content in a paragraph or in the `<HTML>` command inherits the variables of the surrounding layout commands. With `td.warning { --brand-color: orange }`, an `h2` heading in the HTML content of this cell also appears in orange.
+* A second argument gives a fallback in case the variable is not defined: `color: var(--accent, black)`. The fallback may itself contain `var()`.
+* Variables may refer to other variables (`--frame: 1pt solid var(--brand-color)`) and appear in shorthand properties (`padding: var(--spacing) 0`).
+* Names are case-sensitive: `--Color` and `--color` are two different variables.
+* The `style` attribute in HTML content can set and use variables.
+
+If the Publisher cannot insert a variable, because it is not defined and there is no fallback, or because variables refer to each other in a cycle, it ignores the declaration and gives a warning.
+Whatever would apply without this declaration takes effect: another matching rule, the attribute or the inherited value.
+A web browser behaves differently here, it resets the property to the inherited or the initial value.
+
+`var()` only works in the property values of the stylesheet.
+There is no `var()` in the attributes of the layout commands (`<Td padding="var(--spacing)">`); use XPath expressions and layout variables instead.
+`@property`, `env()` and `calc()` are not supported, nor is `var()` in `@page`, `@font-face` and `@media`.

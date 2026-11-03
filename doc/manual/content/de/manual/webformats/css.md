@@ -325,3 +325,40 @@ Die folgenden Eigenschaften werden bei der HTML-Verarbeitung ausgewertet:
 
 Nicht jede Eigenschaft ist in jeder Situation vollständig umgesetzt.
 Den aktuellen Stand einzelner Eigenschaften dokumentiert der [Teststatus im HTML-Kapitel]({{< relref "html#teststatus" >}}).
+
+## CSS-Variablen {#css-variables}
+
+Mit CSS-Variablen (Custom Properties) legt man einen Wert einmal fest und benutzt ihn an vielen Stellen, etwa eine Hausfarbe oder einen Standardabstand.
+Eine Variable ist eine Eigenschaft, deren Name mit zwei Bindestrichen beginnt.
+`var()` setzt ihren Wert ein.
+
+```xml
+<Stylesheet>
+  :root {
+    --hausfarbe: #c00;
+    --abstand: 2mm;
+  }
+  paragraph.titel { color: var(--hausfarbe) }
+  td { padding: var(--abstand) 0 }
+  table.kompakt { --abstand: 1mm }
+  html h2 { color: var(--hausfarbe) }
+</Stylesheet>
+```
+
+Variablen gelten für Layout-Befehle und HTML-Inhalte gleichermaßen:
+
+* `:root` trifft die Wurzel beider Wege (`layout` und `html`). Variablen, die dort stehen, gelten überall.
+* Variablen werden immer vererbt, an jeden Befehl und jedes HTML-Element im Inneren. Ein innerer Befehl kann sie überschreiben: Mit `table.kompakt { --abstand: 1mm }` erhalten alle Zellen dieser Tabelle den kleineren Abstand.
+* HTML-Inhalte in einem Absatz oder im Befehl `<HTML>` erben die Variablen der umgebenden Layout-Befehle. Mit `td.warnung { --hausfarbe: orange }` erscheint auch eine Überschrift `h2` im HTML-Inhalt dieser Zelle orange.
+* Ein zweites Argument gibt einen Ersatzwert an, falls die Variable nicht definiert ist: `color: var(--akzent, black)`. Der Ersatzwert darf selbst `var()` enthalten.
+* Variablen dürfen auf andere Variablen verweisen (`--rahmen: 1pt solid var(--hausfarbe)`) und in Kurzschreibweisen stehen (`padding: var(--abstand) 0`).
+* Groß- und Kleinschreibung zählen: `--Farbe` und `--farbe` sind zwei verschiedene Variablen.
+* Das `style`-Attribut in HTML-Inhalten kann Variablen setzen und benutzen.
+
+Kann der Publisher eine Variable nicht einsetzen, weil sie nicht definiert ist und kein Ersatzwert angegeben ist oder weil Variablen im Kreis aufeinander verweisen, ignoriert er die Deklaration und gibt eine Warnung aus.
+Es gilt dann, was ohne diese Deklaration gelten würde: eine andere passende Regel, das Attribut oder der geerbte Wert.
+Ein Webbrowser verhält sich hier anders, er setzt die Eigenschaft auf den geerbten Wert oder den Anfangswert zurück.
+
+`var()` wirkt nur in den Werten der Eigenschaften im Stylesheet.
+In den Attributen der Layout-Befehle (`<Td padding="var(--abstand)">`) gibt es kein `var()`, dafür gibt es XPath-Ausdrücke und Variablen im Layoutregelwerk.
+Nicht unterstützt werden `@property`, `env()` und `calc()` sowie `var()` in `@page`, `@font-face` und `@media`.
