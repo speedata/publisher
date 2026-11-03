@@ -7,10 +7,23 @@ aliases:
 ---
 
 
-Embedding fonts in the common formats is very easy. The formats TrueType and OpenType (files .ttf and .otf) are supported.
+Embedding fonts in the common formats is very easy. The formats TrueType and OpenType (files `.ttf` and `.otf`) are supported. The publisher recognizes the format from the contents of the file, not from its extension, so a `.ttf` file with OpenType outlines (CFF) works as well.
 
 {{< callout type="warning" >}}
 Type 1 fonts (files `.pfb`) are not supported since version 6.0. Please convert Type 1 fonts to OpenType.
+{{< /callout >}}
+
+{{< callout type="info" >}}
+Web fonts in the formats WOFF and WOFF2 (files `.woff` and `.woff2`) are not supported.
+You can convert them with `woff2_decompress` from the [woff2](https://github.com/google/woff2) package or with [fonttools](https://github.com/fonttools/fonttools):
+
+```
+woff2_decompress fa-solid-900.woff2
+fonttools ttLib -o font.otf font.woff
+```
+
+Mind the license: a web font license often allows the use on websites only, not embedding the font in PDF files.
+Print usually requires a desktop license, which mostly includes files in the OpenType or TrueType format.
 {{< /callout >}}
 
 To make fonts known and used by the publisher, two steps are necessary. The first step is to load a font file:

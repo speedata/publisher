@@ -52,6 +52,8 @@ Die Artikelgruppen von Confixa erhalten zwei Angaben: Das Attribut `use` sagt, o
 
 Font Awesome Free gibt es auf [fontawesome.com](https://fontawesome.com/download). Das Paket enthält im Verzeichnis `webfonts` unter anderem `fa-solid-900.ttf` (gefüllte Symbole) und `fa-regular-400.ttf` (umrandete Symbole, in der freien Fassung nur eine Auswahl). Die beiden Dateien kommen ins Projektverzeichnis oder in ein Unterverzeichnis davon, dort findet der Publisher sie. Die Schriften stehen unter der SIL Open Font License; ins PDF eingebettet werden dürfen sie ohne Weiteres.
 
+Ab Version 7 enthält das Paket für das Web nur noch Dateien im Format WOFF2, die der Publisher nicht lesen kann. Dann nehmen Sie das Paket für Desktop (`fontawesome-free-7.x-desktop.zip`); es enthält im Verzeichnis `otfs` die Dateien `Font Awesome 7 Free-Solid-900.otf` und `Font Awesome 7 Free-Regular-400.otf`. In den folgenden Beispielen steht dann deren Name statt `fa-solid-900.ttf` und `fa-regular-400.ttf`, zum Beispiel `src: url("Font Awesome 7 Free-Solid-900.otf")`.
+
 ### Schritt 2: Symbole aus dem Layout
 
 Für den ersten Weg wird die Icon-Schrift geladen und als Schriftfamilie definiert, in der Größe des Fließtextes:
@@ -107,7 +109,15 @@ Die Beschreibung wird dann wie jeder andere Text mit Auszeichnungen ausgegeben:
 
 Das Symbol erscheint in der Größe des Absatzes. Steht dieselbe Beschreibung in einer größeren Schrift, wächst das Symbol mit.
 
-Statt eines eigenen Stylesheets lässt sich auch das vollständige Stylesheet von Font Awesome einbinden. Liegen die Verzeichnisse `css` und `webfonts` aus dem Paket im Projektverzeichnis, genügt `<Stylesheet filename="css/all.css"/>`; die Schriftdateien aus den `@font-face`-Regeln findet der Publisher über ihren Namen. Das vollständige Stylesheet ist allerdings rund 140 KB groß und beschreibt über 1800 Symbole. Ein eigenes kurzes Stylesheet mit den tatsächlich verwendeten Symbolen bleibt übersichtlicher und zeigt auf einen Blick, welche Klassen in den Daten vorkommen dürfen.
+Statt eines eigenen Stylesheets lässt sich auch das vollständige Stylesheet von Font Awesome einbinden. Liegen die Verzeichnisse `css` und `webfonts` aus dem Paket im Projektverzeichnis, genügt `<Stylesheet filename="css/all.css"/>`; die Schriftdateien aus den `@font-face`-Regeln findet der Publisher über ihren Namen. Bei Version 7 verweisen diese Regeln auf die Dateien im Format WOFF2. Ein zweites Stylesheet danach stellt sie auf die Dateien aus dem Paket für Desktop um:
+
+```css
+@font-face { font-family: "Font Awesome 7 Free"; font-weight: 900; src: url("Font Awesome 7 Free-Solid-900.otf"); }
+@font-face { font-family: "Font Awesome 7 Free"; font-weight: 400; src: url("Font Awesome 7 Free-Regular-400.otf"); }
+@font-face { font-family: "Font Awesome 7 Brands"; font-weight: 400; src: url("Font Awesome 7 Brands-Regular-400.otf"); }
+```
+
+Das vollständige Stylesheet ist allerdings rund 140 KB groß und beschreibt über 1800 Symbole. Ein eigenes kurzes Stylesheet mit den tatsächlich verwendeten Symbolen bleibt übersichtlicher und zeigt auf einen Blick, welche Klassen in den Daten vorkommen dürfen.
 
 ### Variante: Ersatzschrift
 

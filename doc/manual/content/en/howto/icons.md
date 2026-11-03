@@ -52,6 +52,8 @@ The product groups of Confixa get two additions: the attribute `use` says whethe
 
 Font Awesome Free is available at [fontawesome.com](https://fontawesome.com/download). In the directory `webfonts`, the package contains among others `fa-solid-900.ttf` (filled symbols) and `fa-regular-400.ttf` (outlined symbols, only a selection in the free version). Put the two files into the project directory or a subdirectory of it, where the Publisher finds them. The fonts are licensed under the SIL Open Font License; embedding them in the PDF is allowed without restriction.
 
+From version 7 on, the web package only contains files in the WOFF2 format, which the Publisher cannot read. Use the desktop package (`fontawesome-free-7.x-desktop.zip`) instead; its directory `otfs` contains the files `Font Awesome 7 Free-Solid-900.otf` and `Font Awesome 7 Free-Regular-400.otf`. In the examples below, use their names instead of `fa-solid-900.ttf` and `fa-regular-400.ttf`, for example `src: url("Font Awesome 7 Free-Solid-900.otf")`.
+
 ### Step 2: symbols from the layout
 
 For the first way, the icon font is loaded and defined as a font family in the size of the body text:
@@ -107,7 +109,15 @@ The description is then output like any other text with markup:
 
 The symbol appears in the size of the paragraph. If the same description is set in a larger font, the symbol grows with it.
 
-Instead of a stylesheet of your own, you can also include the complete Font Awesome stylesheet. If the directories `css` and `webfonts` from the package are in the project directory, `<Stylesheet filename="css/all.css"/>` is enough; the Publisher finds the font files from the `@font-face` rules by their names. The complete stylesheet is about 140 KB, though, and describes more than 1800 symbols. A short stylesheet of your own with only the symbols you use is easier to keep track of and shows at a glance which classes may appear in the data.
+Instead of a stylesheet of your own, you can also include the complete Font Awesome stylesheet. If the directories `css` and `webfonts` from the package are in the project directory, `<Stylesheet filename="css/all.css"/>` is enough; the Publisher finds the font files from the `@font-face` rules by their names. With version 7, these rules refer to the files in the WOFF2 format. A second stylesheet after it switches them to the files from the desktop package:
+
+```css
+@font-face { font-family: "Font Awesome 7 Free"; font-weight: 900; src: url("Font Awesome 7 Free-Solid-900.otf"); }
+@font-face { font-family: "Font Awesome 7 Free"; font-weight: 400; src: url("Font Awesome 7 Free-Regular-400.otf"); }
+@font-face { font-family: "Font Awesome 7 Brands"; font-weight: 400; src: url("Font Awesome 7 Brands-Regular-400.otf"); }
+```
+
+The complete stylesheet is about 140 KB, though, and describes more than 1800 symbols. A short stylesheet of your own with only the symbols you use is easier to keep track of and shows at a glance which classes may appear in the data.
 
 ### Variant: replacement font
 

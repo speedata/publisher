@@ -9,9 +9,23 @@ aliases:
 
 Das Einbinden von Schriftarten in den gängigen Formaten ist sehr einfach.
 Unterstützt werden die Formate TrueType und OpenType (Dateien `.ttf` und `.otf`).
+Der Publisher erkennt das Format am Inhalt der Datei, nicht an der Endung; eine Datei `.ttf` mit OpenType-Konturen (CFF) funktioniert also auch.
 
 {{< callout type="warning" >}}
 Type-1-Schriften (Dateien `.pfb`) werden seit Version 6.0 nicht mehr unterstützt. Bitte konvertieren Sie Type-1-Schriften nach OpenType.
+{{< /callout >}}
+
+{{< callout type="info" >}}
+Webfonts in den Formaten WOFF und WOFF2 (Dateien `.woff` und `.woff2`) werden nicht unterstützt.
+Sie lassen sich mit `woff2_decompress` aus dem Paket [woff2](https://github.com/google/woff2) oder mit [fonttools](https://github.com/fonttools/fonttools) umwandeln:
+
+```
+woff2_decompress fa-solid-900.woff2
+fonttools ttLib -o schrift.otf schrift.woff
+```
+
+Achten Sie dabei auf die Lizenz: Eine Lizenz für Webfonts erlaubt oft nur die Verwendung auf Webseiten, nicht das Einbetten in PDF-Dateien.
+Für den Druck ist in der Regel eine Desktop-Lizenz nötig, zu der meist auch Dateien im Format OpenType oder TrueType gehören.
 {{< /callout >}}
 
 Um dem Publisher Schriftarten bekannt zu machen und zu nutzen, sind
