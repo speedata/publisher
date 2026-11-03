@@ -1,0 +1,91 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- CSS custom properties in layout commands. Every line names the
+         expected result, nothing red may appear: a var() that does not
+         work leaves a red base rule in effect. Four warnings are expected
+         (undefined variable, both variables of the cycle, color with the cyclic variable). -->
+    <Pageformat width="120mm" height="170mm"/>
+    <SetGrid width="5mm" height="5mm"/>
+
+    <Stylesheet>
+        :root { --main: green; --bad: red; --base: green; --derived: var(--base); --big: 3mm; --cell: red }
+        /* red as long as no var() applies */
+        paragraph.root, paragraph.fallback, paragraph.nested, paragraph.derived, paragraph.imp { color: red }
+        box.v { background-color: red }
+        td.pad { background-color: red }
+        html p { color: red }
+        paragraph.root { color: var(--main) }
+        textblock.over { --main: blue }
+        paragraph.fallback { color: var(--undefined, green) }
+        paragraph.nested { color: var(--undefined, var(--other, green)) }
+        paragraph.drop { color: green }
+        paragraph.drop { color: var(--undefined) }
+        paragraph.derived { color: var(--derived) }
+        paragraph.cycle { --a: var(--b); --b: var(--a); color: green }
+        paragraph.cycle { color: var(--a) }
+        paragraph.imp { --bad: green !important }
+        paragraph#imp { --bad: red; color: var(--bad) }
+        box.v { background-color: var(--main) }
+        td.pad { padding: var(--big) 0; background-color: var(--main) }
+        table.zebra tr:nth-child(even) { --zebra: green }
+        table.zebra td { background-color: var(--zebra, white) }
+        td.warn { --cell: green }
+        html p.cell { color: var(--cell) }
+        html p.outside { color: var(--main) }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject row="1" column="1">
+            <Textblock width="22">
+                <Paragraph class="root"><Value>green (from :root)</Value></Paragraph>
+                <Paragraph class="fallback"><Value>green (fallback)</Value></Paragraph>
+                <Paragraph class="nested"><Value>green (nested fallback)</Value></Paragraph>
+                <Paragraph class="drop"><Value>green (undefined variable, declaration dropped)</Value></Paragraph>
+                <Paragraph class="derived"><Value>green (variable from variable)</Value></Paragraph>
+                <Paragraph class="cycle"><Value>green (cycle, declaration dropped)</Value></Paragraph>
+                <Paragraph class="imp" id="imp"><Value>green (!important custom property)</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject row="9" column="1">
+            <Textblock width="22" class="over">
+                <Paragraph class="root"><Value>blue (overridden in the text block)</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject row="11" column="1"><Box width="4" height="1" class="v"/></PlaceObject>
+        <PlaceObject row="11" column="6">
+            <Textblock width="16"><Paragraph><Value>green box (background-color)</Value></Paragraph></Textblock>
+        </PlaceObject>
+        <PlaceObject row="13" column="1">
+            <Table stretch="no">
+                <Columns><Column width="6"/><Column width="16"/></Columns>
+                <Tr>
+                    <Td class="pad"><Paragraph><Value>green cell</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>3mm padding above and below (shorthand)</Value></Paragraph></Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject row="17" column="1">
+            <Table stretch="no" class="zebra">
+                <Columns><Column width="10"/><Column width="10"/></Columns>
+                <Tr><Td><Paragraph><Value>row 1 white</Value></Paragraph></Td><Td><Paragraph><Value>white</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>row 2 green</Value></Paragraph></Td><Td><Paragraph><Value>green</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>row 3 white</Value></Paragraph></Td><Td><Paragraph><Value>white</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>row 4 green</Value></Paragraph></Td><Td><Paragraph><Value>green</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject row="23" column="1">
+            <Table stretch="no" class="html">
+                <Columns><Column width="22"/></Columns>
+                <Tr>
+                    <Td class="warn"><Paragraph><Value select="cell/*"/></Paragraph></Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject row="25" column="1">
+            <Textblock width="22">
+                <Paragraph><Value select="outside/*"/></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

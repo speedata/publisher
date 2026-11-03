@@ -1,0 +1,20 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- The style attribute wins over the stylesheet rules, regardless of
+         their specificity. Nothing red may appear. -->
+    <Pageformat width="120mm" height="50mm"/>
+    <Stylesheet>
+        html p { color: red; margin-top: 12pt }
+        html p.cls { color: red }
+        html p#id { color: red }
+        html p.ok { color: green }
+    </Stylesheet>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Value select="*"/></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

@@ -1,0 +1,19 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- ::before on block elements with content of more than one
+         character. Every line names the expected result. -->
+    <Pageformat width="120mm" height="40mm"/>
+    <Stylesheet>
+        html p.note::before { content: "Note: "; color: green }
+        html p.quote::before { content: "» "; color: green }
+        html p.wide::before { content: "ab"; width: 20pt; color: green }
+    </Stylesheet>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Value select="*"/></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

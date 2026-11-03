@@ -1,0 +1,10 @@
+<data>
+  <p class="root">green (from :root)</p>
+  <div class="over"><p class="root">blue (overridden in the div)</p></div>
+  <p class="fallback">green (fallback)</p>
+  <p class="drop">green (undefined variable, declaration dropped)</p>
+  <p class="border">green frame with 2pt padding (shorthand, fallback)</p>
+  <p class="mark">green marker before the text (::before)</p>
+  <p class="st" style="--local: green; color: var(--local)">green (style attribute)</p>
+  <ul class="list"><li><span>green (list item, more specific rule)</span></li></ul>
+</data>

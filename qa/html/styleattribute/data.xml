@@ -1,0 +1,6 @@
+<data>
+  <p style="color: green; margin-top: 0">green (style attribute over element rule)</p>
+  <p class="cls" style="color: green; margin-top: 0">green (style attribute over class rule)</p>
+  <p id="id" style="color: green; margin-top: 0">green (style attribute over id rule)</p>
+  <p class="ok" style="margin-top: 0">green (rule, the style attribute sets only the margin)</p>
+</data>

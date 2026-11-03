@@ -1,0 +1,32 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- CSS custom properties in HTML content. Every line names the
+         expected result, nothing red may appear: a var() that does not
+         work leaves a red base rule in effect. The line "dropped" gives a
+         warning. -->
+    <Pageformat width="120mm" height="110mm"/>
+    <Stylesheet>
+        :root { --main: green; --frame: 1pt solid green }
+        /* red as long as no var() applies */
+        html p.root, html p.fallback, html p.st { color: red }
+        html li span { color: red }
+        html p.root { color: var(--main) }
+        html div.over { --main: blue }
+        html p.fallback { color: var(--undefined, green) }
+        html p.drop { color: green }
+        html p.drop { color: var(--undefined) }
+        html p.border { border: var(--frame); padding: var(--pad, 2pt) }
+        html p.mark::before { --mark: "» "; content: var(--mark); color: var(--main) }
+        html li { --main: red }
+        html ul.list li { --main: green }
+        html li span { color: var(--main) }
+    </Stylesheet>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Value select="*"/></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

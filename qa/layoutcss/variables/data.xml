@@ -1,0 +1,4 @@
+<data>
+  <cell><p class="cell">green (HTML in a cell, variable from the cell)</p></cell>
+  <outside><p class="outside">green (HTML outside the table, variable from :root)</p></outside>
+</data>

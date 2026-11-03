@@ -1,0 +1,5 @@
+<data>
+  <p class="note">the whole word "Note:" and a space in front</p>
+  <p class="quote">a guillemet and a space in front</p>
+  <p class="wide">"ab" in a 20pt wide box in front</p>
+</data>
