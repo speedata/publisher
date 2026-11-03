@@ -229,3 +229,20 @@ func TestHTMLStyleAttributeWins(t *testing.T) {
 		}
 	}
 }
+
+func TestContentAltText(t *testing.T) {
+	css := `
+.a::before { content: "A" / "alt" }
+.b::before { content: "B"/"" }
+.c::before { --fa: "C"; content: var(--fa)/"" }
+.d::before { content: "D" }
+:is(.e, .f)::before { content: "E" }
+`
+	html := `<body><p id="a" class="a">a</p><p id="b" class="b">b</p><p id="c" class="c">c</p><p id="d" class="d">d</p><p id="f" class="f">f</p></body>`
+	st := htmlStyles(t, html, css, nil)
+	for id, want := range map[string]string{"a": "A", "b": "B", "c": "C", "d": "D", "f": "E"} {
+		if got := st[id]["before::content"]; got != want {
+			t.Errorf("#%s before::content = %q, want %q", id, got, want)
+		}
+	}
+}

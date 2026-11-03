@@ -109,6 +109,7 @@ The selectors from CSS apply, among others:
 | `table.list td` | cells inside a table with the class `list` |
 | `tr > td` | cells directly inside a row |
 | `tr:nth-child(even)` | every second table row (see [Tables](#css-tables)) |
+| `:is(tablehead, tablefoot) td` | cells in the table head and the table foot; `:where()` works the same, but does not count for the specificity of the rule |
 
 For descendant selectors such as `table.list td`, the nesting while the layout is executed counts.
 A paragraph in a `<Record>` that is called with `<ProcessNode>` from a table cell is inside the cell (`td paragraph`).

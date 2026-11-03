@@ -1,0 +1,42 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- :is(), :where() and the alternative text of content in HTML
+         content. Every line names the expected result, nothing red may
+         appear and no quotes or slashes may be output. -->
+    <Pageformat width="120mm" height="80mm"/>
+    <Stylesheet>
+        /* :is() has the specificity of its most specific argument, here
+           #nope (1,0,0), so it wins over p.is (0,1,2) */
+        html p.is { color: red }
+        html :is(p.is, #nope) { color: green }
+
+        /* :where() has zero specificity */
+        html p.wh { color: green }
+        html :where(#wh, p.wh) { color: red }
+        html :where(p.wh) { text-decoration: underline }
+
+        /* invalid arguments are dropped, the rest applies */
+        html p.fg { color: red }
+        html :is(:unknown-pseudo, p::before, p.fg) { color: green; font-weight: bold }
+
+        /* combinators and nesting */
+        html div.box span, html div.box em { color: red }
+        html :is(div.box) :is(span, :is(em)) { color: green }
+
+        /* pseudo-element after :is() */
+        html :is(p.b1, p.b2)::before { content: "» "; color: green }
+
+        /* alternative text after / is not output */
+        html p.alt::before { content: "OK: " / "okay"; color: green }
+        html p.fa { --fa: "» " }
+        html :is(p.fa)::before { content: var(--fa)/""; color: green }
+    </Stylesheet>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Value select="*"/></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

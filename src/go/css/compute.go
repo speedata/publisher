@@ -7,6 +7,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/andybalholm/cascadia"
+	"github.com/speedata/css/scanner"
 	"golang.org/x/net/html"
 )
 
@@ -195,12 +196,32 @@ type varRef struct {
 
 // htmlValue serializes the value of a declaration for the HTML renderer.
 func htmlValue(key string, toks tokenstream) string {
+	if key == "content" {
+		toks = withoutAltText(toks)
+	}
 	v := stringValue(toks)
 	switch key {
 	case "content", "list-style-type":
 		v = trimQuotes(v)
 	}
 	return v
+}
+
+// withoutAltText removes the alternative text from a content value such as
+// "\f015" / "Home": everything from the first "/" outside of parentheses.
+func withoutAltText(toks tokenstream) tokenstream {
+	depth := 0
+	for i, tok := range toks {
+		switch {
+		case tok.Type == scanner.Function || tok.Type == scanner.Delim && tok.Value == "(":
+			depth++
+		case tok.Type == scanner.Delim && tok.Value == ")" && depth > 0:
+			depth--
+		case tok.Type == scanner.Delim && tok.Value == "/" && depth == 0:
+			return toks[:i]
+		}
+	}
+	return toks
 }
 
 // add appends a declaration to the virtual attribute list virt and returns

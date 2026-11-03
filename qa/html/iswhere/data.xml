@@ -1,0 +1,10 @@
+<data>
+  <p class="is">is: green</p>
+  <p id="wh" class="wh">where: green, underlined</p>
+  <p class="fg">forgiving: green, bold</p>
+  <div class="box"><p><span>nested span: green</span>, <em>nested em: green</em></p></div>
+  <p class="b1">before b1: green guillemet</p>
+  <p class="b2">before b2: green guillemet</p>
+  <p class="alt">alternative text: green OK, no quotes</p>
+  <p class="fa">var() with alternative text: green guillemet</p>
+</data>

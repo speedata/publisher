@@ -109,6 +109,7 @@ Es gelten die Selektoren aus CSS, unter anderem:
 | `table.liste td` | Zellen, die in einer Tabelle mit der Klasse `liste` stehen |
 | `tr > td` | Zellen, die direkt in einer Zeile stehen |
 | `tr:nth-child(even)` | jede zweite Tabellenzeile (siehe [Tabellen](#css-tables)) |
+| `:is(tablehead, tablefoot) td` | Zellen im Tabellenkopf und im Tabellenfuß; `:where()` wirkt genauso, zählt aber bei der Gewichtung der Regeln nicht |
 
 Für Nachfahren-Selektoren wie `table.liste td` zählt die Verschachtelung beim Ausführen des Layouts.
 Ein Absatz, der in einem `<Record>` steht und per `<ProcessNode>` aus einer Tabellenzelle aufgerufen wird, steht also in der Zelle (`td paragraph`).
