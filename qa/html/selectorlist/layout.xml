@@ -4,7 +4,7 @@
     <Stylesheet>
         /* :host never matches outside a browser, .green still applies */
         .green, :host { color: green; }
-        /* custom properties are ignored */
+        /* custom properties without var() have no effect */
         :root, :host { --font: normal 900 1em/1 "Some Font"; }
         /* a selector list with a comma inside :not() */
         span:not(.a, .b), .never { color: blue; }

@@ -75,45 +75,6 @@ func stringValue(toks tokenstream) string {
 	return strings.Join(ret, " ")
 }
 
-func keyValueFromToks(toks tokenstream) map[string]string {
-	kv := make(map[string]string)
-	var key, val tokenstream
-	start := 0
-	colon := 0
-	i := 0
-	for {
-		tok := toks[i]
-		switch tok.Type {
-		case scanner.Delim:
-			switch tok.Value {
-			case ":":
-				key = toks[start:i]
-				colon = i + 1
-			case ";":
-				val = toks[colon:i]
-				kv[stringValue(key)] = stringValue(val)
-				start = i + 1
-				key = toks[:0]
-				val = toks[:0]
-			default:
-				// w("unknown delimiter", tok.Value)
-			}
-		default:
-			// w("unknown token type", tok.Type, tok.Value)
-		}
-		i = i + 1
-		if i == len(toks) {
-			if start < i {
-				key = toks[start : colon-1]
-				val = toks[colon:i]
-				kv[stringValue(key)] = stringValue(val)
-			}
-			break
-		}
-	}
-	return kv
-}
-
 func isDimension(str string) (bool, string) {
 	switch str {
 	case "thick":

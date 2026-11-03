@@ -1724,6 +1724,7 @@ function commands.html(layoutxml, dataxml)
     local selection = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "xpathraw")
     local expand_text = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "expand-text", "string", "no")
     local csstext = publisher.css:gettext()
+    local varchain = publisher.css:varchain()
     local tab
 
     -- Check if selection is already an XML structure (e.g., from sd:decode-html)
@@ -1805,7 +1806,7 @@ function commands.html(layoutxml, dataxml)
         for i = 1, #layoutxml do
             htmltext = htmltext .. xml_to_html(layoutxml[i])
         end
-        tab = splib.parse_raw_html_text(htmltext, csstext)
+        tab = splib.parse_raw_html_text(htmltext, csstext, varchain)
     elseif type(selection) == "table" and selection[1] and type(selection[1]) == "table" then
         local inner = selection[1]
         local inner_name = get_local_name(inner)
@@ -1816,7 +1817,7 @@ function commands.html(layoutxml, dataxml)
             for i = 1, #inner do
                 htmltext = htmltext .. xml_to_html(inner[i])
             end
-            tab = splib.parse_raw_html_text(htmltext, csstext)
+            tab = splib.parse_raw_html_text(htmltext, csstext, varchain)
         elseif inner[".__local_name"] then
             -- Check if children are XML elements or just text (CDATA)
             local has_element_children = false
@@ -1834,22 +1835,22 @@ function commands.html(layoutxml, dataxml)
                 for i = 1, #inner do
                     htmltext = htmltext .. xml_to_html(inner[i])
                 end
-                tab = splib.parse_raw_html_text(htmltext, csstext)
+                tab = splib.parse_raw_html_text(htmltext, csstext, varchain)
             else
                 -- XML element with only text children (CDATA) - use string_value
                 local htmltext = publisher.xpath.string_value(selection)
-                tab = splib.parse_raw_html_text(htmltext, csstext)
+                tab = splib.parse_raw_html_text(htmltext, csstext, varchain)
             end
         else
             -- Unknown structure, try string conversion
             local htmltext = publisher.xpath.string_value(selection)
-            tab = splib.parse_raw_html_text(htmltext, csstext)
+            tab = splib.parse_raw_html_text(htmltext, csstext, varchain)
         end
     else
         -- Normal path: selection is a string or can be converted to one
         local htmltext = publisher.xpath.string_value(selection)
         -- Parse the raw HTML structure (but don't build nodes yet - lazy parsing)
-        tab = splib.parse_raw_html_text(htmltext, csstext)
+        tab = splib.parse_raw_html_text(htmltext, csstext, varchain)
     end
     if tab == nil then
         main.log("error", "HTML: could not parse the HTML text", lineinfo(layoutxml))
@@ -5069,6 +5070,9 @@ function commands.paragraph(layoutxml, dataxml, textblockoptions)
     p.fontfamily = fontfamily
     p.html = html
     p.css_textformat = publisher.cssstyle.textformat_fields(css, publisher.cssstyle.fontsize_of(fontfamily))
+    -- HTML content is rendered later, it inherits the custom properties
+    -- of the commands around the paragraph
+    p.css_varchain = publisher.css:varchain()
     -- A paragraph without content behaves like a paragraph with a single
     -- non breaking space and creates an empty line. This applies to a
     -- literally empty <Paragraph></Paragraph> as well as to child elements

@@ -40,11 +40,16 @@ type LayoutStylesheet struct {
 	rules []layoutRule
 	// Fontfamilies contains the font families from @font-face rules.
 	Fontfamilies map[string]FontFamily
+	// hasVars is true if a rule declares a custom property or uses var().
+	hasVars bool
+	// warned contains the warnings already given, so that each one
+	// appears only once.
+	warned map[string]bool
 }
 
 // NewLayoutStylesheet returns an empty stylesheet.
 func NewLayoutStylesheet() *LayoutStylesheet {
-	return &LayoutStylesheet{Fontfamilies: map[string]FontFamily{}}
+	return &LayoutStylesheet{Fontfamilies: map[string]FontFamily{}, warned: map[string]bool{}}
 }
 
 // sourceString serializes tokens close to their source form. Unlike
@@ -114,7 +119,11 @@ func (ls *LayoutStylesheet) AddCSS(csstext string) {
 				continue
 			}
 			valtoks, important := splitImportant(r.Value)
-			decls = append(decls, layoutDecl{key: key, value: sourceString(valtoks), important: important})
+			value := sourceString(valtoks)
+			if isCustomProperty(key) || hasVar(value) {
+				ls.hasVars = true
+			}
+			decls = append(decls, layoutDecl{key: key, value: value, important: important})
 		}
 		selector := sourceString(b.ComponentValues)
 		for _, sel := range parseSelectorGroup(selector) {
@@ -157,18 +166,10 @@ func buildChain(chain []LayoutElement) *html.Node {
 	return n
 }
 
-// Match returns the declarations for the last element of the chain (or its
-// pseudo element, if pseudo is not empty). Rules are applied by ascending
-// specificity, rules with the same specificity in source order, and
-// declarations marked !important after all others. The second return value
-// contains the properties whose value comes from an !important declaration.
-func (ls *LayoutStylesheet) Match(chain []LayoutElement, pseudo string) (map[string]string, map[string]bool) {
-	decls := map[string]string{}
-	important := map[string]bool{}
-	if len(ls.rules) == 0 || len(chain) == 0 {
-		return decls, important
-	}
-	n := buildChain(chain)
+// matchNode returns the rules that match the node n (or its pseudo
+// element), by ascending specificity, rules with the same specificity in
+// source order.
+func (ls *LayoutStylesheet) matchNode(n *html.Node, pseudo string) []*layoutRule {
 	var matched []*layoutRule
 	for i := range ls.rules {
 		r := &ls.rules[i]
@@ -179,20 +180,112 @@ func (ls *LayoutStylesheet) Match(chain []LayoutElement, pseudo string) (map[str
 	sort.SliceStable(matched, func(a, b int) bool {
 		return matched[a].spec.Less(matched[b].spec)
 	})
-	for _, r := range matched {
-		for _, d := range r.decls {
-			if !d.important {
-				decls[d.key] = d.value
+	return matched
+}
+
+// cascade calls f for each declaration of the matched rules in the order
+// of the cascade: normal declarations first, then the !important ones.
+func cascade(matched []*layoutRule, f func(d *layoutDecl)) {
+	for _, important := range []bool{false, true} {
+		for _, r := range matched {
+			for i := range r.decls {
+				if d := &r.decls[i]; d.important == important {
+					f(d)
+				}
 			}
 		}
 	}
-	for _, r := range matched {
-		for _, d := range r.decls {
-			if d.important {
-				decls[d.key] = d.value
-				important[d.key] = true
+}
+
+// customDecls returns the custom property declarations of the matched
+// rules in cascade order.
+func customDecls(matched []*layoutRule) []varDecl {
+	var ret []varDecl
+	cascade(matched, func(d *layoutDecl) {
+		if isCustomProperty(d.key) {
+			ret = append(ret, varDecl{name: d.key, value: d.value})
+		}
+	})
+	return ret
+}
+
+// chainVars computes the custom properties of the element n from the root
+// of the chain down to n. matched are the rules for n, if already known.
+func (ls *LayoutStylesheet) chainVars(n *html.Node, matched []*layoutRule) map[string]string {
+	var vars map[string]string
+	var elements []*html.Node
+	for e := n; e != nil && e.Type == html.ElementNode; e = e.Parent {
+		elements = append(elements, e)
+	}
+	for i := len(elements) - 1; i >= 0; i-- {
+		rules := matched
+		if i > 0 || rules == nil {
+			rules = ls.matchNode(elements[i], "")
+		}
+		var errs []error
+		vars, errs = computeVars(vars, customDecls(rules))
+		for _, err := range errs {
+			warnDropped(ls.warned, "", err)
+		}
+	}
+	return vars
+}
+
+// Vars returns the custom properties that apply to the last element of the
+// chain.
+func (ls *LayoutStylesheet) Vars(chain []LayoutElement) map[string]string {
+	if !ls.hasVars || len(chain) == 0 {
+		return nil
+	}
+	return ls.chainVars(buildChain(chain), nil)
+}
+
+// Match returns the declarations for the last element of the chain (or its
+// pseudo element, if pseudo is not empty). Rules are applied by ascending
+// specificity, rules with the same specificity in source order, and
+// declarations marked !important after all others. The second return value
+// contains the properties whose value comes from an !important declaration.
+// Custom properties are not returned, var() references in the values are
+// replaced. A declaration whose var() cannot be resolved is dropped.
+func (ls *LayoutStylesheet) Match(chain []LayoutElement, pseudo string) (map[string]string, map[string]bool) {
+	decls := map[string]string{}
+	important := map[string]bool{}
+	if len(ls.rules) == 0 || len(chain) == 0 {
+		return decls, important
+	}
+	n := buildChain(chain)
+	matched := ls.matchNode(n, pseudo)
+	var vars map[string]string
+	if ls.hasVars {
+		if pseudo == "" {
+			vars = ls.chainVars(n, matched)
+		} else {
+			vars = ls.chainVars(n, nil)
+			// the pseudo element inherits from its element
+			var errs []error
+			vars, errs = computeVars(vars, customDecls(matched))
+			for _, err := range errs {
+				warnDropped(ls.warned, "", err)
 			}
 		}
 	}
+	cascade(matched, func(d *layoutDecl) {
+		if isCustomProperty(d.key) {
+			return
+		}
+		value := d.value
+		if ls.hasVars && hasVar(value) {
+			var err error
+			if value, err = resolveValue(value, vars); err != nil {
+				// dropped: whatever applies without it takes effect
+				warnDropped(ls.warned, d.key, err)
+				return
+			}
+		}
+		decls[d.key] = value
+		if d.important {
+			important[d.key] = true
+		}
+	})
 	return decls, important
 }

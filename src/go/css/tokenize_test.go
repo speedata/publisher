@@ -11,9 +11,9 @@ func TestParseCSSString(t *testing.T) {
 	if got := len(toks); got != expected {
 		t.Errorf("len(parseCSSString(%s)) = %d, want %d", str, got, expected)
 	}
-	kv := keyValueFromToks(toks)
+	rules := consumeBlock(toks, true).Rules
 	expected = 2
-	if got := len(kv); got != expected {
-		t.Errorf("len(keyValueFromToks(toks)) = %d, want %d", got, expected)
+	if got := len(rules); got != expected {
+		t.Errorf("len(consumeBlock(toks, true).Rules) = %d, want %d", got, expected)
 	}
 }

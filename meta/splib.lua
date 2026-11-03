@@ -128,17 +128,21 @@ function splib.markdown(md) end
 function splib.matches(text, pattern) end
 
 ---Parse an HTML fragment plus CSS and emit it as a nested Lua table tree
----(no surrounding `<body>` wrapping).
+---(no surrounding `<body>` wrapping). With `chain` (encoded as for
+---`css_match`), the root element inherits the custom properties of the
+---layout commands around the HTML content.
 ---@param html string
 ---@param css string
+---@param chain? string
 ---@return table? tree
-function splib.parse_raw_html_text(html, css) end
+function splib.parse_raw_html_text(html, css, chain) end
 
 ---Like `parse_raw_html_text`, but wraps the input in `<body>…</body>` first.
 ---@param html string
 ---@param css string
+---@param chain? string
 ---@return table? tree
-function splib.parse_html_text(html, css) end
+function splib.parse_html_text(html, css, chain) end
 
 ---@class SplibReloadImageArgs
 ---@field filename string

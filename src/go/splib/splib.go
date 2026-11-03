@@ -99,6 +99,11 @@ func sdParseRawHTMLText(L *C.lua_State) int {
 		}
 
 		c := css.NewCSSParser()
+		// optional: the element chain of the layout commands around the
+		// HTML content, for the custom properties it inherits
+		if chain, ok := l.getString(3); ok && chain != "" {
+			c.InitialVars = layoutStylesheet.Vars(parseLayoutChain(chain))
+		}
 		cssResult, err := c.ParseHTMLFragment(htmltext, csstext)
 		if err != nil {
 			slog.Error("sdParseRawHTMLText could not parse HTML", "msg", err.Error())
@@ -124,6 +129,11 @@ func sdParseHTMLText(L *C.lua_State) int {
 			return 0
 		}
 		c := css.NewCSSParser()
+		// optional: the element chain of the layout commands around the
+		// HTML content, for the custom properties it inherits
+		if chain, ok := l.getString(3); ok && chain != "" {
+			c.InitialVars = layoutStylesheet.Vars(parseLayoutChain(chain))
+		}
 		cssresult, err := c.ParseHTMLFragment("<body>"+htmltext+"</body>", csstext)
 		if err != nil {
 			slog.Error("sdParseRawHTMLText could not parse HTML", "msg", err.Error())

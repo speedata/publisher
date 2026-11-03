@@ -89,6 +89,9 @@ type CSS struct {
 	Stylesheet   []sBlock
 	Fontfamilies map[string]FontFamily
 	Pages        map[string]cssPage
+	// InitialVars are the custom properties the root element inherits,
+	// for example from the layout command around the HTML content.
+	InitialVars map[string]string
 }
 
 // FontSource holds the origin of a font as parsed from a @font-face src list.

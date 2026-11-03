@@ -137,3 +137,60 @@ func TestIsBoldWeight(t *testing.T) {
 		}
 	}
 }
+
+func TestLayoutVars(t *testing.T) {
+	ls := NewLayoutStylesheet()
+	ls.AddCSS(`
+		:root { --main: rgb(1,2,3); --gap: 1mm }
+		table.wide { --gap: 3mm }
+		td { padding: var(--gap) 0 }
+		td.c { color: var(--main) }
+		td.u { color: green }
+		td.u { color: var(--undefined) }
+		td.f { color: var(--undefined, blue) }
+		tr:nth-child(even) { --zebra: gray }
+		tr td { background-color: var(--zebra, white) }
+		td.imp { --main: red !important }
+		td#imp { --main: yellow; color: var(--main) }
+		ol { --marker: "»" }
+		ol.other li::marker { --marker: "«" }
+		li::marker { content: var(--marker) }
+	`)
+	table := elt("table", "", "")
+	wide := elt("table", "wide", "")
+	tr := func(pos int) LayoutElement { return LayoutElement{Name: "tr", Position: pos} }
+	testdata := []struct {
+		name   string
+		chain  []LayoutElement
+		pseudo string
+		key    string
+		want   string
+	}{
+		{"root", []LayoutElement{table, tr(1), elt("td", "c", "")}, "", "color", "rgb(1,2,3)"},
+		{"shorthand", []LayoutElement{table, tr(1), elt("td", "", "")}, "", "padding", "1mm 0"},
+		{"inherited override", []LayoutElement{wide, tr(1), elt("td", "", "")}, "", "padding", "3mm 0"},
+		{"undefined dropped", []LayoutElement{table, tr(1), elt("td", "u", "")}, "", "color", "green"},
+		{"fallback", []LayoutElement{table, tr(1), elt("td", "f", "")}, "", "color", "blue"},
+		{"structural odd", []LayoutElement{table, tr(1), elt("td", "", "")}, "", "background-color", "white"},
+		{"structural even", []LayoutElement{table, tr(2), elt("td", "", "")}, "", "background-color", "gray"},
+		{"important variable", []LayoutElement{table, tr(1), elt("td", "imp", "imp")}, "", "color", "red"},
+		{"pseudo inherits", []LayoutElement{elt("ol", "", ""), elt("li", "", "")}, "marker", "content", `"»"`},
+		{"pseudo own", []LayoutElement{elt("ol", "other", ""), elt("li", "", "")}, "marker", "content", `"«"`},
+		{"no custom properties", []LayoutElement{table}, "", "--gap", ""},
+	}
+	for _, tc := range testdata {
+		t.Run(tc.name, func(t *testing.T) {
+			decls, _ := ls.Match(tc.chain, tc.pseudo)
+			if got := decls[tc.key]; got != tc.want {
+				t.Errorf("%s = %q, want %q", tc.key, got, tc.want)
+			}
+		})
+	}
+	vars := ls.Vars([]LayoutElement{wide, tr(2), elt("td", "", "")})
+	if vars["--gap"] != "3mm" || vars["--zebra"] != "gray" || vars["--main"] != "rgb(1,2,3)" {
+		t.Errorf("Vars = %v", vars)
+	}
+	if NewLayoutStylesheet().Vars([]LayoutElement{table}) != nil {
+		t.Errorf("Vars without variables should be nil")
+	}
+}

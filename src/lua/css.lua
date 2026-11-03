@@ -18,6 +18,7 @@ local splib = splib
 ---@field cache table<string, CSSResult> Match results by chain.
 ---@field fontfaces? table<string, table> Font families from @font-face rules (see `get_fontfaces`).
 ---@field structural? boolean True if a selector may depend on the position of an element.
+---@field variables? boolean True if the CSS may contain custom properties (`--name`).
 ---@field position_limit? integer Positions up to this value are passed unchanged (see `analyze_positions`).
 ---@field position_period? integer Positions above `position_limit` are equivalent modulo this value, nil if every position counts.
 ---@field __index? CSSRules Set when the table serves as a metatable in `new`.
@@ -222,6 +223,10 @@ local function parsetxt(self, csstext)
     if self.structural then
         analyze_positions(self)
     end
+    -- custom properties and var(--name); Go checks this exactly
+    if string.find(csstext, "--", 1, true) then
+        self.variables = true
+    end
 end
 
 -- Loads a CSS file from disk (resolved via `kpse.find_file`) and adds its
@@ -325,6 +330,18 @@ local function set_chain(self, chain)
     self.stack = { table.unpack(chain.stack) }
     self.levels = { table.unpack(chain.levels) }
     return previous
+end
+
+-- Returns the encoded chain of the layout commands being executed, for HTML
+-- content that inherits their custom properties (see
+-- `splib.parse_html_text`). Nil if the CSS has no custom properties.
+---@param self CSSRules
+---@return string?
+local function varchain(self)
+    if not self.variables or #self.stack == 0 then
+        return nil
+    end
+    return table.concat(self.stack, "\2")
 end
 
 -- Returns the declarations for an encoded chain.
@@ -509,6 +526,7 @@ return {
     leave = leave,
     get_chain = get_chain,
     set_chain = set_chain,
+    varchain = varchain,
     rules = rules,
     standalone = standalone,
     pick = pick,

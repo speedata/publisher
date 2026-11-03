@@ -7,6 +7,7 @@ local publisher = require("publisher")
 ---@class Par
 ---@field textformat? Textformat Resolved textformat of the paragraph.
 ---@field css_textformat? table Textformat fields from CSS, applied on top of the textformat (see `get_textformat`).
+---@field css_varchain? string Encoded chain of the paragraph, for the custom properties of HTML content (see `css.varchain`).
 ---@field origin? string Caller identifier (debugging only).
 ---@field margin_top? integer Margin above the paragraph in sp.
 ---@field margin_bottom? integer Margin below the paragraph in sp.
@@ -439,7 +440,7 @@ local function flatten(self, items, options, data)
                         csstext = csstext .. string.format(" body {font-size: %dsp;}", fi.size)
                     end
                 end
-                local htmltree = splib.parse_html_text(htmltext, csstext)
+                local htmltree = splib.parse_html_text(htmltext, csstext, self.css_varchain)
                 if not htmltree then
                     main.log("error", "Could not parse the HTML text")
                 else
