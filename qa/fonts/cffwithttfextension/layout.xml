@@ -1,0 +1,20 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- heros-cff.ttf is an unchanged copy of texgyreheros-regular.otf
+         (OpenType with CFF outlines) with the extension .ttf. The font
+         format is taken from the file contents, so the font is embedded
+         as CFF. -->
+    <Pageformat width="80mm" height="30mm"/>
+    <LoadFontfile name="heros-cff" filename="heros-cff.ttf"/>
+    <DefineFontfamily name="cff" fontsize="12" leading="14">
+        <Regular fontface="heros-cff"/>
+    </DefineFontfamily>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph fontfamily="cff"><Value>CFF in a .ttf file: 0123456789</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

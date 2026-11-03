@@ -29,6 +29,31 @@ function M.guess_fonttype(filename)
     end
 end
 
+-- The font formats recognized by the first four bytes of a font file.
+local font_signatures = {
+    ["OTTO"] = "opentype", -- CFF outlines
+    ["\0\1\0\0"] = "truetype",
+    ["true"] = "truetype",
+    ["wOFF"] = "woff",
+    ["wOF2"] = "woff2",
+}
+
+-- Return the font format of the file `filename_with_path` from its first
+-- bytes: `opentype` (CFF outlines), `truetype`, `woff` or `woff2`. The
+-- extension does not matter, a `.ttf` file can have CFF outlines. For font
+-- collections and unknown files, the format is guessed from the file name.
+---@param filename_with_path string
+---@return string|nil
+function M.font_file_type(filename_with_path)
+    local file = io.open(filename_with_path, "rb")
+    if not file then
+        return M.guess_fonttype(filename_with_path)
+    end
+    local signature = file:read(4)
+    file:close()
+    return font_signatures[signature] or M.guess_fonttype(filename_with_path)
+end
+
 ---@param name string Font file name (without path).
 ---@param size number Font size in scaled points.
 ---@param extra_parameter table Additional font settings such as `space` or `otfeatures`.
@@ -65,7 +90,19 @@ function M.define_font_hb(name, size, extra_parameter)
     if not filename_with_path then
         return false, string.format("Fontfile '%s' not found.", name)
     end
+    local fonttype = M.font_file_type(filename_with_path)
+    if fonttype == "woff" or fonttype == "woff2" then
+        return false,
+            string.format(
+                "%s font '%s' is not supported. Please convert the font to OpenType or TrueType, for example with woff2_decompress or fonttools.",
+                fonttype:upper(),
+                name
+            )
+    end
     local face = publisher.harfbuzz.Face.new(filename_with_path)
+    if not face or face:get_glyph_count() == 0 then
+        return false, string.format("Fontfile '%s' is not an OpenType or TrueType font.", name)
+    end
     local fnt = publisher.harfbuzz.Font.new(face)
 
     if size < 0 then
@@ -99,7 +136,7 @@ function M.define_font_hb(name, size, extra_parameter)
     f.step = publisher.options.fontstep or extra_parameter.step or 10
     f.auto_expand = true
     f.embedding = "subset"
-    f.format = M.guess_fonttype(name)
+    f.format = fonttype
     f.parameters = {
         slant = 0,
         space = (extra_parameter.space or 25) / 100 * size,
