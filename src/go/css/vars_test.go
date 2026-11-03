@@ -211,3 +211,21 @@ func TestHTMLVarsInitialWin(t *testing.T) {
 		}
 	}
 }
+
+func TestHTMLStyleAttributeWins(t *testing.T) {
+	css := `p { color: blue; margin-top: 3pt } p.c { color: green }`
+	html := `<body><p id="a" style="color: red">a</p><p id="b" class="c" style="color: red; margin-top: 1pt">b</p><p id="c" class="c">c</p></body>`
+	st := htmlStyles(t, html, css, nil)
+	checks := []struct{ id, prop, want string }{
+		{"a", "color", "red"},
+		{"a", "margin-top", "3pt"},
+		{"b", "color", "red"},
+		{"b", "margin-top", "1pt"},
+		{"c", "color", "green"},
+	}
+	for _, c := range checks {
+		if got := st[c.id][c.prop]; got != c.want {
+			t.Errorf("#%s %s = %q, want %q", c.id, c.prop, got, c.want)
+		}
+	}
+}

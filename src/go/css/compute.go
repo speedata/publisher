@@ -28,6 +28,7 @@ var nodeVirtAttrs = map[*html.Node][]html.Attribute{}
 func (c *CSS) FillComputedMaps(r *Result) error {
 	nodeVirtAttrs := make(map[*html.Node][]html.Attribute)
 	varState := make(map[*html.Node]*nodeVarState)
+	inlineStyles := make(map[*html.Node][]qrule)
 	haveVars := false
 	state := func(n *html.Node) *nodeVarState {
 		st := varState[n]
@@ -86,8 +87,9 @@ func (c *CSS) FillComputedMaps(r *Result) error {
 
 			// Build virtual attribute list for this node:
 			// - copy original (except style)
-			// - later append inline style as !props
 			// - later append matched rules as !props in ascending specificity
+			// - then append the style attribute as !props, it wins over
+			//   the rules
 			virt := make([]html.Attribute, 0, len(n.Attr)+8)
 
 			// Copy original attributes excluding "style"
@@ -98,12 +100,8 @@ func (c *CSS) FillComputedMaps(r *Result) error {
 				virt = append(virt, a)
 			}
 
-			// Inline style: append as !key=value (kept as a single "layer")
 			if styleStr, has := sel.Attr("style"); has && styleStr != "" {
-				st := state(n)
-				for _, single := range consumeBlock(parseCSSString(styleStr), true).Rules {
-					virt = st.add(virt, "", single, true)
-				}
+				inlineStyles[n] = consumeBlock(parseCSSString(styleStr), true).Rules
 			}
 
 			nodeVirtAttrs[n] = virt
@@ -129,6 +127,17 @@ func (c *CSS) FillComputedMaps(r *Result) error {
 				nodeVirtAttrs[n] = virt
 			}
 		}
+	}
+
+	// 3a) The style attribute (kept as a single "layer") wins over the
+	//     stylesheet rules.
+	for n, rules := range inlineStyles {
+		st := state(n)
+		virt := nodeVirtAttrs[n]
+		for _, single := range rules {
+			virt = st.add(virt, "", single, true)
+		}
+		nodeVirtAttrs[n] = virt
 	}
 
 	// 3b) Custom properties: inherit them from the root down and replace
@@ -168,8 +177,7 @@ type nodeVarState struct {
 	// custom property declarations per pseudo element prefix ("" for the
 	// element itself), cascade order
 	decls map[string][]varDecl
-	// custom property declarations of the style attribute, they win over
-	// the stylesheet
+	// custom property declarations of the style attribute
 	inline []varDecl
 	// declarations with var() references, the value is filled in later
 	refs     []varRef
