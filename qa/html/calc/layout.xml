@@ -1,0 +1,24 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="10cm" height="8cm"/>
+  <Stylesheet>
+    :root { --s: 0.5; --w: 1cm; }
+    .c1 { font-size: calc(0.5em); }
+    .c2 { font-size: calc(0.5 * 1em); }
+    .c3 { font-size: calc(8 / 16 * 1em); }
+    .c4 { font-size: calc(1em - 5pt); }
+    .c5 { font-size: calc(var(--s) * 1em); }
+    .c6 { font-size: calc((6 / 4 - 0.5) * 2em); }
+    .c7 { font-size: calc(50% + 2pt); }
+  </Stylesheet>
+  <Record element="data">
+    <PlaceObject>
+      <Box width="calc(1cm + 5mm)" height="2mm" background-color="black"/>
+    </PlaceObject>
+    <PlaceObject>
+      <Textblock>
+        <Paragraph><Value select="*"/></Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

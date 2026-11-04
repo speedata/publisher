@@ -31,7 +31,18 @@ func stringValue(toks tokenstream) string {
 	ret := []string{}
 	negative := false
 	prevNegative := false
-	for _, tok := range toks {
+	// Open functions and parentheses. Inside calc() the operators are
+	// kept, the expression is evaluated in Lua.
+	var nesting []bool
+	inCalc := func() bool {
+		for _, c := range nesting {
+			if c {
+				return true
+			}
+		}
+		return false
+	}
+	for i, tok := range toks {
 		prevNegative = negative
 		negative = false
 		switch tok.Type {
@@ -39,17 +50,20 @@ func stringValue(toks tokenstream) string {
 			ret = append(ret, tok.Value)
 		case scanner.String:
 			ret = append(ret, "\""+tok.Value+"\"")
-		case scanner.Number, scanner.Dimension:
-			if prevNegative {
-				ret = append(ret, "-"+tok.Value)
-			} else {
-				ret = append(ret, tok.Value)
+		case scanner.Number, scanner.Dimension, scanner.Percentage:
+			v := tok.Value
+			if tok.Type == scanner.Percentage {
+				v += "%"
 			}
-		case scanner.Percentage:
-			ret = append(ret, tok.Value+"%")
+			if prevNegative {
+				ret = append(ret, "-"+v)
+			} else {
+				ret = append(ret, v)
+			}
 		case scanner.Hash:
 			ret = append(ret, "#"+tok.Value)
 		case scanner.Function:
+			nesting = append(nesting, strings.EqualFold(tok.Value, "calc"))
 			ret = append(ret, tok.Value+"(")
 		case scanner.S:
 			// ret = append(ret, " ")
@@ -57,10 +71,34 @@ func stringValue(toks tokenstream) string {
 			switch tok.Value {
 			case ";":
 				// ignore
-			case ",", ")":
+			case ",":
 				ret = append(ret, tok.Value)
+			case ")":
+				if len(nesting) > 0 {
+					nesting = nesting[:len(nesting)-1]
+				}
+				ret = append(ret, tok.Value)
+			case "(":
+				if inCalc() {
+					nesting = append(nesting, true)
+					ret = append(ret, tok.Value)
+				} else {
+					slog.Warn("unhandled CSS delimiter", "delimiter", tok.Value)
+				}
+			case "*", "/", "+":
+				if inCalc() {
+					ret = append(ret, tok.Value)
+				} else if tok.Value != "+" {
+					slog.Warn("unhandled CSS delimiter", "delimiter", tok.Value)
+				}
 			case "-":
-				negative = true
+				// A sign directly in front of a number. Inside calc() a
+				// minus with white space after it is the operator.
+				if inCalc() && !followedByNumber(toks, i) {
+					ret = append(ret, tok.Value)
+				} else {
+					negative = true
+				}
 			case `\`:
 				// ignore, often from line-continuation in style attributes
 			default:
@@ -73,6 +111,19 @@ func stringValue(toks tokenstream) string {
 		}
 	}
 	return strings.Join(ret, " ")
+}
+
+// followedByNumber reports whether the token after toks[i] is a number,
+// a dimension or a percentage (without white space in between).
+func followedByNumber(toks tokenstream, i int) bool {
+	if i+1 >= len(toks) {
+		return false
+	}
+	switch toks[i+1].Type {
+	case scanner.Number, scanner.Dimension, scanner.Percentage:
+		return true
+	}
+	return false
 }
 
 func isDimension(str string) (bool, string) {

@@ -1,0 +1,9 @@
+<data>
+  <p>1 X<span class="c1">X</span> calc(0.5em)</p>
+  <p>2 X<span class="c2">X</span> calc(0.5 * 1em)</p>
+  <p>3 X<span class="c3">X</span> calc(8 / 16 * 1em)</p>
+  <p>4 X<span class="c4">X</span> calc(1em - 5pt)</p>
+  <p>5 X<span class="c5">X</span> calc(var(--s) * 1em)</p>
+  <p>6 X<span class="c6">X</span> calc((6 / 4 - 0.5) * 2em)</p>
+  <p>7 X<span class="c7">X</span> calc(50% + 2pt)</p>
+</data>

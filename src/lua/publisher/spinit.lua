@@ -200,6 +200,11 @@ function tex.sp(number_or_string)
         return toint(sp)
     end
 
+    -- CSS calc() with absolute units, for example from a stylesheet
+    if s:match("^calc%(") then
+        return require("csscalc").length(s)
+    end
+
     -- fallback: try TeX dimension parser
     if orig_texsp then
         -- perform legacy replacements before calling tex.sp

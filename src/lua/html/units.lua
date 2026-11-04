@@ -3,8 +3,25 @@
 -- The `HtmlStyles` class is defined in `html/inherit.lua`.
 
 local publisher = require("publisher")
+local csscalc = require("csscalc")
 
 local M = {}
+
+-- Returns the size of 1em in sp: the size of the font family if the font
+-- family number is fixed, otherwise `fontsize_sp`.
+---@param styles HtmlStyles
+---@param fontsize_sp number?
+---@return number
+function M.em_size(styles, fontsize_sp)
+    local fn = tonumber(styles["font-family-number"])
+    if fn then
+        local fam = publisher.fonts.lookup_fontfamily_number_instance[fn]
+        if fam then
+            return fam.size
+        end
+    end
+    return fontsize_sp or styles.fontsize_sp or 0
+end
 
 ---Convert a CSS-like size to TeX scaled points (sp).
 ---Accepts: "Nrem", "Nem", number-as-string => px, TeX length string (e.g. "12pt", "1pc").
@@ -17,22 +34,19 @@ function M.getsize(styles, size, fontsize_sp)
         return 0
     end
     if type(size) == "string" then
-        if string.match(size, "rem$") then
+        if csscalc.is_calc(size) then
+            return csscalc.length(size, {
+                em = M.em_size(styles, fontsize_sp),
+                rem = styles.rootfontsize_sp,
+            }) or 0
+        elseif string.match(size, "rem$") then
             local amount = string.gsub(size, "^(.*)rem$", "%1")
             ---@diagnostic disable-next-line: cast-local-type
             return math.round(styles.rootfontsize_sp * amount)
         elseif string.match(size, "em$") then
             local amount = string.gsub(size, "^(.*)r?em$", "%1")
-            local fn = styles["font-family-number"]
-            if fn and tonumber(fn) then
-                -- get font family size if available
-                local fam = publisher.fonts.lookup_fontfamily_number_instance[tonumber(fn)]
-                if fam then
-                    fontsize_sp = fam.size
-                end
-            end
             ---@diagnostic disable-next-line: cast-local-type
-            return math.round(fontsize_sp * amount)
+            return math.round(M.em_size(styles, fontsize_sp) * amount)
         elseif tonumber(size) then
             return tex.sp(size .. "px") or 0
         else

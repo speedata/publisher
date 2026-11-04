@@ -2,6 +2,7 @@
 -- Uses global `tex` and `math` like the legacy code.
 -- The `HtmlStyles` class is defined in `html/inherit.lua`, where instances are created.
 local units = require("html.units")
+local csscalc = require("csscalc")
 
 local M = {}
 
@@ -19,7 +20,14 @@ function M.set_calculated_width(styles)
     local sw = styles.width or "auto"
     local cw = styles.calculated_width
 
-    if type(sw) == "string" and string.match(sw, "%%$") then
+    if csscalc.is_calc(sw) then
+        ---@cast sw string
+        cw = csscalc.length(sw, {
+            em = units.em_size(styles, styles.fontsize_sp),
+            rem = styles.rootfontsize_sp,
+            percent = cw,
+        }) or cw
+    elseif type(sw) == "string" and string.match(sw, "%%$") then
         local amount = string.match(sw, "([%d.]+)%%$")
         cw = math.round(cw * tonumber(amount) / 100, 0)
     elseif type(sw) == "string" and string.match(sw, "em$") then
@@ -57,7 +65,17 @@ function M.copy_attributes(styles, attributes, _elementname)
             splib.log("warning", "HTML: CSS property not supported", "property", k, "value", v)
         end
         if k == "font-size" then
-            if type(v) == "string" and string.match(v, "rem$") then
+            if csscalc.is_calc(v) then
+                -- em and % refer to the font size of the parent
+                local size = csscalc.length(v, {
+                    em = styles.fontsize_sp,
+                    rem = styles.rootfontsize_sp,
+                    percent = styles.fontsize_sp,
+                })
+                if size then
+                    styles.fontsize_sp = size
+                end
+            elseif type(v) == "string" and string.match(v, "rem$") then
                 local amount = string.gsub(v, "^(.*)rem$", "%1")
                 styles.fontsize_sp = math.round(styles.rootfontsize_sp * amount)
             elseif type(v) == "string" and string.match(v, "em$") then
@@ -94,7 +112,22 @@ function M.copy_attributes(styles, attributes, _elementname)
     -- here and inherited as an absolute value. Plain numbers and "normal"
     -- depend on the font size of each element (see html.fonts.lineheight).
     local lh = attributes["line-height"]
-    if lh and lh ~= "normal" and not tonumber(lh) then
+    if csscalc.is_calc(lh) then
+        local n, is_length = csscalc.evaluate(lh, {
+            em = units.em_size(styles, styles.fontsize_sp),
+            rem = styles.rootfontsize_sp,
+            percent = styles.fontsize_sp,
+        })
+        if n and is_length then
+            styles["line-height"] = string.format("%dsp", n)
+            styles.lineheight_sp = n
+        elseif n then
+            -- a factor, inherited as such
+            styles["line-height"] = tostring(n)
+        else
+            styles["line-height"] = nil
+        end
+    elseif lh and lh ~= "normal" and not tonumber(lh) then
         local percent = string.match(lh, "^([%d.]+)%%$")
         if percent then
             styles.lineheight_sp = math.round(styles.fontsize_sp * tonumber(percent) / 100)

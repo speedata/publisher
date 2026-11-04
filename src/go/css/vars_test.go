@@ -246,3 +246,45 @@ func TestContentAltText(t *testing.T) {
 		}
 	}
 }
+
+func TestHTMLCalc(t *testing.T) {
+	css := `
+:root { --s: 0.5; --w: 2em }
+.a { font-size: calc(14 / 16 * 1em) }
+.b { vertical-align: calc((6 / 14 - 0.375) * 1em) }
+.c { margin-left: calc(1em - 5pt) }
+.d { margin-left: calc(-1 * var(--w, 2em)) }
+.e { font-size: calc(var(--s) * 1em) }
+.f { width: calc(100% - -2pt) }
+.g { margin: calc(1em + 2pt) 0 }
+.h { margin-left: -5pt; margin-right: -10% }
+`
+	html := `<body>
+<p id="a" class="a">a</p>
+<p id="b" class="b">b</p>
+<p id="c" class="c">c</p>
+<p id="d" class="d">d</p>
+<p id="e" class="e">e</p>
+<p id="f" class="f">f</p>
+<p id="g" class="g">g</p>
+<p id="h" class="h">h</p>
+</body>`
+	st := htmlStyles(t, html, css, nil)
+	checks := []struct{ id, prop, want string }{
+		{"a", "font-size", "calc( 14 / 16 * 1em )"},
+		{"b", "vertical-align", "calc( ( 6 / 14 - 0.375 ) * 1em )"},
+		{"c", "margin-left", "calc( 1em - 5pt )"},
+		{"d", "margin-left", "calc( -1 * 2em )"},
+		{"e", "font-size", "calc( 0.5 * 1em )"},
+		{"f", "width", "calc( 100% - -2pt )"},
+		{"g", "margin-top", "calc( 1em + 2pt )"},
+		{"g", "margin-left", "0"},
+		{"h", "margin-left", "-5pt"},
+		{"h", "margin-right", "-10%"},
+	}
+	for _, c := range checks {
+		if got := st[c.id][c.prop]; got != c.want {
+			t.Errorf("#%s %s = %q, want %q", c.id, c.prop, got, c.want)
+		}
+	}
+}
