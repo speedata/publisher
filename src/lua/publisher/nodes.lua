@@ -1464,8 +1464,8 @@ function M.hbglyphlist(arguments)
     end
 
     if not list then
-        -- This should never happen.
-        main.log("warn", "No head found")
+        -- All glyphs were skipped (missing from the font and already
+        -- reported, DEL, a lone no-break space, removed during shaping).
         return node.new("hlist")
     end
     local aa = parameter.add_attributes or {}
