@@ -1,0 +1,26 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="10cm" height="10cm"/>
+  <DefineFontfamily name="text" fontsize="10" leading="14">
+    <Regular fontface="TeXGyreHeros-Regular"/>
+    <Bold fontface="TeXGyreHeros-Bold"/>
+    <Italic fontface="TeXGyreHeros-Italic"/>
+    <BoldItalic fontface="TeXGyreHeros-BoldItalic"/>
+  </DefineFontfamily>
+  <Stylesheet>
+    .pt   { font-size: 5pt; }
+    .em   { font-size: 0.5em; }
+    .em2  { font-size: 2em; }
+    .pct  { font-size: 50%; }
+    .rem  { font-size: 0.5rem; }
+    p.pem { font-size: 0.5em; }
+    h2    { font-size: 1.5em; }
+  </Stylesheet>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph><Value select="*"/></Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

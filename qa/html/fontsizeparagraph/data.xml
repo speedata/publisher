@@ -1,0 +1,13 @@
+<data>
+  <p>1 X<span class="pt">X</span> 5pt</p>
+  <p>2 X<span class="em">X</span> 0.5em</p>
+  <p>3 X<span class="em2">X</span> 2em</p>
+  <p>4 X<span class="pct">X</span> 50%</p>
+  <p>5 X<span class="rem">X</span> 0.5rem</p>
+  <p class="pem">6 XX p 0.5em</p>
+  <p>7 X<span style="font-size: 0.5em">X</span> style 0.5em</p>
+  <p>8 X<span class="em2">X<b>B</b><i>I</i><span class="em">X</span></span> nested</p>
+  <p>9 <small>small</small> <big>big</big> UA sizes ignored</p>
+  <h1>10 h1 paragraph size</h1>
+  <h2>11 h2 1.5em from layout</h2>
+</data>

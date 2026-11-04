@@ -629,30 +629,10 @@ function M.build_nodelist(elt, options, before_box, _caller, prevdir, dataxml)
                     local marker_opt
                     if has_marker_styles then
                         local ms = inherit.push(stylesstack)
-                        local inherited_fam = styles["font-family-number"]
                         styles_mod.copy_attributes(ms, marker_styles, "li::marker")
-                        if marker_styles["font-size"] and inherited_fam and tonumber(inherited_fam) > 0 then
-                            -- Re-define the inherited font family at the new marker size
-                            local fam_inst = publisher.fonts.lookup_fontfamily_number_instance[tonumber(inherited_fam)]
-                            if fam_inst then
-                                local marker_name = (fam_inst.name or "marker") .. "/marker"
-                                local cached = publisher.fonts.lookup_fontfamily_name_number[marker_name]
-                                if cached then
-                                    ms["font-family-number"] = cached
-                                else
-                                    local new_fam = publisher.fontfamilies.define_fontfamily(
-                                        fam_inst.fontfaceregular,
-                                        fam_inst.fontfacebold,
-                                        fam_inst.fontfaceitalic,
-                                        fam_inst.fontfacebolditalic,
-                                        marker_name,
-                                        ms.fontsize_sp,
-                                        ms.fontsize_sp * 1.12
-                                    )
-                                    ms["font-family-number"] = new_fam
-                                end
-                            end
-                        elseif marker_styles["font-family"] then
+                        -- An inherited font family number gets the marker
+                        -- size in get_fontfamily.
+                        if marker_styles["font-family"] then
                             ms["font-family-number"] = 0
                         end
                         marker_opt = inline_options.set_options_for_mknodes(ms, {}, publisher, fontfamilies)

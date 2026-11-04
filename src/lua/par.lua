@@ -426,9 +426,18 @@ local function flatten(self, items, options, data)
                 end
             else
                 local htmltext = reconstruct_html_text(thisself)
-                local csstext = " a { text-decoration: none; color: black}" .. default_css_text
+                local csstext = " a { text-decoration: none; color: black}"
+                local cssfontsize = self.textformat and self.textformat.cssfontsize == true
+                if not cssfontsize then
+                    -- With the font of the paragraph, headings, small and big
+                    -- keep its size. The font sizes of the default style
+                    -- sheet do not apply, those of the layout do (they come
+                    -- later).
+                    csstext = csstext .. " h1, h2, h3, h4, h5, h6, small, big { font-size: 1em; }"
+                end
+                csstext = csstext .. default_css_text
 
-                if self.textformat and self.textformat.cssfontsize == true then
+                if cssfontsize then
                     -- ignore
                 else
                     csstext = csstext .. string.format(" body {font-family-number: %d ;}", options.fontfamily)

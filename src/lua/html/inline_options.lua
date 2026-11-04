@@ -20,7 +20,16 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
     -- Font family / size
     local family = styles["font-family"]
     local fontsize = styles["font-size"]
-    options.fontfamily = fonts.get_fontfamily(family, styles.fontsize_sp, fontsize, styles, publisher, fontfamilies)
+    local fixedfam = tonumber(styles["font-family-number"])
+    local script = styles["vertical-align"] == "sub" or styles["vertical-align"] == "super"
+    if fixedfam and fixedfam > 0 and (script or options.fontsize == "small") then
+        -- Sub- and superscripts (and their contents) take the script size of
+        -- the family (see below), not the font-size of the default style
+        -- sheet.
+        options.fontfamily = fixedfam
+    else
+        options.fontfamily = fonts.get_fontfamily(family, styles.fontsize_sp, fontsize, styles, publisher, fontfamilies)
+    end
 
     if styles.has_border then
         local styles_fontsize_sp = styles.fontsize_sp
