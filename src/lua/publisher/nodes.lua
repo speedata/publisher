@@ -1088,6 +1088,10 @@ function M.hbglyphlist(arguments)
     elseif parameter.verticalalign == "super" then
         glyph_yoffset_base = famtab.supershift
     end
+    if parameter.yoffset then
+        -- raised (positive) or lowered text, from CSS vertical-align
+        glyph_yoffset_base = glyph_yoffset_base + parameter.yoffset
+    end
     local xoffset_dir = 1
     if direction == "rtl" then
         xoffset_dir = -1
@@ -1406,7 +1410,7 @@ function M.hbglyphlist(arguments)
                 n.xoffset = xoffset_dir * thisglyph.x_offset * thistbl.mag
             end
             if thisglyph.y_offset ~= 0 then
-                n.yoffset = thisglyph.y_offset * thistbl.mag
+                n.yoffset = glyph_yoffset_base + thisglyph.y_offset * thistbl.mag
             end
             node_set_attribute(n, att_fontfamily, fontfamily)
             apply_styles(n)

@@ -174,6 +174,20 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
         if famnum and famnum > 0 then
             options.fontsize = "small"
         end
+    elseif type(valign) == "string" and (string.match(valign, "^[-+.%d]") or string.match(valign, "^calc%(")) then
+        -- A length raises (positive) or lowers the text, relative to the
+        -- (possibly shifted) baseline of the parent. A percentage refers
+        -- to the line height of the element.
+        local shift
+        local percent = string.match(valign, "^([-+]?[%d.]+)%%$")
+        if percent then
+            shift = math.round(fonts.lineheight(styles, styles.fontsize_sp) * tonumber(percent) / 100)
+        else
+            shift = units.getsize(styles, valign, styles.fontsize_sp)
+        end
+        if shift ~= 0 then
+            options.yoffset = (options.yoffset or 0) + shift
+        end
     end
 
     return options

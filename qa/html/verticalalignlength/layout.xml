@@ -1,0 +1,20 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="10cm" height="8cm"/>
+  <Stylesheet>
+    .up   { vertical-align: 3pt; }
+    .down { vertical-align: -3pt; }
+    .em   { vertical-align: 0.5em; }
+    .pct  { vertical-align: 50%; }
+    .sm   { font-size: calc(14 / 16 * 1em); line-height: calc(1 / 14 * 1em); vertical-align: calc((6 / 14 - 0.375) * 1em); }
+    .xs   { font-size: calc(12 / 16 * 1em); line-height: calc(1 / 12 * 1em); vertical-align: calc((6 / 12 - 0.375) * 1em); }
+    .lg   { font-size: calc(20 / 16 * 1em); line-height: calc(1 / 20 * 1em); vertical-align: calc((6 / 20 - 0.375) * 1em); }
+  </Stylesheet>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph><Value select="*"/></Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

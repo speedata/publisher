@@ -1,0 +1,9 @@
+<data>
+  <p>1 X<span class="up">X</span>X 3pt</p>
+  <p>2 X<span class="down">X</span>X -3pt</p>
+  <p>3 X<span class="em">X</span>X 0.5em</p>
+  <p>4 X<span class="pct">X</span>X 50%</p>
+  <p>5 X<span class="up">X<span class="up">X</span><b>B</b></span>X nested</p>
+  <p>6 X<span class="up">X<sup>2</sup></span>X with sup</p>
+  <p>7 X<span class="xs">X</span><span class="sm">X</span><span class="lg">X</span>X fa-xs, fa-sm, fa-lg</p>
+</data>
