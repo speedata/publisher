@@ -5,6 +5,13 @@ local units = require("html.units")
 
 local M = {}
 
+-- CSS properties that are recognized but have no effect. Each value is
+-- reported once per run.
+local unsupported = {
+    transform = { none = true },
+}
+local reported = {}
+
 ---Recompute styles.calculated_width based on CSS-like width and box extras.
 ---@param styles HtmlStyles
 ---@return nil
@@ -44,6 +51,11 @@ function M.copy_attributes(styles, attributes, _elementname)
     remember_currentcolor = {}
 
     for k, v in pairs(attributes) do
+        local ignored = unsupported[k]
+        if ignored and not ignored[v] and not reported[k .. ":" .. tostring(v)] then
+            reported[k .. ":" .. tostring(v)] = true
+            splib.log("warning", "HTML: CSS property not supported", "property", k, "value", v)
+        end
         if k == "font-size" then
             if type(v) == "string" and string.match(v, "rem$") then
                 local amount = string.gsub(v, "^(.*)rem$", "%1")
