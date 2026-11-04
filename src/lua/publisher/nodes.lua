@@ -518,22 +518,28 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                 if head_props_t.borderstart then
                     -- bordered nodes always sit inside a box, so parent is set here
                     ---@cast parent Node
+                    -- the border ends after the node with the same id
+                    local borderid = head_props_t.borderstart
                     local cur = head
+                    local stop
                     while cur do
                         local cur_properties = node.getproperty(cur)
-                        if cur_properties and cur_properties.borderend then
-                            if cur.next then
-                                cur = cur.next
-                            end
+                        if cur_properties and cur_properties.borderend == borderid then
+                            stop = cur.next
                             break
                         end
                         cur = cur.next
                     end
+                    -- measure with the glue as set in the line
+                    local gset, gsign, gorder = 0, 0, 0
+                    if parent.id == publisher.hlist_node then
+                        gset, gsign, gorder = parent.glue_set, parent.glue_sign, parent.glue_order
+                    end
                     local wd, ht, dp
-                    if cur then
-                        wd, ht, dp = node.dimensions(head, cur)
+                    if stop then
+                        wd, ht, dp = node.dimensions(gset, gsign, gorder, head, stop)
                     else
-                        wd, ht, dp = node.dimensions(head)
+                        wd, ht, dp = node.dimensions(gset, gsign, gorder, head)
                     end
                     local boxnode = assert(publisher.htmlbox(blockinline, head, wd, ht, dp))
                     parent.head = node.insert_before(parent.head, head, boxnode)

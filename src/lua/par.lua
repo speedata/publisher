@@ -809,6 +809,101 @@ end
 ---@field first boolean The paragraph is at the start of the box.
 ---@field last boolean The paragraph is at the end of the box.
 
+-- Node types that count as content of a line for inline borders.
+local border_content = {
+    [node.id("glyph")] = true,
+    [node.id("hlist")] = true,
+    [node.id("vlist")] = true,
+    [node.id("rule")] = true,
+    [node.id("disc")] = true,
+}
+local border_content_hlist = node.id("hlist")
+
+---@return Node
+local function zero_rule()
+    local r = node.new(publisher.rule_node)
+    r.width = 0
+    r.height = 0
+    r.depth = 0
+    return r
+end
+
+-- Splits the borders of inline HTML elements at line breaks. The rule with
+-- borderstart and the rule with borderend of an element (see
+-- html.add_inline_box) can end up on different lines. Each line then gets
+-- a border of its own: the first one is open on the right, the following
+-- ones are open on the left (and on the right if the element goes on).
+---@param nodelist Node The vlist of lines.
+local function split_inline_borders(nodelist)
+    local open = {} -- the borders not yet closed, innermost last
+    local line = nodelist.head
+    while line do
+        if line.id == border_content_hlist then
+            local continued = {}
+            for i = 1, #open do
+                continued[i] = open[i]
+            end
+            local n = line.head
+            while n do
+                local p = node.getproperty(n)
+                if p and p.borderstart then
+                    open[#open + 1] = { props = p, start = n }
+                end
+                if p and p.borderend then
+                    for i = #open, 1, -1 do
+                        if open[i].props.borderstart == p.borderend then
+                            table.remove(open, i)
+                            break
+                        end
+                    end
+                end
+                n = n.next
+            end
+            if #continued > 0 then
+                local first = line.head
+                while first and not border_content[first.id] do
+                    first = first.next
+                end
+                for i = 1, #continued do
+                    local entry = continued[i]
+                    local anchor = zero_rule()
+                    local props = {}
+                    for k, v in pairs(entry.props) do
+                        props[k] = v
+                    end
+                    props.openleft = true
+                    props.openright = nil
+                    props.origin = "inline border continued"
+                    node.setproperty(anchor, props)
+                    if first then
+                        line.head = node.insert_before(line.head, first, anchor)
+                    else
+                        line.head = node.insert_after(line.head, node.tail(line.head), anchor)
+                    end
+                    entry.props = props
+                    entry.start = anchor
+                end
+            end
+            if #open > 0 then
+                local last = node.tail(line.head) ---@type Node?
+                while last and not border_content[last.id] do
+                    last = last.prev
+                end
+                last = last or line.head
+                -- innermost first
+                for i = #open, 1, -1 do
+                    local entry = open[i]
+                    local anchor = zero_rule()
+                    node.setproperty(anchor, { borderend = entry.props.borderstart, origin = "inline border split" })
+                    line.head, last = node.insert_after(line.head, last, anchor)
+                    entry.props.openright = true
+                end
+            end
+        end
+        line = line.next
+    end
+end
+
 -- Adds the space above and below the linebroken vbox `nodelist` that the
 -- surrounding HTML block boxes (`chain`, outermost first) need and inserts
 -- their backgrounds and borders at the top of the list. `first` and `last`
@@ -1432,6 +1527,7 @@ function Par:format(width_sp, options, data)
             end
 
             publisher.fonts.post_linebreak(nodelist)
+            split_inline_borders(nodelist)
             -- HTML block boxes: space, background and borders
             if prop_css_chain then
                 add_css_boxes(nodelist, prop_css_chain, true, true)

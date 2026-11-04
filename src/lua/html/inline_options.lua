@@ -48,10 +48,17 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
         local border_bottom_style = styles["border-bottom-style"] or "none"
         local border_left_style = styles["border-left-style"] or "none"
 
-        local border_top_width = units.getsize(styles, styles["border-top-width"], styles_fontsize_sp)
-        local border_right_width = units.getsize(styles, styles["border-right-width"], styles_fontsize_sp)
-        local border_bottom_width = units.getsize(styles, styles["border-bottom-width"], styles_fontsize_sp)
-        local border_left_width = units.getsize(styles, styles["border-left-width"], styles_fontsize_sp)
+        -- A side without a border style has no border width (as in CSS).
+        local function borderwidth(side, style)
+            if style == "none" or style == "hidden" then
+                return 0
+            end
+            return units.getsize(styles, styles["border-" .. side .. "-width"], styles_fontsize_sp)
+        end
+        local border_top_width = borderwidth("top", border_top_style)
+        local border_right_width = borderwidth("right", border_right_style)
+        local border_bottom_width = borderwidth("bottom", border_bottom_style)
+        local border_left_width = borderwidth("left", border_left_style)
 
         local border_top_color = styles["border-top-color"]
         local border_right_color = styles["border-right-color"]

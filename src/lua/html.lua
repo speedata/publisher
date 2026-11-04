@@ -180,6 +180,83 @@ local function push_pseudo_element(pseudo_styles, name, options)
     return publisher.nodes.mknodes(content, pseudo_options), pstyles
 end
 
+local inline_box_counter = 0
+
+-- Returns a rule of width `wd` without height and depth. Unlike a kern, it
+-- is not discarded at the beginning of a line.
+---@param wd integer
+---@param origin string
+---@return Node
+local function spacer(wd, origin)
+    local r = node.new(publisher.rule_node)
+    r.width = wd
+    r.height = 0
+    r.depth = 0
+    publisher.attribute_helpers.setprop(r, "origin", origin)
+    return r
+end
+
+-- Adds the horizontal margin, border and padding of an inline element
+-- around its runs, as in the browser: they take space in the line, the
+-- vertical ones do not. The rule in front of the content carries the
+-- border properties (borderstart), the rule after it ends the border
+-- (borderend with the same id). The border is drawn at shipout, see
+-- nodes.insert_nonmoving_whatsits, and split at line breaks, see
+-- split_inline_borders.
+---@param runs table[] The runs of the element, changed in place.
+---@param styles HtmlStyles
+---@param options table The options of the element (with options.border if it has a border).
+local function add_inline_box(runs, styles, options)
+    local fs = styles.fontsize_sp
+    local margin_left = units.getsize(styles, styles["margin-left"], fs)
+    local margin_right = units.getsize(styles, styles["margin-right"], fs)
+    local border = styles.has_border and options.border or nil
+    local left, right
+    if border then
+        left = border.border_left_width + border.padding_left
+        right = border.border_right_width + border.padding_right
+    else
+        left = units.getsize(styles, styles["padding-left"], fs)
+        right = units.getsize(styles, styles["padding-right"], fs)
+    end
+    if not border and left == 0 and right == 0 and margin_left == 0 and margin_right == 0 then
+        return
+    end
+    local first, last = {}, {}
+    if margin_left ~= 0 then
+        first[#first + 1] = spacer(margin_left, "inline margin-left")
+    end
+    local startrule = spacer(left, "inline border start")
+    first[#first + 1] = startrule
+    local endrule = spacer(right, "inline border end")
+    last[1] = endrule
+    if margin_right ~= 0 then
+        last[2] = spacer(margin_right, "inline margin-right")
+    end
+    if border then
+        inline_box_counter = inline_box_counter + 1
+        local setprop = publisher.attribute_helpers.setprop
+        local fam = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily]
+        setprop(startrule, "borderstart", inline_box_counter)
+        setprop(startrule, "lineheight", fam and fam.size or fs)
+        for index, value in pairs(border) do
+            if index ~= "borderstart" then
+                setprop(startrule, index, value)
+            end
+        end
+        setprop(endrule, "borderend", inline_box_counter)
+    end
+    local head = first[1]
+    for i = 2, #first do
+        node.insert_after(head, node.tail(head), first[i])
+    end
+    if last[2] then
+        node.insert_after(last[1], last[1], last[2])
+    end
+    table.insert(runs, 1, head)
+    runs[#runs + 1] = last[1]
+end
+
 -- Recursive part of collect_horizontal_nodes. pending.box is the
 -- ::before box of the enclosing block. It goes in front of the first
 -- run that is created and is then removed from pending.
@@ -257,25 +334,8 @@ local function collect_runs(elt, parameter, pending, dataxml)
             end
         end
 
-        if styles.has_border then
-            publisher.attribute_helpers.setprop(thisret[1], "borderstart", 1)
-            local ff = options.fontfamily
-            local ht = publisher.fonts.lookup_fontfamily_number_instance[ff].size
-
-            publisher.attribute_helpers.setprop(thisret[1], "lineheight", ht)
-            for index, value in pairs(options.border) do
-                publisher.attribute_helpers.setprop(thisret[1], index, value)
-            end
-            -- the border ends after the last run of the element (runs can
-            -- also be strings, they carry no properties)
-            local lastrun = thisret[1]
-            for j = #thisret, 2, -1 do
-                if type(thisret[j]) ~= "string" then
-                    lastrun = thisret[j]
-                    break
-                end
-            end
-            publisher.attribute_helpers.setprop(node.tail(lastrun), "borderend", 1)
+        if typ == "table" then
+            add_inline_box(thisret, styles, options)
         end
 
         for j = 1, #thisret do

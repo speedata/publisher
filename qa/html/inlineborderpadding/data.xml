@@ -1,0 +1,12 @@
+<data>
+  <p>1 a<span class="b">X</span>b border</p>
+  <p>2 a<span class="p">X</span>b padding 12pt/6pt</p>
+  <p>3 a<span class="pv">X</span>b padding 3pt</p>
+  <p><span class="p">X</span> 4 at line start</p>
+  <p>5 a<span class="m">X</span>b margin 8pt</p>
+  <p>6 a<span class="np">X</span>b padding, no border</p>
+  <p>7 a<span class="b">X<span class="p">Y</span>Z</span>b nested</p>
+  <p>8 a<span class="lft">X</span>b left only</p>
+  <p>9 text <span class="r">rounded and padded text that runs over the line end</span> and more</p>
+  <p>10 text <span class="b">a bordered text that runs over two line ends because it is long enough</span> end</p>
+</data>

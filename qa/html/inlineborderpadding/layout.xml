@@ -1,0 +1,20 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="8cm" height="9cm"/>
+  <Stylesheet>
+    .b   { border: 0.5pt solid red; }
+    .p   { border: 0.5pt solid red; padding-left: 12pt; padding-right: 6pt; }
+    .pv  { border: 0.5pt solid red; padding: 3pt; }
+    .m   { border: 0.5pt solid blue; margin: 0 8pt; }
+    .np  { padding: 0 10pt; }
+    .r   { border: 1pt solid green; border-radius: 4pt; padding: 0 3pt; }
+    .lft { border-left: 2pt solid red; padding-left: 2pt; }
+  </Stylesheet>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph><Value select="*"/></Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

@@ -2343,6 +2343,19 @@ function M.htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
     local border_bottom_width = properties.border_bottom_width
     local border_left_width = properties.border_left_width
 
+    -- An inline element broken across lines has no border on the side of
+    -- the line break (box-decoration-break: slice).
+    if properties.openleft then
+        border_left_width = 0
+        b_t_l_radius = 0
+        b_b_l_radius = 0
+    end
+    if properties.openright then
+        border_right_width = 0
+        b_t_r_radius = 0
+        b_b_r_radius = 0
+    end
+
     local padding_top = properties.padding_top
     local padding_bottom = properties.padding_bottom
     local padding_left = properties.padding_left
@@ -2363,10 +2376,12 @@ function M.htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
         ht = content_bottom - padding_bottom - border_bottom_width
         sp_y2 = content_bottom - padding_bottom
 
-        sp_x0 = -1 * (padding_left + border_left_width)
-        sp_x1 = sp_x0 + border_left_width
-        sp_x2 = sp_x1 + width_sp
-        wd = sp_x2 + border_right_width
+        -- The box starts at the rule in front of the content (border and
+        -- padding) and width_sp includes the rule after it.
+        sp_x0 = 0
+        sp_x1 = border_left_width
+        sp_x2 = width_sp - border_right_width
+        wd = width_sp
     else
         local content_top = height_sp
         local content_bottom = -depth_sp
