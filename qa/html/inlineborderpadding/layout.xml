@@ -1,6 +1,6 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
     xmlns:sd="urn:speedata:2009/publisher/functions/en">
-  <Pageformat width="8cm" height="9cm"/>
+  <Pageformat width="8cm" height="11cm"/>
   <Stylesheet>
     .b   { border: 0.5pt solid red; }
     .p   { border: 0.5pt solid red; padding-left: 12pt; padding-right: 6pt; }
@@ -9,6 +9,9 @@
     .np  { padding: 0 10pt; }
     .r   { border: 1pt solid green; border-radius: 4pt; padding: 0 3pt; }
     .lft { border-left: 2pt solid red; padding-left: 2pt; }
+    .bg  { background-color: yellow; padding: 0 6pt; }
+    .bgm { background-color: yellow; border: 0.5pt solid red; padding: 0 3pt; margin: 0 6pt; }
+    .out { background-color: lightblue; }
   </Stylesheet>
   <Record element="data">
     <PlaceObject>

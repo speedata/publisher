@@ -9,4 +9,7 @@
   <p>8 a<span class="lft">X</span>b left only</p>
   <p>9 text <span class="r">rounded and padded text that runs over the line end</span> and more</p>
   <p>10 text <span class="b">a bordered text that runs over two line ends because it is long enough</span> end</p>
+  <p>11 a<span class="bg">X</span>b background</p>
+  <p>12 <span class="out">a<span class="bgm">X</span>b</span> nested backgrounds, margin</p>
+  <p>13 text <span class="bg">background with padding that runs over the line end</span> end</p>
 </data>

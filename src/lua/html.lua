@@ -183,16 +183,24 @@ end
 local inline_box_counter = 0
 
 -- Returns a rule of width `wd` without height and depth. Unlike a kern, it
--- is not discarded at the beginning of a line.
+-- is not discarded at the beginning of a line. It gets the background
+-- color of `opts`, so that the background covers it.
 ---@param wd integer
 ---@param origin string
+---@param opts table Options with backgroundcolor and bg_padding_top/bottom (from inline_options).
 ---@return Node
-local function spacer(wd, origin)
+local function spacer(wd, origin, opts)
     local r = node.new(publisher.rule_node)
     r.width = wd
     r.height = 0
     r.depth = 0
     publisher.attribute_helpers.setprop(r, "origin", origin)
+    if opts.backgroundcolor then
+        local attnum = publisher.attribute_name_number
+        node.set_attribute(r, attnum["background-color"], opts.backgroundcolor)
+        node.set_attribute(r, attnum["bgpaddingtop"], tex.sp(opts.bg_padding_top or 0))
+        node.set_attribute(r, attnum["bgpaddingbottom"], tex.sp(opts.bg_padding_bottom or 0))
+    end
     return r
 end
 
@@ -206,7 +214,8 @@ end
 ---@param runs table[] The runs of the element, changed in place.
 ---@param styles HtmlStyles
 ---@param options table The options of the element (with options.border if it has a border).
-local function add_inline_box(runs, styles, options)
+---@param parent_options table The options of the parent, for the background of the margin.
+local function add_inline_box(runs, styles, options, parent_options)
     local fs = styles.fontsize_sp
     local margin_left = units.getsize(styles, styles["margin-left"], fs)
     local margin_right = units.getsize(styles, styles["margin-right"], fs)
@@ -224,14 +233,15 @@ local function add_inline_box(runs, styles, options)
     end
     local first, last = {}, {}
     if margin_left ~= 0 then
-        first[#first + 1] = spacer(margin_left, "inline margin-left")
+        first[#first + 1] = spacer(margin_left, "inline margin-left", parent_options)
     end
-    local startrule = spacer(left, "inline border start")
+    -- the background covers the padding, not the margin
+    local startrule = spacer(left, "inline border start", options)
     first[#first + 1] = startrule
-    local endrule = spacer(right, "inline border end")
+    local endrule = spacer(right, "inline border end", options)
     last[1] = endrule
     if margin_right ~= 0 then
-        last[2] = spacer(margin_right, "inline margin-right")
+        last[2] = spacer(margin_right, "inline margin-right", parent_options)
     end
     if border then
         inline_box_counter = inline_box_counter + 1
@@ -335,7 +345,7 @@ local function collect_runs(elt, parameter, pending, dataxml)
         end
 
         if typ == "table" then
-            add_inline_box(thisret, styles, options)
+            add_inline_box(thisret, styles, options, parameter)
         end
 
         for j = 1, #thisret do

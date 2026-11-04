@@ -661,6 +661,22 @@ do
         local bg_padding_top, bg_padding_bottom
         local reportmissingglyphs = opts.reportmissingglyphs
         local lasthead = nil
+        -- A different background color (a nested element with a background
+        -- of its own) ends the current background in front of `at`.
+        local function end_other_bgcolor(at, bgcolor)
+            if start_bgcolor and bgcolor and bgcolor > 0 and bgcolor ~= bgcolorindex then
+                insert_bgcolor(
+                    d_tonode(list_head_d),
+                    d_tonode(at),
+                    d_tonode(start_bgcolor),
+                    bgcolorindex,
+                    bg_padding_top,
+                    bg_padding_bottom,
+                    bgcolor_reverse
+                )
+                start_bgcolor = nil
+            end
+        end
         local fast_path = not (opts.showhyphenation or opts.showkerning or reportmissingglyphs)
         while head do
             local id = d_getid(head)
@@ -778,6 +794,7 @@ do
                         start_underline = nil
                     end
                 end
+                end_other_bgcolor(head, bgcolor)
                 if bgcolor and bgcolor > 0 and not start_bgcolor then
                     bgcolor_reverse = (curdir[#curdir] == "rtl")
                     bgcolorindex = bgcolor
@@ -797,6 +814,32 @@ do
                         )
                         start_bgcolor = nil
                     end
+                end
+            elseif id == rule_node then
+                -- The rules for padding and border of inline HTML elements
+                -- carry the background color of the element. A rule with a
+                -- width and without background (a margin) ends it.
+                local bgcolor = d_has_attribute(head, plb_attnum_bgcolor)
+                end_other_bgcolor(head, bgcolor)
+                if bgcolor and bgcolor > 0 then
+                    if not start_bgcolor then
+                        bgcolorindex = bgcolor
+                        bg_padding_top = d_has_attribute(head, plb_attnum_bgpad_top)
+                        bg_padding_bottom = d_has_attribute(head, plb_attnum_bgpad_bottom)
+                        start_bgcolor = head
+                        bgcolor_reverse = (curdir[#curdir] == "rtl")
+                    end
+                elseif start_bgcolor and d_getfield(head, "width") ~= 0 then
+                    insert_bgcolor(
+                        d_tonode(list_head_d),
+                        d_tonode(head),
+                        d_tonode(start_bgcolor),
+                        bgcolorindex,
+                        bg_padding_top,
+                        bg_padding_bottom,
+                        bgcolor_reverse
+                    )
+                    start_bgcolor = nil
                 end
             elseif id == glyph_node then
                 local ul = d_has_attribute(head, plb_attnum_td_line)
@@ -833,6 +876,7 @@ do
                         start_underline = nil
                     end
                 end
+                end_other_bgcolor(head, bgcolor)
                 if bgcolor and bgcolor > 0 then
                     if not start_bgcolor then
                         bgcolorindex = bgcolor
