@@ -1,0 +1,7 @@
+<data>
+    <html>&lt;p&gt;Block with &lt;b&gt;p&lt;/b&gt; element&lt;/p&gt;</html>
+    <html>Text with &lt;span style='color:red;'&gt;inline&lt;/span&gt; elements &lt;b&gt;only&lt;/b&gt;</html>
+    <html>&lt;b&gt;Bold&lt;/b&gt;</html>
+    <html>&lt;span&gt;&lt;/span&gt; &lt;p&gt;Empty span above creates no line&lt;/p&gt;</html>
+    <html>Text before &lt;p&gt;a block&lt;/p&gt; and &lt;i&gt;text&lt;/i&gt; after</html>
+</data>

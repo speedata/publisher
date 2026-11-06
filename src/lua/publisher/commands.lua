@@ -1930,7 +1930,11 @@ function commands.html(layoutxml, dataxml)
             local container = ret._body or root
             for i = 1, #container do
                 local elt = container[i]
-                if type(elt) == "table" and elt.elementname then
+                -- Text and inline elements directly below body have been
+                -- grouped by normalize_html_tree() and have no element name.
+                local is_block = type(elt) == "table" and elt.elementname
+                local is_inline = type(elt) == "table" and elt.mode == "horizontal"
+                if is_block or (is_inline and tree_mod.has_inline_content(elt)) then
                     ret._elements[#ret._elements + 1] = elt
                 end
             end

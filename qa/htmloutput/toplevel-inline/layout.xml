@@ -1,0 +1,15 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="11cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; }
+        p { background-color: lightblue; }
+    </Stylesheet>
+
+    <Record element="data">
+        <ForAll select="html">
+            <Output>
+                <HTML select="."/>
+            </Output>
+        </ForAll>
+    </Record>
+</Layout>

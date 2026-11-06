@@ -53,4 +53,33 @@ function M.normalize_html_tree(elt)
     end
 end
 
+---Tell whether a horizontal group or inline element shows anything. A group
+---of whitespace and empty elements creates no line box (CSS 2.1, 9.4.2).
+---@param elt table
+---@return boolean
+function M.has_inline_content(elt)
+    for i = 1, #elt do
+        local thiselt = elt[i]
+        if type(thiselt) == "string" then
+            if string.match(thiselt, "%S") then
+                return true
+            end
+        elseif type(thiselt) == "table" then
+            local eltname = thiselt.elementname
+            if eltname == "img" or eltname == "br" or eltname == "wbr" then
+                return true
+            end
+            for k in pairs(thiselt.styles or {}) do
+                if string.match(k, "^%a+::") then
+                    return true
+                end
+            end
+            if M.has_inline_content(thiselt) then
+                return true
+            end
+        end
+    end
+    return false
+end
+
 return M
