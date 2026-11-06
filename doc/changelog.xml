@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.9">
+    <entry version="5.9.20" date="2026-11-06" sha1="ad90bd51">
+        <en summary="Text without block element in HTML.">The command <tt>HTML</tt> inside <tt>Output</tt> now also outputs text and inline elements that are not inside a block element such as <tt>&lt;p&gt;</tt>, for example <tt>Text with &lt;b&gt;bold&lt;/b&gt; words</tt>. Previously, this content was missing from the PDF without any message.</en>
+        <de summary="Text ohne Block-Element in HTML.">Der Befehl <tt>HTML</tt> innerhalb von <tt>Output</tt> gibt jetzt auch Text und Inline-Elemente aus, die nicht in einem Block-Element wie <tt>&lt;p&gt;</tt> stehen, zum Beispiel <tt>Text mit &lt;b&gt;fetten&lt;/b&gt; Wörtern</tt>. Bisher fehlte dieser Inhalt im PDF ohne jede Meldung.</de>
+    </entry>
     <entry version="5.9.19" date="2026-11-04" sha1="ab1e0f0c">
         <en summary="Background of inline elements.">The background color of an inline element in HTML content now also covers its padding on the left and right, as in the browser. A text with a background of its own inside a text with another background, for example a <tt>Span</tt> with <tt>background-color</tt> in a paragraph with a background, now shows its own color. Previously, the outer color covered it.</en>
         <de summary="Hintergrund von Inline-Elementen.">Die Hintergrundfarbe eines Inline-Elements in HTML-Inhalten deckt jetzt auch den Innenabstand links und rechts ab, wie im Browser. Ein Text mit eigenem Hintergrund innerhalb eines Textes mit anderem Hintergrund, zum Beispiel ein <tt>Span</tt> mit <tt>background-color</tt> in einem Absatz mit Hintergrund, zeigt jetzt seine eigene Farbe. Bisher überdeckte ihn die äußere Farbe.</de>
