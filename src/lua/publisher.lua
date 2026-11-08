@@ -1841,6 +1841,11 @@ function M.initialize_luatex_and_generate_pdf()
             pdfcatalog[#pdfcatalog + 1] = string.format("/OutputIntents %d 0 R", outputintentsarrayobjnum)
         end
         if M.options.format == "PDF/UA" then
+            -- The CIDSet of a font subset lists only the glyphs used in the
+            -- text, not the components of composite glyphs that the subset
+            -- contains as well. PDF/UA (veraPDF 7.21.4.2) rejects such an
+            -- incomplete CIDSet; it is optional, so leave it out.
+            pdf.setomitcidset(1)
             pdfcatalog[#pdfcatalog + 1] = string.format(" /MarkInfo <<  /Marked true >> ")
             metadataobjnum = pdf.obj({
                 type = "stream",
