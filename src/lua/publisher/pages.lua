@@ -36,6 +36,17 @@ function M.interwordspace_active()
     return iws
 end
 
+-- Word texts in reading order as ActualText (PDFOptions
+-- logicaltextorder), on by default in PDF/UA mode.
+---@return boolean
+function M.logicaltextorder_active()
+    local lto = publisher.options.logicaltextorder
+    if lto == nil then
+        return publisher.options.format == "PDF/UA"
+    end
+    return lto
+end
+
 -- Ships out the given page node list as the next PDF page. Records
 -- structure-tree information in PDF/UA mode and updates `pagelabels`,
 -- `pagenum_tbl`, `pages_shippedout`.
@@ -70,6 +81,9 @@ function M.shipout(nodelist, pagenumber, dataxml)
     end
     if M.interwordspace_active() then
         publisher.nodes.insert_interword_spaces(nodelist)
+    end
+    if M.logicaltextorder_active() then
+        publisher.nodes.insert_actualtext(nodelist)
     end
     if publisher.options.format == "PDF/UA" then
         publisher.insert_struct_elements(nodelist, cp)

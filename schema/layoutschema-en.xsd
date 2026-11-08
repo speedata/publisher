@@ -6326,6 +6326,17 @@
           <xs:documentation>Set the keywords of the document (comma separated list).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="logicaltextorder">
+        <xs:annotation>
+          <xs:documentation>Store the text of words whose glyphs are not in reading order in the PDF (right-to-left scripts such as Arabic and Hebrew, vowel signs before the consonant in Indic scripts) once more in reading order, so that programs that extract the text (copy and paste, search, screen readers) get the words right. The layout does not change, the PDF gets larger. The default is yes with format="PDF/UA", otherwise no.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="numcopies">
         <xs:annotation>
           <xs:documentation>Set the number of copies. At most 5 are allowed in the PDF specification.</xs:documentation>

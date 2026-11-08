@@ -1150,6 +1150,8 @@ function M.getfallbacks(cluster, glyphslist, fallback_fontdefinitions, direction
                     glyph = g,
                     codepoint = g.codepoint,
                     uc = tbl.backmap[g.codepoint],
+                    -- cluster in the text of the main font
+                    maincluster = entries[i] and entries[i].cluster,
                 }
             end
         end
@@ -1375,6 +1377,12 @@ function M.hbglyphlist(arguments)
         end
     end
 
+    -- PDFOptions logicaltextorder: the words of the text and their glyphs
+    local wordat, words
+    if publisher.page_helpers.logicaltextorder_active() then
+        wordat, words = M.words_by_cluster(cluster, direction == "rtl", M.wordlanguage(style_langcode))
+    end
+
     -- previous glyph and its cluster (byte offset), nil after fallback entries
     local prevglyph, prevcluster
     for i = 1, #glyphs do
@@ -1441,6 +1449,7 @@ function M.hbglyphlist(arguments)
             cp = cpcluster - publisher.puastart
         end
         local uc
+        local textcluster = thisglyph.maincluster or thisglyph.cluster
         if thisglyph.pos then
             -- a special table from fallback
             thisfontnumber = thisglyph.fontnumber
@@ -1667,6 +1676,14 @@ function M.hbglyphlist(arguments)
             node_set_attribute(n, att_fontfamily, fontfamily)
             apply_styles(n)
             list, cur = node.insert_after(list, cur, n)
+            local word = wordat and wordat[textcluster]
+            if word then
+                word.n = word.n + 1
+                for _, c in ipairs(glyph_codepoints(thistbl, cp) or {}) do
+                    word.glyphtext[#word.glyphtext + 1] = c
+                end
+                publisher.attribute_helpers.setprop(n, "logword", word)
+            end
 
             if cur and cur.prev and cur.prev.id == publisher.glyph_node then
                 lastitemwasglyph = true
@@ -1719,6 +1736,9 @@ function M.hbglyphlist(arguments)
         ::continue::
     end
 
+    if words then
+        M.check_words(words)
+    end
     if not list then
         -- All glyphs were skipped (missing from the font and already
         -- reported, DEL, a lone no-break space, removed during shaping).
@@ -2280,6 +2300,184 @@ function M.get_glue_size(n)
         spec = n
     end
     return spec.width
+end
+
+-- White space between words (no word of its own).
+local wordseparators = {
+    [9] = true,
+    [10] = true,
+    [13] = true,
+    [32] = true,
+    [160] = true,
+    [0x1680] = true,
+    [0x2000] = true,
+    [0x2001] = true,
+    [0x2002] = true,
+    [0x2003] = true,
+    [0x2004] = true,
+    [0x2005] = true,
+    [0x2006] = true,
+    [0x2007] = true,
+    [0x2008] = true,
+    [0x2009] = true,
+    [0x200A] = true,
+    [0x202F] = true,
+    [0x205F] = true,
+    [0x3000] = true,
+}
+
+-- The words of a shaped string, for PDFOptions logicaltextorder. Each word
+-- records its text in reading order (`text`), the text its glyphs give in
+-- the order of the nodes (`glyphtext`) and the number of glyphs (`n`).
+---@param cluster table<integer, integer> Code point at each byte offset.
+---@param rtl boolean The string is set right to left.
+---@param lang? string BCP 47 tag if the text has another language than the document.
+---@return table<integer, table> wordat Word at each byte offset.
+---@return table[] words
+function M.words_by_cluster(cluster, rtl, lang)
+    local offsets = {}
+    for pos in pairs(cluster) do
+        offsets[#offsets + 1] = pos
+    end
+    table.sort(offsets)
+    local wordat, words = {}, {}
+    local word
+    for _, pos in ipairs(offsets) do
+        local cp = cluster[pos]
+        if wordseparators[cp] then
+            word = nil
+        else
+            if not word then
+                word = { text = {}, glyphtext = {}, n = 0, rtl = rtl, lang = lang }
+                words[#words + 1] = word
+            end
+            word.text[#word.text + 1] = cp
+            wordat[pos] = word
+        end
+    end
+    return wordat, words
+end
+
+-- BCP 47 tag of a language, nil if it is unknown or the language of the
+-- document (the catalog /Lang).
+---@param languagecode? integer
+---@return string?
+function M.wordlanguage(languagecode)
+    local function tag(code)
+        local l = code and publisher.languages_id_lang[code]
+        return l and l.locale and publisher.language.bcp47(l.locale)
+    end
+    local t = tag(languagecode)
+    if t and t ~= tag(publisher.defaultlanguage) then
+        return t
+    end
+    return nil
+end
+
+-- Marks the words that need their text as ActualText: in right-to-left
+-- text the glyphs are in visual order in the PDF, in other scripts
+-- reordered glyphs (Indic vowel signs before the consonant) or glyphs
+-- without a code point give the wrong text.
+---@param words table[] From `words_by_cluster`, after the glyphs are made.
+function M.check_words(words)
+    for _, word in ipairs(words) do
+        local needed = word.rtl and word.n > 1
+        if not needed and word.n > 0 then
+            local a, b = word.text, word.glyphtext
+            if #a ~= #b then
+                needed = true
+            else
+                for i = 1, #a do
+                    if a[i] ~= b[i] then
+                        needed = true
+                        break
+                    end
+                end
+            end
+        end
+        word.actualtext = needed or nil
+        word.glyphtext = nil
+    end
+end
+
+-- Wraps every complete word that needs it (see `check_words`) in a marked
+-- content sequence with its text in reading order as ActualText. Words
+-- broken across lines keep their glyphs only.
+-- LuaTeX writes right-to-left text in node (reading) order, only the
+-- positions run from right to left, so the literals go before the first
+-- and after the last glyph in any direction.
+---@param head Node? Node list of a page or box.
+---@return Node? head
+function M.insert_actualtext(head)
+    local n = head
+    while n do
+        local id = n.id
+        if id == publisher.hlist_node or id == publisher.vlist_node then
+            n.list = M.insert_actualtext(n.list)
+        elseif id == publisher.glyph_node then
+            local props = node.getproperty(n)
+            local word = props and props.logword
+            if word and word.actualtext and not props.actualtext then
+                -- the glyphs of the word in this list
+                local first, last = n, n
+                local count = 1
+                local samecolor = true
+                local color = node.has_attribute(n, att_color)
+                local m = n.next
+                while m do
+                    local mid = m.id
+                    if mid == publisher.glyph_node then
+                        local mp = node.getproperty(m)
+                        if not (mp and mp.logword == word) then
+                            break
+                        end
+                        count = count + 1
+                        last = m
+                        if node.has_attribute(m, att_color) ~= color then
+                            samecolor = false
+                        end
+                    elseif
+                        mid ~= publisher.kern_node
+                        and mid ~= publisher.disc_node
+                        and mid ~= publisher.penalty_node
+                    then
+                        break
+                    end
+                    m = m.next
+                end
+                if count == word.n then
+                    local bdc = node.new("whatsit", "pdf_literal")
+                    bdc.data = "/Span <<"
+                        .. (word.lang and string.format("/Lang (%s) ", word.lang) or "")
+                        .. "/ActualText "
+                        .. publisher.utf8_to_utf16_string_pdf(utf8.char(table.unpack(word.text)))
+                        .. ">> BDC"
+                    local emc = node.new("whatsit", "pdf_literal")
+                    emc.data = "EMC"
+                    -- inside the text object, unless a color change in the
+                    -- word ends it
+                    bdc.mode = samecolor and 4 or 1
+                    emc.mode = bdc.mode
+                    for _, lit in ipairs({ bdc, emc }) do
+                        lit.attr = n.attr
+                        local lp = {}
+                        for k, v in pairs(props) do
+                            lp[k] = v
+                        end
+                        lp.logword = nil
+                        node.setproperty(lit, lp)
+                    end
+                    head = node.insert_before(head, first, bdc)
+                    head = node.insert_after(head, last, emc)
+                    n = emc
+                else
+                    n = last
+                end
+            end
+        end
+        n = n.next
+    end
+    return head
 end
 
 -- Slot and width of the space glyph per font id, false if the font has

@@ -185,6 +185,12 @@ Damit wird die Datei `publisher-struct.xml` geschrieben, die den Strukturbaum de
 
 Im PDF ist der Abstand zwischen zwei Wörtern nur eine Lücke und kein Zeichen. Programme, die den Text auslesen (Bildschirmlesegeräte, Kopieren und Einfügen, Suche), müssen raten, wo ein Wort endet, und manche ziehen die Wörter zusammen. Im PDF/UA-Modus setzt der Publisher deshalb in jeden Wortabstand ein unsichtbares Leerzeichen. Das Layout ändert sich dadurch nicht. Mit `<PDFOptions interwordspace="yes">` lässt sich das auch für andere PDFs einschalten, mit `interwordspace="no"` ausschalten.
 
+## Lesereihenfolge von Wörtern
+
+In manchen Schriften stehen die Glyphen eines Wortes im PDF nicht in Lesereihenfolge: in Schriften von rechts nach links wie Arabisch und Hebräisch und in indischen Schriften, in denen manche Vokalzeichen vor dem Konsonanten stehen, dem sie im Text folgen. Programme, die den Text auslesen, erhalten die Zeichen solcher Wörter dann in falscher Reihenfolge. Im PDF/UA-Modus speichert der Publisher den Text dieser Wörter deshalb zusätzlich in Lesereihenfolge (als *ActualText*), zusammen mit ihrer Sprache, wenn sie von der Sprache des Dokuments abweicht. Wörter in lateinischer, griechischer oder kyrillischer Schrift sind nicht betroffen. Das Layout ändert sich nicht, das PDF wird aber größer, bei einem vollständig vokalisierten arabischen Text um etwa ein Drittel. Mit `<PDFOptions logicaltextorder="yes">` lässt sich das auch für andere PDFs einschalten, mit `logicaltextorder="no"` ausschalten.
+
+Nicht alle Programme werten diese Angabe gleich aus. Manche Programme, die keinen Text von rechts nach links unterstützen, geben die Wörter dieser Schriften in umgekehrter Reihenfolge aus.
+
 ## Überprüfen des Dokuments
 
 Um die Barrierefreiheit zu überprüfen, bieten sich folgende Programme an:

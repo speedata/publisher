@@ -6326,6 +6326,17 @@
           <xs:documentation>Legt die Schlüsselwörter des Dokuments fest (kommaseparierte Liste)</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="logicaltextorder">
+        <xs:annotation>
+          <xs:documentation>Speichert den Text von Wörtern, deren Glyphen im PDF nicht in Lesereihenfolge stehen (Schriften von rechts nach links wie Arabisch und Hebräisch, Vokalzeichen vor dem Konsonanten in indischen Schriften), zusätzlich in Lesereihenfolge, damit Programme, die den Text auslesen (Kopieren und Einfügen, Suche, Bildschirmlesegeräte), die Wörter richtig erhalten. Das Layout ändert sich nicht, das PDF wird größer. Die Voreinstellung ist yes bei format="PDF/UA", sonst no.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="numcopies">
         <xs:annotation>
           <xs:documentation>Setze Anzahl der Kopien. Maximal erlaubt sind 5 aufgrund der PDF-Spezifikation.</xs:documentation>

@@ -186,6 +186,12 @@ This writes the file `publisher-struct.xml` which contains the structure tree of
 
 In the PDF, the space between two words is just a gap, not a character. Programs that extract the text (screen readers, copy and paste, search) have to guess where a word ends, and some of them run the words together. In PDF/UA mode, the Publisher therefore puts an invisible space character into every space between words. The layout does not change. With `<PDFOptions interwordspace="yes">` you can switch this on for other PDFs as well, with `interwordspace="no"` you can switch it off.
 
+## Reading order of words
+
+In some scripts, the glyphs of a word are not in reading order in the PDF: in right-to-left scripts such as Arabic and Hebrew, and in Indic scripts, where some vowel signs stand before the consonant they follow in the text. Programs that extract the text then get the characters of such words in the wrong order. In PDF/UA mode, the Publisher therefore stores the text of these words once more in reading order (as *ActualText*), together with their language if it differs from the language of the document. Words in Latin, Greek or Cyrillic script are not affected. The layout does not change, but the PDF gets larger, for a fully vowelled Arabic text by about a third. With `<PDFOptions logicaltextorder="yes">` you can switch this on for other PDFs as well, with `logicaltextorder="no"` you can switch it off.
+
+Not all programs use this information in the same way. Some programs that do not support right-to-left text output the words of these scripts in reverse order.
+
 ## Checking the document
 
 The following programs can be used to check accessibility:

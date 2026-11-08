@@ -8701,6 +8701,14 @@
         <para>Legt die Schlüsselwörter des Dokuments fest (kommaseparierte Liste)</para>
       </description>
     </attribute>
+    <attribute en="logicaltextorder" optional="yes" type="boolean" since="5.9.21">
+      <description xml:lang="en">
+        <para>Store the text of words whose glyphs are not in reading order in the PDF (right-to-left scripts such as Arabic and Hebrew, vowel signs before the consonant in Indic scripts) once more in reading order, so that programs that extract the text (copy and paste, search, screen readers) get the words right. The layout does not change, the PDF gets larger. The default is <tt>yes</tt> with <tt>format="PDF/UA"</tt>, otherwise <tt>no</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Speichert den Text von Wörtern, deren Glyphen im PDF nicht in Lesereihenfolge stehen (Schriften von rechts nach links wie Arabisch und Hebräisch, Vokalzeichen vor dem Konsonanten in indischen Schriften), zusätzlich in Lesereihenfolge, damit Programme, die den Text auslesen (Kopieren und Einfügen, Suche, Bildschirmlesegeräte), die Wörter richtig erhalten. Das Layout ändert sich nicht, das PDF wird größer. Die Voreinstellung ist <tt>yes</tt> bei <tt>format="PDF/UA"</tt>, sonst <tt>no</tt>.</para>
+      </description>
+    </attribute>
     <attribute en="numcopies" optional="yes" type="number">
       <description xml:lang="en">
         <para>Set the number of copies. At most 5 are allowed in the PDF specification.</para>
