@@ -206,6 +206,14 @@
   </define>
 
   <defineattribute name="languages">
+    <choice en="Amharic">
+      <description xml:lang="en">
+        <para>Amharic</para>
+      </description>
+      <description xml:lang="de">
+        <para>Amharisch</para>
+      </description>
+    </choice>
     <choice en="Ancient Greek">
       <description xml:lang="en">
         <para>Ancient Greek</para>
@@ -270,12 +278,28 @@
         <para>Bulgarisch (lateinisches Alphabet)</para>
       </description>
     </choice>
+    <choice en="Burmese">
+      <description xml:lang="en">
+        <para>Burmese</para>
+      </description>
+      <description xml:lang="de">
+        <para>Birmanisch</para>
+      </description>
+    </choice>
     <choice en="Catalan">
       <description xml:lang="en">
         <para>Catalan</para>
       </description>
       <description xml:lang="de">
         <para>Katalanisch</para>
+      </description>
+    </choice>
+    <choice en="Cherokee">
+      <description xml:lang="en">
+        <para>Cherokee</para>
+      </description>
+      <description xml:lang="de">
+        <para>Cherokee</para>
       </description>
     </choice>
     <choice en="Chinese">
@@ -292,6 +316,14 @@
       </description>
       <description xml:lang="de">
         <para>Chinesisch (Langzeichen)</para>
+      </description>
+    </choice>
+    <choice en="Coptic">
+      <description xml:lang="en">
+        <para>Coptic</para>
+      </description>
+      <description xml:lang="de">
+        <para>Koptisch</para>
       </description>
     </choice>
     <choice en="Croatian">
@@ -382,6 +414,14 @@
         <para>Galicisch</para>
       </description>
     </choice>
+    <choice en="Georgian">
+      <description xml:lang="en">
+        <para>Georgian</para>
+      </description>
+      <description xml:lang="de">
+        <para>Georgisch</para>
+      </description>
+    </choice>
     <choice en="German">
       <description xml:lang="en">
         <para>German</para>
@@ -414,20 +454,20 @@
         <para>Hebräisch</para>
       </description>
     </choice>
-    <choice en="Hungarian">
-      <description xml:lang="en">
-        <para>Hungarian</para>
-      </description>
-      <description xml:lang="de">
-        <para>Ungarisch</para>
-      </description>
-    </choice>
     <choice en="Hindi">
       <description xml:lang="en">
         <para>Hindi</para>
       </description>
       <description xml:lang="de">
         <para>Hindi</para>
+      </description>
+    </choice>
+    <choice en="Hungarian">
+      <description xml:lang="en">
+        <para>Hungarian</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ungarisch</para>
       </description>
     </choice>
     <choice en="Icelandic">
@@ -470,6 +510,14 @@
         <para>Kanaresisch</para>
       </description>
     </choice>
+    <choice en="Khmer">
+      <description xml:lang="en">
+        <para>Khmer</para>
+      </description>
+      <description xml:lang="de">
+        <para>Khmer</para>
+      </description>
+    </choice>
     <choice en="Korean">
       <description xml:lang="en">
         <para>Korean</para>
@@ -484,6 +532,14 @@
       </description>
       <description xml:lang="de">
         <para>Kurmandschi</para>
+      </description>
+    </choice>
+    <choice en="Lao">
+      <description xml:lang="en">
+        <para>Lao</para>
+      </description>
+      <description xml:lang="de">
+        <para>Laotisch</para>
       </description>
     </choice>
     <choice en="Latvian">
@@ -630,6 +686,14 @@
         <para>Serbisch (kyrillische Buchstaben).</para>
       </description>
     </choice>
+    <choice en="Sinhala">
+      <description xml:lang="en">
+        <para>Sinhala</para>
+      </description>
+      <description xml:lang="de">
+        <para>Singhalesisch</para>
+      </description>
+    </choice>
     <choice en="Slovak">
       <description xml:lang="en">
         <para>Slovak</para>
@@ -662,6 +726,14 @@
         <para>Schwedisch</para>
       </description>
     </choice>
+    <choice en="Syriac">
+      <description xml:lang="en">
+        <para>Syriac</para>
+      </description>
+      <description xml:lang="de">
+        <para>Syrisch</para>
+      </description>
+    </choice>
     <choice en="Tamil">
       <description xml:lang="en">
         <para>Tamil</para>
@@ -676,6 +748,22 @@
       </description>
       <description xml:lang="de">
         <para>Telugu</para>
+      </description>
+    </choice>
+    <choice en="Thai">
+      <description xml:lang="en">
+        <para>Thai</para>
+      </description>
+      <description xml:lang="de">
+        <para>Thailändisch</para>
+      </description>
+    </choice>
+    <choice en="Tibetan">
+      <description xml:lang="en">
+        <para>Tibetan</para>
+      </description>
+      <description xml:lang="de">
+        <para>Tibetisch</para>
       </description>
     </choice>
     <choice en="Turkish">
@@ -7677,11 +7765,11 @@
     </example>
     <info xml:lang="en">
       <para>The list of languages and the short code known to the system are:</para>
-      <para><tt>Ancient Greek</tt> (<tt>grc</tt>), <tt>Arabic</tt> (<tt>ar</tt>), <tt>Armenian</tt> (<tt>hy</tt>), <tt>Assamese</tt> (<tt>as</tt>), <tt>Bahasa Indonesia</tt> (<tt>id</tt>), <tt>Basque</tt> (<tt>eu</tt>), <tt>Bengali</tt> (<tt>bn</tt>), <tt>Bulgarian</tt> (<tt>bg</tt>), <tt>Catalan</tt> (<tt>ca</tt>), <tt>Chinese</tt> (<tt>zh</tt>), <tt>Chinese (Traditional)</tt> (<tt>zh_TW</tt>), <tt>Croatian</tt> (<tt>hr</tt>), <tt>Czech</tt> (<tt>cs</tt>), <tt>Danish</tt> (<tt>da</tt>), <tt>Dutch</tt> (<tt>nl</tt>), <tt>English</tt> (<tt>en_GB</tt>), <tt>English (Great Britain)</tt> (<tt>en_GB</tt>), <tt>English (USA)</tt> (<tt>en_US</tt>), <tt>Esperanto</tt> (<tt>eo</tt>), <tt>Estonian</tt> (<tt>et</tt>), <tt>Finnish</tt> (<tt>fi</tt>), <tt>French</tt> (<tt>fr</tt>), <tt>Galician</tt> (<tt>gl</tt>), <tt>German</tt> (<tt>de</tt>), <tt>Greek</tt> (<tt>el</tt>), <tt>Hebrew</tt> (<tt>he</tt>), <tt>Gujarati</tt> (<tt>gu</tt>), <tt>Hindi</tt> (<tt>hi</tt>), <tt>Hungarian</tt> (<tt>hu</tt>), <tt>Icelandic</tt> (<tt>is</tt>), <tt>Irish</tt> (<tt>ga</tt>), <tt>Italian</tt> (<tt>it</tt>), <tt>Japanese</tt> (<tt>ja</tt>), <tt>Kannada</tt> (<tt>kn</tt>), <tt>Korean</tt> (<tt>ko</tt>), <tt>Kurmanji</tt> (<tt>ku</tt>), <tt>Latvian</tt> (<tt>lv</tt>), <tt>Lithuanian</tt> (<tt>lt</tt>), <tt>Malayalam</tt> (<tt>ml</tt>), <tt>Marathi</tt> (<tt>mr</tt>), <tt>Nepali</tt> (<tt>ne</tt>), <tt>Norwegian Bokmål</tt> (<tt>nb</tt>), <tt>Norwegian Nynorsk</tt> (<tt>nn</tt>), <tt>Odia</tt> (<tt>or</tt>), <tt>Other</tt> (<tt>--</tt>), <tt>Persian</tt> (<tt>fa</tt>), <tt>Polish</tt> (<tt>pl</tt>), <tt>Portuguese</tt> (<tt>pt</tt>), <tt>Punjabi</tt> (<tt>pa</tt>), <tt>Romanian</tt> (<tt>ro</tt>), <tt>Russian</tt> (<tt>ru</tt>), <tt>Sanskrit</tt> (<tt>sa</tt>), <tt>Serbian</tt> (<tt>sr</tt>), <tt>Serbian (cyrillic)</tt> (<tt>sc</tt>), <tt>Slovak</tt> (<tt>sk</tt>), <tt>Slovenian</tt> (<tt>sl</tt>), <tt>Spanish</tt> (<tt>es</tt>), <tt>Swedish</tt> (<tt>sv</tt>), <tt>Tamil</tt> (<tt>ta</tt>), <tt>Telugu</tt> (<tt>te</tt>), <tt>Turkish</tt> (<tt>tr</tt>), <tt>Ukrainian</tt> (<tt>uk</tt>), <tt>Urdu</tt> (<tt>ur</tt>), <tt>Welsh</tt> (<tt>cy</tt>)</para>
+      <para><tt>Amharic</tt> (<tt>am</tt>), <tt>Ancient Greek</tt> (<tt>grc</tt>), <tt>Arabic</tt> (<tt>ar</tt>), <tt>Armenian</tt> (<tt>hy</tt>), <tt>Assamese</tt> (<tt>as</tt>), <tt>Bahasa Indonesia</tt> (<tt>id</tt>), <tt>Basque</tt> (<tt>eu</tt>), <tt>Bengali</tt> (<tt>bn</tt>), <tt>Bulgarian</tt> (<tt>bg</tt>), <tt>Burmese</tt> (<tt>my</tt>), <tt>Catalan</tt> (<tt>ca</tt>), <tt>Cherokee</tt> (<tt>chr</tt>), <tt>Chinese</tt> (<tt>zh</tt>), <tt>Chinese (Traditional)</tt> (<tt>zh_TW</tt>), <tt>Coptic</tt> (<tt>cop</tt>), <tt>Croatian</tt> (<tt>hr</tt>), <tt>Czech</tt> (<tt>cs</tt>), <tt>Danish</tt> (<tt>da</tt>), <tt>Dutch</tt> (<tt>nl</tt>), <tt>English</tt> (<tt>en_GB</tt>), <tt>English (Great Britain)</tt> (<tt>en_GB</tt>), <tt>English (USA)</tt> (<tt>en_US</tt>), <tt>Esperanto</tt> (<tt>eo</tt>), <tt>Estonian</tt> (<tt>et</tt>), <tt>Finnish</tt> (<tt>fi</tt>), <tt>French</tt> (<tt>fr</tt>), <tt>Galician</tt> (<tt>gl</tt>), <tt>Georgian</tt> (<tt>ka</tt>), <tt>German</tt> (<tt>de</tt>), <tt>Greek</tt> (<tt>el</tt>), <tt>Gujarati</tt> (<tt>gu</tt>), <tt>Hebrew</tt> (<tt>he</tt>), <tt>Hindi</tt> (<tt>hi</tt>), <tt>Hungarian</tt> (<tt>hu</tt>), <tt>Icelandic</tt> (<tt>is</tt>), <tt>Irish</tt> (<tt>ga</tt>), <tt>Italian</tt> (<tt>it</tt>), <tt>Japanese</tt> (<tt>ja</tt>), <tt>Kannada</tt> (<tt>kn</tt>), <tt>Khmer</tt> (<tt>km</tt>), <tt>Korean</tt> (<tt>ko</tt>), <tt>Kurmanji</tt> (<tt>ku</tt>), <tt>Lao</tt> (<tt>lo</tt>), <tt>Latvian</tt> (<tt>lv</tt>), <tt>Lithuanian</tt> (<tt>lt</tt>), <tt>Malayalam</tt> (<tt>ml</tt>), <tt>Marathi</tt> (<tt>mr</tt>), <tt>Nepali</tt> (<tt>ne</tt>), <tt>Norwegian Bokmål</tt> (<tt>nb</tt>), <tt>Norwegian Nynorsk</tt> (<tt>nn</tt>), <tt>Odia</tt> (<tt>or</tt>), <tt>Other</tt> (<tt>--</tt>), <tt>Persian</tt> (<tt>fa</tt>), <tt>Polish</tt> (<tt>pl</tt>), <tt>Portuguese</tt> (<tt>pt</tt>), <tt>Punjabi</tt> (<tt>pa</tt>), <tt>Romanian</tt> (<tt>ro</tt>), <tt>Russian</tt> (<tt>ru</tt>), <tt>Sanskrit</tt> (<tt>sa</tt>), <tt>Serbian</tt> (<tt>sr</tt>), <tt>Serbian (cyrillic)</tt> (<tt>sc</tt>), <tt>Sinhala</tt> (<tt>si</tt>), <tt>Slovak</tt> (<tt>sk</tt>), <tt>Slovenian</tt> (<tt>sl</tt>), <tt>Spanish</tt> (<tt>es</tt>), <tt>Swedish</tt> (<tt>sv</tt>), <tt>Syriac</tt> (<tt>syr</tt>), <tt>Tamil</tt> (<tt>ta</tt>), <tt>Telugu</tt> (<tt>te</tt>), <tt>Thai</tt> (<tt>th</tt>), <tt>Tibetan</tt> (<tt>bo</tt>), <tt>Turkish</tt> (<tt>tr</tt>), <tt>Ukrainian</tt> (<tt>uk</tt>), <tt>Urdu</tt> (<tt>ur</tt>), <tt>Welsh</tt> (<tt>cy</tt>)</para>
     </info>
     <info xml:lang="de">
       <para>Die Liste der bekannten Sprachen und der Sprachcode im speedata Publisher sind:</para>
-      <para><tt>Ancient Greek</tt> (<tt>grc</tt>), <tt>Arabic</tt> (<tt>ar</tt>), <tt>Armenian</tt> (<tt>hy</tt>), <tt>Assamese</tt> (<tt>as</tt>), <tt>Bahasa Indonesia</tt> (<tt>id</tt>), <tt>Basque</tt> (<tt>eu</tt>), <tt>Bengali</tt> (<tt>bn</tt>), <tt>Bulgarian</tt> (<tt>bg</tt>), <tt>Catalan</tt> (<tt>ca</tt>), <tt>Chinese</tt> (<tt>zh</tt>), <tt>Chinese (Traditional)</tt> (<tt>zh_TW</tt>), <tt>Croatian</tt> (<tt>hr</tt>), <tt>Czech</tt> (<tt>cs</tt>), <tt>Danish</tt> (<tt>da</tt>), <tt>Dutch</tt> (<tt>nl</tt>), <tt>English</tt> (<tt>en_GB</tt>), <tt>English (Great Britain)</tt> (<tt>en_GB</tt>), <tt>English (USA)</tt> (<tt>en_US</tt>), <tt>Esperanto</tt> (<tt>eo</tt>), <tt>Estonian</tt> (<tt>et</tt>), <tt>Finnish</tt> (<tt>fi</tt>), <tt>French</tt> (<tt>fr</tt>), <tt>Galician</tt> (<tt>gl</tt>), <tt>German</tt> (<tt>de</tt>), <tt>Greek</tt> (<tt>el</tt>), <tt>Hebrew</tt> (<tt>he</tt>), <tt>Gujarati</tt> (<tt>gu</tt>), <tt>Hindi</tt> (<tt>hi</tt>), <tt>Hungarian</tt> (<tt>hu</tt>), <tt>Icelandic</tt> (<tt>is</tt>), <tt>Irish</tt> (<tt>ga</tt>), <tt>Italian</tt> (<tt>it</tt>), <tt>Japanese</tt> (<tt>ja</tt>), <tt>Kannada</tt> (<tt>kn</tt>), <tt>Korean</tt> (<tt>ko</tt>), <tt>Kurmanji</tt> (<tt>ku</tt>), <tt>Latvian</tt> (<tt>lv</tt>), <tt>Lithuanian</tt> (<tt>lt</tt>), <tt>Malayalam</tt> (<tt>ml</tt>), <tt>Marathi</tt> (<tt>mr</tt>), <tt>Nepali</tt> (<tt>ne</tt>), <tt>Norwegian Bokmål</tt> (<tt>nb</tt>), <tt>Norwegian Nynorsk</tt> (<tt>nn</tt>), <tt>Odia</tt> (<tt>or</tt>), <tt>Other</tt> (<tt>--</tt>), <tt>Persian</tt> (<tt>fa</tt>), <tt>Polish</tt> (<tt>pl</tt>), <tt>Portuguese</tt> (<tt>pt</tt>), <tt>Punjabi</tt> (<tt>pa</tt>), <tt>Romanian</tt> (<tt>ro</tt>), <tt>Russian</tt> (<tt>ru</tt>), <tt>Sanskrit</tt> (<tt>sa</tt>), <tt>Serbian</tt> (<tt>sr</tt>), <tt>Serbian (cyrillic)</tt> (<tt>sc</tt>), <tt>Slovak</tt> (<tt>sk</tt>), <tt>Slovenian</tt> (<tt>sl</tt>), <tt>Spanish</tt> (<tt>es</tt>), <tt>Swedish</tt> (<tt>sv</tt>), <tt>Tamil</tt> (<tt>ta</tt>), <tt>Telugu</tt> (<tt>te</tt>), <tt>Turkish</tt> (<tt>tr</tt>), <tt>Ukrainian</tt> (<tt>uk</tt>), <tt>Urdu</tt> (<tt>ur</tt>), <tt>Welsh</tt> (<tt>cy</tt>)</para>
+      <para><tt>Amharic</tt> (<tt>am</tt>), <tt>Ancient Greek</tt> (<tt>grc</tt>), <tt>Arabic</tt> (<tt>ar</tt>), <tt>Armenian</tt> (<tt>hy</tt>), <tt>Assamese</tt> (<tt>as</tt>), <tt>Bahasa Indonesia</tt> (<tt>id</tt>), <tt>Basque</tt> (<tt>eu</tt>), <tt>Bengali</tt> (<tt>bn</tt>), <tt>Bulgarian</tt> (<tt>bg</tt>), <tt>Burmese</tt> (<tt>my</tt>), <tt>Catalan</tt> (<tt>ca</tt>), <tt>Cherokee</tt> (<tt>chr</tt>), <tt>Chinese</tt> (<tt>zh</tt>), <tt>Chinese (Traditional)</tt> (<tt>zh_TW</tt>), <tt>Coptic</tt> (<tt>cop</tt>), <tt>Croatian</tt> (<tt>hr</tt>), <tt>Czech</tt> (<tt>cs</tt>), <tt>Danish</tt> (<tt>da</tt>), <tt>Dutch</tt> (<tt>nl</tt>), <tt>English</tt> (<tt>en_GB</tt>), <tt>English (Great Britain)</tt> (<tt>en_GB</tt>), <tt>English (USA)</tt> (<tt>en_US</tt>), <tt>Esperanto</tt> (<tt>eo</tt>), <tt>Estonian</tt> (<tt>et</tt>), <tt>Finnish</tt> (<tt>fi</tt>), <tt>French</tt> (<tt>fr</tt>), <tt>Galician</tt> (<tt>gl</tt>), <tt>Georgian</tt> (<tt>ka</tt>), <tt>German</tt> (<tt>de</tt>), <tt>Greek</tt> (<tt>el</tt>), <tt>Gujarati</tt> (<tt>gu</tt>), <tt>Hebrew</tt> (<tt>he</tt>), <tt>Hindi</tt> (<tt>hi</tt>), <tt>Hungarian</tt> (<tt>hu</tt>), <tt>Icelandic</tt> (<tt>is</tt>), <tt>Irish</tt> (<tt>ga</tt>), <tt>Italian</tt> (<tt>it</tt>), <tt>Japanese</tt> (<tt>ja</tt>), <tt>Kannada</tt> (<tt>kn</tt>), <tt>Khmer</tt> (<tt>km</tt>), <tt>Korean</tt> (<tt>ko</tt>), <tt>Kurmanji</tt> (<tt>ku</tt>), <tt>Lao</tt> (<tt>lo</tt>), <tt>Latvian</tt> (<tt>lv</tt>), <tt>Lithuanian</tt> (<tt>lt</tt>), <tt>Malayalam</tt> (<tt>ml</tt>), <tt>Marathi</tt> (<tt>mr</tt>), <tt>Nepali</tt> (<tt>ne</tt>), <tt>Norwegian Bokmål</tt> (<tt>nb</tt>), <tt>Norwegian Nynorsk</tt> (<tt>nn</tt>), <tt>Odia</tt> (<tt>or</tt>), <tt>Other</tt> (<tt>--</tt>), <tt>Persian</tt> (<tt>fa</tt>), <tt>Polish</tt> (<tt>pl</tt>), <tt>Portuguese</tt> (<tt>pt</tt>), <tt>Punjabi</tt> (<tt>pa</tt>), <tt>Romanian</tt> (<tt>ro</tt>), <tt>Russian</tt> (<tt>ru</tt>), <tt>Sanskrit</tt> (<tt>sa</tt>), <tt>Serbian</tt> (<tt>sr</tt>), <tt>Serbian (cyrillic)</tt> (<tt>sc</tt>), <tt>Sinhala</tt> (<tt>si</tt>), <tt>Slovak</tt> (<tt>sk</tt>), <tt>Slovenian</tt> (<tt>sl</tt>), <tt>Spanish</tt> (<tt>es</tt>), <tt>Swedish</tt> (<tt>sv</tt>), <tt>Syriac</tt> (<tt>syr</tt>), <tt>Tamil</tt> (<tt>ta</tt>), <tt>Telugu</tt> (<tt>te</tt>), <tt>Thai</tt> (<tt>th</tt>), <tt>Tibetan</tt> (<tt>bo</tt>), <tt>Turkish</tt> (<tt>tr</tt>), <tt>Ukrainian</tt> (<tt>uk</tt>), <tt>Urdu</tt> (<tt>ur</tt>), <tt>Welsh</tt> (<tt>cy</tt>)</para>
     </info>
     <seealso>
       <ref name="configuration"/>,

@@ -2108,6 +2108,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Amharic">
+                  <xs:annotation>
+                    <xs:documentation>Amharic</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Ancient Greek">
                   <xs:annotation>
                     <xs:documentation>Ancient Greek</xs:documentation>
@@ -2180,9 +2189,27 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Burmese">
+                  <xs:annotation>
+                    <xs:documentation>Burmese</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Catalan">
                   <xs:annotation>
                     <xs:documentation>Catalan</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Cherokee">
+                  <xs:annotation>
+                    <xs:documentation>Cherokee</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2201,6 +2228,15 @@
                 <xs:enumeration value="Chinese (Traditional)">
                   <xs:annotation>
                     <xs:documentation>Chinese (traditional characters)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Coptic">
+                  <xs:annotation>
+                    <xs:documentation>Coptic</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2306,6 +2342,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Georgian">
+                  <xs:annotation>
+                    <xs:documentation>Georgian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="German">
                   <xs:annotation>
                     <xs:documentation>German</xs:documentation>
@@ -2342,18 +2387,18 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="Hungarian">
+                <xs:enumeration value="Hindi">
                   <xs:annotation>
-                    <xs:documentation>Hungarian</xs:documentation>
+                    <xs:documentation>Hindi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="Hindi">
+                <xs:enumeration value="Hungarian">
                   <xs:annotation>
-                    <xs:documentation>Hindi</xs:documentation>
+                    <xs:documentation>Hungarian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2405,6 +2450,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Khmer">
+                  <xs:annotation>
+                    <xs:documentation>Khmer</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Korean">
                   <xs:annotation>
                     <xs:documentation>Korean</xs:documentation>
@@ -2417,6 +2471,15 @@
                 <xs:enumeration value="Kurmanji">
                   <xs:annotation>
                     <xs:documentation>Kurmanji</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Lao">
+                  <xs:annotation>
+                    <xs:documentation>Lao</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2585,6 +2648,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Sinhala">
+                  <xs:annotation>
+                    <xs:documentation>Sinhala</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
                     <xs:documentation>Slovak</xs:documentation>
@@ -2621,6 +2693,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Syriac">
+                  <xs:annotation>
+                    <xs:documentation>Syriac</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Tamil">
                   <xs:annotation>
                     <xs:documentation>Tamil</xs:documentation>
@@ -2633,6 +2714,24 @@
                 <xs:enumeration value="Telugu">
                   <xs:annotation>
                     <xs:documentation>Telugu</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Thai">
+                  <xs:annotation>
+                    <xs:documentation>Thai</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Tibetan">
+                  <xs:annotation>
+                    <xs:documentation>Tibetan</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -4119,6 +4218,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Amharic">
+                  <xs:annotation>
+                    <xs:documentation>Amharic</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Ancient Greek">
                   <xs:annotation>
                     <xs:documentation>Ancient Greek</xs:documentation>
@@ -4191,9 +4299,27 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Burmese">
+                  <xs:annotation>
+                    <xs:documentation>Burmese</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Catalan">
                   <xs:annotation>
                     <xs:documentation>Catalan</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Cherokee">
+                  <xs:annotation>
+                    <xs:documentation>Cherokee</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -4212,6 +4338,15 @@
                 <xs:enumeration value="Chinese (Traditional)">
                   <xs:annotation>
                     <xs:documentation>Chinese (traditional characters)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Coptic">
+                  <xs:annotation>
+                    <xs:documentation>Coptic</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -4317,6 +4452,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Georgian">
+                  <xs:annotation>
+                    <xs:documentation>Georgian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="German">
                   <xs:annotation>
                     <xs:documentation>German</xs:documentation>
@@ -4353,18 +4497,18 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="Hungarian">
+                <xs:enumeration value="Hindi">
                   <xs:annotation>
-                    <xs:documentation>Hungarian</xs:documentation>
+                    <xs:documentation>Hindi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="Hindi">
+                <xs:enumeration value="Hungarian">
                   <xs:annotation>
-                    <xs:documentation>Hindi</xs:documentation>
+                    <xs:documentation>Hungarian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -4416,6 +4560,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Khmer">
+                  <xs:annotation>
+                    <xs:documentation>Khmer</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Korean">
                   <xs:annotation>
                     <xs:documentation>Korean</xs:documentation>
@@ -4428,6 +4581,15 @@
                 <xs:enumeration value="Kurmanji">
                   <xs:annotation>
                     <xs:documentation>Kurmanji</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Lao">
+                  <xs:annotation>
+                    <xs:documentation>Lao</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -4596,6 +4758,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Sinhala">
+                  <xs:annotation>
+                    <xs:documentation>Sinhala</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
                     <xs:documentation>Slovak</xs:documentation>
@@ -4632,6 +4803,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Syriac">
+                  <xs:annotation>
+                    <xs:documentation>Syriac</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Tamil">
                   <xs:annotation>
                     <xs:documentation>Tamil</xs:documentation>
@@ -4644,6 +4824,24 @@
                 <xs:enumeration value="Telugu">
                   <xs:annotation>
                     <xs:documentation>Telugu</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Thai">
+                  <xs:annotation>
+                    <xs:documentation>Thai</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Tibetan">
+                  <xs:annotation>
+                    <xs:documentation>Tibetan</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5248,6 +5446,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Amharic">
+                  <xs:annotation>
+                    <xs:documentation>Amharic</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Ancient Greek">
                   <xs:annotation>
                     <xs:documentation>Ancient Greek</xs:documentation>
@@ -5320,9 +5527,27 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Burmese">
+                  <xs:annotation>
+                    <xs:documentation>Burmese</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Catalan">
                   <xs:annotation>
                     <xs:documentation>Catalan</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Cherokee">
+                  <xs:annotation>
+                    <xs:documentation>Cherokee</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5341,6 +5566,15 @@
                 <xs:enumeration value="Chinese (Traditional)">
                   <xs:annotation>
                     <xs:documentation>Chinese (traditional characters)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Coptic">
+                  <xs:annotation>
+                    <xs:documentation>Coptic</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5446,6 +5680,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Georgian">
+                  <xs:annotation>
+                    <xs:documentation>Georgian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="German">
                   <xs:annotation>
                     <xs:documentation>German</xs:documentation>
@@ -5482,18 +5725,18 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="Hungarian">
+                <xs:enumeration value="Hindi">
                   <xs:annotation>
-                    <xs:documentation>Hungarian</xs:documentation>
+                    <xs:documentation>Hindi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="Hindi">
+                <xs:enumeration value="Hungarian">
                   <xs:annotation>
-                    <xs:documentation>Hindi</xs:documentation>
+                    <xs:documentation>Hungarian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5545,6 +5788,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Khmer">
+                  <xs:annotation>
+                    <xs:documentation>Khmer</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Korean">
                   <xs:annotation>
                     <xs:documentation>Korean</xs:documentation>
@@ -5557,6 +5809,15 @@
                 <xs:enumeration value="Kurmanji">
                   <xs:annotation>
                     <xs:documentation>Kurmanji</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Lao">
+                  <xs:annotation>
+                    <xs:documentation>Lao</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5725,6 +5986,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Sinhala">
+                  <xs:annotation>
+                    <xs:documentation>Sinhala</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
                     <xs:documentation>Slovak</xs:documentation>
@@ -5761,6 +6031,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Syriac">
+                  <xs:annotation>
+                    <xs:documentation>Syriac</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Tamil">
                   <xs:annotation>
                     <xs:documentation>Tamil</xs:documentation>
@@ -5773,6 +6052,24 @@
                 <xs:enumeration value="Telugu">
                   <xs:annotation>
                     <xs:documentation>Telugu</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Thai">
+                  <xs:annotation>
+                    <xs:documentation>Thai</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Tibetan">
+                  <xs:annotation>
+                    <xs:documentation>Tibetan</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -7545,6 +7842,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Amharic">
+                  <xs:annotation>
+                    <xs:documentation>Amharic</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Ancient Greek">
                   <xs:annotation>
                     <xs:documentation>Ancient Greek</xs:documentation>
@@ -7617,9 +7923,27 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Burmese">
+                  <xs:annotation>
+                    <xs:documentation>Burmese</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Catalan">
                   <xs:annotation>
                     <xs:documentation>Catalan</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Cherokee">
+                  <xs:annotation>
+                    <xs:documentation>Cherokee</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -7638,6 +7962,15 @@
                 <xs:enumeration value="Chinese (Traditional)">
                   <xs:annotation>
                     <xs:documentation>Chinese (traditional characters)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Coptic">
+                  <xs:annotation>
+                    <xs:documentation>Coptic</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -7743,6 +8076,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Georgian">
+                  <xs:annotation>
+                    <xs:documentation>Georgian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="German">
                   <xs:annotation>
                     <xs:documentation>German</xs:documentation>
@@ -7779,18 +8121,18 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="Hungarian">
+                <xs:enumeration value="Hindi">
                   <xs:annotation>
-                    <xs:documentation>Hungarian</xs:documentation>
+                    <xs:documentation>Hindi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="Hindi">
+                <xs:enumeration value="Hungarian">
                   <xs:annotation>
-                    <xs:documentation>Hindi</xs:documentation>
+                    <xs:documentation>Hungarian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -7842,6 +8184,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Khmer">
+                  <xs:annotation>
+                    <xs:documentation>Khmer</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Korean">
                   <xs:annotation>
                     <xs:documentation>Korean</xs:documentation>
@@ -7854,6 +8205,15 @@
                 <xs:enumeration value="Kurmanji">
                   <xs:annotation>
                     <xs:documentation>Kurmanji</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Lao">
+                  <xs:annotation>
+                    <xs:documentation>Lao</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -8022,6 +8382,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Sinhala">
+                  <xs:annotation>
+                    <xs:documentation>Sinhala</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
                     <xs:documentation>Slovak</xs:documentation>
@@ -8058,6 +8427,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Syriac">
+                  <xs:annotation>
+                    <xs:documentation>Syriac</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Tamil">
                   <xs:annotation>
                     <xs:documentation>Tamil</xs:documentation>
@@ -8070,6 +8448,24 @@
                 <xs:enumeration value="Telugu">
                   <xs:annotation>
                     <xs:documentation>Telugu</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Thai">
+                  <xs:annotation>
+                    <xs:documentation>Thai</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Tibetan">
+                  <xs:annotation>
+                    <xs:documentation>Tibetan</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -9311,6 +9707,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Amharic">
+                  <xs:annotation>
+                    <xs:documentation>Amharic</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Ancient Greek">
                   <xs:annotation>
                     <xs:documentation>Ancient Greek</xs:documentation>
@@ -9383,9 +9788,27 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Burmese">
+                  <xs:annotation>
+                    <xs:documentation>Burmese</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Catalan">
                   <xs:annotation>
                     <xs:documentation>Catalan</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Cherokee">
+                  <xs:annotation>
+                    <xs:documentation>Cherokee</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -9404,6 +9827,15 @@
                 <xs:enumeration value="Chinese (Traditional)">
                   <xs:annotation>
                     <xs:documentation>Chinese (traditional characters)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Coptic">
+                  <xs:annotation>
+                    <xs:documentation>Coptic</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -9509,6 +9941,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Georgian">
+                  <xs:annotation>
+                    <xs:documentation>Georgian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="German">
                   <xs:annotation>
                     <xs:documentation>German</xs:documentation>
@@ -9545,18 +9986,18 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="Hungarian">
+                <xs:enumeration value="Hindi">
                   <xs:annotation>
-                    <xs:documentation>Hungarian</xs:documentation>
+                    <xs:documentation>Hindi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="Hindi">
+                <xs:enumeration value="Hungarian">
                   <xs:annotation>
-                    <xs:documentation>Hindi</xs:documentation>
+                    <xs:documentation>Hungarian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -9608,6 +10049,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Khmer">
+                  <xs:annotation>
+                    <xs:documentation>Khmer</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Korean">
                   <xs:annotation>
                     <xs:documentation>Korean</xs:documentation>
@@ -9620,6 +10070,15 @@
                 <xs:enumeration value="Kurmanji">
                   <xs:annotation>
                     <xs:documentation>Kurmanji</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Lao">
+                  <xs:annotation>
+                    <xs:documentation>Lao</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -9788,6 +10247,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Sinhala">
+                  <xs:annotation>
+                    <xs:documentation>Sinhala</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
                     <xs:documentation>Slovak</xs:documentation>
@@ -9824,6 +10292,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Syriac">
+                  <xs:annotation>
+                    <xs:documentation>Syriac</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Tamil">
                   <xs:annotation>
                     <xs:documentation>Tamil</xs:documentation>
@@ -9836,6 +10313,24 @@
                 <xs:enumeration value="Telugu">
                   <xs:annotation>
                     <xs:documentation>Telugu</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Thai">
+                  <xs:annotation>
+                    <xs:documentation>Thai</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Tibetan">
+                  <xs:annotation>
+                    <xs:documentation>Tibetan</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
