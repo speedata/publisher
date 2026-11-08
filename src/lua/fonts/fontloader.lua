@@ -68,6 +68,15 @@ function M.preload_font(name, size, extra_parameter)
     return f
 end
 
+-- Private use area (BMP and planes 15 and 16). The code points that the
+-- publisher gives to glyphs without one (publisher.puastart + glyph id)
+-- are in plane 16.
+---@param cp integer
+---@return boolean
+local function is_pua(cp)
+    return (cp >= 0xE000 and cp <= 0xF8FF) or cp >= 0xF0000
+end
+
 -- The harfbuzz version of the fontloader.
 ---@param name string Font file name (without path).
 ---@param size number Font size in scaled points.
@@ -256,11 +265,19 @@ function M.define_font_hb(name, size, extra_parameter)
         local touni = glyph_uni[gid]
         local uni = touni or (publisher.puastart + gid)
         local glyphname = fnt:get_glyph_name(gid)
-        if glyphname and string.find(glyphname, ".", 1, true) then
-            local basename = string.match(glyphname, "^(.*)%.")
+        -- Glyph name convention (Adobe Glyph List): everything after the
+        -- first period is a variant suffix ("lam-ar.init.Lellah" is a form
+        -- of "lam-ar"). This applies to glyphs without a code point and to
+        -- glyphs the font maps to the private use area (small caps in older
+        -- fonts). A base glyph without a code point of its own gives no
+        -- mapping; HarfBuzz shaping fills these in later (see
+        -- nodes.learn_tounicode).
+        if (not touni or is_pua(touni)) and glyphname and string.find(glyphname, ".", 1, true) then
+            local basename = string.match(glyphname, "^([^.]+)%.")
             local thischar = f.characters[uni]
-            if thischar then
-                thischar.tounicode = glyphname_uni[basename]
+            local baseuni = basename and glyphname_uni[basename]
+            if thischar and baseuni and not is_pua(baseuni) then
+                thischar.tounicode = baseuni
             end
         end
     end

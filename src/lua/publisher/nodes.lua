@@ -839,6 +839,248 @@ function M.addstrut(nodelist, _where, origin)
     return strut
 end
 
+-- Viramas (canonical combining class 9). A half form or the upper part of
+-- a consonant stack ends with one, so a cluster with several unmapped
+-- glyphs is split after them.
+local viramas = {
+    [0x094D] = true,
+    [0x09CD] = true,
+    [0x0A4D] = true,
+    [0x0ACD] = true,
+    [0x0B4D] = true,
+    [0x0BCD] = true,
+    [0x0C4D] = true,
+    [0x0CCD] = true,
+    [0x0D3B] = true,
+    [0x0D3C] = true,
+    [0x0D4D] = true,
+    [0x0DCA] = true,
+    [0x0E3A] = true,
+    [0x0EBA] = true,
+    [0x0F84] = true,
+    [0x1039] = true,
+    [0x103A] = true,
+    [0x1714] = true,
+    [0x1715] = true,
+    [0x1734] = true,
+    [0x17D2] = true,
+    [0x1A60] = true,
+    [0x1B44] = true,
+    [0x1BAA] = true,
+    [0x1BAB] = true,
+    [0x1BF2] = true,
+    [0x1BF3] = true,
+    [0xA806] = true,
+    [0xA8C4] = true,
+    [0xA953] = true,
+    [0xA9C0] = true,
+    [0xAAF6] = true,
+    [0xABED] = true,
+}
+
+-- Canonical decompositions of the two-part vowel signs. HarfBuzz splits
+-- them into glyphs on both sides of the consonant, and these glyphs map to
+-- the parts.
+local twopart_vowels = {
+    [0x09CB] = { 0x09C7, 0x09BE },
+    [0x09CC] = { 0x09C7, 0x09D7 },
+    [0x0B48] = { 0x0B47, 0x0B56 },
+    [0x0B4B] = { 0x0B47, 0x0B3E },
+    [0x0B4C] = { 0x0B47, 0x0B57 },
+    [0x0B94] = { 0x0B92, 0x0BD7 },
+    [0x0BCA] = { 0x0BC6, 0x0BBE },
+    [0x0BCB] = { 0x0BC7, 0x0BBE },
+    [0x0BCC] = { 0x0BC6, 0x0BD7 },
+    [0x0C48] = { 0x0C46, 0x0C56 },
+    [0x0CC0] = { 0x0CBF, 0x0CD5 },
+    [0x0CC7] = { 0x0CC6, 0x0CD5 },
+    [0x0CC8] = { 0x0CC6, 0x0CD6 },
+    [0x0CCA] = { 0x0CC6, 0x0CC2 },
+    [0x0CCB] = { 0x0CC6, 0x0CC2, 0x0CD5 },
+    [0x0D4A] = { 0x0D46, 0x0D3E },
+    [0x0D4B] = { 0x0D47, 0x0D3E },
+    [0x0D4C] = { 0x0D46, 0x0D57 },
+    [0x0DDA] = { 0x0DD9, 0x0DCA },
+    [0x0DDC] = { 0x0DD9, 0x0DCF },
+    [0x0DDD] = { 0x0DD9, 0x0DCF, 0x0DCA },
+    [0x0DDE] = { 0x0DD9, 0x0DDF },
+    [0x1026] = { 0x1025, 0x102E },
+}
+
+-- UTF-16BE hex string for the ToUnicode entry of LuaTeX.
+---@param codepoints integer[]
+---@return string
+local function utf16hex(codepoints)
+    local ret = {}
+    for _, cp in ipairs(codepoints) do
+        if cp > 0xFFFF then
+            cp = cp - 0x10000
+            ret[#ret + 1] = string.format("%04X%04X", 0xD800 + (cp >> 10), 0xDC00 + (cp & 0x3FF))
+        else
+            ret[#ret + 1] = string.format("%04X", cp)
+        end
+    end
+    return table.concat(ret)
+end
+
+-- Code points a glyph stands for in the text layer, nil if the font gives
+-- none (no cmap entry and no usable glyph name).
+---@param tbl table Font table.
+---@param gid integer
+---@return integer[]?
+local function glyph_codepoints(tbl, gid)
+    local learned = tbl.learned_tounicode
+    if learned and learned[gid] then
+        return learned[gid]
+    end
+    local uc = tbl.backmap[gid]
+    local ch = uc and tbl.characters[uc]
+    local tu = ch and ch.tounicode
+    -- private use code points (BMP and planes 15 and 16) say nothing
+    if type(tu) == "number" and not ((tu >= 0xE000 and tu <= 0xF8FF) or tu >= 0xF0000) then
+        return { tu }
+    end
+    return nil
+end
+
+-- Complex shaping (Arabic joining forms, Indic conjuncts, Hebrew mark
+-- ligatures...) produces glyphs that are not in the font's cmap. Without a
+-- ToUnicode entry, the text of these glyphs cannot be extracted from the
+-- PDF, searched or read aloud. The shaping result tells which characters
+-- each glyph belongs to (HarfBuzz clusters), so the mapping is taken from
+-- there, once per glyph and font: the characters of a cluster minus those
+-- of the mapped glyphs in it belong to the unmapped glyphs.
+---@param tbl table Font table of `fontnumber`.
+---@param fontnumber integer LuaTeX font id.
+---@param glyphs table[] HarfBuzz glyphs in logical order (`codepoint` is the glyph id, `cluster` a byte offset).
+---@param cluster table<integer, integer> Code point at each byte offset.
+---@param strlen integer Length of the shaped string in bytes.
+function M.learn_tounicode(tbl, fontnumber, glyphs, cluster, strlen)
+    if not tbl or not tbl.backmap then
+        return
+    end
+    -- group the glyphs by cluster, quick exit when all glyphs are mapped
+    local groups = {}
+    local starts = {}
+    local needed = false
+    for _, g in ipairs(glyphs) do
+        local gid = g.codepoint
+        if gid ~= 0 and gid ~= 65535 and g.cluster then
+            local grp = groups[g.cluster]
+            if not grp then
+                grp = {}
+                groups[g.cluster] = grp
+                starts[#starts + 1] = g.cluster
+            end
+            grp[#grp + 1] = gid
+            if not needed and not glyph_codepoints(tbl, gid) then
+                needed = true
+            end
+        end
+    end
+    if not needed then
+        return
+    end
+    -- Removed glyphs (ZWSP, joiners) leave the start of the next cluster
+    -- free, so the clusters that have no glyph also end a cluster.
+    local allstarts = {}
+    for _, g in ipairs(glyphs) do
+        if g.cluster then
+            allstarts[g.cluster] = true
+        end
+    end
+    local sorted = {}
+    for c in pairs(allstarts) do
+        sorted[#sorted + 1] = c
+    end
+    table.sort(sorted)
+    local clusterend = {}
+    for i, c in ipairs(sorted) do
+        clusterend[c] = sorted[i + 1] or strlen
+    end
+
+    local newchars
+    for _, start in ipairs(starts) do
+        local grp = groups[start]
+        local unmapped = {}
+        for _, gid in ipairs(grp) do
+            if not glyph_codepoints(tbl, gid) then
+                unmapped[#unmapped + 1] = gid
+            end
+        end
+        if #unmapped > 0 then
+            -- the characters of the cluster in logical order
+            local remaining = {}
+            for pos = start, clusterend[start] - 1 do
+                local cp = cluster[pos]
+                if cp then
+                    local parts = twopart_vowels[cp]
+                    if parts then
+                        for _, p in ipairs(parts) do
+                            remaining[#remaining + 1] = p
+                        end
+                    else
+                        remaining[#remaining + 1] = cp
+                    end
+                end
+            end
+            -- the mapped glyphs take their characters
+            for _, gid in ipairs(grp) do
+                local cps = glyph_codepoints(tbl, gid)
+                if cps then
+                    for _, cp in ipairs(cps) do
+                        for j = 1, #remaining do
+                            if remaining[j] == cp then
+                                table.remove(remaining, j)
+                                break
+                            end
+                        end
+                    end
+                end
+            end
+            -- split into units ending with a virama, one for each unmapped
+            -- glyph, the last glyph gets the rest
+            local units = {}
+            local unit = {}
+            for j, cp in ipairs(remaining) do
+                unit[#unit + 1] = cp
+                if viramas[cp] and j < #remaining and #units < #unmapped - 1 then
+                    units[#units + 1] = unit
+                    unit = {}
+                end
+            end
+            if #unit > 0 then
+                units[#units + 1] = unit
+            end
+            tbl.learned_tounicode = tbl.learned_tounicode or {}
+            for j, gid in ipairs(unmapped) do
+                local cps = units[j]
+                if cps and not tbl.learned_tounicode[gid] then
+                    tbl.learned_tounicode[gid] = cps
+                    local uc = tbl.backmap[gid]
+                    local ch = uc and tbl.characters[uc]
+                    if ch then
+                        local newchar = {}
+                        for k, v in pairs(ch) do
+                            newchar[k] = v
+                        end
+                        newchar.tounicode = utf16hex(cps)
+                        newchars = newchars or {}
+                        newchars[uc] = newchar
+                    end
+                end
+            end
+        end
+    end
+    if newchars then
+        -- font.addcharacters only needs the characters, the type asks for a
+        -- complete font
+        ---@type table
+        local addition = { characters = newchars }
+        font.addcharacters(fontnumber, addition)
+    end
+end
+
 -- Resolves missing glyphs with the fallback fonts. Each run of
 -- consecutive missing glyphs is shaped with the first fallback, whatever
 -- is still missing there with the next one, and so on. Glyphs that no
@@ -861,17 +1103,21 @@ function M.getfallbacks(cluster, glyphslist, fallback_fontdefinitions, direction
         end
         local chars = {}
         local index_at = {}
+        local fbcluster = {}
         local offset = 0
         for i, e in ipairs(entries) do
-            local c = unicode.utf8.char(cluster[e.cluster])
+            local cp = cluster[e.cluster]
+            local c = unicode.utf8.char(cp)
             chars[i] = c
             index_at[offset] = i
+            fbcluster[offset] = cp
             offset = offset + #c
         end
         local buf = publisher.harfbuzz.Buffer.new()
         buf:add_utf8(table.concat(chars))
         publisher.shape(tbl, buf, { direction = direction })
         local nglyphs = buf:get_glyphs()
+        M.learn_tounicode(tbl, tbl.fontnum, nglyphs, fbcluster, offset)
         local is_clusterstart = {}
         for _, g in ipairs(nglyphs) do
             is_clusterstart[index_at[g.cluster]] = true
@@ -1668,6 +1914,7 @@ function M.mknodes(str, parameter, _origin, bidi_offset)
         if #glyphs == 0 then
             goto nextsegment
         end
+        M.learn_tounicode(tbl, fontnumber, glyphs, cluster, pos)
         thissegment = M.hbglyphlist({
             glyphs = glyphs,
             tbl = tbl,
