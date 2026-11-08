@@ -3060,6 +3060,9 @@ function commands.insert_pages(layoutxml, dataxml)
         -- Stored pages bypass pages.shipout(), so the TrimBox/BleedBox
         -- page attributes must be set here.
         thispagestore.grids[i]:trimbox(publisher.options.crop)
+        if publisher.page_helpers.interwordspace_active() then
+            publisher.nodes.insert_interword_spaces(thispagestore[i])
+        end
         tex.box[666] = thispagestore[i]
         publisher.pagenum_tbl[#publisher.pagenum_tbl + 1] = current_pagenumber
         tex.shipout(666)
@@ -5274,6 +5277,7 @@ function commands.pdfoptions(layoutxml, dataxml)
     )
     local hyperlinkborderwidth =
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "hyperlinkborderwidth", "width_sp")
+    local interwordspace = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "interwordspace", "boolean")
     local keywords = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "keywords", "string")
     local nc = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "numcopies", "number")
     local pagelayout = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "pagelayout", "string")
@@ -5386,6 +5390,9 @@ function commands.pdfoptions(layoutxml, dataxml)
 
     if colorprofile then
         spotcolors.set_colorprofile(colorprofile)
+    end
+    if interwordspace ~= nil then
+        publisher.options.interwordspace = interwordspace
     end
 
     if format then

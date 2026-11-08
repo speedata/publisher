@@ -181,6 +181,10 @@ Der speedata Publisher kann den Strukturbaum auch als XML-Datei ausgeben. Dazu w
 
 Damit wird die Datei `publisher-struct.xml` geschrieben, die den Strukturbaum des PDF-Dokuments enthält. Das ist nützlich zum Debuggen und für automatisierte Tests der Dokumentstruktur.
 
+## Leerzeichen zwischen Wörtern
+
+Im PDF ist der Abstand zwischen zwei Wörtern nur eine Lücke und kein Zeichen. Programme, die den Text auslesen (Bildschirmlesegeräte, Kopieren und Einfügen, Suche), müssen raten, wo ein Wort endet, und manche ziehen die Wörter zusammen. Im PDF/UA-Modus setzt der Publisher deshalb in jeden Wortabstand ein unsichtbares Leerzeichen. Das Layout ändert sich dadurch nicht. Mit `<PDFOptions interwordspace="yes">` lässt sich das auch für andere PDFs einschalten, mit `interwordspace="no"` ausschalten.
+
 ## Überprüfen des Dokuments
 
 Um die Barrierefreiheit zu überprüfen, bieten sich folgende Programme an:

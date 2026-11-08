@@ -376,6 +376,7 @@ M.css = do_luafile("css.lua"):new()
 ---@field fontshrink number?
 ---@field fontstep number?
 ---@field fontstretch number?
+---@field interwordspace? boolean Space characters between words in the PDF (`nil`: only in PDF/UA mode).
 ---@field format "PDF/UA"|"PDF/X-3"|"PDF/X-4"|"PDF/X-3:2002"|"PDF/A-3"|"" PDF output format ("PDF/X-3" is normalized to "PDF/X-3:2002" in commands.pdfoptions)
 ---@field gridcells_dx? integer Horizontal gap between grid cells in sp.
 ---@field gridcells_dy? integer Vertical gap between grid cells in sp.

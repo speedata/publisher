@@ -6310,6 +6310,17 @@
           <xs:documentation>Setze die Rahmendicke von Hyperlinks wenn showhyperlinks aktiviert ist. Die Voreinstellung ist 1pt.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="interwordspace">
+        <xs:annotation>
+          <xs:documentation>Fügt zwischen Wörtern ein Leerzeichen in das PDF ein, damit Programme, die den Text auslesen (Kopieren und Einfügen, Suche, Bildschirmlesegeräte), die Wortgrenzen erkennen. Das Layout ändert sich nicht. Die Voreinstellung ist yes bei format="PDF/UA", sonst no.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="keywords">
         <xs:annotation>
           <xs:documentation>Legt die Schlüsselwörter des Dokuments fest (kommaseparierte Liste)</xs:documentation>

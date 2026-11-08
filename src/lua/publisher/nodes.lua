@@ -2282,6 +2282,101 @@ function M.get_glue_size(n)
     return spec.width
 end
 
+-- Slot and width of the space glyph per font id, false if the font has
+-- none.
+local spaceglyph_cache = {}
+
+---@param fontid integer
+---@return integer|false slot
+---@return integer width
+local function spaceglyph(fontid)
+    local entry = spaceglyph_cache[fontid]
+    if entry == nil then
+        local f = fonts.used_fonts[fontid]
+        if not f then
+            -- fallback fonts are not in used_fonts
+            for _, uf in pairs(fonts.used_fonts) do
+                for _, fb in ipairs(uf.fallback_fontdefinitions or {}) do
+                    if fb.fontnum == fontid then
+                        f = fb
+                    end
+                end
+            end
+        end
+        local slot = f and f.spaceslot
+        local ch = slot and f.characters[slot]
+        entry = ch and { slot, ch.width } or false
+        spaceglyph_cache[fontid] = entry
+    end
+    if not entry then
+        return false, 0
+    end
+    return entry[1], entry[2]
+end
+
+-- Word spaces are glue, not characters, so programs that extract text
+-- from the PDF (copy and paste, search, screen readers) have to guess
+-- where words end. This puts an invisible space glyph of the font of the
+-- preceding text at every word space, followed by a kern of the negative
+-- width, so the layout does not change. The new nodes take the attributes
+-- and properties of the glue (color, link, structure element).
+---@param head Node? Node list of a page or box.
+function M.insert_interword_spaces(head)
+    local lastfont, lastexpansion
+    local n = head
+    while n do
+        local id = n.id
+        if id == publisher.hlist_node or id == publisher.vlist_node then
+            M.insert_interword_spaces(n.list)
+        elseif id == publisher.glyph_node then
+            lastfont = n.font
+            lastexpansion = n.expansion_factor
+        elseif
+            id == publisher.glue_node
+            and lastfont
+            and (node.has_attribute(n, att_spaceglue) or node.has_attribute(n, publisher.att_tie_glue))
+        then
+            local props = node.getproperty(n)
+            local slot, w = spaceglyph(lastfont)
+            if slot and not (props and props.interwordspace) then
+                local g = node.new(publisher.glyph_node)
+                ---@cast g GlyphNode
+                g.font = lastfont
+                g.char = slot
+                g.attr = n.attr
+                -- The same expansion as the text before (font expansion
+                -- of the line) keeps the glyphs in one PDF text run, the
+                -- kern takes the expanded width.
+                if lastexpansion and lastexpansion ~= 0 then
+                    g.expansion_factor = lastexpansion
+                    w = node.dimensions(g)
+                end
+                local k = node.new(publisher.kern_node)
+                k.subtype = 1
+                k.kern = -w
+                k.attr = n.attr
+                if props then
+                    local gp, kp = {}, {}
+                    for key, v in pairs(props) do
+                        gp[key] = v
+                        kp[key] = v
+                    end
+                    node.setproperty(g, gp)
+                    node.setproperty(k, kp)
+                else
+                    props = {}
+                    node.setproperty(n, props)
+                end
+                -- the glue keeps its space when the list is shipped out again
+                props.interwordspace = true
+                head = node.insert_before(head, n, g)
+                head = node.insert_before(head, n, k)
+            end
+        end
+        n = n.next
+    end
+end
+
 -- Inserts a glue node at the head or tail of `nodelist`.
 ---@param nodelist Node?
 ---@param head_or_tail "head"|"tail"

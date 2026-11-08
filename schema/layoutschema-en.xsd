@@ -6310,6 +6310,17 @@
           <xs:documentation>Set the border width of hyperlinks when showhyperlinks is set. The default is 1pt.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="interwordspace">
+        <xs:annotation>
+          <xs:documentation>Put a space character between words into the PDF, so that programs that extract the text (copy and paste, search, screen readers) recognize the word boundaries. The layout does not change. The default is yes with format="PDF/UA", otherwise no.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="keywords">
         <xs:annotation>
           <xs:documentation>Set the keywords of the document (comma separated list).</xs:documentation>

@@ -5322,6 +5322,15 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="interwordspace">
+               <a:documentation>Fügt zwischen Wörtern ein Leerzeichen in das PDF ein, damit Programme, die den Text auslesen (Kopieren und Einfügen, Suche, Bildschirmlesegeräte), die Wortgrenzen erkennen. Das Layout ändert sich nicht. Die Voreinstellung ist yes bei format=&#34;PDF/UA&#34;, sonst no.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="keywords">
                <a:documentation>Legt die Schlüsselwörter des Dokuments fest (kommaseparierte Liste)</a:documentation>
             </attribute>

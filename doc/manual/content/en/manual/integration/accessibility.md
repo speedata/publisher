@@ -182,6 +182,10 @@ The speedata Publisher can also dump the structure tree to an XML file by using 
 
 This writes the file `publisher-struct.xml` which contains the structure tree of the PDF document. This is useful for debugging and for automated testing of the document structure.
 
+## Spaces between words
+
+In the PDF, the space between two words is just a gap, not a character. Programs that extract the text (screen readers, copy and paste, search) have to guess where a word ends, and some of them run the words together. In PDF/UA mode, the Publisher therefore puts an invisible space character into every space between words. The layout does not change. With `<PDFOptions interwordspace="yes">` you can switch this on for other PDFs as well, with `interwordspace="no"` you can switch it off.
+
 ## Checking the document
 
 The following programs can be used to check accessibility:

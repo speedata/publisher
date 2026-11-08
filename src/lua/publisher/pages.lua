@@ -25,6 +25,17 @@ function M.page_initialized_p(pagenumber)
     return publisher.pages[pagenumber] ~= nil
 end
 
+-- Space characters between words (PDFOptions interwordspace), on by
+-- default in PDF/UA mode.
+---@return boolean
+function M.interwordspace_active()
+    local iws = publisher.options.interwordspace
+    if iws == nil then
+        return publisher.options.format == "PDF/UA"
+    end
+    return iws
+end
+
 -- Ships out the given page node list as the next PDF page. Records
 -- structure-tree information in PDF/UA mode and updates `pagelabels`,
 -- `pagenum_tbl`, `pages_shippedout`.
@@ -56,6 +67,9 @@ function M.shipout(nodelist, pagenumber, dataxml)
             nodelist = publisher.nodes.set_color_if_necessary(nodelist, colorindex)
             nodelist = node.vpack(nodelist)
         end
+    end
+    if M.interwordspace_active() then
+        publisher.nodes.insert_interword_spaces(nodelist)
     end
     if publisher.options.format == "PDF/UA" then
         publisher.insert_struct_elements(nodelist, cp)

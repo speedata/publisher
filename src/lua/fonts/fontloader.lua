@@ -283,6 +283,27 @@ function M.define_font_hb(name, size, extra_parameter)
     end
     f.backmap = backmap
 
+    -- The no-break space takes slot 32 (the shaper turns it into glue). If
+    -- the font has a separate glyph for the space, that glyph gets a slot
+    -- of its own for the space characters between words (PDFOptions
+    -- interwordspace), so they map to U+0020 and not to U+00A0.
+    local spacegid = fnt:get_nominal_glyph(32)
+    local slot32 = f.characters[32]
+    if spacegid and slot32 and slot32.index ~= spacegid then
+        local slot = publisher.puastart + spacegid
+        local hadvance = fnt:get_glyph_h_advance(spacegid)
+        f.characters[slot] = {
+            index = spacegid,
+            width = hadvance * mag,
+            hadvance = hadvance,
+            expansion_factor = 1000,
+            tounicode = 32,
+        }
+        f.spaceslot = slot
+    elseif slot32 then
+        f.spaceslot = 32
+    end
+
     -- With spacefromfont="yes" at LoadFontfile the interword glue comes from
     -- the font's own space advance instead of the fixed 25% of the font size
     -- set above. Stretch and shrink use TeX's 1 : 1/2 : 1/3 ratios. An
