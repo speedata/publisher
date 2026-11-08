@@ -220,10 +220,11 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
             local transparency = head_props_t and head_props_t.opacity
             local bbox = head_props_t and head_props_t.bbox
             local hl = node_has_attribute(head, attr_num_hyperlink) or (head_props_t and head_props_t.hyperlink)
-            local role, structelemobjnum, id, parentid, rc, actualtext, alttext, structchain
+            local role, structelemobjnum, id, parentid, rc, actualtext, alttext, structchain, langtag
             if opt_format == "PDF/UA" and head_props_t then
                 structchain = head_props_t.structchain
                 actualtext = head_props_t.actualtext
+                langtag = head_props_t.langtag
                 alttext = head_props_t.alttext
                 role = head_props_t.role
                 structelemobjnum = head_props_t.structelemobjnum
@@ -389,6 +390,7 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                         setp(bdc, "id", id)
                         setp(bdc, "bbox", bbox)
                         setp(bdc, "actualtext", actualtext)
+                        setp(bdc, "langtag", langtag)
                         setp(bdc, "origin", "insert_startrole")
                         setp(bdc, "structelemobjnum", structelemobjnum)
                         setp(bdc, "linkobjnum", stl.objnum)
@@ -463,6 +465,7 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                         setp(bdc, "bbox", bbox)
                         setp(bdc, "id", id)
                         setp(bdc, "actualtext", actualtext)
+                        setp(bdc, "langtag", langtag)
                         setp(bdc, "alttext", alttext)
                         setp(bdc, "rolename", tostring(roles_lookup[role]))
                         setp(bdc, "origin", "insert_startrole")
@@ -484,6 +487,7 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                     setp(bdc, "bbox", bbox)
                     setp(bdc, "id", id)
                     setp(bdc, "actualtext", actualtext)
+                    setp(bdc, "langtag", langtag)
                     setp(bdc, "alttext", alttext)
                     setp(bdc, "rolename", tostring(roles_lookup[role]))
                     setp(bdc, "origin", "insert_startrole")
@@ -1302,6 +1306,9 @@ function M.hbglyphlist(arguments)
     if parameter.role then
         style_props_tmpl = style_props_tmpl or {}
         style_props_tmpl["role"] = parameter.role
+        -- language of the structure element (PDF/UA), if it differs from
+        -- the language of the document
+        style_props_tmpl["langtag"] = M.wordlanguage(parameter.languagecode)
     end
     if parameter.structelemobjnum then
         style_props_tmpl = style_props_tmpl or {}

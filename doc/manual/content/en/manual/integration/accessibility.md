@@ -99,6 +99,10 @@ The hierarchical structure is created in the order in which they are output in t
 
 Texts and images that should not appear in the hierarchy can be marked as an artifact (role).
 
+## Language
+
+Screen readers choose the voice by the language of the text. The main language of the layout (`<Options mainlanguage="...">`) becomes the language of the document. A paragraph in another language gets its language with the attribute `language`, for example `<Paragraph role="P" language="Arabic">`; in PDF/UA mode the Publisher writes it to the structure element of the paragraph. Use the language of most of the text as the main language and mark the other parts. This also keeps the PDF smaller, because only text in a language other than the main language needs a language entry.
+
 ## Alternative texts and image descriptions
 
 Images should be provided with a description so that this appears in the hierarchy instead of the image. For paragraphs, it is also possible to insert the ‘real text’ (actual text). This is displayed in the hierarchy instead of the text within `<Value>`.

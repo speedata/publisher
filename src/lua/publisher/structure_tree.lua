@@ -182,6 +182,9 @@ function M.dump_struct_tree_xml(elem, indent, page_ref_to_num)
     if elem.alttext then
         attrs = attrs .. string.format(' alttext="%s"', struct_xml_escape(elem.alttext))
     end
+    if elem.lang then
+        attrs = attrs .. string.format(' lang="%s"', struct_xml_escape(elem.lang))
+    end
 
     local mcids = {}
     local children = {}
@@ -260,6 +263,9 @@ function M.writeStructElements(itm, parentobjectnumber)
         end
         if itm.alttext then
             str[#str + 1] = "/Alt " .. publisher.utf8_to_utf16_string_pdf(itm.alttext)
+        end
+        if itm.lang then
+            str[#str + 1] = string.format("/Lang (%s)", itm.lang)
         end
         local bbox = itm.bbox
         if bbox then

@@ -619,6 +619,7 @@ local ktree = pdf.reserveobj()
 ---@field bbox? [string, string, string, string] Bounding box as `{llx, lly, urx, ury}` strings.
 ---@field page? integer PDF page object number the element appears on.
 ---@field actualtext? string Replacement text for the contents (PDF `/ActualText`).
+---@field lang? string BCP 47 tag if the language differs from the document (PDF `/Lang`).
 ---@field alttext? string Alternative description (PDF `/Alt`).
 ---@field listnumbering? string `/ListNumbering` attribute of an L element (Decimal, Disc, None, ...).
 ---@field linkobjects? integer[] PDF object numbers of associated link annotations.
@@ -2056,6 +2057,7 @@ do
                     if roleid then
                         local actualtext = M.attribute_helpers.getprop(head, "actualtext")
                         local alttext = M.attribute_helpers.getprop(head, "alttext")
+                        local langtag = M.attribute_helpers.getprop(head, "langtag")
                         local rolename = M.roles_a[r]
                         if rolename ~= "Artifact" then
                             ensure_struct_chain(head)
@@ -2067,6 +2069,7 @@ do
                                 page = page,
                                 actualtext = actualtext,
                                 alttext = alttext,
+                                lang = langtag,
                             }
                             local parenttable = M.structElements[parentid]
                             if parenttable then
@@ -2092,6 +2095,7 @@ do
                 end
                 local actualtext = M.attribute_helpers.getprop(head, "actualtext")
                 local alttext = M.attribute_helpers.getprop(head, "alttext")
+                local langtag = M.attribute_helpers.getprop(head, "langtag")
                 local bbox = M.attribute_helpers.getprop(head, "bbox")
                 ensure_struct_chain(head)
                 -- role number to role name
@@ -2114,6 +2118,7 @@ do
                             actualtext = actualtext,
                             alttext = alttext,
                             bbox = bbox,
+                            lang = langtag,
                             linkobjects = { linkobjnum },
                         }
                     else
@@ -2124,6 +2129,7 @@ do
                             actualtext = actualtext,
                             alttext = alttext,
                             bbox = bbox,
+                            lang = langtag,
                         }
                     end
                     -- The parent needs links to the children, but only one for each. Therefore

@@ -5249,6 +5249,7 @@ function commands.paragraph(layoutxml, dataxml, textblockoptions)
             p.id = publisher.roles_a[params.role] .. "_" .. tostring(params.rolecounter)
             p.structpos = params.structpos
             p.actualtext = params.actualtext
+            p.langtag = publisher.nodes.wordlanguage(params.languagecode)
             p.structchain = params.structchain
         end
     end

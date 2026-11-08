@@ -26,6 +26,7 @@ local publisher = require("publisher")
 ---@field structpos? string Position in the parent structure element (PDF/UA).
 ---@field structchain? table Enclosing container structure elements to create on demand (PDF/UA, see `ensure_struct_chain`).
 ---@field actualtext? string Replacement text for the structure element (PDF/UA).
+---@field langtag? string BCP 47 tag of the structure element if it differs from the document language (PDF/UA).
 ---@field html? string HTML processing mode ("off" disables it).
 ---@field typ "par"
 ---@field has_color? boolean
@@ -1709,6 +1710,7 @@ function Par:format(width_sp, options, data)
         publisher.attribute_helpers.setprop(nodelist, "id", self.id)
         publisher.attribute_helpers.setprop(nodelist, "structpos", self.structpos)
         publisher.attribute_helpers.setprop(nodelist, "actualtext", self.actualtext)
+        publisher.attribute_helpers.setprop(nodelist, "langtag", self.langtag)
         publisher.attribute_helpers.setprop(nodelist, "structchain", self.structchain)
         node.set_attribute(nodelist, publisher.att_role, self.role)
     end
