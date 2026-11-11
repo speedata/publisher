@@ -102,6 +102,10 @@ Texte und Bilder, die nicht in der Hierarchie auftreten sollen, können als Arti
 
 Bildschirmlesegeräte wählen die Stimme nach der Sprache des Textes. Die Hauptsprache des Layouts (`<Options mainlanguage="...">`) wird zur Sprache des Dokuments. Ein Absatz in einer anderen Sprache bekommt seine Sprache mit dem Attribut `language`, zum Beispiel `<Paragraph role="P" language="Arabic">`; im PDF/UA-Modus schreibt der Publisher sie in das Strukturelement des Absatzes. Als Hauptsprache eignet sich die Sprache des größten Teils des Textes, die übrigen Teile werden ausgezeichnet. Das hält auch das PDF kleiner, weil nur Text in einer anderen Sprache als der Hauptsprache eine Sprachangabe braucht.
 
+Neben den Sprachen, die unter [`<Options>`]({{< relref "/reference/commands/options" >}}) aufgeführt sind, nehmen `language` und `mainlanguage` jeden Sprachcode in BCP-47-Form an, auch mit Schrift oder Region, zum Beispiel `ckb`, `ur-Arab` oder `sr-Latn`. Der Publisher schreibt den Code unverändert in das PDF. Gibt es für eine Sprache keine Trennmuster, wird der Text nicht getrennt, und der Publisher gibt eine Warnung aus.
+
+Ein Wort oder eine Passage innerhalb eines Absatzes bekommt mit `<Span>` eine eigene Sprache, zum Beispiel `<Span role="Span" language="el">`. Im PDF/UA-Modus wird der Span dann ein eigenes Strukturelement mit dieser Sprache. Die Schrift muss die Buchstaben dieser Sprache enthalten.
+
 ## Alternativ-Texte und Bildbeschreibungen
 
 Bilder sollten mit einer Beschreibung versehen werden, damit diese in der Hierarchie anstelle des Bildes erscheint. Bei Absätzen ist es auch möglich, den »echten Text« (actual text) einzufügen. Dieser wird in der Hierarchie anstelle des Textes innerhalb von `<Value>` angezeigt.

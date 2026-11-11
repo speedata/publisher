@@ -2542,7 +2542,7 @@
                            <param name="pattern">\{.+\}</param>
                         </data>
                         <data type="string">
-                           <param name="pattern">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</param>
+                           <param name="pattern">--|[a-zA-Z]{2,3}([_\-][a-zA-Z0-9]{2,8})*</param>
                         </data>
                         <value>Amharic</value>
                         <a:documentation>Amharic</a:documentation>
@@ -4181,7 +4181,7 @@
                      <param name="pattern">\{.+\}</param>
                   </data>
                   <data type="string">
-                     <param name="pattern">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</param>
+                     <param name="pattern">--|[a-zA-Z]{2,3}([_\-][a-zA-Z0-9]{2,8})*</param>
                   </data>
                   <value>Amharic</value>
                   <a:documentation>Amharic</a:documentation>
@@ -4928,7 +4928,7 @@
                            <param name="pattern">\{.+\}</param>
                         </data>
                         <data type="string">
-                           <param name="pattern">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</param>
+                           <param name="pattern">--|[a-zA-Z]{2,3}([_\-][a-zA-Z0-9]{2,8})*</param>
                         </data>
                         <value>Amharic</value>
                         <a:documentation>Amharic</a:documentation>
@@ -6698,7 +6698,7 @@
                            <param name="pattern">\{.+\}</param>
                         </data>
                         <data type="string">
-                           <param name="pattern">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</param>
+                           <param name="pattern">--|[a-zA-Z]{2,3}([_\-][a-zA-Z0-9]{2,8})*</param>
                         </data>
                         <value>Amharic</value>
                         <a:documentation>Amharic</a:documentation>
@@ -7741,7 +7741,7 @@
                            <param name="pattern">\{.+\}</param>
                         </data>
                         <data type="string">
-                           <param name="pattern">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</param>
+                           <param name="pattern">--|[a-zA-Z]{2,3}([_\-][a-zA-Z0-9]{2,8})*</param>
                         </data>
                         <value>Amharic</value>
                         <a:documentation>Amharic</a:documentation>

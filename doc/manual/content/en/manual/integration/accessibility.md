@@ -103,6 +103,10 @@ Texts and images that should not appear in the hierarchy can be marked as an art
 
 Screen readers choose the voice by the language of the text. The main language of the layout (`<Options mainlanguage="...">`) becomes the language of the document. A paragraph in another language gets its language with the attribute `language`, for example `<Paragraph role="P" language="Arabic">`; in PDF/UA mode the Publisher writes it to the structure element of the paragraph. Use the language of most of the text as the main language and mark the other parts. This also keeps the PDF smaller, because only text in a language other than the main language needs a language entry.
 
+Besides the languages listed under [`<Options>`]({{< relref "/reference/commands/options" >}}), `language` and `mainlanguage` accept any language code in BCP 47 form, also with a script or region, for example `ckb`, `ur-Arab` or `sr-Latn`. The Publisher writes the code to the PDF as it is. For a language without hyphenation patterns, the text is not hyphenated, and the Publisher shows a warning.
+
+A word or a passage within a paragraph gets its own language with `<Span>`, for example `<Span role="Span" language="el">`. In PDF/UA mode, the span becomes a structure element of its own with the language. The font must contain the letters of that language.
+
 ## Alternative texts and image descriptions
 
 Images should be provided with a description so that this appears in the hierarchy instead of the image. For paragraphs, it is also possible to insert the ‘real text’ (actual text). This is displayed in the hierarchy instead of the text within `<Value>`.

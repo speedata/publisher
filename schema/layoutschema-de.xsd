@@ -2123,7 +2123,7 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:string">
-                <xs:pattern value="--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh"/>
+                <xs:pattern value="--|[a-zA-Z]{2,3}([_\-][a-zA-Z0-9]{2,8})*"/>
               </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>
@@ -4233,7 +4233,7 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:string">
-                <xs:pattern value="--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh"/>
+                <xs:pattern value="--|[a-zA-Z]{2,3}([_\-][a-zA-Z0-9]{2,8})*"/>
               </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>
@@ -5461,7 +5461,7 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:string">
-                <xs:pattern value="--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh"/>
+                <xs:pattern value="--|[a-zA-Z]{2,3}([_\-][a-zA-Z0-9]{2,8})*"/>
               </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>
@@ -7857,7 +7857,7 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:string">
-                <xs:pattern value="--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh"/>
+                <xs:pattern value="--|[a-zA-Z]{2,3}([_\-][a-zA-Z0-9]{2,8})*"/>
               </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>
@@ -9722,7 +9722,7 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:string">
-                <xs:pattern value="--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh"/>
+                <xs:pattern value="--|[a-zA-Z]{2,3}([_\-][a-zA-Z0-9]{2,8})*"/>
               </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>

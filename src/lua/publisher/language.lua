@@ -180,9 +180,31 @@ local language_filename = {
     ["--"] = "",
 }
 
+-- True if the locale (lower case, `_` as separator) has the form of a BCP 47
+-- language tag: a primary language subtag of two or three letters, followed
+-- by subtags of two to eight letters or digits (`ckb`, `kn_knda`, `sr_latn_rs`).
+-- Language names (`deutsch`) are not tags.
+---@param locale string
+---@return boolean
+local function is_languagetag(locale)
+    local parts = string.explode(locale, "_")
+    if not string.match(parts[1], "^%l%l%l?$") then
+        return false
+    end
+    for i = 2, #parts do
+        local subtag = parts[i]
+        if #subtag < 2 or #subtag > 8 or not string.match(subtag, "^[%l%d]+$") then
+            return false
+        end
+    end
+    return true
+end
+
 -- Resolves a language reference to a LanguageEntry, loading hyphenation
 -- patterns on first use and caching the result in `publisher.languages` and
 -- `publisher.languages_id_lang`. Numeric input is treated as an existing id.
+-- A well-formed language tag without hyphenation patterns gives a language
+-- without hyphenation.
 ---@param id_or_locale_or_name integer|string LuaTeX language id, locale (`"de"`, `"en_GB"`, ...) or name (`"German"`).
 ---@return LanguageEntry|integer entry Cached entry, or `0` when no patterns can be loaded.
 function M.get_language(id_or_locale_or_name)
@@ -210,6 +232,20 @@ function M.get_language(id_or_locale_or_name)
         if language_filename[langcode] then
             filename_part = language_filename[langcode]
         end
+    end
+
+    if not filename_part and is_languagetag(locale) then
+        -- A well-formed language tag (ckb, kn_knda) without hyphenation
+        -- patterns: the text is not hyphenated, but the tag is still used
+        -- for the PDF /Lang.
+        main.log(
+            "warn",
+            string.format(
+                "No hyphenation patterns for language %s, text is not hyphenated",
+                tostring(orig_id_or_locale_or_name)
+            )
+        )
+        filename_part = ""
     end
 
     local l = lang.new()
