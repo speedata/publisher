@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document>
+  <P page="1">
+    <MCID>0</MCID>
+    <MCID>2</MCID>
+    <Link page="1">
+      <MCID>1</MCID>
+    </Link>
+  </P>
+  <P page="1">
+    <MCID>3</MCID>
+    <MCID>6</MCID>
+    <Link page="1">
+      <MCID>4</MCID>
+      <MCID>5</MCID>
+    </Link>
+  </P>
+  <P page="1">
+    <MCID>7</MCID>
+    <MCID>9</MCID>
+  </P>
+  <P page="1">
+    <MCID>10</MCID>
+  </P>
+</Document>

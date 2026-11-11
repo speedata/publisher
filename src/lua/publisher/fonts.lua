@@ -485,6 +485,33 @@ function M.pre_linebreak(head)
     return pre_linebreak_direct(d_todirect(head))
 end
 
+-- Node properties that place a node in the structure (PDF/UA), see
+-- nodes.insert_nonmoving_whatsits.
+local structprops = {
+    "role",
+    "id",
+    "parent",
+    "rolecounter",
+    "structelemobjnum",
+    "structchain",
+    "actualtext",
+    "alttext",
+    "langtag",
+}
+
+-- Gives `rule` the structure properties of `from`, so that it is drawn
+-- inside the marked content of that structure element (PDF/UA).
+---@param from Node?
+---@param rule Node
+local function copy_structprops(from, rule)
+    local props = from and node.getproperty(from)
+    if type(props) == "table" then
+        for _, key in ipairs(structprops) do
+            publisher.attribute_helpers.setprop(rule, key, props[key])
+        end
+    end
+end
+
 -- Inserts a background-color rule behind a glyph run starting at `start`
 -- and extending while the same `bgcolorindex` is set.
 ---@param parent Node Surrounding hbox/vbox.
@@ -527,6 +554,9 @@ function M.insert_backgroundcolor(parent, head, start, bgcolorindex, bg_padding_
         ht + dp + bg_padding_top + bg_padding_bottom
     )
     rule.mode = 0
+    if publisher.options.format == "PDF/UA" then
+        copy_structprops(start, rule)
+    end
     parent.head = node.insert_before(parent.head, start, rule)
     return rule
 end
@@ -628,6 +658,28 @@ function M.insert_underline(parent, head, start, typ, style, colornumber)
     rule.mode = 0
     local attribs = publisher.attribute_helpers.get_attributes(start)
     publisher.attribute_helpers.set_attributes(rule, attribs)
+    if publisher.options.format == "PDF/UA" then
+        -- The line belongs to the structure element of its text. Without
+        -- these properties it would interrupt the marked content of the
+        -- text and stay untagged. The run can end with nodes without
+        -- width that belong to no structure element (the rule and penalty
+        -- of a line break), so the line goes right after the last node of
+        -- the text. This does not move it.
+        local before = head and head.prev or node.tail(parent.head)
+        while
+            before
+            and before ~= start
+            and (
+                before.id == publisher.penalty_node
+                or before.id == publisher.whatsit_node
+                or (before.id == publisher.rule_node and before.width == 0)
+            )
+        do
+            head = before
+            before = before.prev
+        end
+        copy_structprops(before, rule)
+    end
     parent.head = node.insert_before(parent.head, head, rule)
     return rule
 end

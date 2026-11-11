@@ -131,8 +131,8 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
     local fun
     local prev_hyperlink, prev_fgcolor, prev_role
     local nonextnode = false
+    local role_closed = false
     local linklevel = 0
-    local currentfont = 1
     local rules = {}
     while head do
         local head_props = node_getproperty(head)
@@ -233,7 +233,6 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                 rc = head_props_t.rolecounter
             end
             if head.id == publisher.glyph_node then
-                currentfont = head.font
                 if role and head.next and head.next.id == publisher.disc_node then
                     publisher.attribute_helpers.setprop(head.next, "role", role)
                     publisher.attribute_helpers.setprop(head.next, "parent", parentid)
@@ -358,6 +357,10 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                         setp(emc, "origin", "insert_endrole")
                         node_insert_after(parent.head, enl, emc)
                         insert_endrole = false
+                        -- At the end of the list, the role is closed now.
+                        -- The end link and the EMC after head must not
+                        -- close it once more.
+                        role_closed = endlink_after
                     end
                 end
                 if insert_startlink then
@@ -467,6 +470,7 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                         setp(bdc, "actualtext", actualtext)
                         setp(bdc, "langtag", langtag)
                         setp(bdc, "alttext", alttext)
+                        setp(bdc, "structelemobjnum", structelemobjnum)
                         setp(bdc, "rolename", tostring(roles_lookup[role]))
                         setp(bdc, "origin", "insert_startrole")
                         bdc.data = ""
@@ -489,6 +493,7 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                     setp(bdc, "actualtext", actualtext)
                     setp(bdc, "langtag", langtag)
                     setp(bdc, "alttext", alttext)
+                    setp(bdc, "structelemobjnum", structelemobjnum)
                     setp(bdc, "rolename", tostring(roles_lookup[role]))
                     setp(bdc, "origin", "insert_startrole")
                     bdc.data = ""
@@ -496,6 +501,10 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                     parent.head = node_insert_before(parent.head, head, bdc)
                 end
                 prev_role = role
+                if role_closed then
+                    prev_role = nil
+                    role_closed = false
+                end
 
                 if transparency then
                     local colstart = node_new("whatsit", "pdf_colorstack")
@@ -606,22 +615,6 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                         rules[#rules + 1] = { curx, cury, data }
                     end
                 end
-            elseif
-                publisher.options.format == "PDF/UA"
-                and head.id == publisher.glue_node
-                and node.has_attribute(head, att_spaceglue) == 1
-            then
-                -- a space in PDF/UA should be a real glyph
-                -- subtype >= 1000 is assigend to glue for arranging pages
-                -- space glues always sit inside a box, so parent is set here
-                ---@cast parent Node
-                local g = node.new("glyph")
-                g.subtype = 1
-                g.font = currentfont
-                g.char = 32
-                g.width = head.width
-                parent.head = node.insert_before(parent.head, head, g)
-                head.width = 0
             end
         end
         head = head.next
@@ -2525,14 +2518,27 @@ end
 -- preceding text at every word space, followed by a kern of the negative
 -- width, so the layout does not change. The new nodes take the attributes
 -- and properties of the glue (color, link, structure element).
+--
+-- In PDF/UA, all content is tagged or an artifact. A space between two
+-- structure elements (outside of any marked content) becomes an artifact.
 ---@param head Node? Node list of a page or box.
-function M.insert_interword_spaces(head)
+---@param state? { mcdepth: integer } Marked content depth in the page so far.
+function M.insert_interword_spaces(head, state)
+    state = state or { mcdepth = 0 }
+    local pdfua = publisher.options.format == "PDF/UA"
     local lastfont, lastexpansion
     local n = head
     while n do
         local id = n.id
         if id == publisher.hlist_node or id == publisher.vlist_node then
-            M.insert_interword_spaces(n.list)
+            M.insert_interword_spaces(n.list, state)
+        elseif id == publisher.whatsit_node and n.subtype == publisher.pdf_literal_whatsit then
+            local origin = publisher.attribute_helpers.getprop(n, "origin")
+            if origin == "insert_startrole" then
+                state.mcdepth = state.mcdepth + 1
+            elseif origin == "insert_endrole" then
+                state.mcdepth = state.mcdepth - 1
+            end
         elseif id == publisher.glyph_node then
             lastfont = n.font
             lastexpansion = n.expansion_factor
@@ -2576,6 +2582,18 @@ function M.insert_interword_spaces(head)
                 props.interwordspace = true
                 head = node.insert_before(head, n, g)
                 head = node.insert_before(head, n, k)
+                if pdfua and state.mcdepth <= 0 then
+                    local bmc = node.new("whatsit", "pdf_literal")
+                    bmc.data = "/Artifact BMC"
+                    local emc = node.new("whatsit", "pdf_literal")
+                    emc.data = "EMC"
+                    for _, lit in ipairs({ bmc, emc }) do
+                        lit.mode = 4
+                        lit.attr = n.attr
+                    end
+                    head = node.insert_before(head, g, bmc)
+                    head = node.insert_after(head, g, emc)
+                end
             end
         end
         n = n.next

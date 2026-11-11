@@ -135,14 +135,20 @@ function commands.a(layoutxml, dataxml)
     else
         local p = publisher.par:new(nil, "a")
         local ch = hyperlink_index
+        -- One structure element for the whole link, even if it has several
+        -- children (`<U>`, `<Value>`, ...).
+        local rolecounter
+        if publisher.options.format == "PDF/UA" then
+            publisher.rolecounter = publisher.rolecounter + 1
+            rolecounter = publisher.rolecounter
+        end
         for _, j in ipairs(tab) do
             local c = publisher.xml_helpers.element_contents(j)
             local params = { hyperlink = ch }
             if publisher.options.format == "PDF/UA" then
                 params.role = publisher.structure_tree.get_rolenum("Link")
                 params.structelemobjnum = structelemobjnum
-                publisher.rolecounter = publisher.rolecounter + 1
-                params.rolecounter = publisher.rolecounter
+                params.rolecounter = rolecounter
                 params.parent = 0
             end
             p:append(c, params)
@@ -2437,6 +2443,10 @@ function commands.hspace(layoutxml, dataxml)
             n.subtype = 100
             n.leader = publisher.nodes.mknodes(leadertext, options)
             node.set_attribute(n.leader, publisher.att_leaderwd, leaderwd or -1)
+            if publisher.options.format == "PDF/UA" then
+                -- leaders (dots in a table of contents) are decoration
+                publisher.attribute_helpers.setprop(n, "role", publisher.structure_tree.get_rolenum("Artifact"))
+            end
         end
 
         local p1, p2

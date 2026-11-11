@@ -236,9 +236,8 @@ function M.writeStructElements(itm, parentobjectnumber)
             objectnumbers[#objectnumbers + 1] = string.format("%d", thisitm)
         end
     end
-    if itm.linkobjects then
-        objectnumbers[#objectnumbers + 1] =
-            string.format("<</Type/OBJR /Obj %d 0 R /Pg %d 0 R >>", itm.linkobjects[1], itm.page)
+    for _, lo in ipairs(itm.linkobjects or {}) do
+        objectnumbers[#objectnumbers + 1] = string.format("<</Type/OBJR /Obj %d 0 R /Pg %d 0 R >>", lo.obj, lo.page)
     end
 
     local k

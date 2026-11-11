@@ -625,7 +625,7 @@ local ktree = pdf.reserveobj()
 ---@field lang? string BCP 47 tag if the language differs from the document (PDF `/Lang`).
 ---@field alttext? string Alternative description (PDF `/Alt`).
 ---@field listnumbering? string `/ListNumbering` attribute of an L element (Decimal, Disc, None, ...).
----@field linkobjects? integer[] PDF object numbers of associated link annotations.
+---@field linkobjects? { obj: integer, page: integer }[] Link annotations of the element (object and page object numbers).
 ---@field text? string Alternative text / contents.
 ---@field [integer] StructElement|integer|{ mcid: integer, page: integer } Child structure elements, MCID numbers or marked content references on other pages.
 
@@ -2109,16 +2109,33 @@ do
                 -- role number to role name
                 local rolename = M.roles_a[r]
 
+                -- The link annotation that starts right after this marked
+                -- content, if any. A link that runs over several lines has
+                -- one annotation for each line, all in the same structure
+                -- element.
+                local linkobject
+                if rolename == "Link" then
+                    local startlink = head.next
+                    if
+                        startlink
+                        and startlink.id == M.whatsit_node
+                        and startlink.subtype == M.pdf_start_link_whatsit
+                    then
+                        local action = assert(startlink.action)
+                        action.data = action.data .. "/F 2" .. string.format("/P %s 0 R ", page)
+                        linkobject = { obj = M.attribute_helpers.getprop(head, "linkobjnum"), page = page }
+                    end
+                end
                 local entry
                 if M.structElements[roleid] then
                     entry = M.structElements[roleid]
+                    if linkobject then
+                        entry.linkobjects = entry.linkobjects or {}
+                        entry.linkobjects[#entry.linkobjects + 1] = linkobject
+                    end
                 else
                     if rolename == "Link" then
-                        local linkobjnum = M.attribute_helpers.getprop(head, "linkobjnum")
                         local structelemobjnum = M.attribute_helpers.getprop(head, "structelemobjnum")
-                        local startlink = assert(head.next)
-                        local action = assert(startlink.action)
-                        action.data = action.data .. "/F 2" .. string.format("/P %s 0 R ", page)
                         entry = {
                             obj = structelemobjnum,
                             role = rolename,
@@ -2127,7 +2144,7 @@ do
                             alttext = alttext,
                             bbox = bbox,
                             lang = langtag,
-                            linkobjects = { linkobjnum },
+                            linkobjects = { linkobject },
                         }
                     else
                         entry = {
@@ -2139,6 +2156,11 @@ do
                             bbox = bbox,
                             lang = langtag,
                         }
+                    end
+                    -- Later marked content of the same element (the next
+                    -- line, the text after an inline element) adds to it.
+                    if roleid then
+                        M.structElements[roleid] = entry
                     end
                     -- The parent needs links to the children, but only one for each. Therefore
                     -- the parent contains a table (added_tables) which records all role ids
