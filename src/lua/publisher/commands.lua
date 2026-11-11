@@ -907,6 +907,13 @@ function commands.compatibility(layoutxml, dataxml)
             "use spacefromfont at LoadFontfile instead"
         )
     end
+    -- A missing attribute must leave its flag untouched, otherwise this
+    -- command would undo what the defaults attribute at Layout has set.
+    local raggednaturalspaces =
+        publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "raggednaturalspaces", "boolean")
+    if raggednaturalspaces ~= nil then
+        publisher.compatibility.raggednaturalspaces = raggednaturalspaces
+    end
 end
 
 -- CopyOf

@@ -1,0 +1,28 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  defaults="6.0">
+
+  <Options crop="2mm"/>
+  <!-- defaults 6.0: the word spaces of ragged lines keep their natural width (#748) -->
+
+  <DefineTextformat name="left" alignment="leftaligned"/>
+  <DefineTextformat name="right" alignment="rightaligned"/>
+  <DefineTextformat name="center" alignment="centered"/>
+
+  <Record element="data">
+    <PlaceObject column="1" row="1">
+      <Textblock width="75mm">
+        <Paragraph textformat="left">
+          <Value>The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.</Value>
+        </Paragraph>
+        <Paragraph textformat="right">
+          <Value>The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.</Value>
+        </Paragraph>
+        <Paragraph textformat="center">
+          <Value>The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+
+</Layout>

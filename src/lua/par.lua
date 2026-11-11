@@ -1293,6 +1293,7 @@ function Par:format(width_sp, options, data)
     local att_ignore_orphan = publisher.att_ignore_orphan_widowsetting
     local att_break_below = publisher.att_break_below_forbidden
     local att_margin_top_boxstart = publisher.att_margin_top_boxstart
+    local att_spaceglue = publisher.attribute_name_number["spaceglue"]
 
     local tf = current_textformat
     for i = 1, objects_len do
@@ -1455,6 +1456,16 @@ function Par:format(width_sp, options, data)
                 adjspace = tex.adjustspacing
                 tex.pdfadjustspacing = 0
                 tex.adjustspacing = 0
+                -- Ragged lines are not filled to the measure, so the word
+                -- spaces must not shrink. Otherwise a line takes one word
+                -- more than fits and keeps its compressed spaces (#748).
+                if publisher.compatibility.raggednaturalspaces then
+                    for g in node.traverse_id(glue_node_id, nodelist) do
+                        if node.has_attribute(g, att_spaceglue) or node.has_attribute(g, publisher.att_tie_glue) then
+                            g.shrink = 0
+                        end
+                    end
+                end
                 nodelist = publisher.nodes.do_linebreak(nodelist, width_sp, parameter)
                 if tabstops then
                     publisher.tabstops.set_lines(nodelist, tabstops, width_sp, true)

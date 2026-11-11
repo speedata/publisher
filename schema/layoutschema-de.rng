@@ -1259,8 +1259,19 @@
    </define>
    <define name="e_Compatibility">
       <element name="Compatibility">
-         <a:documentation>Setze Kompatibilität für ältere Layoutregeln. Derzeit hat dieser Befehl keine Einstellungen, er bleibt für Layouts früherer Versionen erhalten.</a:documentation>
+         <a:documentation>Schaltet einzelne Verhaltensweisen um, die sich mit einer späteren Version des Publishers ändern. Eine Einstellung hier hat Vorrang vor dem Attribut defaults bei Layout.</a:documentation>
          <lsp:doc href="https://doc.speedata.de/publisher/de/reference/commands/compatibility/"></lsp:doc>
+         <optional>
+            <attribute name="raggednaturalspaces">
+               <a:documentation>Bestimmt, ob die Wortzwischenräume im Flattersatz (Ausrichtung leftaligned, rightaligned, centered, start und end) ihre natürliche Breite behalten. Dieses Verhalten gehört zum Verhaltensstand 6.0 des Attributs defaults bei Layout.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Standard ab Version 6.0: Jede Zeile hat Wortzwischenräume in natürlicher Breite. Ein Wort, das bei natürlicher Breite nicht mehr passt, kommt in die nächste Zeile.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Voreinstellung bis Version 5.9: Die Wortzwischenräume einer Zeile dürfen etwas gestaucht werden, damit noch ein Wort hineinpasst. Diese Zeilen haben engere Wortzwischenräume als die übrigen Zeilen des Absatzes.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -3300,7 +3311,7 @@
                </optional>
                <optional>
                   <attribute name="defaults">
-                     <a:documentation>Wählt den Verhaltensstand der angegebenen Publisher-Version aus, im Format major.minor (zum Beispiel 6.0) oder mit dem Schlüsselwort latest für die aktuelle Version. Verhaltensänderungen, die erst in einer späteren Version zum Standard werden, lassen sich so schon vorher einschalten. Einzeleinstellungen wie die Attribute bei Compatibility haben Vorrang. Derzeit gibt es keine solchen Verhaltensänderungen, das Attribut wird angenommen und hat keine Wirkung. Es zählt nur das Wurzelelement der Haupt-Layoutdatei. Ist die angeforderte Version neuer als der Publisher, wird eine Warnung ausgegeben.</a:documentation>
+                     <a:documentation>Wählt den Verhaltensstand der angegebenen Publisher-Version aus, im Format major.minor (zum Beispiel 6.0) oder mit dem Schlüsselwort latest für die aktuelle Version. Verhaltensänderungen, die erst in einer späteren Version zum Standard werden, lassen sich so schon vorher einschalten. Einzeleinstellungen wie die Attribute bei Compatibility haben Vorrang. Derzeit betrifft das die natürlichen Wortzwischenräume im Flattersatz (Standard ab Version 6.0, siehe raggednaturalspaces bei Compatibility). Bis Version 6.0 behalten Layouts ohne dieses Attribut das bisherige Verhalten; mit defaults=&#34;5.9&#34; behalten sie es auch nach dem Wechsel. Es zählt nur das Wurzelelement der Haupt-Layoutdatei. Ist die angeforderte Version neuer als der Publisher, wird eine Warnung ausgegeben.</a:documentation>
                   </attribute>
                </optional>
                <oneOrMore>

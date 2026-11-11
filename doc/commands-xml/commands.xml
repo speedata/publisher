@@ -3073,16 +3073,44 @@
   -->
   <command en="Compatibility">
     <description xml:lang="en">
-      <para>Set compatibility for older layouts. At the moment this command has no settings, it is kept for layouts of earlier versions.</para>
+      <para>Switch single behaviors that change with a later version of the publisher. A setting here takes precedence over the attribute <tt>defaults</tt> at <cmd name="Layout"/>.</para>
     </description>
     <description xml:lang="de">
-      <para>Setze Kompatibilität für ältere Layoutregeln. Derzeit hat dieser Befehl keine Einstellungen, er bleibt für Layouts früherer Versionen erhalten.</para>
+      <para>Schaltet einzelne Verhaltensweisen um, die sich mit einer späteren Version des Publishers ändern. Eine Einstellung hier hat Vorrang vor dem Attribut <tt>defaults</tt> bei <cmd name="Layout"/>.</para>
     </description>
     <childelements></childelements>
+    <attribute en="raggednaturalspaces" optional="yes" since="5.9.22">
+      <description xml:lang="en">
+        <para>Determines whether the word spaces in ragged text (alignment <tt>leftaligned</tt>, <tt>rightaligned</tt>, <tt>centered</tt>, <tt>start</tt> and <tt>end</tt>) keep their natural width. This behavior is part of version 6.0 of the attribute <tt>defaults</tt> at <cmd name="Layout"/>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt, ob die Wortzwischenräume im Flattersatz (Ausrichtung <tt>leftaligned</tt>, <tt>rightaligned</tt>, <tt>centered</tt>, <tt>start</tt> und <tt>end</tt>) ihre natürliche Breite behalten. Dieses Verhalten gehört zum Verhaltensstand 6.0 des Attributs <tt>defaults</tt> bei <cmd name="Layout"/>.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Standard from version 6.0: every line has word spaces of natural width. A word that does not fit at natural width goes to the next line.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Standard ab Version 6.0: Jede Zeile hat Wortzwischenräume in natürlicher Breite. Ein Wort, das bei natürlicher Breite nicht mehr passt, kommt in die nächste Zeile.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Default up to version 5.9: the word spaces of a line may shrink a little, so that one more word fits. These lines have narrower word spaces than the other lines of the paragraph.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Voreinstellung bis Version 5.9: Die Wortzwischenräume einer Zeile dürfen etwas gestaucht werden, damit noch ein Wort hineinpasst. Diese Zeilen haben engere Wortzwischenräume als die übrigen Zeilen des Absatzes.</para>
+        </description>
+      </choice>
+    </attribute>
     <example xml:lang="en">
+      <listing><![CDATA[<Compatibility raggednaturalspaces="yes"/>
+]]></listing>
       <para>The settings <tt>movecursoronplaceobject</tt> (removed in version 6.0) and <tt>spacefromfont</tt> (moved to <cmd name="LoadFontfile"/> in version 5.9.6) are no longer available here.</para>
     </example>
     <example xml:lang="de">
+      <listing><![CDATA[<Compatibility raggednaturalspaces="yes"/>
+]]></listing>
       <para>Die Einstellungen <tt>movecursoronplaceobject</tt> (in Version 6.0 entfernt) und <tt>spacefromfont</tt> (in Version 5.9.6 zu <cmd name="LoadFontfile"/> verschoben) gibt es hier nicht mehr.</para>
     </example>
     <seealso>
@@ -6242,10 +6270,10 @@
     </attribute>
     <attribute en="defaults" type="text" optional="yes" since="5.9.5">
       <description xml:lang="en">
-        <para>Selects the behavior defaults of the given publisher version, in the format major.minor (for example <tt>6.0</tt>) or the keyword <tt>latest</tt> for the current version. Behavior changes that become the standard in a later version can be switched on this way before upgrading. Individual settings such as the attributes at <cmd name="Compatibility"/> take precedence. At the moment there are no such behavior changes, the attribute is accepted and has no effect. Only the root element of the main layout file is taken into account. If the requested version is newer than the publisher, a warning is given.</para>
+        <para>Selects the behavior defaults of the given publisher version, in the format major.minor (for example <tt>6.0</tt>) or the keyword <tt>latest</tt> for the current version. Behavior changes that become the standard in a later version can be switched on this way before upgrading. Individual settings such as the attributes at <cmd name="Compatibility"/> take precedence. Currently this concerns the natural word spaces in ragged text (standard with version 6.0, see <tt>raggednaturalspaces</tt> at <cmd name="Compatibility"/>). Until version 6.0, layouts without this attribute keep the previous behavior; with <tt>defaults="5.9"</tt> they keep it after the upgrade as well. Only the root element of the main layout file is taken into account. If the requested version is newer than the publisher, a warning is given.</para>
       </description>
       <description xml:lang="de">
-        <para>Wählt den Verhaltensstand der angegebenen Publisher-Version aus, im Format major.minor (zum Beispiel <tt>6.0</tt>) oder mit dem Schlüsselwort <tt>latest</tt> für die aktuelle Version. Verhaltensänderungen, die erst in einer späteren Version zum Standard werden, lassen sich so schon vorher einschalten. Einzeleinstellungen wie die Attribute bei <cmd name="Compatibility"/> haben Vorrang. Derzeit gibt es keine solchen Verhaltensänderungen, das Attribut wird angenommen und hat keine Wirkung. Es zählt nur das Wurzelelement der Haupt-Layoutdatei. Ist die angeforderte Version neuer als der Publisher, wird eine Warnung ausgegeben.</para>
+        <para>Wählt den Verhaltensstand der angegebenen Publisher-Version aus, im Format major.minor (zum Beispiel <tt>6.0</tt>) oder mit dem Schlüsselwort <tt>latest</tt> für die aktuelle Version. Verhaltensänderungen, die erst in einer späteren Version zum Standard werden, lassen sich so schon vorher einschalten. Einzeleinstellungen wie die Attribute bei <cmd name="Compatibility"/> haben Vorrang. Derzeit betrifft das die natürlichen Wortzwischenräume im Flattersatz (Standard ab Version 6.0, siehe <tt>raggednaturalspaces</tt> bei <cmd name="Compatibility"/>). Bis Version 6.0 behalten Layouts ohne dieses Attribut das bisherige Verhalten; mit <tt>defaults="5.9"</tt> behalten sie es auch nach dem Wechsel. Es zählt nur das Wurzelelement der Haupt-Layoutdatei. Ist die angeforderte Version neuer als der Publisher, wird eine Warnung ausgegeben.</para>
       </description>
     </attribute>
     <example xml:lang="en">

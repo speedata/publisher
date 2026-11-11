@@ -1048,9 +1048,29 @@
   </xs:element>
   <xs:element name="Compatibility">
     <xs:annotation>
-      <xs:documentation>Set compatibility for older layouts. At the moment this command has no settings, it is kept for layouts of earlier versions.</xs:documentation>
+      <xs:documentation>Switch single behaviors that change with a later version of the publisher. A setting here takes precedence over the attribute defaults at Layout.</xs:documentation>
     </xs:annotation>
-    <xs:complexType/>
+    <xs:complexType>
+      <xs:attribute name="raggednaturalspaces">
+        <xs:annotation>
+          <xs:documentation>Determines whether the word spaces in ragged text (alignment leftaligned, rightaligned, centered, start and end) keep their natural width. This behavior is part of version 6.0 of the attribute defaults at Layout.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes">
+              <xs:annotation>
+                <xs:documentation>Standard from version 6.0: every line has word spaces of natural width. A word that does not fit at natural width goes to the next line.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="no">
+              <xs:annotation>
+                <xs:documentation>Default up to version 5.9: the word spaces of a line may shrink a little, so that one more word fits. These lines have narrower word spaces than the other lines of the paragraph.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
   </xs:element>
   <xs:element name="Contents">
     <xs:annotation>
@@ -3536,7 +3556,7 @@
       </xs:attribute>
       <xs:attribute name="defaults">
         <xs:annotation>
-          <xs:documentation>Selects the behavior defaults of the given publisher version, in the format major.minor (for example 6.0) or the keyword latest for the current version. Behavior changes that become the standard in a later version can be switched on this way before upgrading. Individual settings such as the attributes at Compatibility take precedence. At the moment there are no such behavior changes, the attribute is accepted and has no effect. Only the root element of the main layout file is taken into account. If the requested version is newer than the publisher, a warning is given.</xs:documentation>
+          <xs:documentation>Selects the behavior defaults of the given publisher version, in the format major.minor (for example 6.0) or the keyword latest for the current version. Behavior changes that become the standard in a later version can be switched on this way before upgrading. Individual settings such as the attributes at Compatibility take precedence. Currently this concerns the natural word spaces in ragged text (standard with version 6.0, see raggednaturalspaces at Compatibility). Until version 6.0, layouts without this attribute keep the previous behavior; with defaults="5.9" they keep it after the upgrade as well. Only the root element of the main layout file is taken into account. If the requested version is newer than the publisher, a warning is given.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>

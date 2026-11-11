@@ -1259,8 +1259,19 @@
    </define>
    <define name="e_Compatibility">
       <element name="Compatibility">
-         <a:documentation>Set compatibility for older layouts. At the moment this command has no settings, it is kept for layouts of earlier versions.</a:documentation>
+         <a:documentation>Switch single behaviors that change with a later version of the publisher. A setting here takes precedence over the attribute defaults at Layout.</a:documentation>
          <lsp:doc href="https://doc.speedata.de/publisher/en/reference/commands/compatibility/"></lsp:doc>
+         <optional>
+            <attribute name="raggednaturalspaces">
+               <a:documentation>Determines whether the word spaces in ragged text (alignment leftaligned, rightaligned, centered, start and end) keep their natural width. This behavior is part of version 6.0 of the attribute defaults at Layout.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Standard from version 6.0: every line has word spaces of natural width. A word that does not fit at natural width goes to the next line.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Default up to version 5.9: the word spaces of a line may shrink a little, so that one more word fits. These lines have narrower word spaces than the other lines of the paragraph.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -3300,7 +3311,7 @@
                </optional>
                <optional>
                   <attribute name="defaults">
-                     <a:documentation>Selects the behavior defaults of the given publisher version, in the format major.minor (for example 6.0) or the keyword latest for the current version. Behavior changes that become the standard in a later version can be switched on this way before upgrading. Individual settings such as the attributes at Compatibility take precedence. At the moment there are no such behavior changes, the attribute is accepted and has no effect. Only the root element of the main layout file is taken into account. If the requested version is newer than the publisher, a warning is given.</a:documentation>
+                     <a:documentation>Selects the behavior defaults of the given publisher version, in the format major.minor (for example 6.0) or the keyword latest for the current version. Behavior changes that become the standard in a later version can be switched on this way before upgrading. Individual settings such as the attributes at Compatibility take precedence. Currently this concerns the natural word spaces in ragged text (standard with version 6.0, see raggednaturalspaces at Compatibility). Until version 6.0, layouts without this attribute keep the previous behavior; with defaults=&#34;5.9&#34; they keep it after the upgrade as well. Only the root element of the main layout file is taken into account. If the requested version is newer than the publisher, a warning is given.</a:documentation>
                   </attribute>
                </optional>
                <oneOrMore>

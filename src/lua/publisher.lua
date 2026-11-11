@@ -524,9 +524,12 @@ M.defaultlevel = "5.9"
 -- since is the version at which a behavior becomes the standard. The flag
 -- of the same name in M.compatibility is enabled when the requested
 -- defaults level is at least that version; a setting at the Compatibility
--- command takes precedence. The registry is empty at the moment.
+-- command takes precedence.
 ---@type table<string, {since: string}>
-M.behaviors = {}
+M.behaviors = {
+    -- word spaces in ragged text keep their natural width (#748)
+    raggednaturalspaces = { since = "6.0" },
+}
 
 for behavior, b in pairs(M.behaviors) do
     M.compatibility[behavior] = M.compare_versions(M.defaultlevel, b.since) >= 0
