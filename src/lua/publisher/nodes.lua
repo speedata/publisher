@@ -14,6 +14,7 @@ local publisher = require("publisher")
 local M = {}
 
 local fonts = require("publisher.fonts")
+local fontloader = require("fonts.fontloader")
 local colors_module = require("publisher.colors")
 local links_module = require("publisher.links")
 require("par")
@@ -904,22 +905,6 @@ local twopart_vowels = {
     [0x1026] = { 0x1025, 0x102E },
 }
 
--- UTF-16BE hex string for the ToUnicode entry of LuaTeX.
----@param codepoints integer[]
----@return string
-local function utf16hex(codepoints)
-    local ret = {}
-    for _, cp in ipairs(codepoints) do
-        if cp > 0xFFFF then
-            cp = cp - 0x10000
-            ret[#ret + 1] = string.format("%04X%04X", 0xD800 + (cp >> 10), 0xDC00 + (cp & 0x3FF))
-        else
-            ret[#ret + 1] = string.format("%04X", cp)
-        end
-    end
-    return table.concat(ret)
-end
-
 -- Code points a glyph stands for in the text layer, nil if the font gives
 -- none (no cmap entry and no usable glyph name).
 ---@param tbl table Font table.
@@ -996,7 +981,7 @@ function M.learn_tounicode(tbl, fontnumber, glyphs, cluster, strlen)
         clusterend[c] = sorted[i + 1] or strlen
     end
 
-    local newchars
+    local newglyphs
     for _, start in ipairs(starts) do
         local grp = groups[start]
         local unmapped = {}
@@ -1054,27 +1039,45 @@ function M.learn_tounicode(tbl, fontnumber, glyphs, cluster, strlen)
                 local cps = units[j]
                 if cps and not tbl.learned_tounicode[gid] then
                     tbl.learned_tounicode[gid] = cps
-                    local uc = tbl.backmap[gid]
-                    local ch = uc and tbl.characters[uc]
-                    if ch then
-                        local newchar = {}
-                        for k, v in pairs(ch) do
-                            newchar[k] = v
-                        end
-                        newchar.tounicode = utf16hex(cps)
-                        newchars = newchars or {}
-                        newchars[uc] = newchar
-                    end
+                    newglyphs = newglyphs or {}
+                    newglyphs[gid] = cps
                 end
             end
         end
     end
-    if newchars then
-        -- font.addcharacters only needs the characters, the type asks for a
-        -- complete font
-        ---@type table
-        local addition = { characters = newchars }
-        font.addcharacters(fontnumber, addition)
+    if not newglyphs then
+        return
+    end
+    -- All instances of the font file share one PDF font, so all of them
+    -- get the new ToUnicode entries.
+    local instances = tbl.learned_shared and tbl.learned_shared.instances
+    if not instances or #instances == 0 then
+        instances = { { num = fontnumber, f = tbl } }
+    end
+    for _, inst in ipairs(instances) do
+        local newchars
+        for gid, cps in pairs(newglyphs) do
+            local uc = inst.f.backmap[gid]
+            local ch = uc and inst.f.characters[uc]
+            if ch then
+                local newchar = {}
+                for k, v in pairs(ch) do
+                    newchar[k] = v
+                end
+                newchar.tounicode = fontloader.utf16hex(cps)
+                -- the Lua table of the instance stays in step with LuaTeX
+                ch.tounicode = newchar.tounicode
+                newchars = newchars or {}
+                newchars[uc] = newchar
+            end
+        end
+        if newchars then
+            -- font.addcharacters only needs the characters, the type asks
+            -- for a complete font
+            ---@type table
+            local addition = { characters = newchars }
+            font.addcharacters(inst.num, addition)
+        end
     end
 end
 

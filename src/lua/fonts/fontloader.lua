@@ -77,6 +77,66 @@ local function is_pua(cp)
     return (cp >= 0xE000 and cp <= 0xF8FF) or cp >= 0xF0000
 end
 
+-- UTF-16BE hex string for the ToUnicode entry of LuaTeX.
+---@param codepoints integer[]
+---@return string
+function M.utf16hex(codepoints)
+    local ret = {}
+    for _, cp in ipairs(codepoints) do
+        if cp > 0xFFFF then
+            cp = cp - 0x10000
+            ret[#ret + 1] = string.format("%04X%04X", 0xD800 + (cp >> 10), 0xDC00 + (cp & 0x3FF))
+        else
+            ret[#ret + 1] = string.format("%04X", cp)
+        end
+    end
+    return table.concat(ret)
+end
+
+-- The text of glyphs without a code point is learned from the shaping
+-- result (nodes.learn_tounicode). LuaTeX writes one PDF font with one
+-- ToUnicode CMap for all sizes of a font file, so the learned mapping
+-- belongs to the file, not to the instance: every instance must give the
+-- same text for a glyph.
+---@class learned_tounicode
+---@field map table<integer, integer[]> Code points per glyph id.
+---@field instances {num: integer, f: table}[] The defined instances of the font file.
+
+---@type table<string, learned_tounicode>
+local learned_by_file = {}
+
+-- Connects the font `f` to the learned mapping of its font file. Glyphs
+-- learned from other instances get their ToUnicode entry here, before
+-- the font is defined.
+---@param f table Font table from define_font_hb.
+local function share_learned_tounicode(f)
+    local shared = learned_by_file[f.filename]
+    if not shared then
+        shared = { map = {}, instances = {} }
+        learned_by_file[f.filename] = shared
+    end
+    f.learned_tounicode = shared.map
+    f.learned_shared = shared
+    for gid, cps in pairs(shared.map) do
+        local uc = f.backmap[gid]
+        local ch = uc and f.characters[uc]
+        if ch then
+            ch.tounicode = M.utf16hex(cps)
+        end
+    end
+end
+
+-- Registers the LuaTeX font id of a font table from define_font_hb, so
+-- that mappings learned later reach this instance as well.
+---@param f table Font table from define_font_hb.
+---@param num integer LuaTeX font id.
+function M.register_instance(f, num)
+    local shared = f.learned_shared
+    if shared then
+        shared.instances[#shared.instances + 1] = { num = num, f = f }
+    end
+end
+
 -- The harfbuzz version of the fontloader.
 ---@param name string Font file name (without path).
 ---@param size number Font size in scaled points.
@@ -338,11 +398,13 @@ function M.define_font_hb(name, size, extra_parameter)
             ---@cast newfont_or_msg -string
             local num = font.define(newfont_or_msg)
             newfont_or_msg.fontnum = num
+            M.register_instance(newfont_or_msg, num)
             fallback_fontdefinitions[#fallback_fontdefinitions + 1] = newfont_or_msg
         end
     end
 
     f.fallback_fontdefinitions = fallback_fontdefinitions
+    share_learned_tounicode(f)
 
     -- If the face carries an OpenType MATH table, parse it and populate
     -- f.MathConstants + per-glyph italic corrections. No-op for regular

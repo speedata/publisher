@@ -229,6 +229,7 @@ function M.define_font(instance)
     preloaded_fonts[num] = f
     used_fonts[num] = f
     font.define(num, f)
+    fontloader_mod.register_instance(f, num)
     return true
 end
 
