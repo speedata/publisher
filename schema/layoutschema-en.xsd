@@ -6520,6 +6520,16 @@
           <xs:documentation>Set the name of the color profile. Has to be defined with DefineColorprofile.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="copyright">
+        <xs:annotation>
+          <xs:documentation>The copyright notice or license of the document, for example © 2026 Example Inc. or CC BY-SA 4.0. The document is then marked as copyrighted. An empty value (copyright="") marks it as public domain. The information is written to the XMP metadata, which Adobe Acrobat shows in the document properties (“Copyright Status”, “Copyright Notice”). With this attribute the PDF gets XMP metadata even without format.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="copyrighturl">
+        <xs:annotation>
+          <xs:documentation>The URL of the copyright or license information (XMP xmpRights:WebStatement, “Copyright Info URL” in Adobe Acrobat). See copyright.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="creator">
         <xs:annotation>
           <xs:documentation>Set the creator application of the document</xs:documentation>

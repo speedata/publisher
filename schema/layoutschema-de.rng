@@ -5333,6 +5333,16 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="copyright">
+               <a:documentation>Der Urheberrechtsvermerk oder die Lizenz des Dokuments, zum Beispiel © 2026 Beispiel GmbH oder CC BY-SA 4.0. Das Dokument gilt dann als urheberrechtlich geschützt. Ein leerer Wert (copyright=&#34;&#34;) kennzeichnet es als gemeinfrei. Die Angaben werden in die XMP-Metadaten geschrieben, die Adobe Acrobat in den Dokumenteigenschaften anzeigt („Copyright-Status“, „Copyright-Vermerk“). Mit diesem Attribut erhält das PDF auch ohne format XMP-Metadaten.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="copyrighturl">
+               <a:documentation>Die URL der Urheberrechts- oder Lizenzinformationen (XMP xmpRights:WebStatement, „URL für Copyright-Informationen“ in Adobe Acrobat). Siehe copyright.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="creator">
                <a:documentation>Legt die Anwendung des Dokuments fest</a:documentation>
             </attribute>

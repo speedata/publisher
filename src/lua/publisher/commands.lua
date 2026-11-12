@@ -5282,6 +5282,8 @@ end
 function commands.pdfoptions(layoutxml, dataxml)
     local author = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "author", "string")
     local colorprofile = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "colorprofile", "string")
+    local copyright = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "copyright", "string")
+    local copyrighturl = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "copyrighturl", "string")
     local creator = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "creator", "string")
     local displaymode = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "displaymode", "string")
     local dpi = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "dpi", "number")
@@ -5336,6 +5338,12 @@ function commands.pdfoptions(layoutxml, dataxml)
     end
     if keywords then
         publisher.options.documentkeywords = keywords
+    end
+    if copyright then
+        publisher.options.documentcopyright = copyright
+    end
+    if copyrighturl then
+        publisher.options.documentcopyrighturl = copyrighturl
     end
     if dpi then
         publisher.options.dpi = dpi

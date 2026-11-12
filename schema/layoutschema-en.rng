@@ -5333,6 +5333,16 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="copyright">
+               <a:documentation>The copyright notice or license of the document, for example © 2026 Example Inc. or CC BY-SA 4.0. The document is then marked as copyrighted. An empty value (copyright=&#34;&#34;) marks it as public domain. The information is written to the XMP metadata, which Adobe Acrobat shows in the document properties (“Copyright Status”, “Copyright Notice”). With this attribute the PDF gets XMP metadata even without format.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="copyrighturl">
+               <a:documentation>The URL of the copyright or license information (XMP xmpRights:WebStatement, “Copyright Info URL” in Adobe Acrobat). See copyright.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="creator">
                <a:documentation>Set the creator application of the document</a:documentation>
             </attribute>

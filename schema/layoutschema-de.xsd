@@ -6520,6 +6520,16 @@
           <xs:documentation>Setzt das Farbprofile. Muss mit DefineColorprofile registriert worden sein.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="copyright">
+        <xs:annotation>
+          <xs:documentation>Der Urheberrechtsvermerk oder die Lizenz des Dokuments, zum Beispiel © 2026 Beispiel GmbH oder CC BY-SA 4.0. Das Dokument gilt dann als urheberrechtlich geschützt. Ein leerer Wert (copyright="") kennzeichnet es als gemeinfrei. Die Angaben werden in die XMP-Metadaten geschrieben, die Adobe Acrobat in den Dokumenteigenschaften anzeigt („Copyright-Status“, „Copyright-Vermerk“). Mit diesem Attribut erhält das PDF auch ohne format XMP-Metadaten.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="copyrighturl">
+        <xs:annotation>
+          <xs:documentation>Die URL der Urheberrechts- oder Lizenzinformationen (XMP xmpRights:WebStatement, „URL für Copyright-Informationen“ in Adobe Acrobat). Siehe copyright.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="creator">
         <xs:annotation>
           <xs:documentation>Legt die Anwendung des Dokuments fest</xs:documentation>

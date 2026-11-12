@@ -226,6 +226,36 @@ function M.getmetadata(filespecnumbers, opts)
         end
     end
 
+    -- subject: dc:description is a language alternative (rdf:Alt)
+    if opts and opts.documentsubject and opts.documentsubject ~= "" then
+        local li = desc:add_element("dc:description"):add_element("rdf:Alt"):add_element("rdf:li")
+        li:set_attr("xml:lang", "x-default"):set_text(opts.documentsubject)
+    end
+
+    if opts and opts.documentkeywords and opts.documentkeywords ~= "" then
+        desc:add_element("pdf:Keywords"):set_text(opts.documentkeywords)
+    end
+
+    -- copyright and license (Acrobat: "Copyright Status", "Copyright
+    -- Notice", "Copyright Info URL"). A notice marks the document as
+    -- copyrighted, an empty one as public domain, without the status is
+    -- unknown.
+    local copyright = opts and opts.documentcopyright
+    local copyrighturl = opts and opts.documentcopyrighturl
+    if copyright and copyright ~= "" then
+        local li = desc:add_element("dc:rights"):add_element("rdf:Alt"):add_element("rdf:li")
+        li:set_attr("xml:lang", "x-default"):set_text(copyright)
+    end
+    if copyright ~= nil or (copyrighturl and copyrighturl ~= "") then
+        desc:set_attr("xmlns:xmpRights", "http://ns.adobe.com/xap/1.0/rights/")
+        if copyright ~= nil then
+            desc:add_element("xmpRights:Marked"):set_text(copyright ~= "" and "True" or "False")
+        end
+        if copyrighturl and copyrighturl ~= "" then
+            desc:add_element("xmpRights:WebStatement"):set_text(copyrighturl)
+        end
+    end
+
     if fmt == "PDF/A-3" and zugferd_level and zugferd_filename then
         desc:set_attr("xmlns:pdfaExtension", "http://www.aiim.org/pdfa/ns/extension/")
         desc:set_attr("xmlns:pdfaField", "http://www.aiim.org/pdfa/ns/field#")

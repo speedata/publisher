@@ -8651,6 +8651,22 @@
         <para>Setzt das Farbprofile. Muss mit <cmd name="DefineColorprofile"/> registriert worden sein.</para>
       </description>
     </attribute>
+    <attribute en="copyright" optional="yes" type="text" since="5.9.25">
+      <description xml:lang="en">
+        <para>The copyright notice or license of the document, for example <tt>© 2026 Example Inc.</tt> or <tt>CC BY-SA 4.0</tt>. The document is then marked as copyrighted. An empty value (<tt>copyright=""</tt>) marks it as public domain. The information is written to the XMP metadata, which Adobe Acrobat shows in the document properties (“Copyright Status”, “Copyright Notice”). With this attribute the PDF gets XMP metadata even without <tt>format</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Urheberrechtsvermerk oder die Lizenz des Dokuments, zum Beispiel <tt>© 2026 Beispiel GmbH</tt> oder <tt>CC BY-SA 4.0</tt>. Das Dokument gilt dann als urheberrechtlich geschützt. Ein leerer Wert (<tt>copyright=""</tt>) kennzeichnet es als gemeinfrei. Die Angaben werden in die XMP-Metadaten geschrieben, die Adobe Acrobat in den Dokumenteigenschaften anzeigt („Copyright-Status“, „Copyright-Vermerk“). Mit diesem Attribut erhält das PDF auch ohne <tt>format</tt> XMP-Metadaten.</para>
+      </description>
+    </attribute>
+    <attribute en="copyrighturl" optional="yes" type="text" since="5.9.25">
+      <description xml:lang="en">
+        <para>The URL of the copyright or license information (XMP <tt>xmpRights:WebStatement</tt>, “Copyright Info URL” in Adobe Acrobat). See <tt>copyright</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die URL der Urheberrechts- oder Lizenzinformationen (XMP <tt>xmpRights:WebStatement</tt>, „URL für Copyright-Informationen“ in Adobe Acrobat). Siehe <tt>copyright</tt>.</para>
+      </description>
+    </attribute>
     <attribute en="creator" optional="yes" type="text" since="4.9.2">
       <description xml:lang="en">
         <para>Set the creator application of the document</para>

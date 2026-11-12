@@ -365,6 +365,8 @@ M.css = do_luafile("css.lua"):new()
 ---@field default_zugferdfile? string Default ZUGFeRD invoice file name.
 ---@field displaymode? "UseAttachments"|"UseOutlines"|"FullScreen"|"UseThumbs" PDF viewer display mode.
 ---@field documentauthor string
+---@field documentcopyright? string Copyright notice / license (XMP dc:rights); `""`: public domain, `nil`: unknown.
+---@field documentcopyrighturl? string URL of the license (XMP xmpRights:WebStatement).
 ---@field documentcreator? string
 ---@field documentkeywords string
 ---@field documentproducer? string
@@ -1924,6 +1926,19 @@ function M.initialize_luatex_and_generate_pdf()
             pdfcatalog[#pdfcatalog + 1] = string.format("/StructTreeRoot %d 0 R", strObjnum)
         end
 
+        -- copyright and license information exist only in XMP
+        if
+            not metadataobjnum
+            and (M.options.documentcopyright ~= nil or (M.options.documentcopyrighturl or "") ~= "")
+        then
+            metadataobjnum = pdf.obj({
+                type = "stream",
+                string = metadata.getmetadata(M.filespecnumbers, M.options),
+                immediate = true,
+                attr = [[  /Subtype /XML /Type /Metadata ]],
+                compresslevel = 0,
+            })
+        end
         if metadataobjnum then
             pdfcatalog[#pdfcatalog + 1] = string.format("/Metadata %d 0 R", metadataobjnum)
         end
