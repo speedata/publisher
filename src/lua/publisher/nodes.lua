@@ -2531,6 +2531,41 @@ local function wordpart_text(word, first, last)
     return { table.unpack(word.text, lo, stop) }
 end
 
+local pdf_literal_subtype = node.subtype("pdf_literal")
+
+-- Literal mode for the marked content of an ActualText that starts at
+-- `first`. LuaTeX has no literal mode that begins a text object (BT),
+-- mode 4 (text) even ends it (`pdf_literal` in pdfliteral.c). Mode 2
+-- (always) keeps it open, so BDC and EMC stay inside the text object.
+-- That is only right if a text object is open before `first`: a glyph
+-- comes before it in the list, with nothing in between that ends the
+-- text object. Otherwise BDC would come before BT and EMC after it, so
+-- the literals end the text object (mode 1, page).
+---@param first Node
+---@return integer mode
+local function actualtext_mode(first)
+    local p = first.prev
+    while p do
+        local id = p.id
+        if id == publisher.glyph_node then
+            return 2
+        elseif id == publisher.whatsit_node then
+            if not (p.subtype == pdf_literal_subtype and p.mode == 2) then
+                return 1
+            end
+        elseif
+            id ~= publisher.glue_node
+            and id ~= publisher.kern_node
+            and id ~= publisher.penalty_node
+            and id ~= publisher.disc_node
+        then
+            return 1
+        end
+        p = p.prev
+    end
+    return 1
+end
+
 -- Wraps the nodes `first` to `last` in a marked content sequence with
 -- `codepoints` as ActualText.
 ---@param head Node
@@ -2538,7 +2573,7 @@ end
 ---@param last Node
 ---@param codepoints integer[]
 ---@param lang? string BCP 47 tag.
----@param mode integer Literal mode (4: inside the text object, 1: page).
+---@param mode integer Literal mode (2: inside the open text object, 1: page).
 ---@return Node head
 ---@return Node emc
 local function wrap_actualtext(head, first, last, codepoints, lang, mode)
@@ -2610,7 +2645,7 @@ function M.insert_actualtext(head)
             local word = props and props.logword
             if props and props.softhyphen and not props.actualtext then
                 ---@cast head Node
-                head, n = wrap_actualtext(head, n, n, { 0xAD }, nil, 4)
+                head, n = wrap_actualtext(head, n, n, { 0xAD }, nil, actualtext_mode(n))
             elseif word and word.actualtext and not props.actualtext then
                 -- the glyphs of the word in this list
                 local first, last = n, n
@@ -2648,8 +2683,9 @@ function M.insert_actualtext(head)
                 if text and #text > 0 then
                     -- inside the text object, unless a color change in the
                     -- word ends it
+                    local mode = samecolor and actualtext_mode(first) or 1
                     ---@cast head Node
-                    head, n = wrap_actualtext(head, first, last, text, word.lang, samecolor and 4 or 1)
+                    head, n = wrap_actualtext(head, first, last, text, word.lang, mode)
                 else
                     n = last
                 end
