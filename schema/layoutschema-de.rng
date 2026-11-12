@@ -5424,7 +5424,7 @@
          </optional>
          <optional>
             <attribute name="logicaltextorder">
-               <a:documentation>Speichert den Text von Wörtern, deren Glyphen im PDF nicht in Lesereihenfolge stehen (Schriften von rechts nach links wie Arabisch und Hebräisch, Vokalzeichen vor dem Konsonanten in indischen Schriften), zusätzlich in Lesereihenfolge, damit Programme, die den Text auslesen (Kopieren und Einfügen, Suche, Bildschirmlesegeräte), die Wörter richtig erhalten. Das Layout ändert sich nicht, das PDF wird größer. Die Voreinstellung ist yes bei format=&#34;PDF/UA&#34;, sonst no.</a:documentation>
+               <a:documentation>Speichert den Text von Wörtern, deren Glyphen nicht den richtigen Text ergeben (Vokalzeichen vor dem Konsonanten in indischen Schriften, Ligaturen wie das arabische Lam-Alif), zusätzlich in Lesereihenfolge, damit Programme, die den Text auslesen (Kopieren und Einfügen, Suche, Bildschirmlesegeräte), die Wörter richtig erhalten. Der Trennstrich, der beim Zeilenumbruch hinzukommt, wird als weicher Trennstrich gekennzeichnet. Das Layout ändert sich nicht, das PDF wird etwas größer. Die Voreinstellung ist yes bei format=&#34;PDF/UA&#34;, sonst no.</a:documentation>
                <choice>
                   <value>yes</value>
                   <value>no</value>

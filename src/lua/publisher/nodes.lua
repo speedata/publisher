@@ -1383,7 +1383,7 @@ function M.hbglyphlist(arguments)
     -- PDFOptions logicaltextorder: the words of the text and their glyphs
     local wordat, words
     if publisher.page_helpers.logicaltextorder_active() then
-        wordat, words = M.words_by_cluster(cluster, direction == "rtl", M.wordlanguage(style_langcode))
+        wordat, words = M.words_by_cluster(cluster, M.wordlanguage(style_langcode))
     end
 
     -- previous glyph and its cluster (byte offset), nil after fallback entries
@@ -2419,11 +2419,10 @@ local wordseparators = {
 -- indexes where the cluster of a glyph starts (for the parts of a word
 -- broken across lines).
 ---@param cluster table<integer, integer> Code point at each byte offset.
----@param rtl boolean The string is set right to left.
 ---@param lang? string BCP 47 tag if the text has another language than the document.
 ---@return table<integer, table> wordat Word at each byte offset.
 ---@return table[] words
-function M.words_by_cluster(cluster, rtl, lang)
+function M.words_by_cluster(cluster, lang)
     local offsets = {}
     for pos in pairs(cluster) do
         offsets[#offsets + 1] = pos
@@ -2440,7 +2439,7 @@ function M.words_by_cluster(cluster, rtl, lang)
             word = nil
         elseif cp ~= 0xAD then
             if not word then
-                word = { text = {}, glyphtext = {}, n = 0, rtl = rtl, lang = lang, index_at = {}, starts = {} }
+                word = { text = {}, glyphtext = {}, n = 0, lang = lang, index_at = {}, starts = {} }
                 words[#words + 1] = word
             end
             word.text[#word.text + 1] = cp
@@ -2467,15 +2466,19 @@ function M.wordlanguage(languagecode)
     return nil
 end
 
--- Marks the words that need their text as ActualText: in right-to-left
--- text the glyphs are in visual order in the PDF, in other scripts
--- reordered glyphs (Indic vowel signs before the consonant) or glyphs
--- without a code point give the wrong text.
+-- Marks the words that need their text as ActualText: words whose glyphs
+-- give another text than the input, because of reordered glyphs (Indic
+-- vowel signs before the consonant), ligatures without a code point of
+-- their own (Arabic lam-alef) or glyphs without a code point. Right-to-
+-- left text needs no ActualText of its own: LuaTeX writes its glyphs in
+-- node (reading) order, only the positions run from right to left, and
+-- programs that read the structure (Acrobat, screen readers) take the
+-- text in that order.
 ---@param words table[] From `words_by_cluster`, after the glyphs are made.
 function M.check_words(words)
     for _, word in ipairs(words) do
-        local needed = word.rtl and word.n > 1
-        if not needed and word.n > 0 then
+        local needed = false
+        if word.n > 0 then
             local a, b = word.text, word.glyphtext
             if #a ~= #b then
                 needed = true

@@ -5424,7 +5424,7 @@
          </optional>
          <optional>
             <attribute name="logicaltextorder">
-               <a:documentation>Store the text of words whose glyphs are not in reading order in the PDF (right-to-left scripts such as Arabic and Hebrew, vowel signs before the consonant in Indic scripts) once more in reading order, so that programs that extract the text (copy and paste, search, screen readers) get the words right. The layout does not change, the PDF gets larger. The default is yes with format=&#34;PDF/UA&#34;, otherwise no.</a:documentation>
+               <a:documentation>Store the text of words whose glyphs do not give the right text (vowel signs before the consonant in Indic scripts, ligatures such as the Arabic lam-alef) once more in reading order, so that programs that extract the text (copy and paste, search, screen readers) get the words right. The hyphen added at a line break is marked as a soft hyphen. The layout does not change, the PDF gets a little larger. The default is yes with format=&#34;PDF/UA&#34;, otherwise no.</a:documentation>
                <choice>
                   <value>yes</value>
                   <value>no</value>
