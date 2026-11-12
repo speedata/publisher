@@ -5423,8 +5423,12 @@ function commands.pdfoptions(layoutxml, dataxml)
 
     if format then
         publisher.options.format = format
-        if format == "PDF/X-3" or format == "PDF/X-4" or format == "PDF/UA" then
+        -- PDF/X-3 is based on PDF 1.3 (no object streams). PDF/UA-1 is
+        -- based on PDF 1.7 and allows them.
+        if format == "PDF/X-3" or format == "PDF/X-4" then
             pdf.setobjcompresslevel(0)
+        end
+        if format == "PDF/X-3" or format == "PDF/X-4" or format == "PDF/UA" then
             if not title then
                 publisher.options.documenttitle = "document"
             end
