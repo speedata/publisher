@@ -1686,6 +1686,11 @@ function M.hbglyphlist(arguments)
                     word.glyphtext[#word.glyphtext + 1] = c
                 end
                 publisher.attribute_helpers.setprop(n, "logword", word)
+                local idx = word.index_at[textcluster]
+                if idx then
+                    word.starts[idx] = true
+                    publisher.attribute_helpers.setprop(n, "logindex", idx)
+                end
             end
 
             if cur and cur.prev and cur.prev.id == publisher.glyph_node then
@@ -2332,6 +2337,9 @@ local wordseparators = {
 -- The words of a shaped string, for PDFOptions logicaltextorder. Each word
 -- records its text in reading order (`text`), the text its glyphs give in
 -- the order of the nodes (`glyphtext`) and the number of glyphs (`n`).
+-- `index_at` gives the index in `text` of each byte offset, `starts` the
+-- indexes where the cluster of a glyph starts (for the parts of a word
+-- broken across lines).
 ---@param cluster table<integer, integer> Code point at each byte offset.
 ---@param rtl boolean The string is set right to left.
 ---@param lang? string BCP 47 tag if the text has another language than the document.
@@ -2347,14 +2355,18 @@ function M.words_by_cluster(cluster, rtl, lang)
     local word
     for _, pos in ipairs(offsets) do
         local cp = cluster[pos]
+        -- A soft hyphen (U+00AD) has no glyph and is not part of the text
+        -- of the word. At a line break the hyphen glyph gets it as
+        -- ActualText (`insert_actualtext`).
         if wordseparators[cp] then
             word = nil
-        else
+        elseif cp ~= 0xAD then
             if not word then
-                word = { text = {}, glyphtext = {}, n = 0, rtl = rtl, lang = lang }
+                word = { text = {}, glyphtext = {}, n = 0, rtl = rtl, lang = lang, index_at = {}, starts = {} }
                 words[#words + 1] = word
             end
             word.text[#word.text + 1] = cp
+            word.index_at[pos] = #word.text
             wordat[pos] = word
         end
     end
@@ -2400,12 +2412,110 @@ function M.check_words(words)
         end
         word.actualtext = needed or nil
         word.glyphtext = nil
+        word.index_at = nil
     end
 end
 
--- Wraps every complete word that needs it (see `check_words`) in a marked
--- content sequence with its text in reading order as ActualText. Words
--- broken across lines keep their glyphs only.
+-- The text of the glyphs `first` to `last` of `word` (all glyphs of the
+-- word in one list, for example the part on one line of a word broken
+-- across lines): from the first character of their clusters to the
+-- character before the next cluster of the word.
+---@param word table From `words_by_cluster`.
+---@param first Node
+---@param last Node
+---@return integer[]? codepoints nil if the glyphs have no cluster index.
+local function wordpart_text(word, first, last)
+    local lo, hi
+    local m = first
+    while m do
+        if m.id == publisher.glyph_node then
+            local mp = node.getproperty(m)
+            local idx = mp and mp.logword == word and mp.logindex
+            if idx then
+                lo = (lo == nil or idx < lo) and idx or lo
+                hi = (hi == nil or idx > hi) and idx or hi
+            end
+        end
+        if m == last then
+            break
+        end
+        m = m.next
+    end
+    if not lo then
+        return nil
+    end
+    local stop = #word.text
+    for idx in pairs(word.starts) do
+        if idx > hi and idx - 1 < stop then
+            stop = idx - 1
+        end
+    end
+    return { table.unpack(word.text, lo, stop) }
+end
+
+-- Wraps the nodes `first` to `last` in a marked content sequence with
+-- `codepoints` as ActualText.
+---@param head Node
+---@param first Node
+---@param last Node
+---@param codepoints integer[]
+---@param lang? string BCP 47 tag.
+---@param mode integer Literal mode (4: inside the text object, 1: page).
+---@return Node head
+---@return Node emc
+local function wrap_actualtext(head, first, last, codepoints, lang, mode)
+    local bdc = node.new("whatsit", "pdf_literal")
+    bdc.data = "/Span <<"
+        .. (lang and string.format("/Lang (%s) ", lang) or "")
+        .. "/ActualText "
+        .. publisher.utf8_to_utf16_string_pdf(utf8.char(table.unpack(codepoints)))
+        .. ">> BDC"
+    local emc = node.new("whatsit", "pdf_literal")
+    emc.data = "EMC"
+    bdc.mode = mode
+    emc.mode = mode
+    local props = node.getproperty(first)
+    for _, lit in ipairs({ bdc, emc }) do
+        lit.attr = first.attr
+        local lp = {}
+        if type(props) == "table" then
+            for k, v in pairs(props) do
+                lp[k] = v
+            end
+        end
+        lp.logword = nil
+        lp.logindex = nil
+        lp.softhyphen = nil
+        node.setproperty(lit, lp)
+    end
+    head = node.insert_before(head, first, bdc)
+    head = node.insert_after(head, last, emc)
+    return head, emc
+end
+
+-- Marks the hyphens that line breaking may add (the glyphs in the pre
+-- text of discretionaries that are not part of a word, see
+-- `insert_actualtext`).
+---@param head Node? Paragraph node list.
+function M.mark_softhyphens(head)
+    while head do
+        if head.id == publisher.disc_node and head.pre then
+            for g in node.traverse_id(publisher.glyph_node, head.pre) do
+                local props = node.getproperty(g)
+                if not (type(props) == "table" and props.logword) then
+                    publisher.attribute_helpers.setprop(g, "softhyphen", true)
+                end
+            end
+        end
+        head = head.next
+    end
+end
+
+-- Wraps every word that needs it (see `check_words`) in a marked content
+-- sequence with its text in reading order as ActualText. The parts of a
+-- word broken across lines get the matching part of the text. The hyphen
+-- added at a line break gets a soft hyphen (U+00AD) as ActualText, so
+-- that programs that extract the text join the word again.
 -- LuaTeX writes right-to-left text in node (reading) order, only the
 -- positions run from right to left, so the literals go before the first
 -- and after the last glyph in any direction.
@@ -2420,7 +2530,10 @@ function M.insert_actualtext(head)
         elseif id == publisher.glyph_node then
             local props = node.getproperty(n)
             local word = props and props.logword
-            if word and word.actualtext and not props.actualtext then
+            if props and props.softhyphen and not props.actualtext then
+                ---@cast head Node
+                head, n = wrap_actualtext(head, n, n, { 0xAD }, nil, 4)
+            elseif word and word.actualtext and not props.actualtext then
                 -- the glyphs of the word in this list
                 local first, last = n, n
                 local count = 1
@@ -2448,31 +2561,17 @@ function M.insert_actualtext(head)
                     end
                     m = m.next
                 end
+                local text
                 if count == word.n then
-                    local bdc = node.new("whatsit", "pdf_literal")
-                    bdc.data = "/Span <<"
-                        .. (word.lang and string.format("/Lang (%s) ", word.lang) or "")
-                        .. "/ActualText "
-                        .. publisher.utf8_to_utf16_string_pdf(utf8.char(table.unpack(word.text)))
-                        .. ">> BDC"
-                    local emc = node.new("whatsit", "pdf_literal")
-                    emc.data = "EMC"
+                    text = word.text
+                else
+                    text = wordpart_text(word, first, last)
+                end
+                if text and #text > 0 then
                     -- inside the text object, unless a color change in the
                     -- word ends it
-                    bdc.mode = samecolor and 4 or 1
-                    emc.mode = bdc.mode
-                    for _, lit in ipairs({ bdc, emc }) do
-                        lit.attr = n.attr
-                        local lp = {}
-                        for k, v in pairs(props) do
-                            lp[k] = v
-                        end
-                        lp.logword = nil
-                        node.setproperty(lit, lp)
-                    end
-                    head = node.insert_before(head, first, bdc)
-                    head = node.insert_after(head, last, emc)
-                    n = emc
+                    ---@cast head Node
+                    head, n = wrap_actualtext(head, first, last, text, word.lang, samecolor and 4 or 1)
                 else
                     n = last
                 end
@@ -2699,6 +2798,9 @@ function M.finish_par(nodelist, _hsize, parameters)
 
         if publisher.options.format == "PDF/UA" then
             add_properties_to_discnodes(nodelist)
+        end
+        if publisher.page_helpers.logicaltextorder_active() then
+            M.mark_softhyphens(nodelist)
         end
     end
 
