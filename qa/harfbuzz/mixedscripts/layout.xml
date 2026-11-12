@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<!-- Text in another script before Bengali in the same run (#756).
+	     Every run of one script is shaped on its own, so the Bengali
+	     words show the conjunct and the reordered vowel sign in all
+	     paragraphs. Noto Sans Bengali has no Latin letters, they come
+	     from the fallback. -->
+	<LoadFontfile name="beng" filename="NotoSansBengali-Regular.ttf">
+		<Fallback filename="texgyreheros-regular.otf" />
+	</LoadFontfile>
+
+	<DefineFontfamily name="text" fontsize="12" leading="16">
+		<Regular fontface="beng" />
+	</DefineFontfamily>
+
+	<Record element="data">
+		<PlaceObject>
+			<Textblock width="15">
+				<Paragraph><Value>একমাত্ৰ পুত্ৰকে</Value></Paragraph>
+				<Paragraph><Value>A: একমাত্ৰ পুত্ৰকে</Value></Paragraph>
+				<Paragraph><Value>একমাত্ৰ পুত্ৰকে A</Value></Paragraph>
+				<Paragraph><Value>(g166) একমাত্ৰ পুত্ৰকে</Value></Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>

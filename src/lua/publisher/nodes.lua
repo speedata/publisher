@@ -1782,6 +1782,81 @@ function M.getinstancename(parameter)
     return instancename
 end
 
+-- The script for HarfBuzz that the language fixes: CJK languages keep
+-- one script for the whole text, otherwise HarfBuzz takes it from the
+-- first character (Latin in "XML数据"). The OpenType language tag
+-- selects the regional glyph forms.
+---@param locale string Internal locale such as `zh_tw` or `de`.
+---@return string? script ISO 15924 tag.
+local function language_script(locale)
+    local langcode, region = string.match(locale, "^(%a+)_?(%a*)")
+    if langcode == "zh" then
+        if region == "tw" or region == "hk" or region == "mo" or region == "hant" then
+            return "Hant"
+        end
+        return "Hans"
+    elseif langcode == "ja" then
+        return "Hani"
+    end
+    return nil
+end
+
+-- Script of each code point, false for Common, Inherited and Unknown.
+---@type table<integer, string|false>
+local script_cache = {}
+
+-- Scripts that are set together (Japanese, Chinese with Bopomofo).
+local script_group = { Hani = "Hani", Hira = "Hani", Kana = "Hani", Bopo = "Hani" }
+
+---@param cp integer
+---@return string|false
+local function script_of(cp)
+    local sc = script_cache[cp]
+    if sc == nil then
+        sc = tostring(publisher.harfbuzz.unicode.script(cp))
+        if sc == "Zyyy" or sc == "Zinh" or sc == "Zzzz" then
+            sc = false
+        end
+        script_cache[cp] = sc
+    end
+    return sc
+end
+
+-- Splits a string into runs of one script (Unicode script itemization,
+-- UAX #24): HarfBuzz shapes a buffer with one script, which it guesses
+-- from the first letter, so Bengali after a Latin letter would be shaped
+-- as Latin. Common characters (spaces, digits, punctuation) and
+-- combining marks belong to the run before them, at the start to the
+-- first run.
+---@param str string
+---@return {[1]: string, [2]: string}[]? runs Text and script of each run, nil if there is only one.
+function M.split_by_script(str)
+    if not string.find(str, "[\128-\255]") then
+        return nil
+    end
+    local runs = {}
+    local runstart, curscript, curgroup
+    local pos = 0
+    for c in unicode.utf8.gmatch(str, ".") do
+        local sc = script_of(unicode.utf8.byte(c))
+        if sc then
+            local grp = script_group[sc] or sc
+            if not curscript then
+                runstart, curscript, curgroup = 0, sc, grp
+            elseif grp ~= curgroup then
+                runs[#runs + 1] = { string.sub(str, runstart + 1, pos), curscript }
+                runstart, curscript, curgroup = pos, sc, grp
+            end
+        end
+        pos = pos + #c
+    end
+    if #runs == 0 then
+        return nil
+    end
+    runs[#runs + 1] = { string.sub(str, runstart + 1), curscript }
+    return runs
+end
+
 -- Top-level entry point: turns a string `str` plus `parameter` (font,
 -- color, decoration, ...) into a node list shaped with HarfBuzz.
 ---@param str string Text segment.
@@ -1818,7 +1893,7 @@ function M.mknodes(str, parameter, _origin, bidi_offset)
 
     ---@type string?
     local maindirection
-    ---@type [integer?, string][]
+    ---@type [integer?, string, integer?, string?][] direction, text, embedding level, script
     local segments
     if parameter.bidi and str ~= "\n" then
         local dir = 0
@@ -1879,35 +1954,38 @@ function M.mknodes(str, parameter, _origin, bidi_offset)
         return dirnode
     end
 
+    local locale = "en"
+    if languagecode and publisher.languages_id_lang[languagecode].locale then
+        locale = publisher.languages_id_lang[languagecode].locale
+    end
+    -- HarfBuzz needs a BCP 47 tag: the internal locale `sc` would be
+    -- Sardinian instead of Serbian (Cyrillic). `nil` for "Other" (`--`).
+    ---@type string?
+    local thislang = publisher.language.bcp47(locale)
+    local langscript = thislang and language_script(locale)
+    if not langscript then
+        -- each run of one script is shaped on its own
+        local itemized = {}
+        for _, seg in ipairs(segments) do
+            local runs = M.split_by_script(seg[2])
+            if runs then
+                for _, run in ipairs(runs) do
+                    itemized[#itemized + 1] = { seg[1], run[1], seg[3], run[2] }
+                end
+            else
+                itemized[#itemized + 1] = seg
+            end
+        end
+        segments = itemized
+    end
+
     for i = 1, #segments do
         str = segments[i][2]
         ---@type 0|1|string|nil 0/"ltr" or 1/"rtl"; later the shape() result.
         local direction = segments[i][1]
-        local locale = "en"
-        if languagecode and publisher.languages_id_lang[languagecode].locale then
-            locale = publisher.languages_id_lang[languagecode].locale
-        end
-        -- HarfBuzz needs a BCP 47 tag: the internal locale `sc` would be
-        -- Sardinian instead of Serbian (Cyrillic). `nil` for "Other" (`--`).
-        ---@type string?
-        local thislang = publisher.language.bcp47(locale)
         local thissegment
-        local script = nil
-        if thislang then
-            -- Fix the script for CJK languages, otherwise HarfBuzz takes it
-            -- from the first character (Latin in "XML数据"). The OpenType
-            -- language tag selects the regional glyph forms.
-            local langcode, region = string.match(locale, "^(%a+)_?(%a*)")
-            if langcode == "zh" then
-                if region == "tw" or region == "hk" or region == "mo" or region == "hant" then
-                    script = "Hant"
-                else
-                    script = "Hans"
-                end
-            elseif langcode == "ja" then
-                script = "Hani"
-            end
-        end
+        ---@type string?
+        local script = langscript or segments[i][4]
 
         -- U+2060 WORD JOINER is a default ignorable and gets removed by
         -- HarfBuzz (FLAG_REMOVE_DEFAULT_IGNORABLES) before it reaches the
