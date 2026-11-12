@@ -1050,6 +1050,47 @@ local function add_css_boxes(nodelist, chain, first, last)
     nodelist.list = list
 end
 
+-- The first glyph in `head` (also in nested lists) that belongs to a
+-- structure element (PDF/UA).
+---@param head Node?
+---@return Node?
+local function first_tagged_glyph(head)
+    if not head then
+        return nil
+    end
+    for n in node.traverse(head) do
+        if n.id == publisher.glyph_node then
+            local props = node.getproperty(n)
+            if type(props) == "table" and props.role then
+                return n
+            end
+        elseif n.id == publisher.hlist_node or n.id == publisher.vlist_node then
+            local g = first_tagged_glyph(n.list)
+            if g then
+                return g
+            end
+        end
+    end
+    return nil
+end
+
+-- Gives all glyphs in `head` (also in nested lists) the structure
+-- properties of `ref`.
+---@param head Node?
+---@param ref Node
+local function tag_glyphs_like(head, ref)
+    if not head then
+        return
+    end
+    for n in node.traverse(head) do
+        if n.id == publisher.glyph_node then
+            publisher.fonts.copy_structprops(ref, n)
+        elseif n.id == publisher.hlist_node or n.id == publisher.vlist_node then
+            tag_glyphs_like(n.list, ref)
+        end
+    end
+end
+
 -- Builds the glyph node list, applies the textformat, runs line breaking
 -- and returns the linebroken vbox. The main entry point used by callers
 -- once they know the target width.
@@ -1737,6 +1778,14 @@ function Par:format(width_sp, options, data)
             initial_hlist.shift = -initial_hlist.width
         end
         publisher.attribute_helpers.setprop(self.initial, "origin", "initial")
+        if publisher.options.format == "PDF/UA" then
+            -- The initial is made without the options of the paragraph.
+            -- Its glyphs belong to the structure element of the paragraph.
+            local ref = first_tagged_glyph(nodelist)
+            if ref then
+                tag_glyphs_like(self.initial, ref)
+            end
+        end
         initial_hlist = node.vpack(initial_hlist)
         publisher.attribute_helpers.setprop(initial_hlist, "origin", "initial")
 

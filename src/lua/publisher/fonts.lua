@@ -500,11 +500,12 @@ local structprops = {
     "langtag",
 }
 
--- Gives `rule` the structure properties of `from`, so that it is drawn
--- inside the marked content of that structure element (PDF/UA).
+-- Gives `rule` (or any node) the structure properties of `from`, so that
+-- it is drawn inside the marked content of that structure element
+-- (PDF/UA).
 ---@param from Node?
 ---@param rule Node
-local function copy_structprops(from, rule)
+function M.copy_structprops(from, rule)
     local props = from and node.getproperty(from)
     if type(props) == "table" then
         for _, key in ipairs(structprops) do
@@ -556,7 +557,7 @@ function M.insert_backgroundcolor(parent, head, start, bgcolorindex, bg_padding_
     )
     rule.mode = 0
     if publisher.options.format == "PDF/UA" then
-        copy_structprops(start, rule)
+        M.copy_structprops(start, rule)
     end
     parent.head = node.insert_before(parent.head, start, rule)
     return rule
@@ -679,7 +680,7 @@ function M.insert_underline(parent, head, start, typ, style, colornumber)
             head = before
             before = before.prev
         end
-        copy_structprops(before, rule)
+        M.copy_structprops(before, rule)
     end
     parent.head = node.insert_before(parent.head, head, rule)
     return rule
