@@ -820,6 +820,14 @@ The attribute `break-pagetype` on the `<Table>` element (since version 5.7.5) in
 
 If the table breaks from page 1 to the next page, the back side is output as page 2 and the table continues on page 3.
 
+An attribute value template in `break-pagetype` is evaluated again at each page break of the table (since version 5.9.27). During the evaluation, `sd:current-page()` still returns the page before the break. This way the extra page can be limited to certain breaks, for example only to the back side of the first sheet:
+
+```xml
+<Table break-pagetype="{if (sd:current-page() = 1) then 'backside' else ''}">
+```
+
+With three pages of table contents, the result is page 1 (table), page 2 (back side), page 3 and page 4 (table).
+
 ## Tables and font sizes
 
 To typeset tables with small font sizes, you need to set a small fontfamily in the table definition:

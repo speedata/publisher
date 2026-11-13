@@ -5714,6 +5714,8 @@ function commands.place_object(layoutxml, dataxml)
                     -- see last lines of place_object
                     objects.balance = object.balance
                     objects.break_pagetype = object.break_pagetype
+                    objects.break_pagetype_layoutxml = object.break_pagetype_layoutxml
+                    objects.break_pagetype_dataxml = object.break_pagetype_dataxml
                     for i = 1, #object do
                         objects[#objects + 1] = { object = object[i], objecttype = objecttype }
                     end
@@ -5934,9 +5936,25 @@ function commands.place_object(layoutxml, dataxml)
         if i < #objects then
             -- don't switch when inside a group
             if publisher.current_group == nil then
+                -- Table/break-pagetype is evaluated again at each split (the
+                -- current page is still the page before the break), so an
+                -- attribute value template can restrict the extra page to
+                -- certain breaks, e.g. only the first one.
+                local break_pagetype = objects.break_pagetype
+                if objects.break_pagetype_layoutxml then
+                    break_pagetype = publisher.attribute_helpers.read_attribute(
+                        objects.break_pagetype_layoutxml,
+                        objects.break_pagetype_dataxml,
+                        "break-pagetype",
+                        "string"
+                    )
+                    if break_pagetype == "" then
+                        break_pagetype = nil
+                    end
+                end
                 local prev_pagenumber = publisher.current_pagenumber
                 publisher.page_helpers.next_area(area, nil, dataxml, "place_object not in group")
-                if objects.break_pagetype and publisher.current_pagenumber > prev_pagenumber then
+                if break_pagetype and publisher.current_pagenumber > prev_pagenumber then
                     -- Table/break-pagetype: between two parts of a split table
                     -- an extra page of the requested page type is shipped out.
                     -- Its contents must come from AtPageCreation of that page type.
@@ -5944,7 +5962,7 @@ function commands.place_object(layoutxml, dataxml)
                     -- getheight in the split calculation); discard the empty page
                     -- so it can be re-created with the requested page type.
                     publisher.pages[publisher.current_pagenumber] = nil
-                    publisher.nextpage = objects.break_pagetype
+                    publisher.nextpage = break_pagetype
                     publisher.page_helpers.setup_page(nil, "place_object break-pagetype", dataxml)
                     publisher.page_helpers.new_page("place_object break-pagetype", dataxml)
                 end
@@ -7107,6 +7125,12 @@ function commands.table(layoutxml, dataxml, options)
     if not node.is_node(n) then
         n.balance = balance
         n.break_pagetype = break_pagetype
+        local attributes = layoutxml[".__attributes"]
+        if attributes and attributes["break-pagetype"] and string.find(attributes["break-pagetype"], "{", 1, true) then
+            -- attribute value template: re-evaluated at each split in place_object
+            n.break_pagetype_layoutxml = layoutxml
+            n.break_pagetype_dataxml = dataxml
+        end
     end
     -- Helpful for debugging purpose:
     -- for i=1,#n do

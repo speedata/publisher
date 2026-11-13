@@ -881,6 +881,14 @@ Mit dem Attribut `break-pagetype` am `<Table>`-Element (ab Version 5.7.5) wird b
 
 Bricht die Tabelle beispielsweise von Seite 1 auf die nächste Seite um, so wird die Rückseite als Seite 2 ausgegeben und die Tabelle auf Seite 3 fortgesetzt.
 
+Eine Attributwertvorlage in `break-pagetype` wird bei jedem Seitenumbruch der Tabelle neu ausgewertet (ab Version 5.9.27). `sd:current-page()` liefert dabei noch die Seite vor dem Umbruch. So lässt sich die zusätzliche Seite auf bestimmte Umbrüche beschränken, zum Beispiel nur auf die Rückseite des ersten Blattes:
+
+```xml
+<Table break-pagetype="{if (sd:current-page() = 1) then 'rueckseite' else ''}">
+```
+
+Bei drei Seiten Tabelleninhalt ergibt das Seite 1 (Tabelle), Seite 2 (Rückseite), Seite 3 und Seite 4 (Tabelle).
+
 ## Tabellen und Schriftgröße
 
 Um Tabellen mit kleiner Schriftgröße zu setzen, muss die Schriftfamilie in der Tabellendefinition auf eine kleine Schriftfamilie gesetzt werden:

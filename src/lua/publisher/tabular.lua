@@ -1985,6 +1985,8 @@ end
 ---@class SplitTableResult: VlistNode[] One vlist per part of a split table.
 ---@field balance? boolean Balance the parts over all frames (set in commands.table).
 ---@field break_pagetype? string Page type for the extra page between two parts (set in commands.table).
+---@field break_pagetype_layoutxml? table Layout XML of the Table, to re-evaluate break-pagetype at each split.
+---@field break_pagetype_dataxml? table Data XML of the Table, to re-evaluate break-pagetype at each split.
 
 -- Typeset the entire table, including head, body, and foot.
 ---@param dataxml table XML data for the table

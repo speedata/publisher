@@ -11342,10 +11342,10 @@
     </attribute>
     <attribute en="break-pagetype" type="text" optional="yes" since="5.7.5">
       <description xml:lang="en">
-        <para>When the table is split at a page break, an extra page of the given page type is inserted between the two parts of the table. The contents of that page must be created with <tt>AtPageCreation</tt> of the page type. The page numbering continues as usual. An empty value disables the insertion.</para>
+        <para>When the table is split at a page break, an extra page of the given page type is inserted between the two parts of the table. The contents of that page must be created with <tt>AtPageCreation</tt> of the page type. The page numbering continues as usual. An empty value disables the insertion. An attribute value template is evaluated again at each page break (since 5.9.27); <tt>sd:current-page()</tt> then returns the page before the break.</para>
       </description>
       <description xml:lang="de">
-        <para>Wenn die Tabelle an einem Seitenumbruch geteilt wird, wird zwischen den beiden Teilen der Tabelle eine zusätzliche Seite mit dem angegebenen Seitentyp eingefügt. Der Inhalt dieser Seite muss in <tt>AtPageCreation</tt> des Seitentyps erzeugt werden. Die Seitennummerierung läuft normal weiter. Ein leerer Wert schaltet das Einfügen aus.</para>
+        <para>Wenn die Tabelle an einem Seitenumbruch geteilt wird, wird zwischen den beiden Teilen der Tabelle eine zusätzliche Seite mit dem angegebenen Seitentyp eingefügt. Der Inhalt dieser Seite muss in <tt>AtPageCreation</tt> des Seitentyps erzeugt werden. Die Seitennummerierung läuft normal weiter. Ein leerer Wert schaltet das Einfügen aus. Eine Attributwertvorlage wird bei jedem Seitenumbruch neu ausgewertet (ab 5.9.27); <tt>sd:current-page()</tt> liefert dabei die Seite vor dem Umbruch.</para>
       </description>
     </attribute>
     <attribute en="class" optional="yes" type="text" since="5.9.14">
