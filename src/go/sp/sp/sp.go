@@ -723,7 +723,13 @@ See https://github.com/speedata/publisher/issues/310 for details.
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`)
 		}
 
-		if run(ep, cmdline, env) < 0 {
+		// With more than one run, the protocol file records the current run
+		// and the number of runs (run="x/y" on the root element).
+		runEnv := env[:len(env):len(env)]
+		if runs > 1 {
+			runEnv = append(runEnv, fmt.Sprintf("SP_RUN=%d/%d", i, runs))
+		}
+		if run(ep, cmdline, runEnv) < 0 {
 			exitstatus = -1
 		}
 		// The status file is written even if the publisher exits with an

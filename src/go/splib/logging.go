@@ -188,6 +188,11 @@ func setupLog(protocol string) error {
 			{Name: xml.Name{Local: "pro"}, Value: os.Getenv("SP_PRO")},
 		},
 	}
+	// Set by the sp binary if more than one run is requested: current run and
+	// number of runs, for example "2/3".
+	if run := os.Getenv("SP_RUN"); run != "" {
+		logStartElement.Attr = append(logStartElement.Attr, xml.Attr{Name: xml.Name{Local: "run"}, Value: run})
+	}
 	if err = logEncoder.EncodeToken(logStartElement); err != nil {
 		return err
 	}

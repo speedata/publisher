@@ -122,6 +122,8 @@ Ebenso wird eine etwas ausführlichere Protokolldatei (`publisher-protocol.xml`)
 </log>
 ```
 
+Bei mehreren Durchläufen (`--runs`, `runs` in der Konfigurationsdatei oder `<Options runs="..." />` im Layout) enthält das Wurzelelement seit Version 5.9.27 das Attribut `run`, zum Beispiel `run="2/3"`: Das Protokoll stammt aus dem zweiten von drei Durchläufen. Da jeder Durchlauf die Datei neu schreibt, steht nach dem Ende des Publishers dort immer der letzte Durchlauf.
+
 ## Wie Sie Hilfe erhalten
 
 Wenn alle Fehlersuche fehlschlägt oder wenn Sie Fragen oder Kommentare haben, die Sie mit anderen teilen möchten, können Sie die folgenden Ressourcen nutzen:

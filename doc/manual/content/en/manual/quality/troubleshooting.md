@@ -117,6 +117,8 @@ A more detailed log file (`publisher-protocol.xml`) is also written, which conta
 </log>
 ```
 
+With more than one run (`--runs`, `runs` in the configuration file or `<Options runs="..." />` in the layout), the root element has the attribute `run` since version 5.9.27, for example `run="2/3"`: the protocol comes from the second of three runs. Since every run rewrites the file, it always contains the last run once the Publisher has finished.
+
 ## How to get help
 
 If all troubleshooting fails or if you have questions or comments that you want to share with others, you can use the following resources:
