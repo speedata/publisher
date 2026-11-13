@@ -6751,10 +6751,18 @@ function commands.span(layoutxml, dataxml)
         languagecode = languagecode,
     }
     if publisher.options.format == "PDF/UA" then
-        publisher.rolecounter = publisher.rolecounter + 1
-        params.role = publisher.structure_tree.get_rolenum(role)
-        params.rolecounter = publisher.rolecounter
-        params.parent = 0
+        -- Text in another language than the document needs its own
+        -- element for the /Lang entry. Without a role or another language
+        -- the text belongs to the surrounding element (the paragraph).
+        if not role and publisher.nodes.wordlanguage(languagecode) then
+            role = "Span"
+        end
+        if role then
+            publisher.rolecounter = publisher.rolecounter + 1
+            params.role = publisher.structure_tree.get_rolenum(role)
+            params.rolecounter = publisher.rolecounter
+            params.parent = 0
+        end
     end
 
     local p = publisher.par:new(nil, "span2")

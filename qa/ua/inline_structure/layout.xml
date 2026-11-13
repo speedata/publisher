@@ -1,0 +1,35 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<PDFOptions format="PDF/UA" title="Inline elements in the structure" />
+	<Trace dump-structtree="yes" />
+	<Pageformat height="8cm" width="8cm" />
+
+	<Record element="data">
+		<!-- the table of contents comes first, so the structure gets sorted by page -->
+		<InsertPages name="toc" pages="1" />
+		<ClearPage />
+		<PlaceObject>
+			<Textblock>
+				<!-- Span with the document language and B: no elements of their own -->
+				<Paragraph role="H2"><B><Span language="English (Great Britain)"><Value>Chapter</Value></Span></B><Value> one</Value></Paragraph>
+				<!-- the paragraph's own text stays around the Span and the link -->
+				<Paragraph>
+					<Value>Published by </Value>
+					<A href="https://example.org"><U><Value>Example Inc</Value></U></A>
+					<Value>, all </Value><Span language="German"><Value>Gewinne</Value></Span>
+					<Value> go to </Value><Span role="Span"><Value>charity</Value></Span><Value>.</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<SavePages name="toc">
+			<PlaceObject>
+				<Textblock>
+					<Paragraph role="H1"><Value>Contents</Value></Paragraph>
+					<Paragraph>
+						<Span language="German"><Value>Genesis</Value></Span><HSpace leader="." /><Fontface fontfamily="text"><Value>1</Value></Fontface><Br />
+						<Span language="German"><Value>Exodus</Value></Span><HSpace leader="." /><Fontface fontfamily="text"><Value>2</Value></Fontface>
+					</Paragraph>
+				</Textblock>
+			</PlaceObject>
+		</SavePages>
+	</Record>
+</Layout>
