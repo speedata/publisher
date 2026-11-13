@@ -1091,6 +1091,25 @@ local function tag_glyphs_like(head, ref)
     end
 end
 
+-- Sets the given structure properties on all glyphs in `head` (also in
+-- nested lists).
+---@param head Node?
+---@param props table<string, any>
+local function tag_glyphs_with(head, props)
+    if not head then
+        return
+    end
+    for n in node.traverse(head) do
+        if n.id == publisher.glyph_node then
+            for k, v in pairs(props) do
+                publisher.attribute_helpers.setprop(n, k, v)
+            end
+        elseif n.id == publisher.hlist_node or n.id == publisher.vlist_node then
+            tag_glyphs_with(n.list, props)
+        end
+    end
+end
+
 -- Builds the glyph node list, applies the textformat, runs line breaking
 -- and returns the linebroken vbox. The main entry point used by callers
 -- once they know the target width.
@@ -1780,10 +1799,19 @@ function Par:format(width_sp, options, data)
         publisher.attribute_helpers.setprop(self.initial, "origin", "initial")
         if publisher.options.format == "PDF/UA" then
             -- The initial is made without the options of the paragraph.
-            -- Its glyphs belong to the structure element of the paragraph.
+            -- Its glyphs belong to the structure element of the paragraph,
+            -- or with a role of its own to an element right before it.
             local ref = first_tagged_glyph(nodelist)
             if ref then
                 tag_glyphs_like(self.initial, ref)
+                local initialrole = publisher.attribute_helpers.getprop(self.initial, "initialrole")
+                local refid = publisher.attribute_helpers.getprop(ref, "id")
+                if initialrole and refid then
+                    local rolecounter = publisher.attribute_helpers.getprop(self.initial, "initialrolecounter")
+                    local id = publisher.roles_a[initialrole] .. "_" .. tostring(rolecounter)
+                    publisher.struct_before[id] = refid
+                    tag_glyphs_with(self.initial, { role = initialrole, id = id, rolecounter = rolecounter })
+                end
             end
         end
         initial_hlist = node.vpack(initial_hlist)

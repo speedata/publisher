@@ -105,7 +105,22 @@ Screen readers choose the voice by the language of the text. The main language o
 
 Besides the languages listed under [`<Options>`]({{< relref "/reference/commands/options" >}}), `language` and `mainlanguage` accept any language code in BCP 47 form, also with a script or region, for example `ckb`, `ur-Arab` or `sr-Latn`. The Publisher writes the code to the PDF as it is. For a language without hyphenation patterns, the text is not hyphenated, and the Publisher shows a warning.
 
-A word or a passage within a paragraph gets its own language with `<Span>`, for example `<Span role="Span" language="el">`. In PDF/UA mode, the span becomes a structure element of its own with the language. The font must contain the letters of that language.
+A word or a passage within a paragraph gets its own language with `<Span>`, for example `<Span language="el">`. In PDF/UA mode, a span in a language other than the main language becomes a structure element of its own (role `Span`) with the language. The font must contain the letters of that language.
+
+## Inline elements
+
+Text in `<Span>` (without a role or another language), `<B>`, `<I>`, `<U>` and `<Fontface>` is part of the paragraph, in the order of the text. A link (`<A>`) becomes a `Link` element within the paragraph. A `<Span>` with a role, for example `<Span role="Span">`, becomes an element of its own.
+
+## Initial as a heading
+
+An [`<Initial>`]({{< relref "/reference/commands/initial" >}}) is part of the paragraph. With the attribute `role`, it becomes an element of its own right before the paragraph. This way, screen readers announce a chapter number as a heading, while the number stays in the paragraph for the layout:
+
+```xml
+<Paragraph>
+  <Initial fontfamily="chapter" role="H2"><Value select="@chapter" /></Initial>
+  <Value select="text" />
+</Paragraph>
+```
 
 ## Alternative texts and image descriptions
 

@@ -104,7 +104,22 @@ Bildschirmlesegeräte wählen die Stimme nach der Sprache des Textes. Die Haupts
 
 Neben den Sprachen, die unter [`<Options>`]({{< relref "/reference/commands/options" >}}) aufgeführt sind, nehmen `language` und `mainlanguage` jeden Sprachcode in BCP-47-Form an, auch mit Schrift oder Region, zum Beispiel `ckb`, `ur-Arab` oder `sr-Latn`. Der Publisher schreibt den Code unverändert in das PDF. Gibt es für eine Sprache keine Trennmuster, wird der Text nicht getrennt, und der Publisher gibt eine Warnung aus.
 
-Ein Wort oder eine Passage innerhalb eines Absatzes bekommt mit `<Span>` eine eigene Sprache, zum Beispiel `<Span role="Span" language="el">`. Im PDF/UA-Modus wird der Span dann ein eigenes Strukturelement mit dieser Sprache. Die Schrift muss die Buchstaben dieser Sprache enthalten.
+Ein Wort oder eine Passage innerhalb eines Absatzes bekommt mit `<Span>` eine eigene Sprache, zum Beispiel `<Span language="el">`. Im PDF/UA-Modus wird ein Span in einer anderen Sprache als der Hauptsprache ein eigenes Strukturelement (Rolle `Span`) mit dieser Sprache. Die Schrift muss die Buchstaben dieser Sprache enthalten.
+
+## Inline-Elemente
+
+Text in `<Span>` (ohne Rolle und ohne andere Sprache), `<B>`, `<I>`, `<U>` und `<Fontface>` gehört zum Absatz, in der Reihenfolge des Textes. Ein Link (`<A>`) wird ein `Link`-Element innerhalb des Absatzes. Ein `<Span>` mit Rolle, zum Beispiel `<Span role="Span">`, wird ein eigenes Element.
+
+## Initiale als Überschrift
+
+Eine [`<Initial>`]({{< relref "/reference/commands/initial" >}}) gehört zum Absatz. Mit dem Attribut `role` wird sie ein eigenes Element direkt vor dem Absatz. So sagen Bildschirmlesegeräte eine Kapitelnummer als Überschrift an, während die Nummer für das Layout im Absatz bleibt:
+
+```xml
+<Paragraph>
+  <Initial fontfamily="chapter" role="H2"><Value select="@chapter" /></Initial>
+  <Value select="text" />
+</Paragraph>
+```
 
 ## Alternativ-Texte und Bildbeschreibungen
 

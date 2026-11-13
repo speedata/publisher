@@ -1,0 +1,22 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <PDFOptions format="PDF/UA" title="Initial with a role" />
+  <Trace dump-structtree="yes"/>
+  <Pageformat height="12cm" width="10cm"/>
+  <DefineFontfamily name="big" fontsize="24" leading="24"><Regular fontface="sans"/></DefineFontfamily>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph role="H1"><Value>Genesis</Value></Paragraph>
+        <Paragraph><Initial fontfamily="big" role="H2" padding-right="2pt"><Value>1</Value></Initial><Value>In the beginning God created the heaven and the earth. And the earth was without form.</Value></Paragraph>
+        <Paragraph><Initial fontfamily="big" padding-right="2pt"><Value>2</Value></Initial><Value>Thus the heavens and the earth were finished.</Value></Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <Output>
+      <Text>
+        <Paragraph><Initial fontfamily="big" role="H2"><Value>3</Value></Initial><Value>Now the serpent was more subtil than any beast of the field.</Value></Paragraph>
+        <Paragraph direction="rtl" bidi="yes"><Initial fontfamily="big" role="H2"><Value>4</Value></Initial><Value>And Adam knew Eve his wife.</Value></Paragraph>
+      </Text>
+    </Output>
+  </Record>
+</Layout>

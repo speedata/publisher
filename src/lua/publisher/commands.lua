@@ -2965,6 +2965,7 @@ function commands.initial(layoutxml, dataxml)
     local padding_top = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "padding-top", "length_sp", 0)
     local padding_bottom =
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "padding-bottom", "length_sp", 0)
+    local role = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "role", "string")
     if fontname then
         main.log(
             "warn",
@@ -3019,6 +3020,16 @@ function commands.initial(layoutxml, dataxml)
         head = node.insert_after(head, box, publisher.nodes.make_glue({ width = padding_bottom }))
     end
     box = node.vpack(head)
+    if role and publisher.options.format == "PDF/UA" then
+        -- The initial becomes an element of its own before the paragraph,
+        -- see par.lua.
+        local rolenum = publisher.structure_tree.get_rolenum(role)
+        if rolenum then
+            publisher.rolecounter = publisher.rolecounter + 1
+            publisher.attribute_helpers.setprop(box, "initialrole", rolenum)
+            publisher.attribute_helpers.setprop(box, "initialrolecounter", publisher.rolecounter)
+        end
+    end
 
     return box
 end

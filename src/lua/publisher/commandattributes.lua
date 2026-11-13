@@ -45,7 +45,7 @@ return {
     ["HSpace"] = {["leader"] = true, ["leader-width"] = true, ["minwidth"] = true, ["width"] = true },
     ["I"] = { },
     ["Include"] = {["xml:base"] = true },
-    ["Initial"] = {["color"] = true, ["fontfamily"] = true, ["padding-left"] = true, ["padding-right"] = true, ["padding-top"] = true, ["padding-bottom"] = true },
+    ["Initial"] = {["color"] = true, ["fontfamily"] = true, ["padding-left"] = true, ["padding-right"] = true, ["padding-top"] = true, ["padding-bottom"] = true, ["role"] = true },
     ["InsertPages"] = {["name"] = true, ["pages"] = true },
     ["Image"] = {["class"] = true, ["id"] = true, ["bleed"] = true, ["clip"] = true, ["description"] = true, ["dpiwarn"] = true, ["fallback"] = true, ["file"] = true, ["height"] = true, ["imageshape"] = true, ["parent"] = true, ["page"] = true, ["margin-bottom"] = true, ["margin-top"] = true, ["margin-left"] = true, ["margin-right"] = true, ["maxwidth"] = true, ["maxheight"] = true, ["minwidth"] = true, ["minheight"] = true, ["opacity"] = true, ["padding"] = true, ["padding-top"] = true, ["padding-bottom"] = true, ["padding-left"] = true, ["padding-right"] = true, ["stretch"] = true, ["role"] = true, ["rotate"] = true, ["visiblebox"] = true, ["vertical-align"] = true, ["width"] = true, ["imagetype"] = true },
     ["Italic"] = {["fontface"] = true },

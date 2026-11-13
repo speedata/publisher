@@ -660,6 +660,14 @@ local ktree = pdf.reserveobj()
 ---@type table<string, StructElement>
 M.structElements = {}
 
+-- Structure elements that go right before another element in the same
+-- parent instead of into the element that contains their marked content.
+-- Key is the id of the element, value the id of the element it precedes.
+-- Used for an Initial with a role of its own (a chapter number as a
+-- heading before the paragraph).
+---@type table<string, string>
+M.struct_before = {}
+
 -- paragraph, table and textblock should set them
 ---@type integer
 M.current_fontfamily = 0
@@ -2026,6 +2034,9 @@ end
 do
     local objcount
     local structelementobjects
+    -- The children table each structure element was added to.
+    ---@type table<table, table>
+    local entry_parent = setmetatable({}, { __mode = "k" })
 
     -- Creates the container structure elements a node depends on (for
     -- example L and LI of a list item) when they do not exist yet. The
@@ -2049,6 +2060,7 @@ do
                 local parenttable = M.structElements[c.parentid]
                 if parenttable then
                     parenttable[#parenttable + 1] = entry
+                    entry_parent[entry] = parenttable
                 end
                 M.structElements[c.id] = entry
             end
@@ -2103,6 +2115,7 @@ do
                                 else
                                     parenttable[#parenttable + 1] = entry
                                 end
+                                entry_parent[entry] = parenttable
                             end
                             M.structElements[roleid] = entry
                         end
@@ -2198,7 +2211,22 @@ do
                     --          ["role"] = "P"
                     --     },
                     -- },
-                    if not parentid then
+                    -- An element that precedes another one (Initial with a
+                    -- role) goes into the parent of that element.
+                    local before = roleid and M.struct_before[roleid]
+                    local target = before and M.structElements[before]
+                    local targetparent = target and entry_parent[target]
+                    if targetparent then
+                        local pos = #targetparent + 1
+                        for i = 1, #targetparent do
+                            if targetparent[i] == target then
+                                pos = i
+                                break
+                            end
+                        end
+                        table.insert(targetparent, pos, entry)
+                        entry_parent[entry] = targetparent
+                    elseif not parentid then
                         main.log(
                             "debug",
                             "Structure entry has no parent id",
@@ -2212,6 +2240,7 @@ do
                             local parenttable = M.structElements[parentid]
                             if parenttable then
                                 parenttable[#parenttable + 1] = entry
+                                entry_parent[entry] = parenttable
                             else
                                 main.log(
                                     "debug",

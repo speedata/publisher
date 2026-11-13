@@ -5339,6 +5339,15 @@
         <para>Fügt Leerraum unten der Initiale ein.</para>
       </description>
     </attribute>
+    <attribute en="role" optional="yes" since="5.9.26">
+      <description xml:lang="en">
+        <para>The role for PDF/UA (accessibility, tagged PDF). With a role, the initial becomes a structure element of its own right before the paragraph, for example <tt>role="H2"</tt> for a chapter number that screen readers announce as a heading. Without a role, the initial is part of the paragraph.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Rolle für PDF/UA (Barrierefreiheit, tagged PDF). Mit einer Rolle wird die Initiale ein eigenes Strukturelement direkt vor dem Absatz, zum Beispiel <tt>role="H2"</tt> für eine Kapitelnummer, die Bildschirmlesegeräte als Überschrift ansagen. Ohne Rolle gehört die Initiale zum Absatz.</para>
+      </description>
+      <referenceattribute name="roles" />
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Textblock>
   <Paragraph>
