@@ -93,21 +93,24 @@ function M.get_rolenum(rolestring)
 end
 
 -- Returns the sort key for a structure-tree child: the mapped page number
--- for nested struct elements, or `math.huge` for raw MCID numbers (so they
--- keep their relative order). Recurses into descendants when no `page` is
+-- for nested struct elements and marked content references. A raw MCID
+-- number is marked content on the page of its parent element, so it gets
+-- the parent's page; otherwise the parent's own text would end up after
+-- all of its child elements. Recurses into descendants when no `page` is
 -- set on the child itself.
 ---@param child table|integer
 ---@param page_map table<integer, integer> Maps PDF page reference numbers to logical page numbers.
+---@param parentpage? integer PDF page object number of the parent element.
 ---@return integer|number
-local function get_struct_page_position(child, page_map)
+local function get_struct_page_position(child, page_map, parentpage)
     if type(child) == "number" then
-        return math.huge
+        return parentpage and page_map[parentpage] or math.huge
     end
     if child.page then
         return page_map[child.page] or math.huge
     end
     for i = 1, #child do
-        local pos = get_struct_page_position(child[i], page_map)
+        local pos = get_struct_page_position(child[i], page_map, child.page)
         if pos ~= math.huge then
             return pos
         end
@@ -136,7 +139,11 @@ function M.sort_struct_tree_by_page_order(elem, page_ref_to_pagenumber)
     end
     local tagged = {}
     for i = 1, #elem do
-        tagged[i] = { child = elem[i], orig = i, page_pos = get_struct_page_position(elem[i], page_ref_to_pagenumber) }
+        tagged[i] = {
+            child = elem[i],
+            orig = i,
+            page_pos = get_struct_page_position(elem[i], page_ref_to_pagenumber, elem.page),
+        }
     end
     publisher.utilities.stable_sort(tagged, function(a, b)
         if a.page_pos ~= b.page_pos then
@@ -161,8 +168,9 @@ local function struct_xml_escape(s)
     return s
 end
 
--- Serializes a structure tree to indented XML for debugging. MCID children
--- are emitted as `<MCID>n</MCID>`; nested struct elements recurse.
+-- Serializes a structure tree to indented XML for debugging. Children are
+-- written in /K order: MCIDs as `<MCID>n</MCID>`, nested struct elements
+-- recurse.
 ---@param elem table Structure tree root or sub-tree.
 ---@param indent string? Leading whitespace prefix (used internally).
 ---@param page_ref_to_num table<integer, integer>? Maps PDF page refs to logical page numbers.
@@ -186,28 +194,20 @@ function M.dump_struct_tree_xml(elem, indent, page_ref_to_num)
         attrs = attrs .. string.format(' lang="%s"', struct_xml_escape(elem.lang))
     end
 
-    local mcids = {}
-    local children = {}
-    for i = 1, #elem do
-        local child = elem[i]
-        if type(child) == "table" and child.mcid then
-            mcids[#mcids + 1] = tostring(child.mcid)
-        elseif type(child) == "table" then
-            children[#children + 1] = child
-        else
-            mcids[#mcids + 1] = tostring(child)
-        end
-    end
-
-    if #children == 0 and #mcids == 0 then
+    if #elem == 0 then
         lines[#lines + 1] = indent .. "<" .. role .. attrs .. "/>"
     else
+        -- children in the order of /K (reading order)
         lines[#lines + 1] = indent .. "<" .. role .. attrs .. ">"
-        for _, mcid in ipairs(mcids) do
-            lines[#lines + 1] = indent .. "  <MCID>" .. mcid .. "</MCID>"
-        end
-        for _, child in ipairs(children) do
-            lines[#lines + 1] = M.dump_struct_tree_xml(child, indent .. "  ", page_ref_to_num)
+        for i = 1, #elem do
+            local child = elem[i]
+            if type(child) == "table" and child.mcid then
+                lines[#lines + 1] = indent .. "  <MCID>" .. tostring(child.mcid) .. "</MCID>"
+            elseif type(child) == "table" then
+                lines[#lines + 1] = M.dump_struct_tree_xml(child, indent .. "  ", page_ref_to_num)
+            else
+                lines[#lines + 1] = indent .. "  <MCID>" .. tostring(child) .. "</MCID>"
+            end
         end
         lines[#lines + 1] = indent .. "</" .. role .. ">"
     end

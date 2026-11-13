@@ -2,18 +2,18 @@
 <Document>
   <P page="1">
     <MCID>0</MCID>
-    <MCID>2</MCID>
     <Link page="1">
       <MCID>1</MCID>
     </Link>
+    <MCID>2</MCID>
   </P>
   <P page="1">
     <MCID>3</MCID>
-    <MCID>6</MCID>
     <Link page="1">
       <MCID>4</MCID>
       <MCID>5</MCID>
     </Link>
+    <MCID>6</MCID>
   </P>
   <P page="1">
     <MCID>7</MCID>
