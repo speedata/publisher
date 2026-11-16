@@ -1,0 +1,23 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<PDFOptions format="PDF/UA" title="Inline elements in Output/Text" />
+	<Options mainlanguage="English (USA)" />
+	<Trace dump-structtree="yes" />
+	<Pageformat height="12cm" width="8cm" />
+	<DefineTextformat name="nohyphenation" alignment="leftaligned" hyphenate="no" />
+
+	<Record element="data">
+		<Output>
+			<Text>
+				<!-- the Span with another language comes first, the H1 must contain it -->
+				<Paragraph role="H1"><Span language="German"><Value>Vorwort</Value></Span><Br /><Span language="German"><Value>Deutsch</Value></Span><Value> at </Value><A href="https://example.org/preface"><U><Value>example.org</Value></U></A></Paragraph>
+				<!-- the links stay in the paragraph, in text order -->
+				<Paragraph><Value>We thank our sources at </Value><A href="https://a.example.org"><U><Value>A</Value></U></A><Value>, </Value><A href="https://b.example.org"><U><Value>B</Value></U></A><Value> and </Value><A href="https://c.example.org"><U><Value>C</Value></U></A><Value>.</Value></Paragraph>
+				<Paragraph><Span language="German"><Value>Genesis</Value></Span><Value> 1:2 </Value><Span language="German"><Value>Exodus</Value></Span><Value> 3:4</Value></Paragraph>
+				<!-- a soft hyphen in the text breaks the line without hyphenation, the hyphen gets a soft hyphen as ActualText -->
+				<Paragraph textformat="nohyphenation"><Value>aaa bbb ccc Yohan&#xAD;na&#xAD;kam&#xAD;ba&#xAD;ba&#xAD;xyz&#xAD;long&#xAD;word&#xAD;extra&#xAD;ordi&#xAD;nari&#xAD;ly ddd</Value></Paragraph>
+				<!-- the chapter number is read as "Chapter 1" -->
+				<Paragraph><Initial role="H2" actualtext="Chapter 1"><Value>1</Value></Initial><Value>In the beginning God created the heaven and the earth.</Value></Paragraph>
+			</Text>
+		</Output>
+	</Record>
+</Layout>

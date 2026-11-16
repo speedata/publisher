@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document>
+  <H1 page="1">
+    <Span page="1" lang="de">
+      <MCID>0</MCID>
+    </Span>
+    <Span page="1" lang="de">
+      <MCID>1</MCID>
+    </Span>
+    <MCID>2</MCID>
+    <Link page="1">
+      <MCID>3</MCID>
+    </Link>
+  </H1>
+  <P page="1">
+    <MCID>4</MCID>
+    <Link page="1">
+      <MCID>5</MCID>
+    </Link>
+    <MCID>6</MCID>
+    <Link page="1">
+      <MCID>7</MCID>
+    </Link>
+    <MCID>8</MCID>
+    <Link page="1">
+      <MCID>9</MCID>
+    </Link>
+    <MCID>10</MCID>
+  </P>
+  <P page="1">
+    <Span page="1" lang="de">
+      <MCID>11</MCID>
+    </Span>
+    <MCID>12</MCID>
+    <Span page="1" lang="de">
+      <MCID>13</MCID>
+    </Span>
+    <MCID>14</MCID>
+  </P>
+  <P page="1">
+    <MCID>15</MCID>
+    <MCID>16</MCID>
+  </P>
+  <H2 page="1" actualtext="Chapter 1">
+    <MCID>17</MCID>
+  </H2>
+  <P page="1">
+    <MCID>18</MCID>
+    <MCID>19</MCID>
+  </P>
+</Document>
