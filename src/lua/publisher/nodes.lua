@@ -2912,13 +2912,14 @@ function M.finish_par(nodelist, _hsize, parameters)
 
     if not parameters.disable_hyphenation then
         lang.hyphenate(nodelist)
-
-        if publisher.options.format == "PDF/UA" then
-            add_properties_to_discnodes(nodelist)
-        end
-        if publisher.page_helpers.logicaltextorder_active() then
-            M.mark_softhyphens(nodelist)
-        end
+    end
+    -- Also without hyphenation: a soft hyphen (U+00AD) in the text is a
+    -- discretionary as well.
+    if publisher.options.format == "PDF/UA" then
+        add_properties_to_discnodes(nodelist)
+    end
+    if publisher.page_helpers.logicaltextorder_active() then
+        M.mark_softhyphens(nodelist)
     end
 
     local n = node.new("penalty")
