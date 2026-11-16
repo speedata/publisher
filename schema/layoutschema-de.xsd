@@ -2890,6 +2890,11 @@
       <xs:sequence>
         <xs:element ref="en:Value"/>
       </xs:sequence>
+      <xs:attribute name="actualtext">
+        <xs:annotation>
+          <xs:documentation>Der Text für Bildschirmlesegeräte im PDF/UA-Modus anstelle des Inhalts der Initiale, zum Beispiel actualtext="Kapitel 1" für die Kapitelnummer 1. Wird nur zusammen mit role verwendet.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="color">
         <xs:annotation>
           <xs:documentation>Setze die Farbe der Initiale. Voreingestellt ist Schwarz.</xs:documentation>
@@ -9044,7 +9049,7 @@
       </xs:attribute>
       <xs:attribute name="break-pagetype">
         <xs:annotation>
-          <xs:documentation>Wenn die Tabelle an einem Seitenumbruch geteilt wird, wird zwischen den beiden Teilen der Tabelle eine zusätzliche Seite mit dem angegebenen Seitentyp eingefügt. Der Inhalt dieser Seite muss in AtPageCreation des Seitentyps erzeugt werden. Die Seitennummerierung läuft normal weiter. Ein leerer Wert schaltet das Einfügen aus.</xs:documentation>
+          <xs:documentation>Wenn die Tabelle an einem Seitenumbruch geteilt wird, wird zwischen den beiden Teilen der Tabelle eine zusätzliche Seite mit dem angegebenen Seitentyp eingefügt. Der Inhalt dieser Seite muss in AtPageCreation des Seitentyps erzeugt werden. Die Seitennummerierung läuft normal weiter. Ein leerer Wert schaltet das Einfügen aus. Eine Attributwertvorlage wird bei jedem Seitenumbruch neu ausgewertet (ab 5.9.27); sd:current-page() liefert dabei die Seite vor dem Umbruch.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="class">

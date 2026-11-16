@@ -2832,6 +2832,11 @@
          <interleave>
             <group>
                <optional>
+                  <attribute name="actualtext">
+                     <a:documentation>Der Text für Bildschirmlesegeräte im PDF/UA-Modus anstelle des Inhalts der Initiale, zum Beispiel actualtext=&#34;Kapitel 1&#34; für die Kapitelnummer 1. Wird nur zusammen mit role verwendet.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="color">
                      <a:documentation>Setze die Farbe der Initiale. Voreingestellt ist Schwarz.</a:documentation>
                      <lsp:references symbol="color"></lsp:references>
@@ -7169,7 +7174,7 @@
                </optional>
                <optional>
                   <attribute name="break-pagetype">
-                     <a:documentation>Wenn die Tabelle an einem Seitenumbruch geteilt wird, wird zwischen den beiden Teilen der Tabelle eine zusätzliche Seite mit dem angegebenen Seitentyp eingefügt. Der Inhalt dieser Seite muss in AtPageCreation des Seitentyps erzeugt werden. Die Seitennummerierung läuft normal weiter. Ein leerer Wert schaltet das Einfügen aus.</a:documentation>
+                     <a:documentation>Wenn die Tabelle an einem Seitenumbruch geteilt wird, wird zwischen den beiden Teilen der Tabelle eine zusätzliche Seite mit dem angegebenen Seitentyp eingefügt. Der Inhalt dieser Seite muss in AtPageCreation des Seitentyps erzeugt werden. Die Seitennummerierung läuft normal weiter. Ein leerer Wert schaltet das Einfügen aus. Eine Attributwertvorlage wird bei jedem Seitenumbruch neu ausgewertet (ab 5.9.27); sd:current-page() liefert dabei die Seite vor dem Umbruch.</a:documentation>
                   </attribute>
                </optional>
                <optional>

@@ -5291,6 +5291,14 @@
     <childelements>
       <cmd name="Value"/>
     </childelements>
+    <attribute en="actualtext" optional="yes" type="text" allowxpath="yes" since="5.9.28">
+      <description xml:lang="en">
+        <para>The text for screen readers in PDF/UA mode instead of the contents of the initial, for example <tt>actualtext="Chapter 1"</tt> for the chapter number 1. Only used together with <tt>role</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Text für Bildschirmlesegeräte im PDF/UA-Modus anstelle des Inhalts der Initiale, zum Beispiel <tt>actualtext="Kapitel 1"</tt> für die Kapitelnummer 1. Wird nur zusammen mit <tt>role</tt> verwendet.</para>
+      </description>
+    </attribute>
     <attribute en="color" optional="yes" since="2.9.0" type="text" allowxpath="yes">
       <description xml:lang="en">
         <para>Set the color of the initial. Defaults to black.</para>

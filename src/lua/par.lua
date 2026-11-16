@@ -1810,7 +1810,12 @@ function Par:format(width_sp, options, data)
                     local rolecounter = publisher.attribute_helpers.getprop(self.initial, "initialrolecounter")
                     local id = publisher.roles_a[initialrole] .. "_" .. tostring(rolecounter)
                     publisher.struct_before[id] = refid
-                    tag_glyphs_with(self.initial, { role = initialrole, id = id, rolecounter = rolecounter })
+                    tag_glyphs_with(self.initial, {
+                        role = initialrole,
+                        id = id,
+                        rolecounter = rolecounter,
+                        actualtext = publisher.attribute_helpers.getprop(self.initial, "initialactualtext"),
+                    })
                 end
             end
         end

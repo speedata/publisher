@@ -2890,6 +2890,11 @@
       <xs:sequence>
         <xs:element ref="en:Value"/>
       </xs:sequence>
+      <xs:attribute name="actualtext">
+        <xs:annotation>
+          <xs:documentation>The text for screen readers in PDF/UA mode instead of the contents of the initial, for example actualtext="Chapter 1" for the chapter number 1. Only used together with role.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="color">
         <xs:annotation>
           <xs:documentation>Set the color of the initial. Defaults to black.</xs:documentation>
@@ -9044,7 +9049,7 @@
       </xs:attribute>
       <xs:attribute name="break-pagetype">
         <xs:annotation>
-          <xs:documentation>When the table is split at a page break, an extra page of the given page type is inserted between the two parts of the table. The contents of that page must be created with AtPageCreation of the page type. The page numbering continues as usual. An empty value disables the insertion.</xs:documentation>
+          <xs:documentation>When the table is split at a page break, an extra page of the given page type is inserted between the two parts of the table. The contents of that page must be created with AtPageCreation of the page type. The page numbering continues as usual. An empty value disables the insertion. An attribute value template is evaluated again at each page break (since 5.9.27); sd:current-page() then returns the page before the break.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="class">

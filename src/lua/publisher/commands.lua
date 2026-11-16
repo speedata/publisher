@@ -2966,6 +2966,7 @@ function commands.initial(layoutxml, dataxml)
     local padding_bottom =
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "padding-bottom", "length_sp", 0)
     local role = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "role", "string")
+    local actualtext = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "actualtext", "string")
     if fontname then
         main.log(
             "warn",
@@ -3028,7 +3029,10 @@ function commands.initial(layoutxml, dataxml)
             publisher.rolecounter = publisher.rolecounter + 1
             publisher.attribute_helpers.setprop(box, "initialrole", rolenum)
             publisher.attribute_helpers.setprop(box, "initialrolecounter", publisher.rolecounter)
+            publisher.attribute_helpers.setprop(box, "initialactualtext", actualtext)
         end
+    elseif actualtext and publisher.options.format == "PDF/UA" then
+        main.log("warn", "Initial: actualtext needs a role", "actualtext", actualtext)
     end
 
     return box
