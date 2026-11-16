@@ -1918,15 +1918,22 @@ function M.initialize_luatex_and_generate_pdf()
                 ),
                 immediate = true,
             })
+            -- The per-page arrays are written as separate objects. Inline,
+            -- the parent tree of a long document grows beyond the size
+            -- LuaTeX can write as a single object ("PDF buffer" overflow).
             local numentries = { "<< /Nums [" }
             for i = 1, #M.struct_root_numtree do
+                local value = tostring(M.struct_root_numtree[i])
+                if value:sub(1, 1) == "[" and value ~= "[ ]" then
+                    value = string.format("%d 0 R", pdf.obj({ type = "raw", string = value, immediate = true }))
+                end
                 numentries[#numentries + 1] = tostring(i - 1)
-                numentries[#numentries + 1] = tostring(M.struct_root_numtree[i])
+                numentries[#numentries + 1] = value
             end
             numentries[#numentries + 1] = "] >>"
             pdf.obj({
                 type = "raw",
-                string = string.format(table.concat(numentries, " ")),
+                string = table.concat(numentries, " "),
                 objnum = parenttree,
                 immediate = true,
             })
