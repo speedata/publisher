@@ -2049,10 +2049,9 @@ do
     -- example L and LI of a list item) when they do not exist yet. The
     -- node property `structchain` lists them from the outermost to the
     -- innermost as `{ id = ..., role = ..., parentid = ... }`.
-    ---@param head Node
+    ---@param chain? table[]
     ---@return nil
-    local function ensure_struct_chain(head)
-        local chain = M.attribute_helpers.getprop(head, "structchain")
+    local function ensure_struct_chain(chain)
         if not chain then
             return
         end
@@ -2072,6 +2071,43 @@ do
                 M.structElements[c.id] = entry
             end
         end
+    end
+
+    -- Creates the structure element of a box (for example a paragraph)
+    -- and adds it to its parent. `fields` holds the id, the role number and
+    -- the other structure properties of the box.
+    ---@param fields table
+    ---@param page integer PDF page object number for the current page.
+    ---@param parentid? string Overrides `fields.parentid`.
+    ---@return nil
+    local function add_box_entry(fields, page, parentid)
+        local rolename = M.roles_a[fields.role]
+        if rolename == "Artifact" then
+            return
+        end
+        ensure_struct_chain(fields.structchain)
+        local structpos = fields.structpos
+        local structposnum = tonumber(structpos)
+        local entry = {
+            obj = pdf.reserveobj(),
+            role = rolename,
+            page = page,
+            actualtext = fields.actualtext,
+            alttext = fields.alttext,
+            lang = fields.langtag,
+        }
+        local parenttable = M.structElements[parentid or fields.parentid]
+        if parenttable then
+            if structpos == "top" then
+                table.insert(parenttable, 1, entry)
+            elseif structposnum then
+                table.insert(parenttable, math.floor(structposnum), entry)
+            else
+                parenttable[#parenttable + 1] = entry
+            end
+            entry_parent[entry] = parenttable
+        end
+        M.structElements[fields.id] = entry
     end
 
     -- Walks a node list, collects PDF/UA structure entries from `att_role`
@@ -2097,34 +2133,30 @@ do
                     -- roleid is role, underscore, rolecounter, for example P_1
                     local roleid = M.attribute_helpers.getprop(head, "id")
                     if roleid then
-                        local actualtext = M.attribute_helpers.getprop(head, "actualtext")
-                        local alttext = M.attribute_helpers.getprop(head, "alttext")
-                        local langtag = M.attribute_helpers.getprop(head, "langtag")
-                        local rolename = M.roles_a[r]
-                        if rolename ~= "Artifact" then
-                            ensure_struct_chain(head)
-                            local structpos = M.attribute_helpers.getprop(head, "structpos")
-                            local structposnum = tonumber(structpos)
-                            local entry = {
-                                obj = pdf.reserveobj(),
-                                role = rolename,
-                                page = page,
-                                actualtext = actualtext,
-                                alttext = alttext,
-                                lang = langtag,
-                            }
-                            local parenttable = M.structElements[parentid]
-                            if parenttable then
-                                if structpos == "top" then
-                                    table.insert(parenttable, 1, entry)
-                                elseif structposnum then
-                                    table.insert(parenttable, math.floor(structposnum), entry)
-                                else
-                                    parenttable[#parenttable + 1] = entry
+                        local getprop = M.attribute_helpers.getprop
+                        add_box_entry({
+                            id = roleid,
+                            role = r,
+                            parentid = parentid,
+                            structpos = getprop(head, "structpos"),
+                            actualtext = getprop(head, "actualtext"),
+                            alttext = getprop(head, "alttext"),
+                            langtag = getprop(head, "langtag"),
+                            structchain = getprop(head, "structchain"),
+                        }, page)
+                    else
+                        -- A line of a paragraph that was taken out of the
+                        -- paragraph box (Output/Text, see pages.vsplit).
+                        local structpara = M.attribute_helpers.getprop(head, "structpara")
+                        if structpara then
+                            roleid = structpara.id
+                            if not M.structElements[roleid] then
+                                local paraparent = structpara.parentid
+                                if paraparent == "" or paraparent == nil then
+                                    paraparent = curid or "doc"
                                 end
-                                entry_parent[entry] = parenttable
+                                add_box_entry(structpara, page, paraparent)
                             end
-                            M.structElements[roleid] = entry
                         end
                     end
                     M.find_role_attributes(head.list, parenttree, page, roleid or curid)
@@ -2140,7 +2172,7 @@ do
                 local alttext = M.attribute_helpers.getprop(head, "alttext")
                 local langtag = M.attribute_helpers.getprop(head, "langtag")
                 local bbox = M.attribute_helpers.getprop(head, "bbox")
-                ensure_struct_chain(head)
+                ensure_struct_chain(M.attribute_helpers.getprop(head, "structchain"))
                 -- role number to role name
                 local rolename = M.roles_a[r]
 

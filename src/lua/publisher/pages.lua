@@ -1488,7 +1488,31 @@ function M.vsplit(objects_t, parameter)
     local margin_newcolumn
     while vlist do
         local head = vlist.head
+        -- The lines leave the paragraph box here. In PDF/UA mode they keep
+        -- the structure element of the paragraph, so that links and spans
+        -- in the lines stay inside the paragraph.
+        local structpara
+        if publisher.options.format == "PDF/UA" then
+            local paraid = publisher.attribute_helpers.getprop(vlist, "id")
+            local pararole = node.has_attribute(vlist, publisher.att_role)
+            if paraid and pararole then
+                local getprop = publisher.attribute_helpers.getprop
+                structpara = {
+                    id = paraid,
+                    role = pararole,
+                    parentid = getprop(vlist, "parentid"),
+                    structpos = getprop(vlist, "structpos"),
+                    actualtext = getprop(vlist, "actualtext"),
+                    alttext = getprop(vlist, "alttext"),
+                    langtag = getprop(vlist, "langtag"),
+                    structchain = getprop(vlist, "structchain"),
+                }
+            end
+        end
         while head do
+            if structpara and (head.id == publisher.hlist_node or head.id == publisher.vlist_node) then
+                publisher.attribute_helpers.setprop(head, "structpara", structpara)
+            end
             local tmp_margin_newcolumn = node.has_attribute(head, publisher.att_margin_newcolumn)
 
             if tmp_margin_newcolumn then
