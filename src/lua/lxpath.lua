@@ -117,16 +117,36 @@ local function get_delimited_string(sc)
     local pos = sc.pos + 1
     local start = pos
     local len = sc.len
+    local parts
 
     while pos <= len do
         if string_byte(str, pos) == delim then
-            sc.pos = pos + 1
-            return string_sub(str, start, pos - 1)
+            if string_byte(str, pos + 1) == delim then
+                -- doubled delimiter ('' or "") is an escaped quote
+                parts = parts or {}
+                parts[#parts + 1] = string_sub(str, start, pos)
+                pos = pos + 2
+                start = pos
+            else
+                sc.pos = pos + 1
+                local s = string_sub(str, start, pos - 1)
+                if parts then
+                    parts[#parts + 1] = s
+                    return table.concat(parts)
+                end
+                return s
+            end
+        else
+            pos = pos + 1
         end
-        pos = pos + 1
     end
     sc.pos = pos
-    return string_sub(str, start, pos - 1)
+    local s = string_sub(str, start, pos - 1)
+    if parts then
+        parts[#parts + 1] = s
+        return table.concat(parts)
+    end
+    return s
 end
 
 ---@param sc table scanner
