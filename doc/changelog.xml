@@ -1,5 +1,25 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.9">
+    <entry version="5.9.28" date="2026-11-16" sha1="8c2714f3">
+        <en summary="Quotation marks in XPath strings.">In XPath expressions, a quotation mark inside a string can now be written by doubling it, as defined by XPath 2.0, for example <tt>'all''acqua'</tt> for <tt>all'acqua</tt> or <tt>"say ""hello"""</tt> for <tt>say "hello"</tt>. Previously such expressions were not read correctly.</en>
+        <de summary="Anführungszeichen in XPath-Zeichenketten.">In XPath-Ausdrücken lässt sich ein Anführungszeichen innerhalb einer Zeichenkette jetzt durch Verdoppeln schreiben, wie es XPath 2.0 vorsieht, zum Beispiel <tt>'all''acqua'</tt> für <tt>all'acqua</tt> oder <tt>"sag ""hallo"""</tt> für <tt>sag "hallo"</tt>. Bisher wurden solche Ausdrücke nicht richtig gelesen.</de>
+    </entry>
+    <entry version="5.9.28" date="2026-11-16" sha1="cd34c9f2">
+        <en summary="Links and languages in Output/Text in PDF/UA.">In PDF/UA mode, links and text in another language (<tt>Span</tt> with <tt>language</tt>) in paragraphs of <tt>Output</tt>/<tt>Text</tt> were placed next to their paragraph in the document structure. Screen readers read a paragraph with links without the link texts and then all links together, and a heading that starts with text in another language without this text. They now stay in their paragraph at their place in the text, as with <tt>Textblock</tt>.</en>
+        <de summary="Links und Sprachen in Output/Text in PDF/UA.">Im PDF/UA-Modus standen Links und Text in einer anderen Sprache (<tt>Span</tt> mit <tt>language</tt>) in Absätzen von <tt>Output</tt>/<tt>Text</tt> in der Dokumentstruktur neben ihrem Absatz. Bildschirmlesegeräte lasen einen Absatz mit Links ohne die Linktexte und danach alle Links zusammen, und eine Überschrift, die mit Text in einer anderen Sprache beginnt, ohne diesen Text. Sie bleiben jetzt wie bei <tt>Textblock</tt> an ihrer Stelle im Absatz.</de>
+    </entry>
+    <entry version="5.9.28" date="2026-11-16" sha1="b6ef7497">
+        <en summary="Soft hyphens in PDF/UA.">In PDF/UA mode, the hyphen at a line break at a soft hyphen in the text (U+00AD) is now marked as a soft hyphen when hyphenation is switched off, so screen readers and programs that extract the text join the word again. Previously this only worked with hyphenation switched on.</en>
+        <de summary="Weiche Trennzeichen in PDF/UA.">Im PDF/UA-Modus ist der Trennstrich bei einem Zeilenumbruch an einem weichen Trennzeichen im Text (U+00AD) jetzt auch bei ausgeschalteter Silbentrennung als weicher Trennstrich gekennzeichnet, sodass Bildschirmlesegeräte und Programme, die den Text auslesen, das Wort wieder zusammenfügen. Bisher ging das nur bei eingeschalteter Silbentrennung.</de>
+    </entry>
+    <entry version="5.9.28" date="2026-11-16" sha1="2ffdb8df">
+        <en summary="Text for screen readers at Initial."><tt>Initial</tt> has a new attribute <tt>actualtext</tt>. Together with <tt>role</tt>, screen readers read this text instead of the contents of the initial, for example <tt>actualtext="Chapter 1"</tt> for a chapter number.</en>
+        <de summary="Text für Bildschirmlesegeräte bei Initial."><tt>Initial</tt> hat ein neues Attribut <tt>actualtext</tt>. Zusammen mit <tt>role</tt> lesen Bildschirmlesegeräte diesen Text anstelle des Inhalts der Initiale vor, zum Beispiel <tt>actualtext="Kapitel 1"</tt> für eine Kapitelnummer.</de>
+    </entry>
+    <entry version="5.9.28" date="2026-11-16" sha1="616f7c20">
+        <en summary="Long PDF/UA documents.">Long PDF/UA documents with a lot of text, for example a whole Bible with about 1000 pages, stopped with the error message <tt>TeX capacity exceeded, sorry [PDF buffer=...]</tt> and no PDF was written. These documents are now created as usual.</en>
+        <de summary="Lange PDF/UA-Dokumente.">Lange PDF/UA-Dokumente mit viel Text, zum Beispiel eine ganze Bibel mit etwa 1000 Seiten, brachen mit der Fehlermeldung <tt>TeX capacity exceeded, sorry [PDF buffer=...]</tt> ab, und es wurde kein PDF geschrieben. Diese Dokumente werden jetzt wie gewohnt erzeugt.</de>
+    </entry>
     <entry version="5.9.27" date="2026-11-13" sha1="f05a2c9f">
         <en summary="Current run in the protocol file.">With more than one run, the protocol file shows the current run and the number of runs in the attribute <tt>run</tt> of the root element, for example <tt>run="2/3"</tt>.</en>
         <de summary="Aktueller Durchlauf in der Protokolldatei.">Bei mehreren Durchläufen zeigt die Protokolldatei im Attribut <tt>run</tt> des Wurzelelements den aktuellen Durchlauf und die Anzahl der Durchläufe an, zum Beispiel <tt>run="2/3"</tt>.</de>
