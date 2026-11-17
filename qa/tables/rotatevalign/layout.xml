@@ -1,0 +1,23 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <!-- Vertical text in table cells: the rotated cell is as high as the
+       text is long, so valign places it correctly in both directions.
+       The last cell has HTML contents. -->
+  <Pageformat width="190mm" height="70mm"/>
+  <Record element="data">
+    <PlaceObject>
+      <Table stretch="max">
+        <Columns><Column width="1*"/><Column width="1*"/><Column width="1*"/><Column width="1*"/><Column width="1*"/><Column width="1*"/><Column width="1*"/><Column width="1*"/></Columns>
+        <Tr minheight="5">
+          <Td rotate="-90" valign="top" background-color="yellow"><Paragraph><Value>ccw top</Value></Paragraph></Td>
+          <Td rotate="-90" valign="top" background-color="yellow"><Paragraph><Value>ccw top longer text</Value></Paragraph></Td>
+          <Td rotate="-90" valign="middle" background-color="yellow"><Paragraph><Value>ccw middle</Value></Paragraph></Td>
+          <Td rotate="-90" valign="bottom" background-color="yellow"><Paragraph><Value>ccw bottom</Value></Paragraph></Td>
+          <Td rotate="90" valign="top" background-color="lightgray"><Paragraph><Value>cw top</Value></Paragraph></Td>
+          <Td rotate="90" valign="bottom" background-color="lightgray"><Paragraph><Value>cw bottom</Value></Paragraph></Td>
+          <Td valign="top"><Paragraph><Value>x</Value></Paragraph></Td>
+          <Td rotate="270" valign="bottom" background-color="lightgray"><Paragraph><Value select="sd:decode-html('&lt;b&gt;HTML&lt;/b&gt; contents')"/></Paragraph></Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>

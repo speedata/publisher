@@ -991,8 +991,14 @@ function tabular:pack_cell(blockobjects, width, horizontal_alignment)
                             -- are not yet taken into account.
                             local mw = inlineobject:max_width_and_lineheight({
                                 fontfamily = inlineobject.fontfamily or self.fontfamily,
-                            })
-                            format_width = math.max(format_width, mw * sin_angle)
+                            }, self.dataxml)
+                            if math.abs(math.cos(angle_rad)) < 0.001 then
+                                -- Vertical text gets its natural width, so the rotated
+                                -- cell is as high as the text is long (for valign).
+                                format_width = mw
+                            else
+                                format_width = math.max(format_width, mw * math.abs(sin_angle))
+                            end
                         end
 
                         local v = inlineobject:format(format_width, {
