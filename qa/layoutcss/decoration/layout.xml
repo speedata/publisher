@@ -1,0 +1,67 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+        xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <!-- CSS with !important in HTML content (no warning, bold and italic
+       apply), text-decoration (underline, overline, line-through) for
+       table cells and paragraphs, rotation of table cells by CSS
+       (transform) and by the attribute rotate with HTML contents. -->
+
+  <Pageformat width="210mm" height="297mm"/>
+
+  <Pagetype name="page" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+  </Pagetype>
+
+  <Stylesheet filename="styles.css"/>
+
+  <DefineColor name="DefaultTextColor" value="#000000"/>
+
+  <Record element="data">
+    <ProcessNode select="html"/>
+    <ProcessNode select="Table"/>
+    <Output>
+      <Text>
+        <Paragraph class="mixed"><Value>Dotted red underline</Value></Paragraph>
+        <Paragraph class="wavy"><Value>Wavy blue overline</Value></Paragraph>
+      </Text>
+    </Output>
+  </Record>
+
+  <Record element="html">
+    <Output>
+      <HTML select="."/>
+    </Output>
+  </Record>
+
+  <Record element="Table">
+    <PlaceObject>
+      <Table stretch="max">
+        <Tablehead>
+          <Tr>
+            <ForAll select="Header/Column">
+              <Td rotate="270">
+                <Paragraph color="{@textColor}">
+                  <Value select="sd:decode-html(.)"/>
+                </Paragraph>
+              </Td>
+            </ForAll>
+          </Tr>
+        </Tablehead>
+        <ForAll select="Row">
+          <Tr>
+            <ForAll select="Column">
+              <Td align="{if (empty(@horizontalAlign)) then 'left' else @horizontalAlign}"
+                  valign="{if (empty(@verticalAlign)) then 'top' else @verticalAlign}"
+                  class="{normalize-space(@class)}">
+                <Paragraph color="{@textColor}">
+                  <Value select="sd:decode-html(.)"/>
+                </Paragraph>
+              </Td>
+            </ForAll>
+          </Tr>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+  </Record>
+
+</Layout>

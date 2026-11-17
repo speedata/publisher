@@ -607,11 +607,17 @@ function M.insert_underline(parent, head, start, typ, style, colornumber)
         dashpattern = string.format("1 J [0 %g] 0 d", 2 * rule_width)
     end
 
-    local shift_down = (dp - rule_width) / 1.5
-    if typname == "line-through" then
-        shift_down = -1.6 * shift_down
+    local y
+    if typname == "overline" then
+        -- just above the highest glyph of the line
+        y = ht + rule_width
+    else
+        local shift_down = (dp - rule_width) / 1.5
+        if typname == "line-through" then
+            shift_down = -1.6 * shift_down
+        end
+        y = -1 * shift_down
     end
-    local y = -1 * shift_down
     local path
     if stylename == "double" then
         -- two thinner lines, the second one further away from the text
@@ -627,7 +633,9 @@ function M.insert_underline(parent, head, start, typ, style, colornumber)
                 y - gap / 2
             )
         else
-            path = string.format("0 %g m %g %g l 0 %g m %g %g l", y, -wd, y, y - gap, -wd, y - gap)
+            -- the second line is further away from the text
+            local y2 = typname == "overline" and y + gap or y - gap
+            path = string.format("0 %g m %g %g l 0 %g m %g %g l", y, -wd, y, y2, -wd, y2)
         end
         rule_width = rule_width * 0.7
     elseif stylename == "wavy" then

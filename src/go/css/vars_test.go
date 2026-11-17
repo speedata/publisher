@@ -230,6 +230,28 @@ func TestHTMLStyleAttributeWins(t *testing.T) {
 	}
 }
 
+func TestHTMLImportant(t *testing.T) {
+	css := `.bold { font-weight: bold !important } p.x { font-weight: normal }
+.it { font-style: italic ! important } .u { text-decoration: underline !important }
+.red { color: red !important } p { --c: blue !important } .v { color: var(--c) }`
+	html := `<body><p id="a" class="bold x">a</p><p id="b" class="it">b</p><p id="c" class="u">c</p>
+<p id="d" class="red" style="color: green">d</p><p id="e" class="red" style="color: green !important">e</p><p id="f" class="v">f</p></body>`
+	st := htmlStyles(t, html, css, nil)
+	checks := []struct{ id, prop, want string }{
+		{"a", "font-weight", "bold"},
+		{"b", "font-style", "italic"},
+		{"c", "text-decoration-line", "underline"},
+		{"d", "color", "red"},
+		{"e", "color", "green"},
+		{"f", "color", "blue"},
+	}
+	for _, c := range checks {
+		if got := st[c.id][c.prop]; got != c.want {
+			t.Errorf("#%s %s = %q, want %q", c.id, c.prop, got, c.want)
+		}
+	}
+}
+
 func TestContentAltText(t *testing.T) {
 	css := `
 .a::before { content: "A" / "alt" }

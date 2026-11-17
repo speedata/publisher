@@ -1,0 +1,54 @@
+.fs-success {
+  background-color: #c0ffc0 !important;
+}
+
+.fs-danger {
+  background-color: #ffc0c0 !important;
+}
+
+.fs-warning {
+  background-color: #ffff80 !important;
+}
+
+.fs-info {
+  background-color: #e0e0e0 !important;
+}
+
+.fs-bold {
+  font-weight: bold !important;
+}
+
+.fs-italic {
+  font-style: italic !important;
+}
+
+.fs-overline {
+  text-decoration: overline !important;
+}
+
+.fs-strikeout {
+  text-decoration: line-through !important;
+}
+
+.fs-underline {
+  text-decoration: underline !important;
+}
+
+.fs-rot90 {
+  transform: translate(0,0) rotate(-90deg);
+  /* rotate: 90; */
+}
+
+.fs-rot270 {
+  transform: translate(0,0) rotate(-270deg);
+  /* rotate: 270; */
+}
+
+paragraph.mixed {
+  text-decoration: underline dotted;
+  text-decoration-color: red;
+}
+
+paragraph.wavy {
+  text-decoration: overline wavy blue;
+}

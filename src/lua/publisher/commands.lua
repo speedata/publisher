@@ -7449,6 +7449,8 @@ function commands.td(layoutxml, dataxml)
             tab["background-text"] = x
         elseif k == "background-size" then
             tab["background-size"] = v
+        elseif k == "transform" or k == "rotate" then
+            tab.rotate = publisher.cssstyle.rotation(k, v)
         else
             tab[k] = v
         end

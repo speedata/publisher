@@ -12109,7 +12109,7 @@
         <para>Die Anzahl der Zeilen, die die Zelle überdecken soll. Voreinstellung ist 1.</para>
       </description>
     </attribute>
-    <attribute en="rotate" optional="yes" since="3.3.7" type="number">
+    <attribute en="rotate" optional="yes" since="3.3.7" type="number" css="rotate">
       <description xml:lang="en">
         <para>Rotate the contents of the table cell. Positive values return clockwise. This is experimental and currently only for text.</para>
       </description>

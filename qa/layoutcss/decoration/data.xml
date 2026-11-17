@@ -1,0 +1,40 @@
+<data>
+  <html>Hier ein deutlich längeres Memo zu Beispiel-Datensatz.
+&lt;br/&gt;
+Es sind auch drei HTML-Formatierungen wie &lt;b&gt;fett&lt;/b&gt;, &lt;i&gt;kursiv&lt;/i&gt; oder &lt;u&gt;unterstrichen&lt;/u&gt; enthalten.
+&lt;br/&gt;
+Es gibt auch &lt;span class="fs-overline"&gt;überstrichen&lt;/span&gt;, &lt;span class="fs-strikeout"&gt;durchgestrichen&lt;/span&gt; oder &lt;span class="fs-underline"&gt;unterstrichen&lt;/span&gt;.
+&lt;br/&gt;
+Es gibt auch &lt;span class="fs-bold"&gt;fett&lt;/span&gt;, &lt;span class="fs-italic"&gt;kursiv&lt;/span&gt; oder &lt;span class="fs-bold fs-italic"&gt;fett &amp; kursiv&lt;/span&gt;.
+  </html>
+  <Table>
+    <Header>
+      <Column textColor="DefaultTextColor"></Column>
+      <Column textColor="DefaultTextColor">Right Bold Overline Success</Column>
+      <Column textColor="DefaultTextColor">Center Strikeout Warning</Column>
+      <Column textColor="DefaultTextColor">Left Italic Underline Danger</Column>
+      <Column textColor="DefaultTextColor">Diverses</Column>
+    </Header>
+    <Row>
+      <Column textColor="DefaultTextColor">&lt;br/&gt;         1&lt;br/&gt;&lt;br/&gt;</Column>
+      <Column textColor="DefaultTextColor" horizontalAlign="right" verticalAlign="top" class="fs-success fs-bold fs-overline ">Success</Column>
+      <Column textColor="DefaultTextColor" horizontalAlign="center" verticalAlign="top" class="fs-warning fs-strikeout ">Warning</Column>
+      <Column textColor="DefaultTextColor" horizontalAlign="left" verticalAlign="top" class="fs-danger fs-italic fs-underline ">Danger</Column>
+      <Column textColor="DefaultTextColor" verticalAlign="top" class="fs-rot90 ">Info</Column>
+    </Row>
+    <Row>
+      <Column textColor="DefaultTextColor">&lt;br/&gt;         2&lt;br/&gt;&lt;br/&gt;</Column>
+      <Column textColor="DefaultTextColor" horizontalAlign="right" verticalAlign="bottom" class="fs-success fs-bold fs-overline ">Success</Column>
+      <Column textColor="DefaultTextColor" horizontalAlign="center" verticalAlign="bottom" class="fs-warning fs-strikeout ">Warning</Column>
+      <Column textColor="DefaultTextColor" horizontalAlign="left" verticalAlign="bottom" class="fs-danger fs-italic fs-underline ">Danger</Column>
+      <Column textColor="DefaultTextColor" verticalAlign="bottom" class="fs-rot270 ">Info</Column>
+    </Row>
+    <Row>
+      <Column textColor="DefaultTextColor">&lt;br/&gt;         3&lt;br/&gt;&lt;br/&gt;</Column>
+      <Column textColor="DefaultTextColor" horizontalAlign="right" verticalAlign="middle" class="fs-success fs-bold fs-overline ">Success</Column>
+      <Column textColor="DefaultTextColor" horizontalAlign="center" verticalAlign="middle" class="fs-warning fs-strikeout ">Warning</Column>
+      <Column textColor="DefaultTextColor" horizontalAlign="left" verticalAlign="middle" class="fs-danger fs-italic fs-underline ">Danger</Column>
+      <Column textColor="DefaultTextColor" verticalAlign="middle" class="fs-rot270 ">Info</Column>
+    </Row>
+  </Table>
+</data>

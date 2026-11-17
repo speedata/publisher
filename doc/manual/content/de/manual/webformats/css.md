@@ -172,6 +172,7 @@ Ist das Attribut gesetzt, gelten CSS-Regeln und geerbte Werte für diese Eigensc
 Wie in CSS erben die inneren Befehle Schrift- und Texteigenschaften von den umgebenden.
 Vererbt werden `color`, `font-family`, `font-size`, `font-style`, `font-weight`, `line-height`, `text-align`, `text-indent`, `hyphens`, `letter-spacing`, `orphans` und `widows`.
 Diese Werte geben `<Textblock>`, `<Paragraph>`, `<Table>`, `<Tablehead>`, `<Tablefoot>`, `<Tr>` und `<Td>` an ihren Inhalt weiter.
+Ebenso gilt eine Textauszeichnung mit `text-decoration` (zum Beispiel an einer Tabellenzelle) für den Text darin.
 
 ```xml
 <Stylesheet>
@@ -191,12 +192,12 @@ Ein Attribut ersetzt auch die geerbten Werte, für die es steht: ein Absatz mit 
 
 | Befehl | CSS-Eigenschaften |
 |---|---|
-| `paragraph` | `color`, `background-color`, `font-family`, `font-size`, `font-weight`, `font-style`, `line-height`, `text-align`, `text-indent`, `hyphens`, `letter-spacing`, `margin-top`, `margin-bottom`, `break-before`, `break-after`, `orphans`, `widows` |
+| `paragraph` | `color`, `background-color`, `font-family`, `font-size`, `font-weight`, `font-style`, `text-decoration` (`underline`, `overline`, `line-through`, auch mit Stil und Farbe), `line-height`, `text-align`, `text-indent`, `hyphens`, `letter-spacing`, `margin-top`, `margin-bottom`, `break-before`, `break-after`, `orphans`, `widows` |
 | `textblock` | die vererbten Eigenschaften (siehe oben) sowie `width`, `column-count`, `column-gap` |
 | `table` | die vererbten Eigenschaften, `padding` und `padding-*` (Vorgabe für alle Zellen), `border-collapse` |
 | `tablehead`, `tablefoot` | die vererbten Eigenschaften |
 | `tr` | die vererbten Eigenschaften, `background-color`, `vertical-align` |
-| `td` | die vererbten Eigenschaften, `vertical-align`, `background-color`, `padding`, `padding-*`, `border-*-width`, `border-*-color` sowie `background-text` und die übrigen Hintergrund-Attribute |
+| `td` | die vererbten Eigenschaften, `vertical-align`, `background-color`, `padding`, `padding-*`, `border-*-width`, `border-*-color`, `transform` (nur `rotate()`) bzw. `rotate` für das Attribut `rotate` sowie `background-text` und die übrigen Hintergrund-Attribute |
 | `tablerule` | `height` (Linienstärke), `background-color` (Farbe), `rule-start` |
 | `span` | `background-color`, `background-padding-top`, `background-padding-bottom`, `letter-spacing` |
 | `u` | `border-style` (`dashed` für eine gestrichelte Linie) |
@@ -316,13 +317,15 @@ So lassen sich zum Beispiel Symbole aus einer Icon-Schrift in den Text einfügen
 Die folgenden Eigenschaften werden bei der HTML-Verarbeitung ausgewertet:
 
 * Schrift: `font-family`, `font-size`, `font-style`, `font-weight` (`bold`, `normal` oder Zahlenwerte, ab 600 fett)
-* Text: `color`, `text-align`, `text-decoration` (bzw. `text-decoration-line` mit `underline` und `line-through`, `text-decoration-style` mit `solid`, `double`, `dotted`, `dashed` und `wavy`, `text-decoration-color`), `line-height`, `white-space` (`normal`, `pre`), `vertical-align` (`super`, `sub`) und `hyphens` (`none` bzw. `manual` schaltet die Silbentrennung aus)
+* Text: `color`, `text-align`, `text-decoration` (bzw. `text-decoration-line` mit `underline`, `overline` und `line-through`, `text-decoration-style` mit `solid`, `double`, `dotted`, `dashed` und `wavy`, `text-decoration-color`), `line-height`, `white-space` (`normal`, `pre`), `vertical-align` (`super`, `sub`) und `hyphens` (`none` bzw. `manual` schaltet die Silbentrennung aus)
 * Box-Modell: `margin-*`, `padding-*`, `border-*` (Breite, Stil und Farbe je Seite sowie `border-radius` je Ecke), `width`, `height`
 * Hintergrund: `background-color`
 * Listen: `list-style-type`, `list-style-position`, `list-style` sowie das Pseudoelement `li::marker` (`content`, `color`, `font-family`, `font-size`, `padding-right`, `padding-bottom`)
 * Pseudoelemente `::before` und `::after` an Block- und Inline-Elementen: `content` sowie `color`, `font-family`, `font-style` und `font-weight`; bei Blockelementen für `::before` zusätzlich `width` und `margin-left`. Das Pseudoelement erbt die Eigenschaften seines Elements.
 * Tabellen: `border-collapse`
 * Umbruch: `break-before`, `break-after`
+
+Eine Angabe mit `!important` gewinnt gegen die übrigen Regeln und gegen das Attribut `style`.
 
 Nicht jede Eigenschaft ist in jeder Situation vollständig umgesetzt.
 Den aktuellen Stand einzelner Eigenschaften dokumentiert der [Teststatus im HTML-Kapitel]({{< relref "html#teststatus" >}}).

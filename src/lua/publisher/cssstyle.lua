@@ -383,8 +383,90 @@ function M.box_sides(value)
     return top, right, bottom, v[4] or right
 end
 
+local decoration_lines = { none = true, underline = true, overline = true, ["line-through"] = true }
+local decoration_styles = { solid = true, double = true, dotted = true, dashed = true, wavy = true }
+
+-- Returns line, style and color of the text decoration. The longhand
+-- properties win over the parts of the shorthand `text-decoration`.
+---@param props table<string, string>
+---@return string? line
+---@return string? style
+---@return string? color
+local function text_decoration(props)
+    local line, style, color
+    for part in string.gmatch(props["text-decoration"] or "", "%S+") do
+        if decoration_lines[part] then
+            line = part
+        elseif decoration_styles[part] then
+            style = part
+        else
+            color = part
+        end
+    end
+    line = props["text-decoration-line"] or line
+    style = props["text-decoration-style"] or style
+    color = props["text-decoration-color"] or color
+    if line and not decoration_lines[line] then
+        invalid("text-decoration-line", line)
+        line = nil
+    end
+    if style and not decoration_styles[style] then
+        invalid("text-decoration-style", style)
+        style = nil
+    end
+    return line, style, color
+end
+
+local angle_units = { deg = 1, grad = 0.9, rad = 180 / math.pi, turn = 360 }
+
+-- Returns the angle in degrees of a CSS angle such as `90deg` or `0.25turn`.
+---@param value string
+---@return number?
+local function angle_degrees(value)
+    local num, unit = string.match(value, "^%s*([-+]?[%d.]+)%s*(%a*)%s*$")
+    num = tonumber(num)
+    if not num then
+        return nil
+    end
+    if unit == "" then
+        -- only 0 is allowed without a unit in CSS, but a plain number
+        -- is clear enough
+        return num
+    end
+    local factor = angle_units[string.lower(unit)]
+    return factor and num * factor
+end
+
+-- Returns the rotation in degrees (clockwise) from the CSS property
+-- `transform` (only the rotate() functions count) or `rotate`.
+---@param property string "transform" or "rotate"
+---@param value string
+---@return number?
+function M.rotation(property, value)
+    if property == "rotate" then
+        if value == "none" then
+            return 0
+        end
+        local deg = angle_degrees(value)
+        if not deg then
+            invalid(property, value)
+        end
+        return deg
+    end
+    local ret
+    for arg in string.gmatch(value, "rotate%s*%((.-)%)") do
+        local deg = angle_degrees(arg)
+        if not deg then
+            invalid(property, value)
+            return nil
+        end
+        ret = (ret or 0) + deg
+    end
+    return ret
+end
+
 -- Sets the options for `Par:append` from the CSS properties of a paragraph:
--- color, bold, italic and background color.
+-- color, bold, italic, background color and text decoration.
 ---@param props table<string, string>
 ---@param params table
 ---@return nil
@@ -403,6 +485,14 @@ function M.paragraph_options(props, params)
     end
     if props["background-color"] then
         params.backgroundcolor = colors_module.get_colorindex_from_name(props["background-color"])
+    end
+    local line, style, color = text_decoration(props)
+    if line and line ~= "none" then
+        params.textdecorationline = line
+        params.textdecorationstyle = style or "solid"
+        if color and color ~= "currentcolor" then
+            params.textdecorationcolor = colors_module.get_colorindex_from_name(color)
+        end
     end
 end
 

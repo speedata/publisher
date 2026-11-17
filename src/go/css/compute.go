@@ -111,34 +111,41 @@ func (c *CSS) FillComputedMaps(r *Result) error {
 
 	// 3) Apply stylesheet rules by ascending specificity, append as !props.
 	//    For equal specificity, insertion order is the source order (your original behavior).
-	for _, s := range specs {
-		for _, sr := range rulesBySpec[s] {
-			// Find all nodes matching this selector.
-			for _, n := range cascadia.QueryAll(doc, sr.selector) {
-				// Build prefix for pseudo-element (like your original code)
-				var prefix string
-				if pe := sr.selector.PseudoElement(); pe != "" {
-					prefix = pe + "::"
+	//    The style attribute (kept as a single "layer") wins over the
+	//    stylesheet rules. Declarations with !important come after all
+	//    others, again rules first, then the style attribute.
+	for _, important := range []bool{false, true} {
+		for _, s := range specs {
+			for _, sr := range rulesBySpec[s] {
+				// Find all nodes matching this selector.
+				for _, n := range cascadia.QueryAll(doc, sr.selector) {
+					// Build prefix for pseudo-element (like your original code)
+					var prefix string
+					if pe := sr.selector.PseudoElement(); pe != "" {
+						prefix = pe + "::"
+					}
+					virt := nodeVirtAttrs[n]
+					st := state(n)
+					for _, single := range sr.rule {
+						if isImportant(single.Value) == important {
+							virt = st.add(virt, prefix, single, false)
+						}
+					}
+					nodeVirtAttrs[n] = virt
 				}
-				virt := nodeVirtAttrs[n]
-				st := state(n)
-				for _, single := range sr.rule {
-					virt = st.add(virt, prefix, single, false)
-				}
-				nodeVirtAttrs[n] = virt
 			}
 		}
-	}
 
-	// 3a) The style attribute (kept as a single "layer") wins over the
-	//     stylesheet rules.
-	for n, rules := range inlineStyles {
-		st := state(n)
-		virt := nodeVirtAttrs[n]
-		for _, single := range rules {
-			virt = st.add(virt, "", single, true)
+		for n, rules := range inlineStyles {
+			st := state(n)
+			virt := nodeVirtAttrs[n]
+			for _, single := range rules {
+				if isImportant(single.Value) == important {
+					virt = st.add(virt, "", single, true)
+				}
+			}
+			nodeVirtAttrs[n] = virt
 		}
-		nodeVirtAttrs[n] = virt
 	}
 
 	// 3b) Custom properties: inherit them from the root down and replace
@@ -224,9 +231,17 @@ func withoutAltText(toks tokenstream) tokenstream {
 	return toks
 }
 
+// isImportant reports whether the value tokens end with !important.
+func isImportant(toks tokenstream) bool {
+	_, important := splitImportant(toks)
+	return important
+}
+
 // add appends a declaration to the virtual attribute list virt and returns
-// the new list. Custom properties are kept in st.
+// the new list. Custom properties are kept in st. A trailing !important is
+// removed from the value, the caller takes care of the order.
 func (st *nodeVarState) add(virt []html.Attribute, prefix string, single qrule, inline bool) []html.Attribute {
+	single.Value, _ = splitImportant(single.Value)
 	// The scanner splits "--name" into "-" and "-name", stringValue does
 	// not restore it, so check the source text.
 	if name := sourceString(single.Key); isCustomProperty(name) {

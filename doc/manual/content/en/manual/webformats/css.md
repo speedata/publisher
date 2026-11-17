@@ -172,6 +172,7 @@ If the attribute is set, CSS rules and inherited values for these properties do 
 As in CSS, the inner commands inherit font and text properties from the surrounding ones.
 The inherited properties are `color`, `font-family`, `font-size`, `font-style`, `font-weight`, `line-height`, `text-align`, `text-indent`, `hyphens`, `letter-spacing`, `orphans` and `widows`.
 `<Textblock>`, `<Paragraph>`, `<Table>`, `<Tablehead>`, `<Tablefoot>`, `<Tr>` and `<Td>` pass these values on to their contents.
+Likewise, a `text-decoration` (for example on a table cell) applies to the text inside.
 
 ```xml
 <Stylesheet>
@@ -191,12 +192,12 @@ An attribute also replaces the inherited values it stands for: a paragraph with 
 
 | Command | CSS properties |
 |---|---|
-| `paragraph` | `color`, `background-color`, `font-family`, `font-size`, `font-weight`, `font-style`, `line-height`, `text-align`, `text-indent`, `hyphens`, `letter-spacing`, `margin-top`, `margin-bottom`, `break-before`, `break-after`, `orphans`, `widows` |
+| `paragraph` | `color`, `background-color`, `font-family`, `font-size`, `font-weight`, `font-style`, `text-decoration` (`underline`, `overline`, `line-through`, also with style and color), `line-height`, `text-align`, `text-indent`, `hyphens`, `letter-spacing`, `margin-top`, `margin-bottom`, `break-before`, `break-after`, `orphans`, `widows` |
 | `textblock` | the inherited properties (see above) and `width`, `column-count`, `column-gap` |
 | `table` | the inherited properties, `padding` and `padding-*` (default for all cells), `border-collapse` |
 | `tablehead`, `tablefoot` | the inherited properties |
 | `tr` | the inherited properties, `background-color`, `vertical-align` |
-| `td` | the inherited properties, `vertical-align`, `background-color`, `padding`, `padding-*`, `border-*-width`, `border-*-color` as well as `background-text` and the other background attributes |
+| `td` | the inherited properties, `vertical-align`, `background-color`, `padding`, `padding-*`, `border-*-width`, `border-*-color`, `transform` (only `rotate()`) or `rotate` for the attribute `rotate` as well as `background-text` and the other background attributes |
 | `tablerule` | `height` (rule width), `background-color` (color), `rule-start` |
 | `span` | `background-color`, `background-padding-top`, `background-padding-bottom`, `letter-spacing` |
 | `u` | `border-style` (`dashed` for a dashed line) |
@@ -316,13 +317,15 @@ This way you can, for example, insert symbols from an icon font into the text, s
 The following properties are evaluated by the HTML processing:
 
 * Font: `font-family`, `font-size`, `font-style`, `font-weight` (`bold`, `normal` or numbers, bold from 600 on)
-* Text: `color`, `text-align`, `text-decoration` (or `text-decoration-line` with `underline` and `line-through`, `text-decoration-style` with `solid`, `double`, `dotted`, `dashed` and `wavy`, `text-decoration-color`), `line-height`, `white-space` (`normal`, `pre`), `vertical-align` (`super`, `sub`) and `hyphens` (`none` or `manual` turns off hyphenation)
+* Text: `color`, `text-align`, `text-decoration` (or `text-decoration-line` with `underline`, `overline` and `line-through`, `text-decoration-style` with `solid`, `double`, `dotted`, `dashed` and `wavy`, `text-decoration-color`), `line-height`, `white-space` (`normal`, `pre`), `vertical-align` (`super`, `sub`) and `hyphens` (`none` or `manual` turns off hyphenation)
 * Box model: `margin-*`, `padding-*`, `border-*` (width, style and color per side plus `border-radius` per corner), `width`, `height`
 * Background: `background-color`
 * Lists: `list-style-type`, `list-style-position`, `list-style` and the pseudo-element `li::marker` (`content`, `color`, `font-family`, `font-size`, `padding-right`, `padding-bottom`)
 * Pseudo-elements `::before` and `::after` on block and inline elements: `content` as well as `color`, `font-family`, `font-style` and `font-weight`; on block elements, `::before` also supports `width` and `margin-left`. The pseudo-element inherits the properties of its element.
 * Tables: `border-collapse`
 * Breaks: `break-before`, `break-after`
+
+A declaration with `!important` wins over the other rules and over the `style` attribute.
 
 Not every property is fully implemented in every situation.
 The current state of individual properties is documented in the [test status in the HTML chapter]({{< relref "html#test-status" >}}).

@@ -162,7 +162,7 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
             splib.log("warning", "HTML: color not defined", "color", color)
         end
     end
-    if line == "underline" or line == "line-through" then
+    if line == "underline" or line == "overline" or line == "line-through" then
         options.textdecorationline = line
         options.textdecorationstyle = style
     end

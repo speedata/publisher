@@ -54,6 +54,12 @@ local inherited_properties = {
     ["orphans"] = true,
     ["text-align"] = true,
     ["text-indent"] = true,
+    -- Not inherited in CSS, but a decoration of a cell or paragraph
+    -- applies to the text inside, which has the same effect here.
+    ["text-decoration"] = true,
+    ["text-decoration-color"] = true,
+    ["text-decoration-line"] = true,
+    ["text-decoration-style"] = true,
     ["widows"] = true,
 }
 
