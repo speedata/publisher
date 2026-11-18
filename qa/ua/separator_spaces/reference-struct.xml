@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document>
+  <P page="1">
+    <Span page="1" lang="en">
+      <MCID>0</MCID>
+    </Span>
+    <MCID>1</MCID>
+    <MCID>2</MCID>
+    <MCID>3</MCID>
+  </P>
+  <P page="1">
+    <MCID>4</MCID>
+    <MCID>5</MCID>
+  </P>
+  <P page="1">
+    <MCID>6</MCID>
+    <MCID>8</MCID>
+  </P>
+  <P page="1">
+    <MCID>9</MCID>
+  </P>
+  <P page="1">
+    <MCID>10</MCID>
+    <MCID>11</MCID>
+  </P>
+  <P page="1">
+    <MCID>12</MCID>
+    <MCID>13</MCID>
+    <MCID>14</MCID>
+  </P>
+</Document>

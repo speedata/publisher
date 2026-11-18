@@ -1,0 +1,15 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <PDFOptions format="PDF/UA" title="Spaces at HSpace, Br and tabs" mainlanguage="en"/>
+  <Trace dump-structtree="yes"/>
+  <DefineTextformat name="tabs" tab-stops="3cm, 6cm"/>
+  <Record element="data">
+    <Output><Text>
+      <Paragraph><Span language="en"><Value>Yuhana</Value></Span><HSpace width="2pt"/><Value>20:3 aïdios</Value><Br/><Value>Roma</Value><HSpace width="2pt"/><Value>1:20</Value></Paragraph>
+      <Paragraph><Value>Left</Value><HSpace/><Value>Right</Value></Paragraph>
+      <Paragraph><Value>Chapter</Value><HSpace leader=" . "/><Value>5</Value></Paragraph>
+      <Paragraph><HSpace width="1cm"/><Value>Indent</Value></Paragraph>
+      <Paragraph><Value>Word </Value><HSpace width="2pt"/><Value>next</Value></Paragraph>
+      <Paragraph textformat="tabs"><Value>A&#9;B&#9;C</Value></Paragraph>
+    </Text></Output>
+  </Record>
+</Layout>

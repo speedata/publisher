@@ -2439,6 +2439,8 @@ function commands.hspace(layoutxml, dataxml)
             -- the width with the font's interword space (see nodes.lua).
             publisher.attribute_helpers.setprop(n, "hspace_fixed", true)
         end
+        -- text extraction sees a space here (interwordspace)
+        publisher.attribute_helpers.setprop(n, "textseparator", true)
         if leadertext then
             n.subtype = 100
             n.leader = publisher.nodes.mknodes(leadertext, options)

@@ -1643,6 +1643,7 @@ function M.hbglyphlist(arguments)
                     list, cur = node.insert_after(list, cur, tabglue)
                 elseif parameter.tab == "hspace" then
                     local tabglue = set_glue(nil, { width = 0, stretch = 2 ^ 16, stretch_order = 3 })
+                    publisher.attribute_helpers.setprop(tabglue, "textseparator", true)
                     list, cur = node.insert_after(list, cur, tabglue)
                 else
                     -- a regular space, handled above (tabregularspace)
@@ -2738,14 +2739,16 @@ end
 -- width, so the layout does not change. The new nodes take the attributes
 -- and properties of the glue (color, link, structure element).
 --
--- A forced line break (Br) gets a space as well, so that the
--- last word of a line and the first word of the next line do not run
--- together. It is inserted only after text, so empty lines add none.
+-- A forced line break (Br), a tab and an HSpace get a space as well,
+-- so that the words before and after do not run together. It is
+-- inserted only after text, so empty lines or an HSpace at the start of
+-- a line add none.
 --
 -- In PDF/UA, all content is tagged or an artifact. A space between two
--- structure elements (outside of any marked content) becomes an artifact.
+-- structure elements (outside of any marked content) is appended to the
+-- tagged text before it, or becomes an artifact if there is none.
 ---@param head Node? Node list of a page or box.
----@param state? { mcdepth: integer, textbefore: boolean? } Marked content depth in the page so far, text since the last space.
+---@param state? { mcdepth: integer, textbefore: boolean?, lastglyph: Node? } Marked content depth in the page so far, text since the last space, last tagged glyph.
 function M.insert_interword_spaces(head, state)
     state = state or { mcdepth = 0 }
     local pdfua = publisher.options.format == "PDF/UA"
@@ -2753,9 +2756,12 @@ function M.insert_interword_spaces(head, state)
     local n = head
     while n do
         local id = n.id
-        local newline = false
+        -- glue that separates words without being a word space
+        local separator = false
         if id == publisher.glue_node and lastfont and state.textbefore then
-            newline = node.has_attribute(n, att_newline) ~= nil
+            separator = node.has_attribute(n, att_newline) ~= nil
+                or node.has_attribute(n, publisher.att_tab) ~= nil
+                or publisher.attribute_helpers.getprop(n, "textseparator") == true
         end
         if id == publisher.hlist_node or id == publisher.vlist_node then
             M.insert_interword_spaces(n.list, state)
@@ -2770,20 +2776,33 @@ function M.insert_interword_spaces(head, state)
             lastfont = n.font
             lastexpansion = n.expansion_factor
             state.textbefore = true
+            -- last glyph inside marked content (tagged text)
+            state.lastglyph = state.mcdepth > 0 and n or nil
         elseif
             id == publisher.glue_node
             and lastfont
-            and (newline or node.has_attribute(n, att_spaceglue) or node.has_attribute(n, publisher.att_tie_glue))
+            and (separator or node.has_attribute(n, att_spaceglue) or node.has_attribute(n, publisher.att_tie_glue))
         then
             state.textbefore = false
             local props = node.getproperty(n)
             local slot, w = spaceglyph(lastfont)
             if slot and not (props and props.interwordspace) then
+                -- In PDF/UA, a space outside of marked content or in an
+                -- artifact (the dots of a leader) goes to the end of the
+                -- tagged text before it, so it belongs to that structure
+                -- element and screen readers see it.
+                local after
+                if pdfua then
+                    local artifact = props and props.role == publisher.structure_tree.get_rolenum("Artifact")
+                    if state.mcdepth <= 0 or artifact then
+                        after = state.lastglyph
+                    end
+                end
                 local g = node.new(publisher.glyph_node)
                 ---@cast g GlyphNode
                 g.font = lastfont
                 g.char = slot
-                g.attr = n.attr
+                g.attr = (after or n).attr
                 -- The same expansion as the text before (font expansion
                 -- of the line) keeps the glyphs in one PDF text run, the
                 -- kern takes the expanded width.
@@ -2794,8 +2813,8 @@ function M.insert_interword_spaces(head, state)
                 local k = node.new(publisher.kern_node)
                 k.subtype = 1
                 k.kern = -w
-                k.attr = n.attr
-                if props then
+                k.attr = g.attr
+                if props and not after then
                     local gp, kp = {}, {}
                     for key, v in pairs(props) do
                         gp[key] = v
@@ -2803,15 +2822,21 @@ function M.insert_interword_spaces(head, state)
                     end
                     node.setproperty(g, gp)
                     node.setproperty(k, kp)
-                else
+                elseif not props then
                     props = {}
                     node.setproperty(n, props)
                 end
                 -- the glue keeps its space when the list is shipped out again
                 props.interwordspace = true
-                head = node.insert_before(head, n, g)
-                head = node.insert_before(head, n, k)
-                if pdfua and state.mcdepth <= 0 then
+                if after then
+                    node.insert_after(after, after, g)
+                    node.insert_after(g, g, k)
+                    state.lastglyph = nil
+                else
+                    head = node.insert_before(head, n, g)
+                    head = node.insert_before(head, n, k)
+                end
+                if pdfua and state.mcdepth <= 0 and not after then
                     local bmc = node.new("whatsit", "pdf_literal")
                     bmc.data = "/Artifact BMC"
                     local emc = node.new("whatsit", "pdf_literal")
