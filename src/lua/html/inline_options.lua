@@ -19,8 +19,9 @@ local function background_color(styles)
 end
 
 -- An inline element is drawn as a box (see publisher.htmlbox) when it
--- has a border or a background with rounded corners. The box draws the
--- background, so it can follow the rounded corners.
+-- has a border, a background with rounded corners or a background and
+-- display: inline-block. The box draws the background, so it can follow
+-- the rounded corners and covers the vertical padding.
 ---@param styles table
 ---@return boolean
 function M.is_boxed(styles)
@@ -29,6 +30,9 @@ function M.is_boxed(styles)
     end
     if not background_color(styles) then
         return false
+    end
+    if styles.display == "inline-block" then
+        return true
     end
     for _, corner in ipairs({ "top-left", "top-right", "bottom-right", "bottom-left" }) do
         if units.getsize(styles, styles["border-" .. corner .. "-radius"], styles.fontsize_sp) > 0 then

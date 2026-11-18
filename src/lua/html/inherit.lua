@@ -15,6 +15,7 @@ local M = {}
 ---@field content? string
 ---@field hyphens? string
 ---@field has_border? boolean
+---@field display? string
 ---@field listindent? number
 ---@field listlevel? integer
 ---@field ollevel? integer

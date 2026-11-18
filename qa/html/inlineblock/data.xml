@@ -1,0 +1,7 @@
+<data><html>
+<p>Zahlen: <span class="badge">1</span> <span class="badge info">23</span> <span class="badge warn">456</span> und <span class="badge info">info</span> Text.</p>
+<p>vertical-align: middle <span class="badge info big">xg</span> baseline <span class="badge info big base">xg</span> Ende.</p>
+<p>min-width, text-align: center <span class="badge info wide">1</span> und mit Rahmen <span class="badge framed">danger</span> und eckig <span class="badge info square">eckig</span>.</p>
+<p>Kein Umbruch: Ein langer Text damit der Badge am Zeilenende <span class="badge info">nicht umbricht</span> sondern ganz.</p>
+<p>Mehrzeilig: Ein Absatz mit einem <span class="badge warn">warning</span> Badge in der ersten und noch einem <span class="badge info">info</span> Badge in der zweiten Zeile.</p>
+</html></data>

@@ -204,21 +204,56 @@ local function spacer(wd, origin, opts)
     return r
 end
 
--- Adds the horizontal margin, border and padding of an inline element
--- around its runs, as in the browser: they take space in the line, the
--- vertical ones do not. The rule in front of the content carries the
--- border properties (borderstart), the rule after it ends the border
--- (borderend with the same id). The border is drawn at shipout, see
--- nodes.insert_nonmoving_whatsits, and split at line breaks, see
--- split_inline_borders.
----@param runs table[] The runs of the element, changed in place.
+-- The font of the text of an element (the variant for bold and italic).
+---@param options table Options from inline_options.set_options_for_mknodes.
+---@return table? font The font table (see fonts/fontloader.lua).
+local function font_of(options)
+    if not options.fontfamily then
+        return nil
+    end
+    local variant = "normal"
+    if options.bold and options.italic then
+        variant = "bolditalic"
+    elseif options.bold then
+        variant = "bold"
+    elseif options.italic then
+        variant = "italic"
+    end
+    local instance = publisher.fonts.get_fontinstance(options.fontfamily, variant)
+    return publisher.fonts.used_fonts[instance]
+end
+
+-- The depth of a line box with the line height `lineheight` for the font
+-- of the element. As in the browser the line box is centered on the area
+-- between the descender and the ascender of the font, so it does not
+-- depend on the letters inside.
+---@param options table
+---@param lineheight integer
+---@return integer?
+local function linebox_depth(options, lineheight)
+    local f = font_of(options)
+    if f and f.ascender and f.descender then
+        local halfleading = (f.ascender + f.descender - lineheight) / 2
+        return math.round(f.descender - halfleading)
+    end
+    return nil
+end
+
+-- The rules in front of and after the content of an inline element: they
+-- have the width of the horizontal border and padding. For an element
+-- with border or background (see inline_options.is_boxed), the first rule
+-- carries the border properties (borderstart) and the second ends the
+-- border (borderend with the same id). The border and the background are
+-- drawn at shipout, see nodes.insert_nonmoving_whatsits and
+-- publisher.htmlbox; they are `lineheight` high plus the vertical padding
+-- and border.
 ---@param styles HtmlStyles
----@param options table The options of the element (with options.border if it has a border).
----@param parent_options table The options of the parent, for the background of the margin.
-local function add_inline_box(runs, styles, options, parent_options)
+---@param options table The options of the element (with options.border if it is boxed).
+---@param lineheight integer
+---@return Node? startrule nil if the element has no border and no horizontal padding.
+---@return Node? endrule
+local function inline_box_rules(styles, options, lineheight)
     local fs = styles.fontsize_sp
-    local margin_left = units.getsize(styles, styles["margin-left"], fs)
-    local margin_right = units.getsize(styles, styles["margin-right"], fs)
     local border = inline_options.is_boxed(styles) and options.border or nil
     local left, right
     if border then
@@ -228,47 +263,20 @@ local function add_inline_box(runs, styles, options, parent_options)
         left = units.getsize(styles, styles["padding-left"], fs)
         right = units.getsize(styles, styles["padding-right"], fs)
     end
-    if not border and left == 0 and right == 0 and margin_left == 0 and margin_right == 0 then
-        return
-    end
-    local first, last = {}, {}
-    if margin_left ~= 0 then
-        first[#first + 1] = spacer(margin_left, "inline margin-left", parent_options)
+    if not border and left == 0 and right == 0 then
+        return nil, nil
     end
     -- the background covers the padding, not the margin
     local startrule = spacer(left, "inline border start", options)
-    first[#first + 1] = startrule
     local endrule = spacer(right, "inline border end", options)
-    last[1] = endrule
-    if margin_right ~= 0 then
-        last[2] = spacer(margin_right, "inline margin-right", parent_options)
-    end
     if border then
         inline_box_counter = inline_box_counter + 1
         local setprop = publisher.attribute_helpers.setprop
-        local fam = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily]
         setprop(startrule, "borderstart", inline_box_counter)
-        setprop(startrule, "lineheight", fam and fam.size or fs)
-        -- The box is one font size high. It sits where the browser puts a
-        -- box with line-height 1: centered on the area between the
-        -- descender and the ascender of the font, so it does not depend on
-        -- the letters inside.
-        local f
-        if fam then
-            local variant = "normal"
-            if options.bold and options.italic then
-                variant = "bolditalic"
-            elseif options.bold then
-                variant = "bold"
-            elseif options.italic then
-                variant = "italic"
-            end
-            local instance = publisher.fonts.get_fontinstance(options.fontfamily, variant)
-            f = publisher.fonts.used_fonts[instance]
-        end
-        if f and f.ascender and f.descender then
-            local halfleading = (f.ascender + f.descender - fam.size) / 2
-            setprop(startrule, "depth", math.round(f.descender - halfleading))
+        setprop(startrule, "lineheight", lineheight)
+        local depth = linebox_depth(options, lineheight)
+        if depth then
+            setprop(startrule, "depth", depth)
         end
         for index, value in pairs(border) do
             if index ~= "borderstart" then
@@ -277,15 +285,194 @@ local function add_inline_box(runs, styles, options, parent_options)
         end
         setprop(endrule, "borderend", inline_box_counter)
     end
-    local head = first[1]
-    for i = 2, #first do
-        node.insert_after(head, node.tail(head), first[i])
+    return startrule, endrule
+end
+
+-- Adds the horizontal margin, border and padding of an inline element
+-- around its runs, as in the browser: they take space in the line, the
+-- vertical ones do not. The border is split at line breaks, see
+-- split_inline_borders. The border box is one font size high (as with
+-- line-height 1).
+---@param runs table[] The runs of the element, changed in place.
+---@param styles HtmlStyles
+---@param options table The options of the element (with options.border if it has a border).
+---@param parent_options table The options of the parent, for the background of the margin.
+local function add_inline_box(runs, styles, options, parent_options)
+    local fs = styles.fontsize_sp
+    local margin_left = units.getsize(styles, styles["margin-left"], fs)
+    local margin_right = units.getsize(styles, styles["margin-right"], fs)
+    local fam = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily]
+    local startrule, endrule = inline_box_rules(styles, options, fam and fam.size or fs)
+    if not startrule and margin_left == 0 and margin_right == 0 then
+        return
     end
-    if last[2] then
-        node.insert_after(last[1], last[1], last[2])
+    local first, last = {}, {}
+    if margin_left ~= 0 then
+        first[#first + 1] = spacer(margin_left, "inline margin-left", parent_options)
     end
-    table.insert(runs, 1, head)
-    runs[#runs + 1] = last[1]
+    if startrule then
+        first[#first + 1] = startrule
+        last[#last + 1] = endrule
+    end
+    if margin_right ~= 0 then
+        last[#last + 1] = spacer(margin_right, "inline margin-right", parent_options)
+    end
+    if #first > 0 then
+        local head = first[1]
+        for i = 2, #first do
+            node.insert_after(head, node.tail(head), first[i])
+        end
+        table.insert(runs, 1, head)
+    end
+    if #last > 0 then
+        local head = last[1]
+        for i = 2, #last do
+            node.insert_after(head, node.tail(head), last[i])
+        end
+        runs[#runs + 1] = head
+    end
+end
+
+-- The x-height (height of the letter x) at the font size `size`, taken
+-- from the font of `options` (for vertical-align: middle).
+---@param options table
+---@param size integer
+---@return integer
+local function x_height(options, size)
+    local f = font_of(options)
+    if f and f.characters and f.size > 0 then
+        local x = f.characters[120]
+        if x and x.height then
+            return math.round(x.height / f.size * size)
+        end
+    end
+    return math.round(size / 2)
+end
+
+-- Turns the runs of an element with display: inline-block into one box
+-- that does not break across lines (as in the browser for a single line
+-- of contents). The box gets the vertical padding and border as height,
+-- so the line makes room for it. Its content is line-height high and at
+-- least min-width (or width) wide; text-align places narrower contents.
+-- vertical-align: middle centers the box on the middle of the x-height of
+-- the parent.
+---@param runs table[] The runs of the element.
+---@param styles HtmlStyles
+---@param options table The options of the element.
+---@param parent_options table The options of the parent.
+---@return table[] runs The new runs: margins and the box.
+local function make_inline_block(runs, styles, options, parent_options)
+    local fs = styles.fontsize_sp or 0
+    local head
+    for i = 1, #runs do
+        local r = runs[i]
+        if type(r) == "string" then
+            r = publisher.nodes.mknodes(r, options)
+        end
+        if r then
+            if head then
+                node.insert_after(head, node.tail(head), r)
+            else
+                head = r
+            end
+        end
+    end
+    if head then
+        head = inline_utils.trim_space_beginning(head)
+    end
+    if head then
+        head = inline_utils.trim_space_end(head)
+    end
+    -- load the fonts before measuring
+    if head then
+        publisher.fonts.pre_linebreak(head)
+    end
+
+    local lineheight = fonts.lineheight(styles, fs)
+    local depth = linebox_depth(options, lineheight) or math.round(lineheight / 4)
+
+    -- width of the content: at least width and min-width
+    local natural = head and node.dimensions(head) or 0
+    local target = 0
+    local width = styles.width
+    if width and width ~= "auto" then
+        target = units.getsize(styles, width, fs)
+    end
+    local min_width = styles["min-width"]
+    if min_width and min_width ~= "auto" then
+        target = math.max(target, units.getsize(styles, min_width, fs))
+    end
+    local extra = math.max(0, target - natural)
+    local before, after = 0, extra
+    local align = styles["text-align"]
+    if align == "center" then
+        before = math.floor(extra / 2)
+        after = extra - before
+    elseif align == "right" or align == "end" then
+        before, after = extra, 0
+    end
+    if before > 0 then
+        head = node.insert_before(head, head, spacer(before, "inline-block align", options))
+    end
+    if after > 0 then
+        local s = spacer(after, "inline-block align", options)
+        if head then
+            node.insert_after(head, node.tail(head), s)
+        else
+            head = s
+        end
+    end
+
+    -- vertical padding and border
+    local border = inline_options.is_boxed(styles) and options.border or nil
+    local top, bottom
+    if border then
+        top = border.border_top_width + border.padding_top
+        bottom = border.border_bottom_width + border.padding_bottom
+    else
+        top = units.getsize(styles, styles["padding-top"], fs)
+        bottom = units.getsize(styles, styles["padding-bottom"], fs)
+    end
+    local strut = node.new(publisher.rule_node)
+    strut.width = 0
+    strut.height = lineheight - depth + top
+    strut.depth = depth + bottom
+    publisher.attribute_helpers.setprop(strut, "origin", "inline-block strut")
+    if head then
+        head = node.insert_before(head, head, strut)
+    else
+        head = strut
+    end
+
+    local startrule, endrule = inline_box_rules(styles, options, lineheight)
+    if startrule and endrule then
+        head = node.insert_before(head, head, startrule)
+        node.insert_after(head, assert(node.tail(head)), endrule)
+    end
+    local box = node.hpack(head)
+    publisher.attribute_helpers.setprop(box, "origin", "inline-block")
+    -- the line takes the height and depth of the box (see do_linebreak)
+    publisher.attribute_helpers.setprop(box, "inlineblock", true)
+    node.set_attribute(box, publisher.att_ignore_orphan_widowsetting, 1)
+
+    if styles["vertical-align"] == "middle" then
+        -- the parent font: the font of the element at the size of the parent
+        local parent_styles = stylesstack._stack[styles.pos - 1]
+        local parent_size = parent_styles and parent_styles.fontsize_sp or fs
+        box.shift = math.round((box.height - box.depth) / 2 - x_height(options, parent_size) / 2)
+    end
+
+    local ret = {}
+    local margin_left = units.getsize(styles, styles["margin-left"], fs)
+    local margin_right = units.getsize(styles, styles["margin-right"], fs)
+    if margin_left ~= 0 then
+        ret[#ret + 1] = spacer(margin_left, "inline margin-left", parent_options)
+    end
+    ret[#ret + 1] = box
+    if margin_right ~= 0 then
+        ret[#ret + 1] = spacer(margin_right, "inline margin-right", parent_options)
+    end
+    return ret
 end
 
 -- Recursive part of collect_horizontal_nodes. pending.box is the
@@ -366,7 +553,11 @@ local function collect_runs(elt, parameter, pending, dataxml)
         end
 
         if typ == "table" then
-            add_inline_box(thisret, styles, options, parameter)
+            if styles.display == "inline-block" and thiselt.elementname ~= "img" then
+                thisret = make_inline_block(thisret, styles, options, parameter)
+            else
+                add_inline_box(thisret, styles, options, parameter)
+            end
         end
 
         for j = 1, #thisret do

@@ -3389,7 +3389,8 @@ function M.do_linebreak(nodelist, hsize, parameters)
                         end
                     end
                     local props = d_getproperty(head_list)
-                    if props and props.mathbox then
+                    -- The same for inline-block boxes of HTML text.
+                    if props and (props.mathbox or props.inlineblock) then
                         -- A shifted box (a fraction placed on the math axis)
                         -- extends less above and more below the baseline.
                         local shift = d_getfield(head_list, "shift") or 0
