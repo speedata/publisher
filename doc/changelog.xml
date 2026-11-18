@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.9">
+    <entry version="5.9.29" date="2026-11-17" sha1="975d6efc">
+        <en summary="Text decoration and rotation in CSS for layout commands.">CSS rules for layout commands now support <tt>text-decoration</tt> (<tt>underline</tt>, <tt>overline</tt>, <tt>line-through</tt>, also with style and color) for paragraphs. A text decoration on a table cell applies to the text inside. <tt>overline</tt> now also works in HTML contents. A table cell can be rotated with <tt>transform: rotate(-90deg)</tt> or <tt>rotate: -90deg</tt>, like with the attribute <tt>rotate</tt>.</en>
+        <de summary="Textauszeichnung und Drehung in CSS für Layout-Befehle.">CSS-Regeln für Layout-Befehle unterstützen jetzt <tt>text-decoration</tt> (<tt>underline</tt>, <tt>overline</tt>, <tt>line-through</tt>, auch mit Stil und Farbe) für Absätze. Eine Textauszeichnung an einer Tabellenzelle gilt für den Text darin. <tt>overline</tt> funktioniert jetzt auch in HTML-Inhalten. Eine Tabellenzelle lässt sich mit <tt>transform: rotate(-90deg)</tt> oder <tt>rotate: -90deg</tt> drehen, wie mit dem Attribut <tt>rotate</tt>.</de>
+    </entry>
+    <entry version="5.9.29" date="2026-11-17" sha1="975d6efc">
+        <en summary="!important in CSS for HTML contents.">In HTML contents, a CSS declaration with <tt>!important</tt> gave the warning <tt>unhandled CSS delimiter</tt>, and some properties such as <tt>font-weight: bold !important</tt> had no effect. These declarations now work and take precedence over other rules and the <tt>style</tt> attribute.</en>
+        <de summary="!important in CSS für HTML-Inhalte.">In HTML-Inhalten führte eine CSS-Angabe mit <tt>!important</tt> zur Warnung <tt>unhandled CSS delimiter</tt>, und manche Eigenschaften wie <tt>font-weight: bold !important</tt> wirkten nicht. Diese Angaben funktionieren jetzt und haben Vorrang vor anderen Regeln und dem Attribut <tt>style</tt>.</de>
+    </entry>
+    <entry version="5.9.29" date="2026-11-17" sha1="adc98524">
+        <en summary="Rotated table cells.">A table cell with <tt>rotate</tt> and HTML contents, for example from <tt>sd:decode-html()</tt>, stopped with the error message <tt>HTML contents needs the data XML context</tt>. Also, text rotated by 90 or 270 degrees was not placed correctly with <tt>valign</tt>. Both are fixed.</en>
+        <de summary="Gedrehte Tabellenzellen.">Eine Tabellenzelle mit <tt>rotate</tt> und HTML-Inhalt, zum Beispiel aus <tt>sd:decode-html()</tt>, brach mit der Fehlermeldung <tt>HTML contents needs the data XML context</tt> ab. Außerdem stand um 90 oder 270 Grad gedrehter Text bei <tt>valign</tt> an der falschen Stelle. Beides ist behoben.</de>
+    </entry>
     <entry version="5.9.28" date="2026-11-16" sha1="8c2714f3">
         <en summary="Quotation marks in XPath strings.">In XPath expressions, a quotation mark inside a string can now be written by doubling it, as defined by XPath 2.0, for example <tt>'all''acqua'</tt> for <tt>all'acqua</tt> or <tt>"say ""hello"""</tt> for <tt>say "hello"</tt>. Previously such expressions were not read correctly.</en>
         <de summary="Anführungszeichen in XPath-Zeichenketten.">In XPath-Ausdrücken lässt sich ein Anführungszeichen innerhalb einer Zeichenkette jetzt durch Verdoppeln schreiben, wie es XPath 2.0 vorsieht, zum Beispiel <tt>'all''acqua'</tt> für <tt>all'acqua</tt> oder <tt>"sag ""hallo"""</tt> für <tt>sag "hallo"</tt>. Bisher wurden solche Ausdrücke nicht richtig gelesen.</de>
