@@ -2483,7 +2483,9 @@ function M.htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
 
     local margin_left = properties.margin_left or 0
     -- ht == y3, wd == x3
-    depth_sp = math.max(depth_sp, properties.depth or 0)
+    -- The depth comes from the font (see add_inline_box in html.lua), not
+    -- from the letters inside, so that boxes in a line have the same height.
+    depth_sp = properties.depth or depth_sp
     height_sp = properties.lineheight - depth_sp
     local sp_x0, sp_x1, sp_x2, wd
     local sp_y0, sp_y1, sp_y2, ht
@@ -2521,6 +2523,29 @@ function M.htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
         sp_x1 = content_left - padding_left
         sp_x2 = content_right + padding_left
         wd = sp_x2 + border_right_width
+    end
+
+    -- Radii that do not fit into the box are all reduced by the same factor,
+    -- as in CSS (overlapping curves): a radius of 10px on a smaller badge
+    -- gives a pill.
+    do
+        local box_wd, box_ht = wd - sp_x0, sp_y0 - ht
+        local factor = 1
+        local function fit(length, r1, r2)
+            if r1 + r2 > 0 then
+                factor = math.min(factor, length / (r1 + r2))
+            end
+        end
+        fit(box_wd, b_t_l_radius, b_t_r_radius)
+        fit(box_wd, b_b_l_radius, b_b_r_radius)
+        fit(box_ht, b_t_l_radius, b_b_l_radius)
+        fit(box_ht, b_t_r_radius, b_b_r_radius)
+        if factor < 1 then
+            b_t_l_radius = math.floor(b_t_l_radius * factor)
+            b_t_r_radius = math.floor(b_t_r_radius * factor)
+            b_b_l_radius = math.floor(b_b_l_radius * factor)
+            b_b_r_radius = math.floor(b_b_r_radius * factor)
+        end
     end
 
     -- The trapezoids must extend closer to the center of the border, because if the border
@@ -2708,9 +2733,27 @@ function M.htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
 
     rules_clip[#rules_clip + 1] = "h W* n"
 
+    -- The background fills the outer path (as background-clip: border-box
+    -- in CSS), so it follows the rounded corners.
+    local background = {}
+    local bgcolor = properties.background and colors_module.colors[properties.background]
+    if bgcolor then
+        background[#background + 1] = "q " .. bgcolor.pdfstring
+        background[#background + 1] = M.drawing.pdf_moveto(x1, y1)
+        background[#background + 1] = M.drawing.pdf_lineto(x2, y2)
+        background[#background + 1] = M.drawing.pdf_curveto(x3, y3, x4, y4, x5, y5)
+        background[#background + 1] = M.drawing.pdf_lineto(x6, y6)
+        background[#background + 1] = M.drawing.pdf_curveto(x7, y7, x8, y8, x9, y9)
+        background[#background + 1] = M.drawing.pdf_lineto(x10, y10)
+        background[#background + 1] = M.drawing.pdf_curveto(x11, y11, x12, y12, x13, y13)
+        background[#background + 1] = M.drawing.pdf_lineto(x14, y14)
+        background[#background + 1] = M.drawing.pdf_curveto(x15, y15, x16, y16, x1, y1)
+        background[#background + 1] = "h f Q "
+    end
+
     local n_clip = node.new("whatsit", "pdf_literal") --[[@as PdfLiteralWhatsitNode]]
     M.attribute_helpers.setprop(n_clip, "origin", "htmlbox.clip")
-    local n_clip_data = table.concat(rules_clip, " ")
+    local n_clip_data = table.concat(background, " ") .. table.concat(rules_clip, " ")
     local concat_rules = table.concat(rules, " ")
     n_clip_data = n_clip_data .. " " .. concat_rules
     n_clip.data = n_clip_data

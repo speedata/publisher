@@ -1,0 +1,6 @@
+<data><html>
+<p>Ohne Rahmen: <span class="badge">info</span> und <span class="badge warn">23</span> und Text.</p>
+<p>Mit Rahmen: <span class="badge framed">info</span> und eckig <span class="badge square">eckig</span>.</p>
+<p>In Markierung: <span class="hl">gelb <span class="badge">badge</span> weiter gelb</span>.</p>
+<p>Umbruch: Ein langer Text damit der Badge umbricht <span class="badge">dieser Badge ist sehr lang und bricht um</span> Ende.</p>
+</html></data>

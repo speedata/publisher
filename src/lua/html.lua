@@ -219,7 +219,7 @@ local function add_inline_box(runs, styles, options, parent_options)
     local fs = styles.fontsize_sp
     local margin_left = units.getsize(styles, styles["margin-left"], fs)
     local margin_right = units.getsize(styles, styles["margin-right"], fs)
-    local border = styles.has_border and options.border or nil
+    local border = inline_options.is_boxed(styles) and options.border or nil
     local left, right
     if border then
         left = border.border_left_width + border.padding_left
@@ -249,6 +249,27 @@ local function add_inline_box(runs, styles, options, parent_options)
         local fam = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily]
         setprop(startrule, "borderstart", inline_box_counter)
         setprop(startrule, "lineheight", fam and fam.size or fs)
+        -- The box is one font size high. It sits where the browser puts a
+        -- box with line-height 1: centered on the area between the
+        -- descender and the ascender of the font, so it does not depend on
+        -- the letters inside.
+        local f
+        if fam then
+            local variant = "normal"
+            if options.bold and options.italic then
+                variant = "bolditalic"
+            elseif options.bold then
+                variant = "bold"
+            elseif options.italic then
+                variant = "italic"
+            end
+            local instance = publisher.fonts.get_fontinstance(options.fontfamily, variant)
+            f = publisher.fonts.used_fonts[instance]
+        end
+        if f and f.ascender and f.descender then
+            local halfleading = (f.ascender + f.descender - fam.size) / 2
+            setprop(startrule, "depth", math.round(f.descender - halfleading))
+        end
         for index, value in pairs(border) do
             if index ~= "borderstart" then
                 setprop(startrule, index, value)

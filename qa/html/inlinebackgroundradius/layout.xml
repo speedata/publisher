@@ -1,0 +1,19 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+        xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="120mm" height="120mm"/>
+  <Stylesheet>
+    .badge { padding: 3px 7px; font-size: .85em; font-weight: bold; color: white;
+             background-color: #5bc0de; border-radius: 10px; }
+    .warn { background-color: #f0ad4e; }
+    .framed { border: 1pt solid #333; }
+    .square { border-radius: 0; }
+    .hl { background-color: #ffff80; }
+  </Stylesheet>
+  <Record element="data">
+    <PlaceObject column="1">
+      <Textblock width="90mm">
+        <HTML select="html"/>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

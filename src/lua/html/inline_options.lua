@@ -7,6 +7,37 @@ local colors_module = require("publisher.colors")
 
 local M = {}
 
+-- The background color of an element, nil for none or transparent.
+---@param styles table
+---@return string?
+local function background_color(styles)
+    local bg = styles["background-color"]
+    if bg == "transparent" then
+        return nil
+    end
+    return bg
+end
+
+-- An inline element is drawn as a box (see publisher.htmlbox) when it
+-- has a border or a background with rounded corners. The box draws the
+-- background, so it can follow the rounded corners.
+---@param styles table
+---@return boolean
+function M.is_boxed(styles)
+    if styles.has_border then
+        return true
+    end
+    if not background_color(styles) then
+        return false
+    end
+    for _, corner in ipairs({ "top-left", "top-right", "bottom-right", "bottom-left" }) do
+        if units.getsize(styles, styles["border-" .. corner .. "-radius"], styles.fontsize_sp) > 0 then
+            return true
+        end
+    end
+    return false
+end
+
 ---Configure options for publisher.mknodes based on the given styles.
 ---Mutates and returns `options`.
 ---@param styles table                       -- CSS-like style table (must include fontsize_sp etc.)
@@ -31,7 +62,8 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
         options.fontfamily = fonts.get_fontfamily(family, styles.fontsize_sp, fontsize, styles, publisher, fontfamilies)
     end
 
-    if styles.has_border then
+    local boxed = M.is_boxed(styles)
+    if boxed then
         local styles_fontsize_sp = styles.fontsize_sp
         local margin_top = units.getsize(styles, styles["margin-top"], styles_fontsize_sp)
         local margin_right = units.getsize(styles, styles["margin-right"], styles_fontsize_sp)
@@ -70,10 +102,9 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
         border_bottom_color = border_bottom_color or styles.color or "black"
         border_left_color = border_left_color or styles.color or "black"
 
-        local border_bottom_right_radius = styles["border-bottom-right-radius"] or 0
-        local border_bottom_left_radius = styles["border-bottom-left-radius"] or 0
-        local border_top_right_radius = styles["border-top-right-radius"] or 0
-        local border_top_left_radius = styles["border-top-left-radius"] or 0
+        local function radius(corner)
+            return units.getsize(styles, styles["border-" .. corner .. "-radius"], styles_fontsize_sp)
+        end
 
         options.border = {
             borderstart = true,
@@ -93,10 +124,11 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
             border_right_color = border_right_color,
             border_bottom_color = border_bottom_color,
             border_left_color = border_left_color,
-            border_bottom_right_radius = tex.sp(border_bottom_right_radius),
-            border_bottom_left_radius = tex.sp(border_bottom_left_radius),
-            border_top_right_radius = tex.sp(border_top_right_radius),
-            border_top_left_radius = tex.sp(border_top_left_radius),
+            border_bottom_right_radius = radius("bottom-right"),
+            border_bottom_left_radius = radius("bottom-left"),
+            border_top_right_radius = radius("top-right"),
+            border_top_left_radius = radius("top-left"),
+            background = background_color(styles),
             margin_top = margin_top,
             margin_right = margin_right,
             margin_bottom = margin_bottom,
@@ -136,7 +168,9 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
             splib.log("warning", "HTML: color not defined", "color", styles.color)
         end
     end
-    if bg then
+    -- A boxed element draws its own background; the text keeps the
+    -- background of the parent (if any), which shows at the rounded corners.
+    if bg and not boxed then
         options.backgroundcolor = colors_module.colors[bg].index
     end
 

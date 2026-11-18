@@ -189,6 +189,13 @@ function M.define_font_hb(name, size, extra_parameter)
     f.units_per_em = upem
     f.face = face
     f.font = fnt
+    -- Ascender and descender (both positive, in sp) of the font, used for
+    -- the height of inline boxes (backgrounds and borders) as in CSS.
+    local extents = fnt:get_h_extents()
+    if extents then
+        f.ascender = math.round(extents.ascender * mag)
+        f.descender = math.round(-extents.descender * mag)
+    end
     f.characters = {}
     f.otfeatures = {}
     f.name = face:get_name(6)
