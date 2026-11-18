@@ -2738,10 +2738,14 @@ end
 -- width, so the layout does not change. The new nodes take the attributes
 -- and properties of the glue (color, link, structure element).
 --
+-- A forced line break (Br) gets a space as well, so that the
+-- last word of a line and the first word of the next line do not run
+-- together. It is inserted only after text, so empty lines add none.
+--
 -- In PDF/UA, all content is tagged or an artifact. A space between two
 -- structure elements (outside of any marked content) becomes an artifact.
 ---@param head Node? Node list of a page or box.
----@param state? { mcdepth: integer } Marked content depth in the page so far.
+---@param state? { mcdepth: integer, textbefore: boolean? } Marked content depth in the page so far, text since the last space.
 function M.insert_interword_spaces(head, state)
     state = state or { mcdepth = 0 }
     local pdfua = publisher.options.format == "PDF/UA"
@@ -2749,6 +2753,10 @@ function M.insert_interword_spaces(head, state)
     local n = head
     while n do
         local id = n.id
+        local newline = false
+        if id == publisher.glue_node and lastfont and state.textbefore then
+            newline = node.has_attribute(n, att_newline) ~= nil
+        end
         if id == publisher.hlist_node or id == publisher.vlist_node then
             M.insert_interword_spaces(n.list, state)
         elseif id == publisher.whatsit_node and n.subtype == publisher.pdf_literal_whatsit then
@@ -2761,11 +2769,13 @@ function M.insert_interword_spaces(head, state)
         elseif id == publisher.glyph_node then
             lastfont = n.font
             lastexpansion = n.expansion_factor
+            state.textbefore = true
         elseif
             id == publisher.glue_node
             and lastfont
-            and (node.has_attribute(n, att_spaceglue) or node.has_attribute(n, publisher.att_tie_glue))
+            and (newline or node.has_attribute(n, att_spaceglue) or node.has_attribute(n, publisher.att_tie_glue))
         then
+            state.textbefore = false
             local props = node.getproperty(n)
             local slot, w = spaceglyph(lastfont)
             if slot and not (props and props.interwordspace) then
