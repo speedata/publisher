@@ -726,6 +726,12 @@ function M.build_nodelist(elt, options, before_box, _caller, prevdir, dataxml)
             before_box = nil
 
             local a = publisher.par:new(tf, "html.lua (horizontal)")
+            if textalign then
+                -- When the block ends up inside a Paragraph, it keeps its
+                -- own text-align, otherwise the alignment of the Paragraph
+                -- applies.
+                a.css_alignment = alignment
+            end
             local appended = false
             for j = 1, #n do
                 local thisn = n[j]

@@ -1,0 +1,35 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <!-- text-align of HTML blocks inside a Paragraph -->
+    <Pageformat width="120mm" height="120mm"/>
+    <Stylesheet>
+        .r { text-align: right; background-color: #c0ffc0; }
+        .c { text-align: center; background-color: #ffff80; }
+        .l { text-align: left; background-color: #ffc0c0; }
+    </Stylesheet>
+    <Record element="data">
+        <PlaceObject>
+            <Table stretch="max">
+                <Tr>
+                    <Td>
+                        <Paragraph>
+                            <Value select="sd:decode-html('&lt;div class=&quot;r&quot;&gt;right&lt;/div&gt;&lt;div class=&quot;c&quot;&gt;center&lt;/div&gt;&lt;div class=&quot;l&quot;&gt;left&lt;/div&gt;')"/>
+                        </Paragraph>
+                    </Td>
+                    <Td align="right">
+                        <Paragraph>
+                            <Value select="sd:decode-html('&lt;div&gt;cell&lt;/div&gt;&lt;div class=&quot;l&quot;&gt;left&lt;/div&gt;')"/>
+                        </Paragraph>
+                    </Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+        <Output>
+            <Text>
+                <Paragraph textformat="right">
+                    <Value select="sd:decode-html('&lt;div&gt;Paragraph right&lt;/div&gt;&lt;div style=&quot;text-align: center&quot;&gt;&lt;p&gt;inherited from the div, a longer text that needs more than one line in the paragraph&lt;/p&gt;&lt;/div&gt;&lt;p&gt;Paragraph right again&lt;/p&gt;')"/>
+                </Paragraph>
+            </Text>
+        </Output>
+    </Record>
+</Layout>

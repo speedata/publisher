@@ -13,6 +13,7 @@ local publisher = require("publisher")
 ---@field margin_bottom? integer Margin below the paragraph in sp.
 ---@field padding_left? integer Padding on the left in sp.
 ---@field padding_right? integer Padding on the right in sp.
+---@field css_alignment? string Alignment from the text-align of an HTML block inside a Paragraph (set in html.lua).
 ---@field css_chain? CSSChainEntry[] Surrounding HTML block boxes, outermost first (set by flatten_boxes).
 ---@field firstbox? boolean First paragraph of its box.
 ---@field lastbox? boolean Last paragraph of its box.
@@ -490,6 +491,9 @@ local function flatten(self, items, options, data)
                                     and dir ~= "→"
                                 )
                                 if tbc then
+                                    if tb == 1 and thisblock.css_alignment then
+                                        publisher.attribute_helpers.setprop(tbc, "alignment", thisblock.css_alignment)
+                                    end
                                     if startblock or is_newline then
                                         publisher.attribute_helpers.setprop(tbc, "split", true)
                                         local padding_left = thisblock.padding_left or 0
@@ -630,6 +634,7 @@ function Par:min_width(textformat_name, options, data)
     options = options or {}
     local new_options = publisher.utilities.copy_table_from_defaults(options)
     new_options.textformat = textformat_name
+    new_options.ignore_html_alignment = true
 
     local formatted = newpar:format(1, new_options, data)
     local head = formatted.head
@@ -673,6 +678,7 @@ function Par:max_width_and_lineheight(options, data)
     options = options or {}
     local new_options = publisher.utilities.copy_table_from_defaults(options)
     new_options.textformat = publisher.textformats["__leftaligned"]
+    new_options.ignore_html_alignment = true
     if orig_letterspacing then
         new_options.letterspacing = orig_letterspacing
     elseif orig_letterspacing_em then
@@ -1355,16 +1361,22 @@ function Par:format(width_sp, options, data)
     local att_margin_top_boxstart = publisher.att_margin_top_boxstart
     local att_spaceglue = publisher.attribute_name_number["spaceglue"]
 
-    local tf = current_textformat
+    local base_tf = current_textformat
     for i = 1, objects_len do
         local nodelist = objects[i]
         if publisher.attribute_helpers.getprop(nodelist, "br") == true then
-            tf = publisher.dispatch.new_textformat("", current_textformat)
-            tf.rows = 9999
-            tf.margintop = current_textformat.margintop
-            tf.indent = current_textformat.indent
+            base_tf = publisher.dispatch.new_textformat("", current_textformat)
+            base_tf.rows = 9999
+            base_tf.margintop = current_textformat.margintop
+            base_tf.indent = current_textformat.indent
         else
             objectrow = objectrow + 1
+        end
+        -- an HTML block with its own text-align
+        local tf = base_tf
+        local prop_alignment = publisher.attribute_helpers.getprop(nodelist, "alignment")
+        if prop_alignment and prop_alignment ~= tf.alignment and not options.ignore_html_alignment then
+            tf = publisher.dispatch.new_textformat("", base_tf, { alignment = prop_alignment })
         end
         -- Cache property accesses at loop start
         local prop_pardir = publisher.attribute_helpers.getprop(nodelist, "pardir")
