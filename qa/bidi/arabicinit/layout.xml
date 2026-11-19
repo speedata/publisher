@@ -1,0 +1,18 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="5cm" width="8cm" />
+    <LoadFontfile name="Amiri" filename="amiri-subset.ttf" />
+    <DefineFontfamily fontsize="12" leading="16" name="text"><Regular fontface="Amiri" /></DefineFontfamily>
+    <DefineFontfamily fontsize="30" leading="30" name="init"><Regular fontface="Amiri" /></DefineFontfamily>
+    <Record element="data">
+        <!-- Arabic digits in the initial read left to right, like in the text -->
+        <Output>
+            <Text fontfamily="text">
+                <Paragraph bidi="yes" direction="rtl">
+                    <Initial fontfamily="init" padding-left="2pt"><Value>١٢٣</Value></Initial>
+                    <Value>في البدء ١٢٣ خلق الله السماوات والأرض في البدء خلق الله السماوات والأرض</Value>
+                </Paragraph>
+            </Text>
+        </Output>
+    </Record>
+</Layout>

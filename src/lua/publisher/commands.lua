@@ -2997,11 +2997,16 @@ function commands.initial(layoutxml, dataxml)
             initialvalue = publisher.xml_helpers.element_contents(j)
         end
     end
+    -- Without the bidi algorithm HarfBuzz shapes Arabic digits like Arabic
+    -- letters from right to left, so a chapter number such as ١٢ would come
+    -- out reversed. The bidi algorithm keeps numbers left to right.
+    local bidi = type(initialvalue) == "string" and publisher.nodes.has_rtl(initialvalue)
     local box
-    box = publisher.nodes.mknodes(
-        initialvalue,
-        { fontfamily = fontfamily, color = colors_module.get_colorindex_from_name(colorname, "black") }
-    )
+    box = publisher.nodes.mknodes(initialvalue, {
+        fontfamily = fontfamily,
+        color = colors_module.get_colorindex_from_name(colorname, "black"),
+        bidi = bidi,
+    })
     box = publisher.nodes.addstrut(box, "head", "initial")
     publisher.nodes.finish_par(box, nil, {})
     box = node.hpack(box)
