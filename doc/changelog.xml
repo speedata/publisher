@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.9">
+    <entry version="5.9.33" date="2026-11-19" sha1="383bd2ca">
+        <en summary="text-align of HTML blocks in a paragraph.">HTML blocks such as <tt>div</tt> or <tt>p</tt> inside a <tt>Paragraph</tt> now keep their own <tt>text-align</tt>, for example to combine a right-aligned and a centered line in one table cell. Previously all blocks got the alignment of the paragraph. Blocks without <tt>text-align</tt> still use the alignment of the paragraph.</en>
+        <de summary="text-align von HTML-Blöcken in einem Absatz.">HTML-Blöcke wie <tt>div</tt> oder <tt>p</tt> innerhalb von <tt>Paragraph</tt> behalten jetzt ihr eigenes <tt>text-align</tt>, zum Beispiel um eine rechtsbündige und eine zentrierte Zeile in einer Tabellenzelle zu kombinieren. Bisher erhielten alle Blöcke die Ausrichtung des Absatzes. Blöcke ohne <tt>text-align</tt> richten sich weiterhin nach dem Absatz.</de>
+    </entry>
     <entry version="5.9.32" date="2026-11-19" sha1="f18358c1">
         <en summary="Arabic numbers in Initial.">A number with Arabic digits in <tt>Initial</tt>, for example a chapter number, was printed from right to left, so the digits came out reversed. Like in the text of the paragraph, numbers in an initial are now always read from left to right.</en>
         <de summary="Arabische Zahlen in Initial.">Eine Zahl mit arabischen Ziffern in <tt>Initial</tt>, zum Beispiel eine Kapitelnummer, wurde von rechts nach links gesetzt, die Ziffern standen also in umgekehrter Reihenfolge. Wie im Text des Absatzes werden Zahlen in einem Initial jetzt immer von links nach rechts gesetzt.</de>
