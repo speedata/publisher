@@ -1,0 +1,20 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <!-- padding-left of a Paragraph with HTML content -->
+    <Pageformat width="120mm" height="80mm"/>
+    <Record element="data">
+        <Output>
+            <Text>
+                <Paragraph padding-left="6cm">
+                    <Value select="sd:decode-html('&lt;p&gt;Indented by six centimeters, a longer text that needs more than one line.&lt;/p&gt;')"/>
+                </Paragraph>
+                <Paragraph padding-left="2cm">
+                    <Value select="sd:decode-html('&lt;div&gt;&lt;p&gt;Two centimeters, inside a div.&lt;/p&gt;&lt;/div&gt;')"/>
+                </Paragraph>
+                <Paragraph>
+                    <Value select="sd:decode-html('&lt;p&gt;No padding.&lt;/p&gt;')"/>
+                </Paragraph>
+            </Text>
+        </Output>
+    </Record>
+</Layout>

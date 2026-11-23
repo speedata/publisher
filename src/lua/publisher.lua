@@ -1097,7 +1097,11 @@ do
                 end
             else
                 -- a regular paragraph
-                thisbox:indent(indent)
+                -- Par:indent() turns a nil padding_left into 0, which would
+                -- hide the padding-left of the Paragraph itself
+                if indent ~= 0 then
+                    thisbox:indent(indent)
+                end
                 if box.width then
                     thisbox.width = box.width + indent
                 end
