@@ -89,7 +89,10 @@ func (s *Server) writeFilesV1(r *http.Request) (string, *apiError) {
 	fmt.Fprintf(s.ProtocolFile, "%s: Publishing request from %s at %s\n", id, r.RemoteAddr, time.Now().Format("2006-01-02 15:04:05"))
 
 	for k, v := range files {
-		safeName := filepath.Base(k)
+		safeName, ok := uploadFileName(k)
+		if !ok {
+			return "", &apiError{Status: http.StatusBadRequest, Message: fmt.Sprintf("Invalid file name %q", k)}
+		}
 		bb := strings.NewReader(v.(string))
 		b64reader := base64.NewDecoder(base64.StdEncoding, bb)
 		f, nerr := os.Create(filepath.Join(tmpdir, safeName))

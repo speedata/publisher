@@ -238,6 +238,18 @@ func (s *Server) v0PublishIDHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// uploadFileName returns the base name of a file name from an upload request
+// so that uploaded files are always written into the job directory. ok is
+// false if no usable file name remains (for example "", "." or "..").
+func uploadFileName(name string) (string, bool) {
+	base := filepath.Base(name)
+	switch base {
+	case ".", "..", string(filepath.Separator):
+		return "", false
+	}
+	return base, true
+}
+
 // Return full path to directory on success, empty string on failure
 func (s *Server) checkIDExists(id string) string {
 	publishdir := filepath.Join(s.serverTemp, id)
@@ -466,9 +478,14 @@ func (s *Server) writeFiles(w http.ResponseWriter, r *http.Request) (string, err
 	fmt.Fprintf(s.ProtocolFile, "%s: Publishing request from %s at %s\n", id, r.RemoteAddr, time.Now().Format("2006-01-02 15:04:05"))
 
 	for k, v := range files {
+		safeName, ok := uploadFileName(k)
+		if !ok {
+			w.WriteHeader(http.StatusBadRequest)
+			return "", fmt.Errorf("Invalid file name %q", k)
+		}
 		bb := bytes.NewBuffer([]byte(v.(string)))
 		b64reader := base64.NewDecoder(base64.StdEncoding, bb)
-		f, nerr := os.Create(filepath.Join(tmpdir, k))
+		f, nerr := os.Create(filepath.Join(tmpdir, safeName))
 		if nerr != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return "", fmt.Errorf("Internal error 015")
