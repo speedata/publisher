@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.9">
+    <entry version="5.9.34" date="2026-11-23" sha1="f7d9c808">
+        <en summary="Security: file names in server mode.">In server mode, the file names sent with <tt>/v0/publish</tt> and <tt>/v0/pdf</tt> were not checked. A request could write files outside of the job directory on the server. Now only the file name without a directory is used, as with <tt>/v1</tt>. Requests with an invalid file name such as <tt>..</tt> are rejected. Updating is recommended if the server can be reached by others.</en>
+        <de summary="Sicherheit: Dateinamen im Server-Modus.">Im Server-Modus wurden die mit <tt>/v0/publish</tt> und <tt>/v0/pdf</tt> geschickten Dateinamen nicht geprüft. Eine Anfrage konnte Dateien außerhalb des Auftragsverzeichnisses auf dem Server schreiben. Jetzt wird wie bei <tt>/v1</tt> nur der Dateiname ohne Verzeichnis verwendet. Anfragen mit einem ungültigen Dateinamen wie <tt>..</tt> werden abgewiesen. Ein Update wird empfohlen, wenn der Server für andere erreichbar ist.</de>
+    </entry>
+    <entry version="5.9.34" date="2026-11-23" sha1="64816d86">
+        <en summary="padding-left of a paragraph with HTML contents.">The attribute <tt>padding-left</tt> of a <tt>Paragraph</tt> was ignored when the paragraph contained HTML, for example from <tt>sd:decode-html()</tt>. This bug was introduced in version 5.9.14.</en>
+        <de summary="padding-left eines Absatzes mit HTML-Inhalt.">Das Attribut <tt>padding-left</tt> von <tt>Paragraph</tt> wurde nicht beachtet, wenn der Absatz HTML enthielt, zum Beispiel aus <tt>sd:decode-html()</tt>. Der Fehler bestand seit Version 5.9.14.</de>
+    </entry>
     <entry version="5.9.33" date="2026-11-19" sha1="383bd2ca">
         <en summary="text-align of HTML blocks in a paragraph.">HTML blocks such as <tt>div</tt> or <tt>p</tt> inside a <tt>Paragraph</tt> now keep their own <tt>text-align</tt>, for example to combine a right-aligned and a centered line in one table cell. Previously all blocks got the alignment of the paragraph. Blocks without <tt>text-align</tt> still use the alignment of the paragraph.</en>
         <de summary="text-align von HTML-Blöcken in einem Absatz.">HTML-Blöcke wie <tt>div</tt> oder <tt>p</tt> innerhalb von <tt>Paragraph</tt> behalten jetzt ihr eigenes <tt>text-align</tt>, zum Beispiel um eine rechtsbündige und eine zentrierte Zeile in einer Tabellenzelle zu kombinieren. Bisher erhielten alle Blöcke die Ausrichtung des Absatzes. Blöcke ohne <tt>text-align</tt> richten sich weiterhin nach dem Absatz.</de>
