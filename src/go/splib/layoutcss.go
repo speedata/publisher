@@ -30,18 +30,24 @@ func sdCSSAdd(L *C.lua_State) int {
 }
 
 // parseLayoutChain decodes the element chain built in css.lua. Elements are
-// separated by \x02, the fields name, class, id and position of an element
-// by \x01.
+// separated by \x02, the fields name, class, id, position and style of an
+// element by \x01.
 func parseLayoutChain(chain string) []css.LayoutElement {
 	var ret []css.LayoutElement
 	for _, segment := range strings.Split(chain, "\x02") {
-		fields := strings.Split(segment, "\x01")
-		if len(fields) != 4 {
+		fields := strings.SplitN(segment, "\x01", 5)
+		if len(fields) != 5 {
 			slog.Error("CSS: malformed element chain", "chain", chain)
 			return nil
 		}
 		pos, _ := strconv.Atoi(fields[3])
-		ret = append(ret, css.LayoutElement{Name: fields[0], Class: fields[1], ID: fields[2], Position: pos})
+		ret = append(ret, css.LayoutElement{
+			Name:     fields[0],
+			Class:    fields[1],
+			ID:       fields[2],
+			Position: pos,
+			Style:    fields[4],
+		})
 	}
 	return ret
 }

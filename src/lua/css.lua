@@ -19,6 +19,7 @@ local splib = splib
 ---@field fontfaces? table<string, table> Font families from @font-face rules (see `get_fontfaces`).
 ---@field structural? boolean True if a selector may depend on the position of an element.
 ---@field variables? boolean True if the CSS may contain custom properties (`--name`).
+---@field inline? boolean True if a layout command had a style attribute.
 ---@field position_limit? integer Positions up to this value are passed unchanged (see `analyze_positions`).
 ---@field position_period? integer Positions above `position_limit` are equivalent modulo this value, nil if every position counts.
 ---@field __index? CSSRules Set when the table serves as a metatable in `new`.
@@ -273,19 +274,38 @@ end
 ---@param class? string
 ---@param id? string
 ---@param position? integer Position among the siblings.
+---@param style? string Declarations of the attribute style.
 ---@return string
-local function segment(element, class, id, position)
-    return element .. "\1" .. (class or "") .. "\1" .. (id or "") .. "\1" .. (position or "")
+local function segment(element, class, id, position, style)
+    return element .. "\1" .. (class or "") .. "\1" .. (id or "") .. "\1" .. (position or "") .. "\1" .. (style or "")
+end
+
+-- Returns true if there is anything to match: rules or style attributes.
+---@param self CSSRules
+---@return boolean
+local function active(self)
+    return #self.text > 0 or self.inline == true
 end
 
 -- Enters a layout command. Returns the stack depth before the push, which
--- `leave` restores.
+-- `leave` restores. `style` holds the declarations of the attribute style
+-- (an empty one counts as not set).
 ---@param self CSSRules
 ---@param element string Lower case element name.
 ---@param class? string
 ---@param id? string
+---@param style? string
 ---@return integer depth
-local function enter(self, element, class, id)
+local function enter(self, element, class, id, style)
+    if style == "" then
+        style = nil
+    elseif style then
+        self.inline = true
+        -- custom properties and var(--name); Go checks this exactly
+        if string.find(style, "--", 1, true) then
+            self.variables = true
+        end
+    end
     local stack, levels = self.stack, self.levels
     local depth = #stack
     local position
@@ -300,7 +320,7 @@ local function enter(self, element, class, id)
             end
         end
     end
-    stack[depth + 1] = segment(element, class, id, position)
+    stack[depth + 1] = segment(element, class, id, position, style)
     levels[depth + 1] = { element = element }
     return depth
 end
@@ -357,7 +377,7 @@ end
 ---@return table<string, string> declarations
 ---@return table<string, boolean> important
 local function lookup(self, chain, pseudo)
-    if #self.text == 0 then
+    if not active(self) then
         return empty, empty
     end
     local key = pseudo and chain .. "\3" .. pseudo or chain
@@ -489,7 +509,7 @@ end
 ---@return table<string, string>
 local function style(self, attributes)
     local n = #self.levels
-    if n == 0 or #self.text == 0 then
+    if n == 0 or not active(self) then
         return {}
     end
     local level = self.levels[n]

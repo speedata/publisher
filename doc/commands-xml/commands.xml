@@ -2320,6 +2320,14 @@
         <para>CSS id für diese Box.</para>
       </description>
     </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
+      </description>
+    </attribute>
     <attribute en="padding-top" type="length" optional="yes" css="padding-top" since="2.5.10">
       <description xml:lang="en">
         <para>Set the inner distance (width between contents and the border) to the top edge.</para>
@@ -2521,6 +2529,14 @@
       </description>
       <description xml:lang="de">
         <para>CSS id für diesen Kreis.</para>
+      </description>
+    </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
       </description>
     </attribute>
     <attribute en="radiusx" type="numberorlength" optional="no">
@@ -4598,6 +4614,14 @@
         <para>CSS id für dieses Element.</para>
       </description>
     </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
+      </description>
+    </attribute>
     <attribute en="clip" optional="yes" since="3.5.10">
       <description xml:lang="en">
         <para>Constrain the contents of the frame to its area or allow them to protrude.</para>
@@ -5496,6 +5520,14 @@
       </description>
       <description xml:lang="de">
         <para>CSS id für dieses Element.</para>
+      </description>
+    </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
       </description>
     </attribute>
     <attribute en="bleed" optional="yes" since="2.9.5">
@@ -7282,6 +7314,14 @@
         <para>CSS-Id der Liste.</para>
       </description>
     </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
+      </description>
+    </attribute>
     <attribute en="label-align" optional="yes" since="5.9.7">
       <description xml:lang="en">
         <para>Alignment of the marker within the width given by <tt>label-width</tt>. Default is <tt>right</tt>.</para>
@@ -8141,6 +8181,14 @@
       </description>
       <description xml:lang="de">
         <para>CSS id für diesen Absatz.</para>
+      </description>
+    </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
       </description>
     </attribute>
     <attribute en="actualtext" optional="yes" type="text" allowxpath="yes" since="4.19.23">
@@ -9316,6 +9364,14 @@
         <para>CSS-Id für dieses Objekt.</para>
       </description>
     </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
+      </description>
+    </attribute>
     <attribute en="keepposition" optional="yes">
       <description xml:lang="en">
         <para>Don't move the virtual cursor to the next free space</para>
@@ -9986,6 +10042,14 @@
       </description>
       <description xml:lang="de">
         <para>CSS-Id für diese Linie.</para>
+      </description>
+    </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
       </description>
     </attribute>
     <attribute en="length" type="numberorlength" optional="no">
@@ -10855,6 +10919,14 @@
         <para>CSS id für dieses Element.</para>
       </description>
     </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
+      </description>
+    </attribute>
     <attribute en="background-color" type="text" optional="yes" css="background-color">
       <description xml:lang="en">
         <para>The background color of the content</para>
@@ -11404,6 +11476,14 @@
         <para>CSS-Id für diese Tabelle.</para>
       </description>
     </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
+      </description>
+    </attribute>
     <attribute en="leading" type="length" optional="yes">
       <description xml:lang="en">
         <para>The distance between two rows.</para>
@@ -11868,6 +11948,14 @@
         <para>CSS id für diese Tabellenzelle.</para>
       </description>
     </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
+      </description>
+    </attribute>
     <attribute en="align" optional="yes" css="text-align" allowxpath="yes">
       <description xml:lang="en">
         <para>Horizontal alignment of the cell contents. Defaults to left.</para>
@@ -12263,6 +12351,14 @@
         <para>CSS id für dieses Element.</para>
       </description>
     </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
+      </description>
+    </attribute>
     <remark xml:lang="de">
       <para>Die Linie geht über die gesamte Breite der Tabelle und verschiebt nachfolgende Zeilen nach unten.</para>
     </remark>
@@ -12376,6 +12472,14 @@
       </description>
       <description xml:lang="de">
         <para>CSS-Id für diesen Textblock.</para>
+      </description>
+    </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
       </description>
     </attribute>
     <attribute en="language" optional="yes" allowxpath="yes" since="4.1.1">
@@ -12962,6 +13066,14 @@
         <para>CSS-Id für diese Tabellenzeile.</para>
       </description>
     </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
+      </description>
+    </attribute>
     <attribute en="minheight" type="numberorlength" optional="yes">
       <description xml:lang="en">
         <para>Minimum row height in grid cells or length.</para>
@@ -13270,6 +13382,14 @@
         <para>CSS id für dieses Element.</para>
       </description>
     </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
+      </description>
+    </attribute>
     <remark xml:lang="en">
       <para>Currently doesn't work with margin protrusion.</para>
     </remark>
@@ -13362,6 +13482,14 @@
       </description>
       <description xml:lang="de">
         <para>CSS-Id der Liste.</para>
+      </description>
+    </attribute>
+    <attribute en="style" optional="yes" type="text" since="5.9.37">
+      <description xml:lang="en">
+        <para>CSS declarations for this element, as in the HTML attribute <tt>style</tt>, for example <tt>border: 1pt solid red; padding: 2pt</tt>. They take precedence over the CSS rules, but not over the attributes, unless they are marked <tt>!important</tt>. An empty value is ignored.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut <tt>style</tt>, zum Beispiel <tt>border: 1pt solid red; padding: 2pt</tt>. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit <tt>!important</tt> markiert. Ein leerer Wert wird ignoriert.</para>
       </description>
     </attribute>
     <attribute en="label-align" optional="yes" since="5.9.7">

@@ -678,6 +678,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="style">
+               <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="padding-top">
                <a:documentation>Set the inner distance (width between contents and the border) to the top edge.</a:documentation>
             </attribute>
@@ -993,6 +998,11 @@
          <optional>
             <attribute name="id">
                <a:documentation>CSS id for this circle.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="style">
+               <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
             </attribute>
          </optional>
          <attribute name="radiusx">
@@ -2291,6 +2301,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="style">
+                     <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="clip">
                      <a:documentation>Constrain the contents of the frame to its area or allow them to protrude.</a:documentation>
                      <choice>
@@ -2958,6 +2973,11 @@
                <optional>
                   <attribute name="id">
                      <a:documentation>CSS id for this element.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="style">
+                     <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -4085,6 +4105,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="style">
+                     <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="label-align">
                      <a:documentation>Alignment of the marker within the width given by label-width. Default is right.</a:documentation>
                      <choice>
@@ -4892,6 +4917,11 @@
                <optional>
                   <attribute name="id">
                      <a:documentation>CSS id for this paragraph.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="style">
+                     <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -5738,6 +5768,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="style">
+                     <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="keepposition">
                      <a:documentation>Don&#39;t move the virtual cursor to the next free space</a:documentation>
                      <choice>
@@ -6181,6 +6216,11 @@
          <optional>
             <attribute name="id">
                <a:documentation>CSS id for this rule.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="style">
+               <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
             </attribute>
          </optional>
          <attribute name="length">
@@ -6738,6 +6778,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="style">
+                     <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="background-color">
                      <a:documentation>The background color of the content</a:documentation>
                      <lsp:references symbol="color"></lsp:references>
@@ -7209,6 +7254,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="style">
+                     <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="leading">
                      <a:documentation>The distance between two rows.</a:documentation>
                   </attribute>
@@ -7470,6 +7520,11 @@
                <optional>
                   <attribute name="id">
                      <a:documentation>CSS id for this table cell.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="style">
+                     <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -7756,6 +7811,11 @@
                <a:documentation>CSS id for this element.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="style">
+               <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -7800,6 +7860,11 @@
                <optional>
                   <attribute name="id">
                      <a:documentation>CSS id for this text block.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="style">
+                     <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -8389,6 +8454,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="style">
+                     <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="minheight">
                      <a:documentation>Minimum row height in grid cells or length.</a:documentation>
                   </attribute>
@@ -8616,6 +8686,11 @@
                      <a:documentation>CSS id for this element.</a:documentation>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="style">
+                     <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
+                  </attribute>
+               </optional>
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
@@ -8673,6 +8748,11 @@
                <optional>
                   <attribute name="id">
                      <a:documentation>CSS id of the list.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="style">
+                     <a:documentation>CSS declarations for this element, as in the HTML attribute style, for example border: 1pt solid red; padding: 2pt. They take precedence over the CSS rules, but not over the attributes, unless they are marked !important. An empty value is ignored.</a:documentation>
                   </attribute>
                </optional>
                <optional>

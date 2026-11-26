@@ -217,6 +217,117 @@ func splitCSSParts(s string) []string {
 	return parts
 }
 
+// shorthands are the properties that expandShorthand splits.
+var shorthands = map[string]bool{
+	"margin": true, "padding": true, "list-style": true,
+	"border": true, "border-top": true, "border-right": true, "border-bottom": true, "border-left": true,
+	"border-color": true, "border-style": true, "border-width": true, "border-radius": true,
+}
+
+// expandShorthand returns the longhand properties for the shorthand
+// property key with the value val, or nil if key is not a shorthand. With
+// initial, a border shorthand sets all longhands it stands for, as in CSS:
+// those missing in val get their initial values (style none, width 1pt,
+// color currentcolor). Without initial it sets only the parts that val
+// names. The layout commands use that, so that td { border-top: 1pt }, the
+// name of the Td attribute used as a CSS property, still draws a line.
+func expandShorthand(key, val string, initial bool) map[string]string {
+	if !shorthands[key] {
+		return nil
+	}
+	resolved := make(map[string]string)
+	switch key {
+	case "margin":
+		values := getFourValues(val)
+		for _, margin := range toprightbottomleft {
+			resolved["margin-"+margin] = values[margin]
+		}
+	case "list-style":
+		for _, part := range strings.Split(val, " ") {
+			switch part {
+			case "inside", "outside":
+				resolved["list-style-position"] = part
+			default:
+				if strings.HasPrefix(part, "url") {
+					resolved["list-style-image"] = part
+				} else {
+					resolved["list-style-type"] = trimQuotes(part)
+				}
+			}
+		}
+	case "padding":
+		values := getFourValues(val)
+		for _, padding := range toprightbottomleft {
+			resolved["padding-"+padding] = values[padding]
+		}
+	case "border":
+		if initial {
+			for _, loc := range toprightbottomleft {
+				resolved["border-"+loc+"-style"] = "none"
+				resolved["border-"+loc+"-width"] = "1pt"
+				resolved["border-"+loc+"-color"] = "currentcolor"
+			}
+		}
+
+		// splitCSSParts keeps rgb(1, 2, 3) together
+		for _, part := range splitCSSParts(val) {
+			for _, border := range toprightbottomleft {
+				if ok, str := isBorderStyle(part); ok {
+					resolved["border-"+border+"-style"] = str
+				} else if ok, str := isDimension(part); ok {
+					resolved["border-"+border+"-width"] = str
+				} else {
+					resolved["border-"+border+"-color"] = part
+				}
+			}
+		}
+	case "border-radius":
+		for _, lr := range []string{"left", "right"} {
+			for _, tb := range []string{"top", "bottom"} {
+				resolved["border-"+tb+"-"+lr+"-radius"] = val
+			}
+		}
+	case "border-top", "border-right", "border-bottom", "border-left":
+		if initial {
+			resolved[key+"-width"] = "1pt"
+			resolved[key+"-style"] = "none"
+			resolved[key+"-color"] = "currentcolor"
+		}
+
+		for _, part := range splitCSSParts(val) {
+			if ok, str := isDimension(part); ok {
+				resolved[key+"-width"] = str
+			} else if ok, str := isBorderStyle(part); ok {
+				resolved[key+"-style"] = str
+			} else {
+				resolved[key+"-color"] = part
+			}
+		}
+	case "border-color":
+		values := getFourValues(val)
+		for _, loc := range toprightbottomleft {
+			resolved["border-"+loc+"-color"] = values[loc]
+		}
+	case "border-style":
+		values := getFourValues(val)
+		for _, loc := range toprightbottomleft {
+			resolved["border-"+loc+"-style"] = values[loc]
+		}
+	case "border-width":
+		values := getFourValues(val)
+		for _, loc := range toprightbottomleft {
+			resolved["border-"+loc+"-width"] = values[loc]
+		}
+	}
+	// getFourValues gives empty values for an invalid number of values
+	for k, v := range resolved {
+		if v == "" {
+			delete(resolved, k)
+		}
+	}
+	return resolved
+}
+
 // resolveAttributes expands shorthand CSS-style attributes into their
 // longhand form and separates "computed style" properties from ordinary
 // HTML attributes.
@@ -294,84 +405,14 @@ func resolveAttributes(attrs []html.Attribute) (map[string]string, map[string]st
 		}
 		key = strings.TrimPrefix(key, "!")
 
+		if longhands := expandShorthand(key, attr.Val, true); longhands != nil {
+			for k, v := range longhands {
+				resolved[k] = v
+			}
+			continue
+		}
+
 		switch key {
-		case "margin":
-			values := getFourValues(attr.Val)
-			for _, margin := range toprightbottomleft {
-				resolved["margin-"+margin] = values[margin]
-			}
-		case "list-style":
-			for _, part := range strings.Split(attr.Val, " ") {
-				switch part {
-				case "inside", "outside":
-					resolved["list-style-position"] = part
-				default:
-					if strings.HasPrefix(part, "url") {
-						resolved["list-style-image"] = part
-					} else {
-						resolved["list-style-type"] = trimQuotes(part)
-					}
-				}
-			}
-		case "padding":
-			values := getFourValues(attr.Val)
-			for _, padding := range toprightbottomleft {
-				resolved["padding-"+padding] = values[padding]
-			}
-		case "border":
-			for _, loc := range toprightbottomleft {
-				resolved["border-"+loc+"-style"] = "none"
-				resolved["border-"+loc+"-width"] = "1pt"
-				resolved["border-"+loc+"-color"] = "currentcolor"
-			}
-
-			// This does not work with colors such as rgb(1 , 2 , 4) which have spaces in them
-			for _, part := range splitCSSParts(attr.Val) {
-				for _, border := range toprightbottomleft {
-					if ok, str := isBorderStyle(part); ok {
-						resolved["border-"+border+"-style"] = str
-					} else if ok, str := isDimension(part); ok {
-						resolved["border-"+border+"-width"] = str
-					} else {
-						resolved["border-"+border+"-color"] = part
-					}
-				}
-			}
-		case "border-radius":
-			for _, lr := range []string{"left", "right"} {
-				for _, tb := range []string{"top", "bottom"} {
-					resolved["border-"+tb+"-"+lr+"-radius"] = attr.Val
-				}
-			}
-		case "border-top", "border-right", "border-bottom", "border-left":
-			resolved[key+"-width"] = "1pt"
-			resolved[key+"-style"] = "none"
-			resolved[key+"-color"] = "currentcolor"
-
-			for _, part := range splitCSSParts(attr.Val) {
-				if ok, str := isDimension(part); ok {
-					resolved[key+"-width"] = str
-				} else if ok, str := isBorderStyle(part); ok {
-					resolved[key+"-style"] = str
-				} else {
-					resolved[key+"-color"] = part
-				}
-			}
-		case "border-color":
-			values := getFourValues(attr.Val)
-			for _, loc := range toprightbottomleft {
-				resolved["border-"+loc+"-color"] = values[loc]
-			}
-		case "border-style":
-			values := getFourValues(attr.Val)
-			for _, loc := range toprightbottomleft {
-				resolved["border-"+loc+"-style"] = values[loc]
-			}
-		case "border-width":
-			values := getFourValues(attr.Val)
-			for _, loc := range toprightbottomleft {
-				resolved["border-"+loc+"-width"] = values[loc]
-			}
 		case "font":
 			fontstyle := "normal"
 			fontweight := "normal"

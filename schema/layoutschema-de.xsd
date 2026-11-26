@@ -608,6 +608,11 @@
           <xs:documentation>CSS id für diese Box.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="padding-top">
         <xs:annotation>
           <xs:documentation>Bestimmt den Innenabstand der Box (oben)</xs:documentation>
@@ -770,6 +775,11 @@
       <xs:attribute name="id">
         <xs:annotation>
           <xs:documentation>CSS id für diesen Kreis.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="radiusx" use="required">
@@ -1951,6 +1961,11 @@
           <xs:documentation>CSS id für dieses Element.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="clip">
         <xs:annotation>
           <xs:documentation>Bestimmt, ob die Inhalte des Rahmens auf dessen Fläche begrenzt werden sollen, oder ob sie darüber hinaus ragen dürfen.</xs:documentation>
@@ -3088,6 +3103,11 @@
           <xs:documentation>CSS id für dieses Element.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="bleed">
         <xs:annotation>
           <xs:documentation>Soll das Bild um die Beschnittzugabe (Options) größer werden?</xs:documentation>
@@ -4161,6 +4181,11 @@
       <xs:attribute name="id">
         <xs:annotation>
           <xs:documentation>CSS-Id der Liste.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="label-align">
@@ -5456,6 +5481,11 @@
       <xs:attribute name="id">
         <xs:annotation>
           <xs:documentation>CSS id für diesen Absatz.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="actualtext">
@@ -7188,6 +7218,11 @@
           <xs:documentation>CSS-Id für dieses Objekt.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="keepposition">
         <xs:annotation>
           <xs:documentation>Den virtuellen Cursor nicht verändern.</xs:documentation>
@@ -7538,6 +7573,11 @@
       <xs:attribute name="id">
         <xs:annotation>
           <xs:documentation>CSS-Id für diese Linie.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="length" use="required">
@@ -7962,6 +8002,11 @@
       <xs:attribute name="id">
         <xs:annotation>
           <xs:documentation>CSS id für dieses Element.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="background-color">
@@ -9082,6 +9127,11 @@
           <xs:documentation>CSS-Id für diese Tabelle.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="leading">
         <xs:annotation>
           <xs:documentation>Der Abstand zwischen zwei Zeilen.</xs:documentation>
@@ -9391,6 +9441,11 @@
       <xs:attribute name="id">
         <xs:annotation>
           <xs:documentation>CSS id für diese Tabellenzelle.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="align">
@@ -9794,6 +9849,11 @@
           <xs:documentation>CSS id für dieses Element.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Textblock">
@@ -9847,6 +9907,11 @@
       <xs:attribute name="id">
         <xs:annotation>
           <xs:documentation>CSS-Id für diesen Textblock.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="language">
@@ -11581,6 +11646,11 @@
           <xs:documentation>CSS-Id für diese Tabellenzeile.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="minheight">
         <xs:annotation>
           <xs:documentation>Die Mindesthöhe der Zeile in Rasterzellen oder als Längenangabe.</xs:documentation>
@@ -11925,6 +11995,11 @@
           <xs:documentation>CSS id für dieses Element.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Ul">
@@ -11954,6 +12029,11 @@
       <xs:attribute name="id">
         <xs:annotation>
           <xs:documentation>CSS-Id der Liste.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="style">
+        <xs:annotation>
+          <xs:documentation>CSS-Deklarationen für dieses Element, wie beim HTML-Attribut style, zum Beispiel border: 1pt solid red; padding: 2pt. Sie haben Vorrang vor den CSS-Regeln, aber nicht vor den Attributen, außer sie sind mit !important markiert. Ein leerer Wert wird ignoriert.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="label-align">

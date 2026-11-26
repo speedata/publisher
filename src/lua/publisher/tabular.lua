@@ -2849,7 +2849,8 @@ function tabular:reformat_head()
 end
 
 -- Resolves border conflicts for `border-collapse="collapse"` by setting
--- the heavier border on each shared edge and zeroing the loser.
+-- the heavier border on each shared edge and zeroing the loser. The style
+-- hidden (as in CSS) removes the border of both cells.
 ---@param tbl table[][] 2D table of cell descriptors.
 ---@return nil
 local function adjust_border(tbl)
@@ -2858,6 +2859,9 @@ local function adjust_border(tbl)
             for _, nxt in ipairs(col.nextcol) do
                 local td_borderright = tex.sp(col["border-right"] or 0) or 0
                 local td_borderleft = tex.sp(nxt["border-left"] or 0) or 0
+                if col["border-right-style"] == "hidden" or nxt["border-left-style"] == "hidden" then
+                    td_borderright, td_borderleft = 0, 0
+                end
                 local new_borderwidth = math.max(td_borderleft, td_borderright) / 2
                 col.td_borderright_calculated = math.max(col.td_borderright_calculated or 0, new_borderwidth)
                 nxt.td_borderleft_calculated = math.max(nxt.td_borderleft_calculated or 0, new_borderwidth)
@@ -2871,6 +2875,9 @@ local function adjust_border(tbl)
             for _, nxt in ipairs(col.nextrow) do
                 local td_borderbottom = tex.sp(col["border-bottom"] or 0) or 0
                 local td_bordertop = tex.sp(nxt["border-top"] or 0) or 0
+                if col["border-bottom-style"] == "hidden" or nxt["border-top-style"] == "hidden" then
+                    td_borderbottom, td_bordertop = 0, 0
+                end
                 local new_borderwidth = math.max(td_borderbottom, td_bordertop) / 2
                 nxt.td_bordertop_calculated = math.max(nxt.td_bordertop_calculated or 0, new_borderwidth)
                 col.td_borderbottom_calculated = math.max(col.td_borderbottom_calculated or 0, new_borderwidth)

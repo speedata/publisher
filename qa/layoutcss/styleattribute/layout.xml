@@ -1,0 +1,55 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- The attribute style of layout commands. Every line names the
+         expected result, nothing red may appear. Precedence: !important in
+         style, !important in rules, attributes, style, rules. -->
+    <Pageformat width="120mm" height="170mm"/>
+    <SetGrid width="5mm" height="5mm"/>
+
+    <Stylesheet>
+        :root { --ok: green }
+        paragraph.r { color: red }
+        paragraph#spec.a.b { color: red }
+        paragraph.imp { color: red !important }
+        td { padding: 1mm; background-color: red }
+        td.imp { background-color: green !important }
+        box { background-color: red }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject row="1" column="1">
+            <Textblock width="20">
+                <Paragraph class="r" style="color: green"><Value>green (style over rule)</Value></Paragraph>
+                <Paragraph id="spec" class="r a b" style="color: green"><Value>green (style over more specific rule)</Value></Paragraph>
+                <Paragraph class="imp" style="color: green !important"><Value>green (!important style over !important rule)</Value></Paragraph>
+                <Paragraph style="color: red" color="green"><Value>green (attribute over style)</Value></Paragraph>
+                <Paragraph style="color: green !important" color="red"><Value>green (!important style over attribute)</Value></Paragraph>
+                <Paragraph style="color: var(--ok)"><Value>green (var() in style)</Value></Paragraph>
+                <Paragraph style="--own: green; color: var(--own)"><Value>green (custom property in style)</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject column="1">
+            <Textblock width="20" style="color: green">
+                <Paragraph style=""><Value>green (inherited from Textblock, empty style ignored)</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject column="1">
+            <Table stretch="no" leading="1mm">
+                <Columns><Column width="20"/></Columns>
+                <ForAll select="cell">
+                    <Tr><Td style="{@style}"><Paragraph><Value select="@text"/></Paragraph></Td></Tr>
+                </ForAll>
+                <Tr style="--bg: green; color: white">
+                    <Td style="background-color: var(--bg)"><Paragraph><Value>green cell, white text (from Tr)</Value></Paragraph></Td>
+                </Tr>
+                <Tr><Td class="imp" style="background-color: red"><Paragraph><Value>green cell (!important rule over style)</Value></Paragraph></Td></Tr>
+                <Tr><Td style="background-color: red" background-color="green"><Paragraph><Value>green cell (attribute over style)</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject row="17" column="1"><Box width="4" height="1" style="background-color: green"/></PlaceObject>
+        <PlaceObject row="17" column="6">
+            <Textblock width="14"><Paragraph><Value>green box (style on Box)</Value></Paragraph></Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

@@ -1,0 +1,89 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- CSS shorthands in layout commands and border styles of table
+         cells. Every line names the expected result, nothing red may
+         appear. A Td border without a style is drawn solid, a td border in
+         HTML needs a style (as in CSS). One warning is expected (border
+         style dashed is drawn solid). -->
+    <Pageformat width="120mm" height="200mm"/>
+    <SetGrid width="5mm" height="5mm"/>
+
+    <Stylesheet>
+        :root { --frame: 1pt solid green }
+        td { padding: 1mm }
+        td.solid { border: 1pt solid green }
+        td.nostyle { border: 1pt green }
+        td.spec { border: 1pt solid red }
+        td.spec.x { border-color: green }
+        td.later { border: 1pt solid red; border-color: green }
+        td.imp { border: 1pt solid green !important }
+        td.imp.x { border-color: red }
+        td.var { border: var(--frame) }
+        td.sides { border-width: 0 0 2pt 2pt; border-color: green; border-style: solid }
+        td.none { border: 1pt solid red; border-style: none }
+        td.attr { border-style: none }
+        td.cc { color: green; border: 1pt solid currentcolor }
+        td.dashed { border: 1pt dashed green }
+        td.width { border-right: 2pt }
+        td.pad { padding-left: 20mm }
+        td.pad.x { padding: 1mm }
+        td.padlong { padding: 1mm; padding-left: 10mm }
+        table.collapse td { border: 1pt solid red }
+        table.collapse td.left { border: 1pt solid green; border-right-style: hidden }
+        table.collapse td.right { border-left-color: red; border-top-color: green; border-right-color: green; border-bottom-color: green }
+        frame.round { border-radius: 2mm }
+        td.both { border: 1pt green }
+        td.both2 { border: 1pt solid green }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject row="1" column="1">
+            <Table stretch="no" leading="1mm">
+                <Columns><Column width="20"/></Columns>
+                <Tr><Td class="solid"><Paragraph><Value>green frame (border)</Value></Paragraph></Td></Tr>
+                <Tr><Td class="nostyle"><Paragraph><Value>green frame (border without style)</Value></Paragraph></Td></Tr>
+                <Tr><Td class="spec x"><Paragraph><Value>green frame (more specific border-color)</Value></Paragraph></Td></Tr>
+                <Tr><Td class="later"><Paragraph><Value>green frame (later border-color)</Value></Paragraph></Td></Tr>
+                <Tr><Td class="imp x"><Paragraph><Value>green frame (!important border)</Value></Paragraph></Td></Tr>
+                <Tr><Td class="var"><Paragraph><Value>green frame (border: var(--frame))</Value></Paragraph></Td></Tr>
+                <Tr><Td class="sides"><Paragraph><Value>green lines left and bottom only</Value></Paragraph></Td></Tr>
+                <Tr><Td class="none"><Paragraph><Value>no frame (border-style: none)</Value></Paragraph></Td></Tr>
+                <Tr><Td class="attr" border-top="1pt" border-top-color="green"><Paragraph><Value>green line on top (attribute beats style none)</Value></Paragraph></Td></Tr>
+                <Tr><Td class="cc"><Paragraph><Value>green text and frame (currentcolor)</Value></Paragraph></Td></Tr>
+                <Tr><Td class="dashed"><Paragraph><Value>green frame (dashed, drawn solid)</Value></Paragraph></Td></Tr>
+                <Tr><Td class="width"><Paragraph><Value>black line right (border-right: 2pt)</Value></Paragraph></Td></Tr>
+                <Tr><Td class="pad x" border-left="0.5pt"><Paragraph><Value>1mm padding left (more specific padding)</Value></Paragraph></Td></Tr>
+                <Tr><Td class="padlong" border-left="0.5pt"><Paragraph><Value>10mm padding left (later padding-left)</Value></Paragraph></Td></Tr>
+                <Tr><Td class="padlong" border-left="0.5pt" padding="1mm"><Paragraph><Value>1mm padding left (attribute padding)</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject column="1">
+            <Table stretch="no" border-collapse="collapse" class="collapse">
+                <Columns><Column width="10"/><Column width="10"/></Columns>
+                <Tr>
+                    <Td class="left"><Paragraph><Value>green frame</Value></Paragraph></Td>
+                    <Td class="right"><Paragraph><Value>no line between (hidden)</Value></Paragraph></Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject column="1">
+            <Frame class="round" framecolor="green" rulewidth="1pt">
+                <Textblock width="20"><Paragraph><Value>green frame with round corners (border-radius)</Value></Paragraph></Textblock>
+            </Frame>
+        </PlaceObject>
+        <PlaceObject column="1">
+            <Table stretch="no">
+                <Columns><Column width="10"/><Column width="10"/></Columns>
+                <Tr>
+                    <Td class="both"><Paragraph><Value>layout: green frame (border: 1pt green)</Value></Paragraph></Td>
+                    <Td><Paragraph><Value select="nostyle/*"/></Paragraph></Td>
+                </Tr>
+                <Tr>
+                    <Td class="both2"><Paragraph><Value>layout: green frame (1pt solid green)</Value></Paragraph></Td>
+                    <Td><Paragraph><Value select="solid/*"/></Paragraph></Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

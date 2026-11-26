@@ -46,6 +46,7 @@ oder
 Viele Befehle im Layoutregelwerk lassen sich mit CSS gestalten: Absätze, Textblöcke, Tabellen, Boxen, Linien, Listen und einige mehr.
 Die Selektoren und die Kaskade funktionieren wie im Webbrowser.
 Ein Attribut am Befehl hat Vorrang vor einer CSS-Regel; so lassen sich Vorgaben im Stylesheet bündeln und im Einzelfall überschreiben.
+Mit dem Attribut [`style`](#css-style) lassen sich CSS-Angaben auch direkt an einen Befehl schreiben, zum Beispiel aus den Daten.
 
 Ein vollständiges Beispiel: die Box erhält ihre Hintergrundfarbe über die Klasse `warn`, der Absatz seine Schriftgröße und Farbe über `paragraph.hinweis`.
 
@@ -134,6 +135,9 @@ html td   { padding: 4pt }   /* nur Zellen in HTML-Inhalten */
 td        { color: black }   /* beide */
 ```
 
+Einen Unterschied gibt es bei Rahmen von Tabellenzellen: `td { border: 1pt red }` zeichnet an `<Td>` eine Linie, in HTML-Inhalten nicht, weil dort wie im Browser ein Rahmenstil nötig ist (siehe [Rahmen von Tabellenzellen](#css-cell-borders)).
+Mit `td { border: 1pt solid red }` sehen die Zellen in beiden Wegen gleich aus.
+
 ### Kaskade und Vorrang
 
 Alle passenden Regeln gelten.
@@ -141,11 +145,13 @@ Setzen zwei Regeln dieselbe Eigenschaft, gewinnt die spezifischere (eine Id vor 
 
 Kommt ein Wert von mehreren Seiten, gilt diese Reihenfolge, das Stärkste zuerst:
 
-1. Eine CSS-Angabe mit `!important`.
-2. Das Attribut am Befehl.
-3. Die CSS-Regeln für den Befehl selbst.
-4. Werte, die der Befehl von umgebenden Befehlen erbt (siehe nächster Abschnitt).
-5. Die Vorgaben des Publishers, etwa das Textformat `text` und die Schriftart `text`.
+1. Eine Angabe mit `!important` im Attribut [`style`](#css-style).
+2. Eine CSS-Regel mit `!important`.
+3. Das Attribut am Befehl.
+4. Das Attribut `style`.
+5. Die CSS-Regeln für den Befehl selbst.
+6. Werte, die der Befehl von umgebenden Befehlen erbt (siehe nächster Abschnitt).
+7. Die Vorgaben des Publishers, etwa das Textformat `text` und die Schriftart `text`.
 
 Manche Attribute stehen für mehrere CSS-Eigenschaften.
 Ist das Attribut gesetzt, gelten CSS-Regeln und geerbte Werte für diese Eigenschaften nicht (außer mit `!important`):
@@ -188,6 +194,54 @@ Ebenso gilt eine Textauszeichnung mit `text-decoration` (zum Beispiel an einer T
 Relative Angaben wie `font-size: 1.2em` beziehen sich auf die Schrift des umgebenden Befehls.
 Ein Attribut ersetzt auch die geerbten Werte, für die es steht: ein Absatz mit `fontfamily="..."` erbt keine Schriftgröße, ein Textblock mit `textformat="..."` gibt keine Ausrichtung aus CSS an seine Absätze weiter.
 
+### Das Attribut `style` {#css-style}
+
+Alle Befehle mit dem Attribut `class` haben auch das Attribut `style`.
+Es enthält CSS-Deklarationen für diesen einen Befehl, wie das gleichnamige Attribut in HTML.
+So können Formatangaben direkt aus den Daten kommen:
+
+```xml
+<Tr>
+  <ForAll select="Column">
+    <Td style="{@style}"><Paragraph><Value select="@text"/></Paragraph></Td>
+  </ForAll>
+</Tr>
+```
+
+mit Daten wie
+
+```xml
+<Column style="background-color: #ffe0e0; border: 1pt solid #ff8c00" text="Achtung"/>
+```
+
+* Die Deklarationen haben Vorrang vor allen CSS-Regeln, auch vor spezifischeren.
+  Eine Regel mit `!important` gewinnt gegen `style`, eine Angabe mit `!important` im `style` gewinnt gegen beide.
+* Ein Attribut am Befehl hat Vorrang vor `style`, außer die Angabe im `style` ist mit `!important` markiert.
+  Hier weicht der Publisher vom Browser ab, wo `style` gegen Attribute wie `width` gewinnt: Im Layoutregelwerk sind Attribute ausdrücklich gesetzte Werte und stehen auch sonst über den CSS-Regeln.
+* Die Werte werden vererbt wie die aus Regeln: `<Tr style="color: red">` färbt den Text aller Zellen der Zeile.
+* Kurzformen, `var()` und Variablen sind erlaubt, etwa `style="--akzent: green; border: 1pt solid var(--akzent)"`.
+* Ein leerer Wert, zum Beispiel weil das Attribut in den Daten fehlt, wird ignoriert.
+
+### Kurzformen {#css-shorthands}
+
+Kurzformen fassen mehrere Eigenschaften zusammen.
+Bei Layout-Befehlen zerlegt der Publisher die folgenden Kurzformen in ihre Einzeleigenschaften: `padding`, `margin`, `border`, `border-top` (und die anderen Seiten), `border-width`, `border-style`, `border-color`, `border-radius` und `list-style`.
+Das geschieht während der Kaskade, deshalb gilt wie in CSS: Eine spätere oder spezifischere Angabe ersetzt genau die Einzeleigenschaften, die sie setzt.
+
+```css
+td { padding: 2pt; padding-left: 6pt }   /* links 6pt, sonst 2pt */
+td.eng { padding: 1pt }                   /* überall 1pt, auch links */
+```
+
+Wo in der Tabelle im nächsten Abschnitt eine Einzeleigenschaft steht (zum Beispiel `padding-*` oder `border-*-width`), wirkt also auch die Kurzform.
+Das Attribut `padding` an `<Table>`, `<Td>` und `<Image>` verdeckt alle vier Seiten aus CSS, außer sie sind mit `!important` markiert.
+
+Anders als in CSS setzt eine Rahmen-Kurzform bei Layout-Befehlen nur die Teile, die sie nennt.
+`td { border-right: 0.25pt }` ändert nur die Breite, Stil und Farbe bleiben, wie sie sind.
+In CSS und in HTML-Inhalten setzt dieselbe Angabe den Stil auf `none` und die Farbe auf die Textfarbe zurück.
+
+`font` und `background` werden bei Layout-Befehlen nicht zerlegt.
+
 ### Eigenschaften der Befehle
 
 | Befehl | CSS-Eigenschaften |
@@ -197,18 +251,19 @@ Ein Attribut ersetzt auch die geerbten Werte, für die es steht: ein Absatz mit 
 | `table` | die vererbten Eigenschaften, `padding` und `padding-*` (Vorgabe für alle Zellen), `border-collapse` |
 | `tablehead`, `tablefoot` | die vererbten Eigenschaften |
 | `tr` | die vererbten Eigenschaften, `background-color`, `vertical-align` |
-| `td` | die vererbten Eigenschaften, `vertical-align`, `background-color`, `padding`, `padding-*`, `border-*-width`, `border-*-color`, `transform` (nur `rotate()`) bzw. `rotate` für das Attribut `rotate` sowie `background-text` und die übrigen Hintergrund-Attribute |
+| `td` | die vererbten Eigenschaften, `vertical-align`, `background-color`, `padding-*`, `border-*-width`, `border-*-style`, `border-*-color` (siehe [Rahmen von Tabellenzellen](#css-cell-borders)), `transform` (nur `rotate()`) bzw. `rotate` für das Attribut `rotate` sowie `background-text` und die übrigen Hintergrund-Attribute |
 | `tablerule` | `height` (Linienstärke), `background-color` (Farbe), `rule-start` |
 | `span` | `background-color`, `background-padding-top`, `background-padding-bottom`, `letter-spacing` |
 | `u` | `border-style` (`dashed` für eine gestrichelte Linie) |
 | `ul`, `ol` | `color`, `list-style-type`, `list-style-position`, `padding-left`; für das Aufzählungszeichen `li::marker` mit `content`, `color` und `padding-right` |
 | `box` | `background-color`, `padding-*` |
 | `circle` | `background-color`, `color` (Rahmenfarbe) |
-| `frame` | `border-*-radius` |
+| `frame` | `border-*-radius` (auch als `border-radius`) |
 | `img` | `padding`, `padding-*` |
 | `placeobject` | `background-color` |
 | `rule` | `height` (Linienstärke), `background-color` (Farbe) |
 
+Kurzformen wie `padding`, `border` oder `list-style` wirken überall, wo ihre Einzeleigenschaften stehen (siehe [Kurzformen](#css-shorthands)).
 Die Befehlsreferenz vermerkt bei jedem Attribut, das einer CSS-Eigenschaft entspricht, deren Namen (zum Beispiel „CSS-Eigenschaft: background-color“ bei `<Box>`).
 
 `font-family` nennt eine Schriftfamilie aus [`<DefineFontfamily>`]({{< relref "/reference/commands/definefontfamily" >}}), eine Schrift aus `@font-face` oder [`<LoadFontfile>`]({{< relref "/reference/commands/loadfontfile" >}}) oder eine der allgemeinen Familien `serif`, `sans-serif` und `monospace`.
@@ -259,6 +314,25 @@ Sollen sie auf jeder Seite neu beginnen, hilft `sd:alternating()` mit `eval-on-s
 Ein Tabellenkopf, der auf jeder Seite neu ausgewertet wird, behält die Regeln der Tabelle.
 
 Das vollständige Beispiel liegt im [Beispiele-Repository](https://github.com/speedata/examples/tree/master/technical/csstable).
+
+#### Rahmen von Tabellenzellen {#css-cell-borders}
+
+Zellen erhalten ihre Rahmen über `border` und die Einzeleigenschaften `border-*-width`, `border-*-style` und `border-*-color` oder über die Attribute `border-top`, `border-top-color` usw. an `<Td>`:
+
+```xml
+<Stylesheet>
+  table.liste td { border-bottom: 0.5pt solid #999 }
+  table.liste tablehead td { border-bottom: 1pt solid black }
+</Stylesheet>
+```
+
+* Ohne Rahmenstil zeichnet `<Td>` eine durchgezogene Linie, `td { border: 1pt red }` ergibt also einen roten Rahmen.
+  Im Browser und bei Tabellenzellen in HTML-Inhalten wird ein Rahmen ohne Stil dagegen nicht gezeichnet.
+* `none` und `hidden` entfernen den Rahmen einer Seite.
+  Bei `border-collapse: collapse` entfernt `hidden` auch den Rahmen der Nachbarzelle an dieser Kante.
+  Ein Attribut wie `border-top="1pt"` hat Vorrang vor `none` oder `hidden` aus einer Regel, außer mit `!important`.
+* Die übrigen Stile (`dashed`, `dotted`, `double` und weitere) werden vorerst als durchgezogene Linie gezeichnet, der Publisher gibt dazu eine Warnung aus.
+* `currentcolor` als Rahmenfarbe ist die Textfarbe der Zelle aus CSS, sonst Schwarz.
 
 ## CSS für HTML-Inhalte und Auszeichnungen in den Daten
 
@@ -318,7 +392,9 @@ Die folgenden Eigenschaften werden bei der HTML-Verarbeitung ausgewertet:
 
 * Schrift: `font-family`, `font-size`, `font-style`, `font-weight` (`bold`, `normal` oder Zahlenwerte, ab 600 fett)
 * Text: `color`, `text-align`, `text-decoration` (bzw. `text-decoration-line` mit `underline`, `overline` und `line-through`, `text-decoration-style` mit `solid`, `double`, `dotted`, `dashed` und `wavy`, `text-decoration-color`), `line-height`, `white-space` (`normal`, `pre`), `vertical-align` (`super`, `sub`) und `hyphens` (`none` bzw. `manual` schaltet die Silbentrennung aus)
-* Box-Modell: `margin-*`, `padding-*`, `border-*` (Breite, Stil und Farbe je Seite sowie `border-radius` je Ecke), `width`, `height`
+* Box-Modell: `margin-*`, `padding-*`, `border-*` (Breite, Stil und Farbe je Seite sowie `border-radius` je Ecke), `width`, `height`.
+  Ein Rahmen braucht wie im Browser einen Stil, `border: 1pt black` zeichnet nichts.
+  An Tabellenzellen werden andere Stile als `none` und `hidden` vorerst als durchgezogene Linie gezeichnet.
 * Hintergrund: `background-color`
 * Listen: `list-style-type`, `list-style-position`, `list-style` sowie das Pseudoelement `li::marker` (`content`, `color`, `font-family`, `font-size`, `padding-right`, `padding-bottom`)
 * Pseudoelemente `::before` und `::after` an Block- und Inline-Elementen: `content` sowie `color`, `font-family`, `font-style` und `font-weight`; bei Blockelementen für `::before` zusätzlich `width` und `margin-left`. Das Pseudoelement erbt die Eigenschaften seines Elements.
@@ -357,7 +433,7 @@ Variablen gelten für Layout-Befehle und HTML-Inhalte gleichermaßen:
 * Ein zweites Argument gibt einen Ersatzwert an, falls die Variable nicht definiert ist: `color: var(--akzent, black)`. Der Ersatzwert darf selbst `var()` enthalten.
 * Variablen dürfen auf andere Variablen verweisen (`--rahmen: 1pt solid var(--hausfarbe)`) und in Kurzschreibweisen stehen (`padding: var(--abstand) 0`).
 * Groß- und Kleinschreibung zählen: `--Farbe` und `--farbe` sind zwei verschiedene Variablen.
-* Das `style`-Attribut in HTML-Inhalten kann Variablen setzen und benutzen.
+* Das Attribut `style` in HTML-Inhalten und an Layout-Befehlen kann Variablen setzen und benutzen.
 
 Kann der Publisher eine Variable nicht einsetzen, weil sie nicht definiert ist und kein Ersatzwert angegeben ist oder weil Variablen im Kreis aufeinander verweisen, ignoriert er die Deklaration und gibt eine Warnung aus.
 Es gilt dann, was ohne diese Deklaration gelten würde: eine andere passende Regel, das Attribut oder der geerbte Wert.

@@ -46,6 +46,7 @@ or
 Many commands in the layout rules can be styled with CSS: paragraphs, text blocks, tables, boxes, rules, lists and some more.
 Selectors and the cascade work as in a web browser.
 An attribute on the command takes precedence over a CSS rule, so you can keep the defaults in the stylesheet and override them where needed.
+With the attribute [`style`](#css-style), CSS declarations can also be written directly on a command, for example from the data.
 
 A complete example: the box gets its background color from the class `warn`, the paragraph its font size and color from `paragraph.note`.
 
@@ -134,6 +135,9 @@ html td   { padding: 4pt }   /* only cells in HTML content */
 td        { color: black }   /* both */
 ```
 
+There is one difference for the borders of table cells: `td { border: 1pt red }` draws a line on `<Td>`, but not in HTML content, because there a border style is needed, as in a browser (see [Borders of table cells](#css-cell-borders)).
+With `td { border: 1pt solid red }`, the cells look the same in both.
+
 ### Cascade and precedence
 
 All matching rules apply.
@@ -141,11 +145,13 @@ If two rules set the same property, the more specific one wins (an id before a c
 
 If a value comes from several places, this order applies, strongest first:
 
-1. A CSS declaration with `!important`.
-2. The attribute on the command.
-3. The CSS rules for the command itself.
-4. Values the command inherits from the surrounding commands (see the next section).
-5. The defaults of the Publisher, such as the text format `text` and the font family `text`.
+1. A declaration with `!important` in the attribute [`style`](#css-style).
+2. A CSS rule with `!important`.
+3. The attribute on the command.
+4. The attribute `style`.
+5. The CSS rules for the command itself.
+6. Values the command inherits from the surrounding commands (see the next section).
+7. The defaults of the Publisher, such as the text format `text` and the font family `text`.
 
 Some attributes stand for several CSS properties.
 If the attribute is set, CSS rules and inherited values for these properties do not apply (except with `!important`):
@@ -188,6 +194,54 @@ Likewise, a `text-decoration` (for example on a table cell) applies to the text 
 Relative values such as `font-size: 1.2em` refer to the font of the surrounding command.
 An attribute also replaces the inherited values it stands for: a paragraph with `fontfamily="..."` inherits no font size, and a text block with `textformat="..."` does not pass an alignment from CSS on to its paragraphs.
 
+### The attribute `style` {#css-style}
+
+All commands with the attribute `class` also have the attribute `style`.
+It contains CSS declarations for this one command, like the attribute of the same name in HTML.
+This way, formatting can come directly from the data:
+
+```xml
+<Tr>
+  <ForAll select="Column">
+    <Td style="{@style}"><Paragraph><Value select="@text"/></Paragraph></Td>
+  </ForAll>
+</Tr>
+```
+
+with data such as
+
+```xml
+<Column style="background-color: #ffe0e0; border: 1pt solid #ff8c00" text="Attention"/>
+```
+
+* The declarations take precedence over all CSS rules, including more specific ones.
+  A rule with `!important` wins over `style`, a declaration with `!important` in `style` wins over both.
+* An attribute on the command takes precedence over `style`, unless the declaration in `style` is marked `!important`.
+  This differs from a browser, where `style` wins over attributes such as `width`: in the layout rules, attributes are explicitly set values and also take precedence over the CSS rules.
+* The values are inherited like those from rules: `<Tr style="color: red">` colors the text of all cells in the row.
+* Shorthands, `var()` and variables are allowed, for example `style="--accent: green; border: 1pt solid var(--accent)"`.
+* An empty value, for example because the attribute is missing in the data, is ignored.
+
+### Shorthands {#css-shorthands}
+
+Shorthands combine several properties.
+For layout commands, the Publisher splits the following shorthands into their longhands: `padding`, `margin`, `border`, `border-top` (and the other sides), `border-width`, `border-style`, `border-color`, `border-radius` and `list-style`.
+This happens during the cascade, so as in CSS, a later or more specific declaration replaces exactly the longhands it sets.
+
+```css
+td { padding: 2pt; padding-left: 6pt }   /* 6pt on the left, 2pt elsewhere */
+td.tight { padding: 1pt }                 /* 1pt everywhere, also on the left */
+```
+
+Where the table in the next section lists a longhand (for example `padding-*` or `border-*-width`), the shorthand works as well.
+The attribute `padding` on `<Table>`, `<Td>` and `<Image>` hides all four sides from CSS, unless they are marked `!important`.
+
+Unlike in CSS, a border shorthand on layout commands sets only the parts it names.
+`td { border-right: 0.25pt }` changes only the width, style and color stay as they are.
+In CSS and in HTML content, the same declaration resets the style to `none` and the color to the text color.
+
+`font` and `background` are not split for layout commands.
+
 ### Properties of the commands
 
 | Command | CSS properties |
@@ -197,18 +251,19 @@ An attribute also replaces the inherited values it stands for: a paragraph with 
 | `table` | the inherited properties, `padding` and `padding-*` (default for all cells), `border-collapse` |
 | `tablehead`, `tablefoot` | the inherited properties |
 | `tr` | the inherited properties, `background-color`, `vertical-align` |
-| `td` | the inherited properties, `vertical-align`, `background-color`, `padding`, `padding-*`, `border-*-width`, `border-*-color`, `transform` (only `rotate()`) or `rotate` for the attribute `rotate` as well as `background-text` and the other background attributes |
+| `td` | the inherited properties, `vertical-align`, `background-color`, `padding-*`, `border-*-width`, `border-*-style`, `border-*-color` (see [Borders of table cells](#css-cell-borders)), `transform` (only `rotate()`) or `rotate` for the attribute `rotate` as well as `background-text` and the other background attributes |
 | `tablerule` | `height` (rule width), `background-color` (color), `rule-start` |
 | `span` | `background-color`, `background-padding-top`, `background-padding-bottom`, `letter-spacing` |
 | `u` | `border-style` (`dashed` for a dashed line) |
 | `ul`, `ol` | `color`, `list-style-type`, `list-style-position`, `padding-left`; for the marker `li::marker` with `content`, `color` and `padding-right` |
 | `box` | `background-color`, `padding-*` |
 | `circle` | `background-color`, `color` (frame color) |
-| `frame` | `border-*-radius` |
+| `frame` | `border-*-radius` (also as `border-radius`) |
 | `img` | `padding`, `padding-*` |
 | `placeobject` | `background-color` |
 | `rule` | `height` (rule width), `background-color` (color) |
 
+Shorthands such as `padding`, `border` or `list-style` work wherever their longhands are listed (see [Shorthands](#css-shorthands)).
 The command reference notes the name of the CSS property for every attribute that corresponds to one (for example “CSS property: background-color” for `<Box>`).
 
 `font-family` names a font family from [`<DefineFontfamily>`]({{< relref "/reference/commands/definefontfamily" >}}), a font from `@font-face` or [`<LoadFontfile>`]({{< relref "/reference/commands/loadfontfile" >}}), or one of the generic families `serif`, `sans-serif` and `monospace`.
@@ -259,6 +314,25 @@ To restart them on every page, use `sd:alternating()` with `eval-on-split` (see 
 A table head that is evaluated again on every page keeps the rules of the table.
 
 The complete example is in the [examples repository](https://github.com/speedata/examples/tree/master/technical/csstable).
+
+#### Borders of table cells {#css-cell-borders}
+
+Cells get their borders from `border` and the longhands `border-*-width`, `border-*-style` and `border-*-color`, or from the attributes `border-top`, `border-top-color` etc. on `<Td>`:
+
+```xml
+<Stylesheet>
+  table.list td { border-bottom: 0.5pt solid #999 }
+  table.list tablehead td { border-bottom: 1pt solid black }
+</Stylesheet>
+```
+
+* Without a border style, `<Td>` draws a solid line, so `td { border: 1pt red }` gives a red border.
+  In a browser and for table cells in HTML content, a border without a style is not drawn.
+* `none` and `hidden` remove the border of a side.
+  With `border-collapse: collapse`, `hidden` also removes the border of the neighboring cell at this edge.
+  An attribute such as `border-top="1pt"` takes precedence over `none` or `hidden` from a rule, except with `!important`.
+* The other styles (`dashed`, `dotted`, `double` and more) are drawn as a solid line for now, with a warning.
+* `currentcolor` as the border color is the text color of the cell from CSS, otherwise black.
 
 ## CSS for HTML content and markup in the data
 
@@ -318,7 +392,9 @@ The following properties are evaluated by the HTML processing:
 
 * Font: `font-family`, `font-size`, `font-style`, `font-weight` (`bold`, `normal` or numbers, bold from 600 on)
 * Text: `color`, `text-align`, `text-decoration` (or `text-decoration-line` with `underline`, `overline` and `line-through`, `text-decoration-style` with `solid`, `double`, `dotted`, `dashed` and `wavy`, `text-decoration-color`), `line-height`, `white-space` (`normal`, `pre`), `vertical-align` (`super`, `sub`) and `hyphens` (`none` or `manual` turns off hyphenation)
-* Box model: `margin-*`, `padding-*`, `border-*` (width, style and color per side plus `border-radius` per corner), `width`, `height`
+* Box model: `margin-*`, `padding-*`, `border-*` (width, style and color per side plus `border-radius` per corner), `width`, `height`.
+  As in a browser, a border needs a style, `border: 1pt black` draws nothing.
+  On table cells, styles other than `none` and `hidden` are drawn as a solid line for now.
 * Background: `background-color`
 * Lists: `list-style-type`, `list-style-position`, `list-style` and the pseudo-element `li::marker` (`content`, `color`, `font-family`, `font-size`, `padding-right`, `padding-bottom`)
 * Pseudo-elements `::before` and `::after` on block and inline elements: `content` as well as `color`, `font-family`, `font-style` and `font-weight`; on block elements, `::before` also supports `width` and `margin-left`. The pseudo-element inherits the properties of its element.
@@ -357,7 +433,7 @@ Variables apply to layout commands and HTML content alike:
 * A second argument gives a fallback in case the variable is not defined: `color: var(--accent, black)`. The fallback may itself contain `var()`.
 * Variables may refer to other variables (`--frame: 1pt solid var(--brand-color)`) and appear in shorthand properties (`padding: var(--spacing) 0`).
 * Names are case-sensitive: `--Color` and `--color` are two different variables.
-* The `style` attribute in HTML content can set and use variables.
+* The attribute `style` in HTML content and on layout commands can set and use variables.
 
 If the Publisher cannot insert a variable, because it is not defined and there is no fallback, or because variables refer to each other in a cycle, it ignores the declaration and gives a warning.
 Whatever would apply without this declaration takes effect: another matching rule, the attribute or the inherited value.

@@ -383,6 +383,84 @@ function M.box_sides(value)
     return top, right, bottom, v[4] or right
 end
 
+-- The CSS rules deliver padding only as padding-top etc. (shorthands are
+-- split in the cascade). The attribute padding takes precedence over these
+-- sides, unless a side is set as an attribute itself. `tab` holds the CSS
+-- values overwritten by the attribute values, `attributes` the names of
+-- the attributes that are set. !important declarations must be applied
+-- afterwards.
+---@param tab table<string, any>
+---@param attributes table<string, boolean>
+---@return nil
+function M.padding_attribute_precedence(tab, attributes)
+    if not attributes.padding then
+        return
+    end
+    for _, side in ipairs({ "top", "right", "bottom", "left" }) do
+        local property = "padding-" .. side
+        if not attributes[property] then
+            tab[property] = nil
+        end
+    end
+end
+
+local border_styles = {
+    dashed = true,
+    dotted = true,
+    double = true,
+    groove = true,
+    hidden = true,
+    inset = true,
+    none = true,
+    outset = true,
+    ridge = true,
+    solid = true,
+}
+-- Border styles a cell cannot draw yet, logged once each.
+---@type table<string, boolean>
+local border_styles_warned = {}
+
+-- Applies the border styles and colors of a table cell (Td or td in HTML).
+-- `tab` holds the values from CSS and the attributes (border-top is the
+-- width), `attributes` the names of the attributes that are set. Without a
+-- style Td draws a solid line (unlike CSS, where the style defaults to
+-- none; HTML passes none). none and hidden remove the border, unless the
+-- side has a width attribute and the style is not !important. The other
+-- styles are drawn solid for now. currentcolor is the text color of the
+-- cell, `color` (black if unset).
+---@param tab table<string, any>
+---@param attributes table<string, boolean>
+---@param important table<string, boolean>
+---@param color? string
+---@return nil
+function M.td_border_styles(tab, attributes, important, color)
+    for _, side in ipairs({ "top", "right", "bottom", "left" }) do
+        local width_key = "border-" .. side
+        local style_key = width_key .. "-style"
+        local color_key = width_key .. "-color"
+        local style = tab[style_key]
+        if style then
+            style = string.lower(style)
+            if not border_styles[style] then
+                invalid(style_key, style)
+                style = nil
+            elseif (style == "none" or style == "hidden") and attributes[width_key] and not important[style_key] then
+                style = nil
+            end
+            tab[style_key] = style
+        end
+        if style == "none" or style == "hidden" then
+            tab[width_key] = nil
+        elseif style and style ~= "solid" and not border_styles_warned[style] then
+            border_styles_warned[style] = true
+            main.log("warn", "Table cell: border style not supported yet, drawing a solid line", "style", style)
+        end
+        if type(tab[color_key]) == "string" and string.lower(tab[color_key]) == "currentcolor" then
+            tab[color_key] = color or "black"
+        end
+    end
+end
+
 local decoration_lines = { none = true, underline = true, overline = true, ["line-through"] = true }
 local decoration_styles = { solid = true, double = true, dotted = true, dashed = true, wavy = true }
 

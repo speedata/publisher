@@ -59,52 +59,15 @@ function M.build_html_table_tbody(tbody, cb, dataxml, stylesstack, _border_colla
                     -- Copy cell border and padding styles onto the container
                     local att = td_styles
                     if att then
-                        local bbw = att["border-bottom-width"]
-                        local btw = att["border-top-width"]
-                        local brw = att["border-right-width"]
-                        local blw = att["border-left-width"]
-                        if bbw then
-                            newcontents["border-bottom"] = bbw
+                        -- As in CSS, a border needs a style (the initial
+                        -- style is none), unlike Td in the layout.
+                        for _, side in ipairs({ "top", "right", "bottom", "left" }) do
+                            local prefix = "border-" .. side
+                            newcontents[prefix] = att[prefix .. "-width"]
+                            newcontents[prefix .. "-color"] = att[prefix .. "-color"]
+                            newcontents[prefix .. "-style"] = att[prefix .. "-style"] or "none"
                         end
-                        if btw then
-                            newcontents["border-top"] = btw
-                        end
-                        if blw then
-                            newcontents["border-left"] = blw
-                        end
-                        if brw then
-                            newcontents["border-right"] = brw
-                        end
-                        local bbc = att["border-bottom-color"]
-                        local btc = att["border-top-color"]
-                        local brc = att["border-right-color"]
-                        local blc = att["border-left-color"]
-
-                        local currentcolor = att.color or "black"
-                        if bbc then
-                            if bbc == "currentcolor" then
-                                bbc = currentcolor
-                            end
-                            newcontents["border-bottom-color"] = bbc
-                        end
-                        if btc then
-                            if btc == "currentcolor" then
-                                btc = currentcolor
-                            end
-                            newcontents["border-top-color"] = btc
-                        end
-                        if blc then
-                            if blc == "currentcolor" then
-                                blc = currentcolor
-                            end
-                            newcontents["border-left-color"] = blc
-                        end
-                        if brc then
-                            if brc == "currentcolor" then
-                                brc = currentcolor
-                            end
-                            newcontents["border-right-color"] = brc
-                        end
+                        publisher.cssstyle.td_border_styles(newcontents, {}, {}, att.color)
                         local pt = att["padding-top"]
                         local pb = att["padding-bottom"]
                         local pl = att["padding-left"]

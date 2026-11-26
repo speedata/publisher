@@ -15,7 +15,8 @@ type LayoutElement struct {
 	Name     string // lower case element name, such as "td"
 	Class    string // space separated class names
 	ID       string
-	Position int // 1-based position among its siblings, 0 if unknown
+	Position int    // 1-based position among its siblings, 0 if unknown
+	Style    string // declarations of the attribute style
 }
 
 // layoutDecl is a single declaration of a layout CSS rule.
@@ -45,11 +46,18 @@ type LayoutStylesheet struct {
 	// warned contains the warnings already given, so that each one
 	// appears only once.
 	warned map[string]bool
+	// inline contains the parsed declarations of style attributes, by
+	// their text.
+	inline map[string]*layoutRule
 }
 
 // NewLayoutStylesheet returns an empty stylesheet.
 func NewLayoutStylesheet() *LayoutStylesheet {
-	return &LayoutStylesheet{Fontfamilies: map[string]FontFamily{}, warned: map[string]bool{}}
+	return &LayoutStylesheet{
+		Fontfamilies: map[string]FontFamily{},
+		warned:       map[string]bool{},
+		inline:       map[string]*layoutRule{},
+	}
 }
 
 // sourceString serializes tokens close to their source form. Unlike
@@ -112,19 +120,7 @@ func (ls *LayoutStylesheet) AddCSS(csstext string) {
 		}
 	}
 	for _, b := range block.Blocks {
-		decls := make([]layoutDecl, 0, len(b.Rules))
-		for _, r := range b.Rules {
-			key := sourceString(r.Key)
-			if key == "" {
-				continue
-			}
-			valtoks, important := splitImportant(r.Value)
-			value := sourceString(valtoks)
-			if isCustomProperty(key) || hasVar(value) {
-				ls.hasVars = true
-			}
-			decls = append(decls, layoutDecl{key: key, value: value, important: important})
-		}
+		decls := ls.layoutDecls(b.Rules)
 		selector := sourceString(b.ComponentValues)
 		for _, sel := range parseSelectorGroup(selector) {
 			ls.rules = append(ls.rules, layoutRule{
@@ -135,6 +131,35 @@ func (ls *LayoutStylesheet) AddCSS(csstext string) {
 			})
 		}
 	}
+}
+
+// layoutDecls converts the key-value pairs of a block into declarations.
+func (ls *LayoutStylesheet) layoutDecls(rules []qrule) []layoutDecl {
+	decls := make([]layoutDecl, 0, len(rules))
+	for _, r := range rules {
+		key := sourceString(r.Key)
+		if key == "" {
+			continue
+		}
+		valtoks, important := splitImportant(r.Value)
+		value := sourceString(valtoks)
+		if isCustomProperty(key) || hasVar(value) {
+			ls.hasVars = true
+		}
+		decls = append(decls, layoutDecl{key: key, value: value, important: important})
+	}
+	return decls
+}
+
+// inlineRule returns a rule with the declarations of a style attribute.
+// It has no selector, matchNode adds it for the element itself.
+func (ls *LayoutStylesheet) inlineRule(style string) *layoutRule {
+	if r, ok := ls.inline[style]; ok {
+		return r
+	}
+	r := &layoutRule{decls: ls.layoutDecls(consumeBlock(parseCSSString(style), true).Rules)}
+	ls.inline[style] = r
+	return r
 }
 
 // buildChain creates a small DOM below a root element "layout" and returns
@@ -158,6 +183,9 @@ func buildChain(chain []LayoutElement) *html.Node {
 		if elt.ID != "" {
 			n.Attr = append(n.Attr, html.Attribute{Key: "id", Val: elt.ID})
 		}
+		if elt.Style != "" {
+			n.Attr = append(n.Attr, html.Attribute{Key: "style", Val: elt.Style})
+		}
 		parent.AppendChild(n)
 		if elt.Position > 0 {
 			parent.AppendChild(&html.Node{Type: html.ElementNode, Data: elt.Name})
@@ -168,7 +196,9 @@ func buildChain(chain []LayoutElement) *html.Node {
 
 // matchNode returns the rules that match the node n (or its pseudo
 // element), by ascending specificity, rules with the same specificity in
-// source order.
+// source order. The declarations of the attribute style of n come last
+// (not for a pseudo element), so they take precedence over the rules and
+// their !important ones over the !important ones of the rules.
 func (ls *LayoutStylesheet) matchNode(n *html.Node, pseudo string) []*layoutRule {
 	var matched []*layoutRule
 	for i := range ls.rules {
@@ -180,6 +210,13 @@ func (ls *LayoutStylesheet) matchNode(n *html.Node, pseudo string) []*layoutRule
 	sort.SliceStable(matched, func(a, b int) bool {
 		return matched[a].spec.Less(matched[b].spec)
 	})
+	if pseudo == "" {
+		for _, a := range n.Attr {
+			if a.Key == "style" {
+				matched = append(matched, ls.inlineRule(a.Val))
+			}
+		}
+	}
 	return matched
 }
 
@@ -247,10 +284,13 @@ func (ls *LayoutStylesheet) Vars(chain []LayoutElement) map[string]string {
 // contains the properties whose value comes from an !important declaration.
 // Custom properties are not returned, var() references in the values are
 // replaced. A declaration whose var() cannot be resolved is dropped.
+// Shorthands such as border or padding are returned as their longhands
+// (see expandShorthand), border shorthands without the initial values of
+// the parts they do not name.
 func (ls *LayoutStylesheet) Match(chain []LayoutElement, pseudo string) (map[string]string, map[string]bool) {
 	decls := map[string]string{}
 	important := map[string]bool{}
-	if len(ls.rules) == 0 || len(chain) == 0 {
+	if len(chain) == 0 || len(ls.rules) == 0 && !hasStyle(chain) {
 		return decls, important
 	}
 	n := buildChain(chain)
@@ -282,10 +322,31 @@ func (ls *LayoutStylesheet) Match(chain []LayoutElement, pseudo string) (map[str
 				return
 			}
 		}
-		decls[d.key] = value
-		if d.important {
-			important[d.key] = true
+		// A shorthand sets its longhands here, in the order of the
+		// cascade, so that a later or more specific declaration replaces
+		// exactly the longhands it sets. It cannot be split earlier
+		// because of var(). Unlike in CSS, a border shorthand sets only
+		// the parts it names (see expandShorthand).
+		longhands := expandShorthand(d.key, value, false)
+		if longhands == nil {
+			longhands = map[string]string{d.key: value}
+		}
+		for k, v := range longhands {
+			decls[k] = v
+			if d.important {
+				important[k] = true
+			}
 		}
 	})
 	return decls, important
+}
+
+// hasStyle reports whether an element of the chain has a style attribute.
+func hasStyle(chain []LayoutElement) bool {
+	for _, elt := range chain {
+		if elt.Style != "" {
+			return true
+		}
+	}
+	return false
 }

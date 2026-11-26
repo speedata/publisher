@@ -1,0 +1,4 @@
+<data>
+  <cell style="background-color: #00ff00; border: 1pt #008000" text="light green cell, dark green frame (style from data)"/>
+  <cell style="background-color: #00ff00; padding: 1mm 1mm 1mm 10mm" text="light green cell, 10mm padding left"/>
+</data>

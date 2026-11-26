@@ -2569,12 +2569,15 @@ function commands.image(layoutxml, dataxml)
     end
 
     local tmpattr
+    local attributes_set = {}
     for attname, atttyp in pairs(attribute) do
         tmpattr = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, attname, atttyp)
         if tmpattr then
             tab[attname] = tmpattr
+            attributes_set[attname] = true
         end
     end
+    publisher.cssstyle.padding_attribute_precedence(tab, attributes_set)
     -- !important declarations take precedence over the attributes
     for k in pairs(css_important) do
         tab[k] = css_rules[k]
@@ -6979,17 +6982,16 @@ function commands.table(layoutxml, dataxml, options)
     collapse = publisher.css.pick(css_rules, css_important, "border-collapse", collapse) or "separate"
     textformat = textformat or "__leftaligned"
 
-    -- the padding of the cells: attribute or CSS padding, then the single
-    -- sides from CSS
+    -- the padding of the cells: the attribute, then the sides from CSS
+    -- (the rules deliver padding only as padding-top etc.), which the
+    -- attribute covers unless they are !important
     local paddings = {}
-    local padding_attribute = padding ~= nil and not css_important.padding
-    padding = publisher.css.pick(css_rules, css_important, "padding", padding)
     if padding then
         paddings.top, paddings.right, paddings.bottom, paddings.left = publisher.cssstyle.box_sides(padding)
     end
     for _, side in ipairs({ "top", "right", "bottom", "left" }) do
         local property = "padding-" .. side
-        if css_rules[property] and (not padding_attribute or css_important[property]) then
+        if css_rules[property] and (padding == nil or css_important[property]) then
             paddings[side] = css_rules[property]
         end
     end
@@ -7497,15 +7499,18 @@ function commands.td(layoutxml, dataxml)
     -- attribute) means "not set", so the CSS value or the default applies
     -- (for the background color: the row or column color).
     local tmpattr
+    local attributes_set = {}
     for attname, atttyp in pairs(attribute) do
         tmpattr = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, attname, atttyp)
         if tmpattr and tmpattr ~= "" then
+            attributes_set[attname] = true
             if attname == "background-color" then
                 attname = "backgroundcolor"
             end
             tab[attname] = tmpattr
         end
     end
+    publisher.cssstyle.padding_attribute_precedence(tab, attributes_set)
 
     tab.role = role
     tab.parent = parent
@@ -7521,6 +7526,7 @@ function commands.td(layoutxml, dataxml)
     end
     -- own or inherited text-align, unless the attribute takes precedence
     tab.align = css["text-align"] or align
+    publisher.cssstyle.td_border_styles(tab, attributes_set, css_important, css.color)
 
     if tab["background-transform"] then
         local angle = string.match(tab["background-transform"], "rotate%((.-)deg%)")
@@ -8058,8 +8064,8 @@ function commands.underline(layoutxml, dataxml)
     local dashed = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "dashed", "boolean")
 
     local css_rules, css_important = publisher.css:rules()
-    if dashed == nil or css_important["border-style"] then
-        dashed = (css_rules["border-style"] == "dashed")
+    if dashed == nil or css_important["border-bottom-style"] then
+        dashed = (css_rules["border-bottom-style"] == "dashed")
     end
 
     local p = publisher.par:new(nil, "underline")

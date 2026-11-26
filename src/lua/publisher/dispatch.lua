@@ -370,7 +370,8 @@ function M.dispatch(layoutxml, dataxml, opts)
                     cssdepth = publisher.css:enter(
                         csselement,
                         read_attribute(j, dataxml, "class", "string"),
-                        read_attribute(j, dataxml, "id", "string")
+                        read_attribute(j, dataxml, "id", "string"),
+                        read_attribute(j, dataxml, "style", "string")
                     )
                 end
                 tmp = dispatch_table[eltname](j, dataxml --[[@as table]], opts)
