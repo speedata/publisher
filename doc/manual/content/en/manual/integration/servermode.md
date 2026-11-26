@@ -26,7 +26,7 @@ Server mode is intended for a non-public environment. There are no authenticatio
 {{< /callout >}}
 
 {{< callout type="info" >}}
-API version 0 (`/v0/...`) is still available but no longer actively developed.
+API version 0 (`/v0/...`) is still available but no longer actively developed (see [Server mode: API v0]({{< relref "servermode-v0" >}})).
 New integrations should use API version 1 (`/v1/...`).
 {{< /callout >}}
 

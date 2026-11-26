@@ -24,7 +24,7 @@ Der Server-Modus ist für eine nicht-öffentliche Umgebung gedacht. Es gibt kein
 {{< /callout >}}
 
 {{< callout type="info" >}}
-Die API Version 0 (`/v0/...`) ist weiterhin verfügbar, wird aber nicht mehr weiterentwickelt.
+Die API Version 0 (`/v0/...`) ist weiterhin verfügbar, wird aber nicht mehr weiterentwickelt (siehe [Server-Modus: API v0]({{< relref "servermode-v0" >}})).
 Neue Integrationen sollten die API Version 1 (`/v1/...`) verwenden.
 {{< /callout >}}
 
