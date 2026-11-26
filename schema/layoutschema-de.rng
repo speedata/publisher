@@ -7804,7 +7804,7 @@
                </optional>
                <optional>
                   <attribute name="language">
-                     <a:documentation>Setze die Sprache für Silbentrennung und Darstellung.</a:documentation>
+                     <a:documentation>Setze die Sprache für Silbentrennung und Darstellung aller Absätze im Textblock. Ein Absatz mit eigenem language behält seine Sprache.</a:documentation>
                      <choice>
                         <data type="string">
                            <param name="pattern">\{.+\}</param>
@@ -8015,6 +8015,167 @@
                   <attribute name="fontfamily">
                      <a:documentation>Name der Schriftfamilie, die benutzt werden soll. Voreinstellung ist text</a:documentation>
                      <lsp:references symbol="fontfamily"></lsp:references>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="language">
+                     <a:documentation>Setze die Sprache für Silbentrennung und Darstellung aller Absätze im Text. Ein Absatz mit eigenem language behält seine Sprache.</a:documentation>
+                     <choice>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">--|[a-zA-Z]{2,3}([_\-][a-zA-Z0-9]{2,8})*</param>
+                        </data>
+                        <value>Amharic</value>
+                        <a:documentation>Amharisch</a:documentation>
+                        <value>Ancient Greek</value>
+                        <a:documentation>Altgriechisch</a:documentation>
+                        <value>Arabic</value>
+                        <a:documentation>Arabisch</a:documentation>
+                        <value>Armenian</value>
+                        <a:documentation>Armenisch</a:documentation>
+                        <value>Assamese</value>
+                        <a:documentation>Assamesisch</a:documentation>
+                        <value>Bahasa Indonesia</value>
+                        <a:documentation>Indonesisch</a:documentation>
+                        <value>Basque</value>
+                        <a:documentation>Baskisch</a:documentation>
+                        <value>Bengali</value>
+                        <a:documentation>Bengalisch</a:documentation>
+                        <value>Bulgarian</value>
+                        <a:documentation>Bulgarisch (lateinisches Alphabet)</a:documentation>
+                        <value>Burmese</value>
+                        <a:documentation>Birmanisch</a:documentation>
+                        <value>Catalan</value>
+                        <a:documentation>Katalanisch</a:documentation>
+                        <value>Cherokee</value>
+                        <a:documentation>Cherokee</a:documentation>
+                        <value>Chinese</value>
+                        <a:documentation>Chinesisch (Kurzzeichen)</a:documentation>
+                        <value>Chinese (Traditional)</value>
+                        <a:documentation>Chinesisch (Langzeichen)</a:documentation>
+                        <value>Coptic</value>
+                        <a:documentation>Koptisch</a:documentation>
+                        <value>Croatian</value>
+                        <a:documentation>Kroatisch</a:documentation>
+                        <value>Czech</value>
+                        <a:documentation>Tschechisch</a:documentation>
+                        <value>Danish</value>
+                        <a:documentation>Dänisch</a:documentation>
+                        <value>Dutch</value>
+                        <a:documentation>Niederländisch</a:documentation>
+                        <value>English (Great Britain)</value>
+                        <a:documentation>GB-Englisch</a:documentation>
+                        <value>English (USA)</value>
+                        <a:documentation>US-Englisch</a:documentation>
+                        <value>Esperanto</value>
+                        <a:documentation>Esperanto</a:documentation>
+                        <value>Estonian</value>
+                        <a:documentation>Estnisch</a:documentation>
+                        <value>Finnish</value>
+                        <a:documentation>Finnisch</a:documentation>
+                        <value>French</value>
+                        <a:documentation>Französisch</a:documentation>
+                        <value>Galician</value>
+                        <a:documentation>Galicisch</a:documentation>
+                        <value>Georgian</value>
+                        <a:documentation>Georgisch</a:documentation>
+                        <value>German</value>
+                        <a:documentation>Deutsch</a:documentation>
+                        <value>Greek</value>
+                        <a:documentation>Neugriechisch</a:documentation>
+                        <value>Gujarati</value>
+                        <a:documentation>Gujarati</a:documentation>
+                        <value>Hebrew</value>
+                        <a:documentation>Hebräisch</a:documentation>
+                        <value>Hindi</value>
+                        <a:documentation>Hindi</a:documentation>
+                        <value>Hungarian</value>
+                        <a:documentation>Ungarisch</a:documentation>
+                        <value>Icelandic</value>
+                        <a:documentation>Isländisch</a:documentation>
+                        <value>Irish</value>
+                        <a:documentation>Irisch</a:documentation>
+                        <value>Italian</value>
+                        <a:documentation>Italienisch</a:documentation>
+                        <value>Japanese</value>
+                        <a:documentation>Japanisch</a:documentation>
+                        <value>Kannada</value>
+                        <a:documentation>Kanaresisch</a:documentation>
+                        <value>Khmer</value>
+                        <a:documentation>Khmer</a:documentation>
+                        <value>Korean</value>
+                        <a:documentation>Koreanisch</a:documentation>
+                        <value>Kurmanji</value>
+                        <a:documentation>Kurmandschi</a:documentation>
+                        <value>Lao</value>
+                        <a:documentation>Laotisch</a:documentation>
+                        <value>Latvian</value>
+                        <a:documentation>Lettisch</a:documentation>
+                        <value>Lithuanian</value>
+                        <a:documentation>Litauisch</a:documentation>
+                        <value>Malayalam</value>
+                        <a:documentation>Malayalam</a:documentation>
+                        <value>Marathi</value>
+                        <a:documentation>Marathi</a:documentation>
+                        <value>Nepali</value>
+                        <a:documentation>Nepalesisch</a:documentation>
+                        <value>Norwegian Bokmål</value>
+                        <a:documentation>Norwegisch (Bokmål).</a:documentation>
+                        <value>Norwegian Nynorsk</value>
+                        <a:documentation>Norwegisch (Nynorsk).</a:documentation>
+                        <value>Odia</value>
+                        <a:documentation>Oriya</a:documentation>
+                        <value>Other</value>
+                        <a:documentation>Auf keine der anderen Sprachen umschalten. Hilfreich bei Darstellungsproblemen.</a:documentation>
+                        <value>Persian</value>
+                        <a:documentation>Persisch</a:documentation>
+                        <value>Polish</value>
+                        <a:documentation>Polnisch</a:documentation>
+                        <value>Portuguese</value>
+                        <a:documentation>Portugiesisch</a:documentation>
+                        <value>Punjabi</value>
+                        <a:documentation>Panjabi</a:documentation>
+                        <value>Romanian</value>
+                        <a:documentation>Rumänisch</a:documentation>
+                        <value>Russian</value>
+                        <a:documentation>Russisch</a:documentation>
+                        <value>Sanskrit</value>
+                        <a:documentation>Sanskrit (auch transliteritert)</a:documentation>
+                        <value>Serbian</value>
+                        <a:documentation>Serbisch</a:documentation>
+                        <value>Serbian (cyrillic)</value>
+                        <a:documentation>Serbisch (kyrillische Buchstaben).</a:documentation>
+                        <value>Sinhala</value>
+                        <a:documentation>Singhalesisch</a:documentation>
+                        <value>Slovak</value>
+                        <a:documentation>Slowakisch</a:documentation>
+                        <value>Slovenian</value>
+                        <a:documentation>Slowenisch</a:documentation>
+                        <value>Spanish</value>
+                        <a:documentation>Spanisch</a:documentation>
+                        <value>Swedish</value>
+                        <a:documentation>Schwedisch</a:documentation>
+                        <value>Syriac</value>
+                        <a:documentation>Syrisch</a:documentation>
+                        <value>Tamil</value>
+                        <a:documentation>Tamil</a:documentation>
+                        <value>Telugu</value>
+                        <a:documentation>Telugu</a:documentation>
+                        <value>Thai</value>
+                        <a:documentation>Thailändisch</a:documentation>
+                        <value>Tibetan</value>
+                        <a:documentation>Tibetisch</a:documentation>
+                        <value>Turkish</value>
+                        <a:documentation>Türkisch</a:documentation>
+                        <value>Ukrainian</value>
+                        <a:documentation>Ukrainisch</a:documentation>
+                        <value>Urdu</value>
+                        <a:documentation>Urdu</a:documentation>
+                        <value>Welsh</value>
+                        <a:documentation>Walisisch</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <optional>

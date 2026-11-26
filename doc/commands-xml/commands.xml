@@ -12380,10 +12380,10 @@
     </attribute>
     <attribute en="language" optional="yes" allowxpath="yes" since="4.1.1">
       <description xml:lang="en">
-        <para>Set the language for hyphenation and rendering.</para>
+        <para>Set the language for hyphenation and rendering of all paragraphs in the text block. A paragraph with its own <tt>language</tt> keeps its language.</para>
       </description>
       <description xml:lang="de">
-        <para>Setze die Sprache für Silbentrennung und Darstellung.</para>
+        <para>Setze die Sprache für Silbentrennung und Darstellung aller Absätze im Textblock. Ein Absatz mit eigenem <tt>language</tt> behält seine Sprache.</para>
       </description>
       <referenceattribute name="languages" />
     </attribute>
@@ -12494,6 +12494,15 @@
       <description xml:lang="de">
         <para>Name der Schriftfamilie, die benutzt werden soll. Voreinstellung ist <tt>text</tt></para>
       </description>
+    </attribute>
+    <attribute en="language" optional="yes" allowxpath="yes" since="5.9.35">
+      <description xml:lang="en">
+        <para>Set the language for hyphenation and rendering of all paragraphs in the text. A paragraph with its own <tt>language</tt> keeps its language.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die Sprache für Silbentrennung und Darstellung aller Absätze im Text. Ein Absatz mit eigenem <tt>language</tt> behält seine Sprache.</para>
+      </description>
+      <referenceattribute name="languages" />
     </attribute>
     <attribute en="textformat" type="text" optional="yes">
       <description xml:lang="en">

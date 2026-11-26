@@ -1,0 +1,44 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<!-- language on Textblock and Text applies to all paragraphs inside,
+	     also within ForAll and Switch; Paragraph/@language overrides it -->
+	<Options mainlanguage="German" />
+	<PDFOptions format="PDF/UA" />
+	<Trace dump-structtree="yes" />
+	<Pageformat height="10cm" width="7cm" />
+	<StructureElement role="Document" id="doc" />
+
+	<Record element="data">
+		<PlaceObject column="1" row="1">
+			<Textblock language="en">
+				<Paragraph role="P"><Value>direct</Value></Paragraph>
+				<ForAll select="p">
+					<Paragraph role="P"><Value select="." /></Paragraph>
+				</ForAll>
+				<Switch>
+					<Case test="true()">
+						<Paragraph role="P"><Value>switch</Value></Paragraph>
+					</Case>
+				</Switch>
+				<Paragraph role="P" language="fr"><Value>français</Value></Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<PlaceObject column="1">
+			<Textblock>
+				<Paragraph role="P"><Value>Deutsch</Value></Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<Output>
+			<Text language="en">
+				<Paragraph role="P"><Value>text</Value></Paragraph>
+				<ForAll select="p">
+					<Paragraph role="P"><Value select="." /></Paragraph>
+				</ForAll>
+			</Text>
+		</Output>
+		<Output>
+			<Text>
+				<Paragraph role="P"><Value>Deutsch</Value></Paragraph>
+			</Text>
+		</Output>
+	</Record>
+</Layout>

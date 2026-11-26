@@ -102,6 +102,8 @@ Texte und Bilder, die nicht in der Hierarchie auftreten sollen, können als Arti
 
 Bildschirmlesegeräte wählen die Stimme nach der Sprache des Textes. Die Hauptsprache des Layouts (`<Options mainlanguage="...">`) wird zur Sprache des Dokuments. Ein Absatz in einer anderen Sprache bekommt seine Sprache mit dem Attribut `language`, zum Beispiel `<Paragraph role="P" language="Arabic">`; im PDF/UA-Modus schreibt der Publisher sie in das Strukturelement des Absatzes. Als Hauptsprache eignet sich die Sprache des größten Teils des Textes, die übrigen Teile werden ausgezeichnet. Das hält auch das PDF kleiner, weil nur Text in einer anderen Sprache als der Hauptsprache eine Sprachangabe braucht.
 
+Um mehreren Absätzen dieselbe Sprache zu geben, setzt man `language` am umgebenden `<Textblock>` oder `<Text>`, zum Beispiel `<Output><Text language="en">…</Text></Output>`. Die Sprache gilt für alle Absätze darin, auch innerhalb von `<ForAll>` oder `<Switch>`. Ein Absatz mit eigenem `language` behält seine Sprache.
+
 Neben den Sprachen, die unter [`<Options>`]({{< relref "/reference/commands/options" >}}) aufgeführt sind, nehmen `language` und `mainlanguage` jeden Sprachcode in BCP-47-Form an, auch mit Schrift oder Region, zum Beispiel `ckb`, `ur-Arab` oder `sr-Latn`. Der Publisher schreibt den Code unverändert in das PDF. Gibt es für eine Sprache keine Trennmuster, wird der Text nicht getrennt, und der Publisher gibt eine Warnung aus.
 
 Ein Wort oder eine Passage innerhalb eines Absatzes bekommt mit `<Span>` eine eigene Sprache, zum Beispiel `<Span language="el">`. Im PDF/UA-Modus wird ein Span in einer anderen Sprache als der Hauptsprache ein eigenes Strukturelement (Rolle `Span`) mit dieser Sprache. Die Schrift muss die Buchstaben dieser Sprache enthalten.

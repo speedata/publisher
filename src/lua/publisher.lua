@@ -332,6 +332,11 @@ M.nextpage = nil
 ---@type integer
 M.defaultlanguage = 0
 
+-- The language set by the surrounding Textblock or Text, used by paragraphs
+-- without a language attribute. nil outside of these.
+---@type integer?
+M.current_languagecode = nil
+
 -- Start page
 ---@type number
 M.current_pagenumber = 1

@@ -4989,10 +4989,8 @@ end
 -- On the surrounding element (`Textblock`).
 ---@param layoutxml table
 ---@param dataxml table
----@param textblockoptions? table Style overrides inherited from the surrounding `<Textblock>`.
 ---@return any
-function commands.paragraph(layoutxml, dataxml, textblockoptions)
-    textblockoptions = textblockoptions or {}
+function commands.paragraph(layoutxml, dataxml)
     local allowbreak = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "allowbreak", "string")
     local bidi = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "bidi", "boolean")
     local colorname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "color", "string")
@@ -5068,7 +5066,7 @@ function commands.paragraph(layoutxml, dataxml, textblockoptions)
     if language_name then
         languagecode = publisher.language.get_languagecode(language_name)
     else
-        languagecode = textblockoptions.languagecode or publisher.defaultlanguage
+        languagecode = publisher.current_languagecode or publisher.defaultlanguage
     end
 
     local fontoutlinewidth
@@ -7626,6 +7624,7 @@ function commands.text(layoutxml, dataxml)
     local fontname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "fontface", "string")
     local fontfamilyname =
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "fontfamily", "string", fontname)
+    local language_name = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "language", "string")
     local textformat = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "textformat", "string", "text")
     if fontname then
         main.log("warn", "Text/fontface is deprecated and will be removed in version 5. Please use fontfamily instead")
@@ -7641,7 +7640,13 @@ function commands.text(layoutxml, dataxml)
     end
     local save_color = publisher.current_fgcolor
     publisher.current_fgcolor = colorindex
+    -- Like in Textblock, the language applies to all paragraphs inside.
+    local save_languagecode = publisher.current_languagecode
+    if language_name then
+        publisher.current_languagecode = publisher.language.get_languagecode(language_name)
+    end
     local tab = publisher.dispatch.dispatch(layoutxml, dataxml)
+    publisher.current_languagecode = save_languagecode
     publisher.current_fgcolor = save_color
 
     if not fontfamilyname then
@@ -7888,11 +7893,12 @@ function commands.textblock(layoutxml, dataxml)
         end
     end
 
-    local languagecode
+    -- The language applies to all paragraphs inside, also within ForAll,
+    -- Switch and the like, so it is kept in publisher.current_languagecode
+    -- while the children are dispatched.
+    local save_languagecode = publisher.current_languagecode
     if language_name then
-        languagecode = publisher.language.get_languagecode(language_name)
-    else
-        languagecode = publisher.defaultlanguage
+        publisher.current_languagecode = publisher.language.get_languagecode(language_name)
     end
 
     local width_sp = width
@@ -7909,11 +7915,11 @@ function commands.textblock(layoutxml, dataxml)
     local options = {
         color = colorindex,
         fontfamily = fontfamily,
-        languagecode = languagecode,
         textformat = tf,
     }
 
     local tab = publisher.dispatch.dispatch(layoutxml, dataxml, options)
+    publisher.current_languagecode = save_languagecode
     if colorname then
         publisher.current_fgcolor = save_color
     end
