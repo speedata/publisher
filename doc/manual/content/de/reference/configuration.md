@@ -176,7 +176,7 @@ erkannt. Folgende Optionen werden unterstützt:
 : Port, zu dem eine Verbindung aufgebaut werden kann. Voreinstellung ist 5266.
 
 `runs`
-: Anzahl der Durchläufe für das Dokument.
+: Anzahl der Durchläufe für das Dokument. Der Wert hat Vorrang vor dem Attribut `runs` bei `<Options>` im Layout. Ohne diese Einstellung gilt die Anzahl aus dem Layout (seit Version 5.9.36), sonst 1.
 
 ### Abschnitt Hotfolder (`hotfolder`)
 

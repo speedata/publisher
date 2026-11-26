@@ -172,7 +172,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 : Port to which a connection can be established. Default is 5266.
 
 `runs`
-: Set the number of publishing runs for the client document.
+: Set the number of publishing runs for the client document. This value takes precedence over the attribute `runs` on `<Options>` in the layout. Without this setting, the number of runs is taken from the layout (since version 5.9.36), otherwise it is 1.
 
 ### Section Hotfolder (`hotfolder`)
 

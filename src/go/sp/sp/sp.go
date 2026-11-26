@@ -223,6 +223,16 @@ func getOptionSection(optionname string, section string) string {
 	return ""
 }
 
+// getOptionSectionNoDefault is like getOptionSection, but does not fall back
+// to the built-in defaults. It returns the empty string if the option is
+// neither given on the command line nor in the configuration file.
+func getOptionSectionNoDefault(optionname string, section string) string {
+	if o := options[optionname]; o != "" {
+		return o
+	}
+	return cfg.String(section, optionname)
+}
+
 func getSectionOptionWithWarning(optionname string, section string) string {
 	if o := options[optionname]; o != "" {
 		return o
@@ -1335,7 +1345,10 @@ func main() {
 		s.Filter = getOptionSection("filter", "server")
 		s.Address = getSectionOptionWithWarning("address", "server")
 		s.Tempdir = getOption("tempdir")
-		s.Runs = getOptionSection("runs", "server")
+		// Only pass --runs to the jobs if it is set explicitly. The default
+		// (1) on the command line of a job would override the runs attribute
+		// of Options in the layout.
+		s.Runs = getOptionSectionNoDefault("runs", "server")
 		logfilename := "publisher.protocol"
 		if fn := getSectionOptionWithWarning("logfile", "server"); fn != "" {
 			logfilename = fn
