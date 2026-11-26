@@ -2856,7 +2856,7 @@ local function adjust_border(tbl)
     for _, row in ipairs(tbl) do
         for _, col in ipairs(row) do
             for _, nxt in ipairs(col.nextcol) do
-                local td_borderright = tex.sp(col["border-right"] or 0)
+                local td_borderright = tex.sp(col["border-right"] or 0) or 0
                 local td_borderleft = tex.sp(nxt["border-left"] or 0) or 0
                 local new_borderwidth = math.max(td_borderleft, td_borderright) / 2
                 col.td_borderright_calculated = math.max(col.td_borderright_calculated or 0, new_borderwidth)

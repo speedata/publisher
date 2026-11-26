@@ -1,0 +1,6 @@
+<data>
+  <cell bw="2pt" bc="blue" pad="4pt" label="2pt blue border, 4pt padding"/>
+  <cell label="no attribute values: no border, table padding"/>
+  <cell bw="1pt" label="1pt border, default color"/>
+  <cell class="css" label="no attribute values: 3pt green left border from CSS"/>
+</data>

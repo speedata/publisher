@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en">
+
+  <!-- Empty border and padding values (attribute missing in the data)
+       mean "not set": no error, the CSS value or the default applies. -->
+  <Pageformat width="12cm" height="8cm"/>
+
+  <Stylesheet>
+    td.css { border-left-width: 3pt; border-left-color: green; padding-left: 6pt }
+  </Stylesheet>
+
+  <Record element="data">
+    <PlaceObject>
+      <Table width="10cm" padding="2pt" border-collapse="collapse" stretch="max">
+        <ForAll select="cell">
+          <Tr>
+            <Td class="{@class}"
+                border-top="{@bw}" border-top-color="{@bc}"
+                border-bottom="{@bw}" border-bottom-color="{@bc}"
+                border-left="{@bw}" border-left-color="{@bc}"
+                border-right="{@bw}" border-right-color="{@bc}"
+                padding="{@pad}" padding-left="{@pad}">
+              <Paragraph><Value select="@label"/></Paragraph>
+            </Td>
+            <Td><Paragraph><Value>neighbor</Value></Paragraph></Td>
+          </Tr>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>

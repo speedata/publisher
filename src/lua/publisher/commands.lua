@@ -7493,10 +7493,13 @@ function commands.td(layoutxml, dataxml)
         ["rotate"] = "number",
     }
 
+    -- An empty value (e.g. from border-top="{@width}" with a missing
+    -- attribute) means "not set", so the CSS value or the default applies
+    -- (for the background color: the row or column color).
     local tmpattr
     for attname, atttyp in pairs(attribute) do
         tmpattr = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, attname, atttyp)
-        if tmpattr then
+        if tmpattr and tmpattr ~= "" then
             if attname == "background-color" then
                 attname = "backgroundcolor"
             end
@@ -7510,11 +7513,6 @@ function commands.td(layoutxml, dataxml)
     if tab.graphics then
         main.log("warn", "deprecation note: attribute graphics on Td should be graphic (without s)")
         tab.graphic = tab.graphics
-    end
-    -- An empty background color (e.g. from background-color="{@color}" with a
-    -- missing attribute) means "not set", so the row or column color applies.
-    if tab.backgroundcolor == "" then
-        tab.backgroundcolor = nil
     end
 
     -- !important declarations take precedence over the attributes
