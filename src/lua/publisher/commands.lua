@@ -394,10 +394,11 @@ function commands.attachfile(layoutxml, dataxml)
             publisher.has_pro_error = true
             return nil
         end
-        publisher.options.default_zugferdfile = "factur-x.xml"
-        if string.find(filecontents, "urn:factur-x.eu:1p0:", 1, true) then
-            publisher.options.default_zugferdfile = "ZUGFeRD-invoice.xml"
+        local info = metadata.zugferd_info(filecontents)
+        if not info then
+            return nil
         end
+        publisher.options.default_zugferdfile = info.filename
 
         if not destfilename then
             main.log(

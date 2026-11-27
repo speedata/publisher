@@ -208,7 +208,7 @@
       </xs:attribute>
       <xs:attribute name="name">
         <xs:annotation>
-          <xs:documentation>Name der eingebunden Datei im PDF. Voreinstellung ist factur-x.xml falls der Typ ZUGFeRD invoice ist.</xs:documentation>
+          <xs:documentation>Name der eingebundenen Datei im PDF. Ist der Typ ZUGFeRD invoice, ist die Voreinstellung factur-x.xml (ZUGFeRD 2 und Factur-X), xrechnung.xml (Profil XRECHNUNG) oder ZUGFeRD-invoice.xml (ZUGFeRD 1).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="select">

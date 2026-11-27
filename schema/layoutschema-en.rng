@@ -396,7 +396,7 @@
          </attribute>
          <optional>
             <attribute name="name">
-               <a:documentation>Set the name of the attached file in the PDF document. Defaults to factur-x.xml if the attached file type is ZUGFeRD invoice.</a:documentation>
+               <a:documentation>Set the name of the attached file in the PDF document. If the attached file type is ZUGFeRD invoice, the default is factur-x.xml (ZUGFeRD 2 and Factur-X), xrechnung.xml (profile XRECHNUNG) or ZUGFeRD-invoice.xml (ZUGFeRD 1).</a:documentation>
             </attribute>
          </optional>
          <optional>

@@ -142,11 +142,13 @@ function M.getmetadata(filespecnumbers, opts)
     opts = opts or (package.loaded["publisher"] and package.loaded["publisher"].options)
     local zugferd_level = nil
     local zugferd_filename = nil
+    local zugferd_version = nil
     if filespecnumbers and type(filespecnumbers) == "table" then
         for _, v in ipairs(filespecnumbers) do
             if type(v) == "table" and v[2] ~= nil then
                 zugferd_level = v[2]
                 zugferd_filename = v[3]
+                zugferd_version = v[4]
             end
         end
     end
@@ -263,13 +265,25 @@ function M.getmetadata(filespecnumbers, opts)
         desc:set_attr("xmlns:pdfaSchema", "http://www.aiim.org/pdfa/ns/schema#")
         desc:set_attr("xmlns:pdfaType", "http://www.aiim.org/pdfa/ns/type#")
 
+        -- ZUGFeRD 1 has its own schema, ZUGFeRD 2 and Factur-X use the
+        -- Factur-X schema.
+        local schemaname, namespace, prefix
+        if zugferd_version == 1 then
+            schemaname = "ZUGFeRD PDFA Extension Schema"
+            namespace = "urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#"
+            prefix = "zf"
+        else
+            schemaname = "Factur-X PDFA Extension Schema"
+            namespace = "urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#"
+            prefix = "fx"
+        end
         local ext = desc:add_element("pdfaExtension:schemas")
         local bag = ext:add_element("rdf:Bag")
         local li = bag:add_element("rdf:li")
         li:set_attr("rdf:parseType", "Resource")
-        li:add_element("pdfaSchema:schema"):set_text("ZUGFeRD PDFA Extension Schema")
-        li:add_element("pdfaSchema:namespaceURI"):set_text("urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#")
-        li:add_element("pdfaSchema:prefix"):set_text("zf")
+        li:add_element("pdfaSchema:schema"):set_text(schemaname)
+        li:add_element("pdfaSchema:namespaceURI"):set_text(namespace)
+        li:add_element("pdfaSchema:prefix"):set_text(prefix)
         local prop = li:add_element("pdfaSchema:property")
         local seq = prop:add_element("rdf:Seq")
 
@@ -288,16 +302,67 @@ function M.getmetadata(filespecnumbers, opts)
         add_zugferd_property("ConformanceLevel", "Text", "external", "The conformance level of the ZUGFeRD data")
 
         local rdfdesc = rdf:add_element("rdf:Description")
-        rdfdesc:set_attr("xmlns:zf", "urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#")
+        rdfdesc:set_attr("xmlns:" .. prefix, namespace)
         rdfdesc:set_attr("rdf:about", "")
-        rdfdesc:set_attr("zf:ConformanceLevel", zugferd_level)
-        rdfdesc:set_attr("zf:DocumentFileName", zugferd_filename)
-        rdfdesc:set_attr("zf:DocumentType", "INVOICE")
-        rdfdesc:set_attr("zf:Version", "1.0")
+        rdfdesc:set_attr(prefix .. ":ConformanceLevel", zugferd_level)
+        rdfdesc:set_attr(prefix .. ":DocumentFileName", zugferd_filename)
+        rdfdesc:set_attr(prefix .. ":DocumentType", "INVOICE")
+        rdfdesc:set_attr(prefix .. ":Version", "1.0")
     end
     doc:add_pi("xpacket", [[end="r"]])
 
     return doc:to_string({ pretty = true, indent = "  " })
+end
+
+-- Conformance levels of the guideline IDs
+-- (GuidelineSpecifiedDocumentContextParameter/ID). ZUGFeRD 1 has its own
+-- XMP schema, ZUGFeRD 2 and Factur-X share the Factur-X schema.
+local zugferd_levels = {
+    ["urn:ferd:CrossIndustryDocument:invoice:1p0:basic"] = "BASIC",
+    ["urn:ferd:CrossIndustryDocument:invoice:1p0:comfort"] = "COMFORT",
+    ["urn:ferd:CrossIndustryDocument:invoice:1p0:extended"] = "EXTENDED",
+    ["urn:factur-x.eu:1p0:minimum"] = "MINIMUM",
+    ["urn:zugferd.de:2p0:minimum"] = "MINIMUM",
+    ["urn:factur-x.eu:1p0:basicwl"] = "BASIC WL",
+    ["urn:zugferd.de:2p0:basicwl"] = "BASIC WL",
+    ["urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic"] = "BASIC",
+    ["urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic"] = "BASIC",
+    ["urn:cen.eu:en16931:2017"] = "EN 16931",
+    ["urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended"] = "EXTENDED",
+    ["urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended"] = "EXTENDED",
+}
+
+-- Reads the profile of a ZUGFeRD / Factur-X invoice from its guideline ID.
+-- Logs an error and returns `nil` if the ID is missing or unknown.
+---@param filecontents string The invoice XML.
+---@return { version: integer, level: string, filename: string }? info `version` is 1 (ZUGFeRD 1) or 2 (ZUGFeRD 2, Factur-X), `filename` the default name of the attachment.
+function M.zugferd_info(filecontents)
+    local id =
+        string.match(filecontents, "GuidelineSpecifiedDocumentContextParameter[^>]*>%s*<[^>]-ID[^>]*>%s*([^<]-)%s*</")
+    if not id then
+        main.log("error", "No ZUGFeRD conformance level found")
+        return nil
+    end
+    local level = zugferd_levels[id]
+    if
+        not level
+        and (
+            string.find(id, "urn:xeinkauf.de:kosit:xrechnung", 1, true)
+            or string.find(id, "urn:xoev-de:kosit:standard:xrechnung", 1, true)
+        )
+    then
+        level = "XRECHNUNG"
+    end
+    if not level then
+        main.log("error", "Unknown ZUGFeRD conformance level", "id", id)
+        return nil
+    end
+    if string.find(id, "urn:ferd:", 1, true) == 1 then
+        return { version = 1, level = level, filename = "ZUGFeRD-invoice.xml" }
+    elseif level == "XRECHNUNG" then
+        return { version = 2, level = level, filename = "xrechnung.xml" }
+    end
+    return { version = 2, level = level, filename = "factur-x.xml" }
 end
 
 -- Attaches an embedded file to the PDF and registers the resulting filespec
@@ -311,9 +376,18 @@ end
 ---@param filespecnumbers table Table the filespec entry is appended to.
 ---@return nil
 function M.attach_file_pdf(filecontents, description, mimetype, modificationtime, destfilename, filespecnumbers)
-    local is_zugferd = false
+    local zugferd
+    -- Factur-X 1.07.2, 6.2.2: the XML of MINIMUM and BASIC WL contains less
+    -- than the PDF (no invoice lines), its relationship is Data.
+    local afrelationship = "Alternative"
     if mimetype == "ZUGFeRD invoice" then
-        is_zugferd = true
+        zugferd = M.zugferd_info(filecontents)
+        if not zugferd then
+            return
+        end
+        if zugferd.level == "MINIMUM" or zugferd.level == "BASIC WL" then
+            afrelationship = "Data"
+        end
         mimetype = "text/xml"
     end
     local fileobjectnum = pdf.immediateobj(
@@ -333,7 +407,7 @@ function M.attach_file_pdf(filecontents, description, mimetype, modificationtime
     local filespecnum = pdf.immediateobj(
         string.format(
             [[<<
-  /AFRelationship /Alternative
+  /AFRelationship /%s
   %s/EF <<
     /F %d 0 R
     /UF %d 0 R
@@ -342,6 +416,7 @@ function M.attach_file_pdf(filecontents, description, mimetype, modificationtime
   /Type /Filespec
   /UF %s
 >>]],
+            afrelationship,
             descPDF,
             fileobjectnum,
             fileobjectnum,
@@ -349,40 +424,8 @@ function M.attach_file_pdf(filecontents, description, mimetype, modificationtime
             M.utf8_to_utf16_string_pdf(destfilename)
         )
     )
-    if is_zugferd then
-        local conformancelevel
-        if
-            string.find(filecontents, "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended", 1, true)
-            or string.find(filecontents, "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended", 1, true)
-            or string.find(filecontents, "urn:ferd:CrossIndustryDocument:invoice:1p0:extended", 1, true)
-        then
-            conformancelevel = "extended"
-        elseif
-            string.find(filecontents, "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort", 1, true)
-            or string.find(filecontents, "urn:cen.eu:en16931:2017", 1, true)
-        then
-            conformancelevel = "comfort" -- EN16931
-        elseif
-            string.find(filecontents, "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic", 1, true)
-            or string.find(filecontents, "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic", 1, true)
-        then
-            conformancelevel = "basic"
-        elseif string.find(filecontents, "urn:factur-x.eu:1p0:basicwl", 1, true) then
-            conformancelevel = "basicwl"
-        elseif
-            string.find(filecontents, "urn:factur-x.eu:1p0:minimum", 1, true)
-            or string.find(filecontents, "urn:zugferd.de:2p0:minimum", 1, true)
-        then
-            conformancelevel = "minimum"
-        end
-        if not conformancelevel then
-            main.log("error", "No ZUGFeRD conformance level found")
-            return
-        else
-            conformancelevel = string.upper(conformancelevel)
-        end
-
-        filespecnumbers[#filespecnumbers + 1] = { filespecnum, conformancelevel, destfilename }
+    if zugferd then
+        filespecnumbers[#filespecnumbers + 1] = { filespecnum, zugferd.level, destfilename, zugferd.version }
     else
         filespecnumbers[#filespecnumbers + 1] = { filespecnum, nil, destfilename }
     end

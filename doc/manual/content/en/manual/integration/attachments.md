@@ -33,7 +33,7 @@ To attach an electronic invoice, the value at type must be exactly the string `Z
             filename="invoice.xml" />
 ```
 
-The output filename is set to `factur-x.xml` for ZUGFeRD version 2 and `ZUGFeRD-invoice.xml` for version 1.
+The output filename is set to `factur-x.xml` for ZUGFeRD version 2 and Factur-X, to `xrechnung.xml` for the profile XRECHNUNG and to `ZUGFeRD-invoice.xml` for version 1. You can override this name with `name="..."`. The publisher reads the profile (for example BASIC or EN 16931) from the invoice and writes it to the metadata of the PDF.
 
 The PDF output must be set to PDF/A-3:
 

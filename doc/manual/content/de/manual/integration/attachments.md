@@ -34,7 +34,7 @@ Um eine elektronische Rechnung anzuhängen, muss der Wert bei `type` genau die Z
             filename="invoice.xml" />
 ```
 
-Der Ausgabedateiname wird automatisch auf `factur-x.xml` gesetzt für ZUGFeRD Version 2 und `ZUGFeRD-invoice.xml` für Version 1. Dieser Name kann mit `name="..."` überschrieben werden.
+Der Ausgabedateiname wird automatisch auf `factur-x.xml` gesetzt für ZUGFeRD Version 2 und Factur-X, auf `xrechnung.xml` für das Profil XRECHNUNG und auf `ZUGFeRD-invoice.xml` für Version 1. Dieser Name kann mit `name="..."` überschrieben werden. Das Profil (zum Beispiel BASIC oder EN 16931) liest der Publisher aus der Rechnung und trägt es in die Metadaten des PDF ein.
 
 Die PDF-Ausgabe muss noch auf PDF/A-3 gestellt werden:
 

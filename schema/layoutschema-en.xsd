@@ -208,7 +208,7 @@
       </xs:attribute>
       <xs:attribute name="name">
         <xs:annotation>
-          <xs:documentation>Set the name of the attached file in the PDF document. Defaults to factur-x.xml if the attached file type is ZUGFeRD invoice.</xs:documentation>
+          <xs:documentation>Set the name of the attached file in the PDF document. If the attached file type is ZUGFeRD invoice, the default is factur-x.xml (ZUGFeRD 2 and Factur-X), xrechnung.xml (profile XRECHNUNG) or ZUGFeRD-invoice.xml (ZUGFeRD 1).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="select">
