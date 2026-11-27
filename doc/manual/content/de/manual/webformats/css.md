@@ -331,7 +331,13 @@ Zellen erhalten ihre Rahmen über `border` und die Einzeleigenschaften `border-*
 * `none` und `hidden` entfernen den Rahmen einer Seite.
   Bei `border-collapse: collapse` entfernt `hidden` auch den Rahmen der Nachbarzelle an dieser Kante.
   Ein Attribut wie `border-top="1pt"` hat Vorrang vor `none` oder `hidden` aus einer Regel, außer mit `!important`.
-* Die übrigen Stile (`dashed`, `dotted`, `double` und weitere) werden vorerst als durchgezogene Linie gezeichnet, der Publisher gibt dazu eine Warnung aus.
+* `solid`, `dashed`, `dotted` und `double` werden gezeichnet.
+  Die Striche und Punkte beginnen am Rand der Tabelle und laufen über alle Zellen im selben Takt, sodass eine gestrichelte Tabellenlinie gleichmäßig aussieht.
+  Eine doppelte Linie braucht mindestens 3pt Breite, damit zwei Linien zu erkennen sind.
+* `groove`, `ridge`, `inset` und `outset` werden vorerst als durchgezogene Linie gezeichnet, der Publisher gibt dazu eine Warnung aus.
+* Bei `border-collapse: collapse` und unterschiedlichen Rahmen an einer gemeinsamen Kante gewinnt wie in CSS der breitere Rahmen, bei gleicher Breite der Stil in der Reihenfolge `double`, `solid`, `dashed`, `dotted`, sonst die Zelle links bzw. oben.
+  Der gewinnende Rahmen bestimmt Stil und Farbe der Kante.
+  Sind beide Rahmen durchgezogen (oder ohne Stil), zeichnet wie bisher jede Zelle ihre Hälfte der Linie in ihrer eigenen Farbe.
 * `currentcolor` als Rahmenfarbe ist die Textfarbe der Zelle aus CSS, sonst Schwarz.
 
 ## CSS für HTML-Inhalte und Auszeichnungen in den Daten
@@ -394,7 +400,7 @@ Die folgenden Eigenschaften werden bei der HTML-Verarbeitung ausgewertet:
 * Text: `color`, `text-align`, `text-decoration` (bzw. `text-decoration-line` mit `underline`, `overline` und `line-through`, `text-decoration-style` mit `solid`, `double`, `dotted`, `dashed` und `wavy`, `text-decoration-color`), `line-height`, `white-space` (`normal`, `pre`), `vertical-align` (`super`, `sub`) und `hyphens` (`none` bzw. `manual` schaltet die Silbentrennung aus)
 * Box-Modell: `margin-*`, `padding-*`, `border-*` (Breite, Stil und Farbe je Seite sowie `border-radius` je Ecke), `width`, `height`.
   Ein Rahmen braucht wie im Browser einen Stil, `border: 1pt black` zeichnet nichts.
-  An Tabellenzellen werden andere Stile als `none` und `hidden` vorerst als durchgezogene Linie gezeichnet.
+  An Tabellenzellen werden `groove`, `ridge`, `inset` und `outset` vorerst als durchgezogene Linie gezeichnet (siehe [Rahmen von Tabellenzellen](#css-cell-borders)).
 * Hintergrund: `background-color`
 * Listen: `list-style-type`, `list-style-position`, `list-style` sowie das Pseudoelement `li::marker` (`content`, `color`, `font-family`, `font-size`, `padding-right`, `padding-bottom`)
 * Pseudoelemente `::before` und `::after` an Block- und Inline-Elementen: `content` sowie `color`, `font-family`, `font-style` und `font-weight`; bei Blockelementen für `::before` zusätzlich `width` und `margin-left`. Das Pseudoelement erbt die Eigenschaften seines Elements.

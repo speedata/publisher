@@ -331,7 +331,13 @@ Cells get their borders from `border` and the longhands `border-*-width`, `borde
 * `none` and `hidden` remove the border of a side.
   With `border-collapse: collapse`, `hidden` also removes the border of the neighboring cell at this edge.
   An attribute such as `border-top="1pt"` takes precedence over `none` or `hidden` from a rule, except with `!important`.
-* The other styles (`dashed`, `dotted`, `double` and more) are drawn as a solid line for now, with a warning.
+* `solid`, `dashed`, `dotted` and `double` are drawn.
+  The dashes and dots start at the edge of the table and keep the same rhythm across all cells, so a dashed table rule looks even.
+  A double line needs a width of at least 3pt to show two lines.
+* `groove`, `ridge`, `inset` and `outset` are drawn as a solid line for now, with a warning.
+* With `border-collapse: collapse` and different borders on a shared edge, the wider border wins as in CSS; with equal widths the style wins in the order `double`, `solid`, `dashed`, `dotted`, otherwise the cell to the left or above.
+  The winning border sets style and color of the edge.
+  If both borders are solid (or have no style), each cell draws its half of the line in its own color, as before.
 * `currentcolor` as the border color is the text color of the cell from CSS, otherwise black.
 
 ## CSS for HTML content and markup in the data
@@ -394,7 +400,7 @@ The following properties are evaluated by the HTML processing:
 * Text: `color`, `text-align`, `text-decoration` (or `text-decoration-line` with `underline`, `overline` and `line-through`, `text-decoration-style` with `solid`, `double`, `dotted`, `dashed` and `wavy`, `text-decoration-color`), `line-height`, `white-space` (`normal`, `pre`), `vertical-align` (`super`, `sub`) and `hyphens` (`none` or `manual` turns off hyphenation)
 * Box model: `margin-*`, `padding-*`, `border-*` (width, style and color per side plus `border-radius` per corner), `width`, `height`.
   As in a browser, a border needs a style, `border: 1pt black` draws nothing.
-  On table cells, styles other than `none` and `hidden` are drawn as a solid line for now.
+  On table cells, `groove`, `ridge`, `inset` and `outset` are drawn as a solid line for now (see [Borders of table cells](#css-cell-borders)).
 * Background: `background-color`
 * Lists: `list-style-type`, `list-style-position`, `list-style` and the pseudo-element `li::marker` (`content`, `color`, `font-family`, `font-size`, `padding-right`, `padding-bottom`)
 * Pseudo-elements `::before` and `::after` on block and inline elements: `content` as well as `color`, `font-family`, `font-style` and `font-weight`; on block elements, `::before` also supports `width` and `margin-left`. The pseudo-element inherits the properties of its element.

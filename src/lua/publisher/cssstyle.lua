@@ -416,6 +416,8 @@ local border_styles = {
     ridge = true,
     solid = true,
 }
+-- Border styles a table cell can draw.
+local drawn_border_styles = { solid = true, dashed = true, dotted = true, double = true }
 -- Border styles a cell cannot draw yet, logged once each.
 ---@type table<string, boolean>
 local border_styles_warned = {}
@@ -425,9 +427,9 @@ local border_styles_warned = {}
 -- width), `attributes` the names of the attributes that are set. Without a
 -- style Td draws a solid line (unlike CSS, where the style defaults to
 -- none; HTML passes none). none and hidden remove the border, unless the
--- side has a width attribute and the style is not !important. The other
--- styles are drawn solid for now. currentcolor is the text color of the
--- cell, `color` (black if unset).
+-- side has a width attribute and the style is not !important. solid,
+-- dashed, dotted and double are drawn, the other styles solid for now.
+-- currentcolor is the text color of the cell, `color` (black if unset).
 ---@param tab table<string, any>
 ---@param attributes table<string, boolean>
 ---@param important table<string, boolean>
@@ -451,7 +453,7 @@ function M.td_border_styles(tab, attributes, important, color)
         end
         if style == "none" or style == "hidden" then
             tab[width_key] = nil
-        elseif style and style ~= "solid" and not border_styles_warned[style] then
+        elseif style and not drawn_border_styles[style] and not border_styles_warned[style] then
             border_styles_warned[style] = true
             main.log("warn", "Table cell: border style not supported yet, drawing a solid line", "style", style)
         end

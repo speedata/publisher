@@ -1,0 +1,102 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- Border styles of table cells (dashed, dotted, double). Dashes and
+         dots keep the same rhythm across cells, the halves of collapsed
+         borders make up one line. At shared edges the losing border is
+         red, so nothing red may appear. -->
+    <Pageformat width="150mm" height="230mm"/>
+    <SetGrid width="5mm" height="5mm"/>
+
+    <Stylesheet>
+        td { padding: 1mm }
+        table.dashed td { border: 1pt dashed blue }
+        table.dotted td { border: 1pt dotted green }
+        table.double td { border: 3pt double orange }
+        table.wide td { border: 2pt dashed blue }
+        table.conflict td { border: 1pt solid gray }
+        table.conflict td.b { border: 1pt dashed blue; border-left-color: red; border-right-color: red }
+        table.conflict td.c { border: 2pt dotted green }
+        table.conflict td.d { border: 1pt solid gray; border-top: 1pt dotted red }
+        table.conflict td.e { border: 1pt solid gray; border-top: 1pt dashed red }
+        table.conflict td.f { border: 3pt double green }
+        table.conflict td.a { border-bottom: 1pt dashed blue }
+        .hd { border: 1pt dashed blue }
+        .ho { border: 1pt dotted green }
+        .hb { border: 3pt double orange }
+        .hn { border: 1pt red }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject row="1" column="1">
+            <Table stretch="no" class="dashed">
+                <Columns><Column width="6"/><Column width="7"/><Column width="5"/></Columns>
+                <Tr><Td><Paragraph><Value>dashed</Value></Paragraph></Td><Td><Paragraph><Value>separate borders</Value></Paragraph></Td><Td><Paragraph><Value>c</Value></Paragraph></Td></Tr>
+                <Tr><Td colspan="2"><Paragraph><Value>colspan, dashes in line with the row above</Value></Paragraph></Td><Td><Paragraph><Value>c</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject row="5" column="1">
+            <Table stretch="no" class="dashed" border-collapse="collapse">
+                <Columns><Column width="6"/><Column width="7"/><Column width="5"/></Columns>
+                <Tr><Td><Paragraph><Value>dashed</Value></Paragraph></Td><Td><Paragraph><Value>collapse: one line</Value></Paragraph></Td><Td><Paragraph><Value>c</Value></Paragraph></Td></Tr>
+                <Tr><Td colspan="2"><Paragraph><Value>colspan</Value></Paragraph></Td><Td><Paragraph><Value>c</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject row="9" column="1">
+            <Table stretch="no" class="dotted">
+                <Columns><Column width="6"/><Column width="6"/></Columns>
+                <Tr><Td><Paragraph><Value>dotted</Value></Paragraph></Td><Td><Paragraph><Value>separate</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>a</Value></Paragraph></Td><Td><Paragraph><Value>b</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject row="9" column="15">
+            <Table stretch="no" class="dotted" border-collapse="collapse">
+                <Columns><Column width="6"/><Column width="6"/></Columns>
+                <Tr><Td><Paragraph><Value>dotted</Value></Paragraph></Td><Td><Paragraph><Value>collapse: round dots</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>a</Value></Paragraph></Td><Td><Paragraph><Value>b</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject row="14" column="1">
+            <Table stretch="no" class="double">
+                <Columns><Column width="6"/><Column width="6"/></Columns>
+                <Tr><Td><Paragraph><Value>double</Value></Paragraph></Td><Td><Paragraph><Value>separate</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>a</Value></Paragraph></Td><Td><Paragraph><Value>b</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject row="14" column="15">
+            <Table stretch="no" class="double" border-collapse="collapse">
+                <Columns><Column width="6"/><Column width="6"/></Columns>
+                <Tr><Td><Paragraph><Value>double</Value></Paragraph></Td><Td><Paragraph><Value>collapse: two lines</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>a</Value></Paragraph></Td><Td><Paragraph><Value>b</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject row="20" column="1">
+            <Table stretch="no" class="wide">
+                <Columns><Column width="8"/></Columns>
+                <Tr><Td><Paragraph><Value>2pt dashed</Value></Paragraph></Td></Tr>
+                <Tr><Td><Paragraph><Value>dashes in line</Value></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject row="26" column="1">
+            <Table stretch="no" class="conflict" border-collapse="collapse">
+                <Columns><Column width="7"/><Column width="7"/><Column width="7"/></Columns>
+                <Tr>
+                    <Td class="a"><Paragraph><Value>a</Value></Paragraph></Td>
+                    <Td class="b"><Paragraph><Value>solid left: solid beats dashed</Value></Paragraph></Td>
+                    <Td class="c"><Paragraph><Value>wider dotted wins</Value></Paragraph></Td>
+                </Tr>
+                <Tr>
+                    <Td class="d"><Paragraph><Value>dashed top: beats dotted</Value></Paragraph></Td>
+                    <Td class="e"><Paragraph><Value>blue top: upper cell wins</Value></Paragraph></Td>
+                    <Td class="f"><Paragraph><Value>wider double wins</Value></Paragraph></Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+        <PlaceObject row="34" column="1">
+            <Table stretch="no">
+                <Columns><Column width="14"/></Columns>
+                <Tr><Td><Paragraph><Value>HTML table:</Value></Paragraph><Paragraph><Value select="html/*"/></Paragraph></Td></Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

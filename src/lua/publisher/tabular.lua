@@ -1353,6 +1353,51 @@ function tabular:adjust_row_heights_for_rowspans(rowspans, area)
     end
 end
 
+-- Border styles of table cells that differ from a solid line.
+local patterned_border_styles = { dashed = true, dotted = true, double = true }
+
+-- Returns the width of the double border on `side` of a cell (left or
+-- right), 0 if the side has another style or is shared with the next cell
+-- (border-collapse).
+---@param td_contents table
+---@param side "left"|"right"
+---@return integer
+local function double_corner(td_contents, side)
+    if td_contents["border-" .. side .. "-style"] ~= "double" or td_contents["td_border" .. side .. "_calculated"] then
+        return 0
+    end
+    return tex.sp(td_contents["border-" .. side] or 0) or 0
+end
+
+-- Returns the style of a cell border for colorbar, nil for a solid line.
+-- A collapsed border (`calculated` is set) is one half of a line twice as
+-- wide, centered on the edge of the cell. `phase` is the start of the
+-- border in the table, so that the dashes of adjacent cells line up.
+---@param td_contents table
+---@param side "top"|"right"|"bottom"|"left"
+---@param phase integer
+---@return RuleStyle?
+local function border_rule_style(td_contents, side, phase)
+    local style = td_contents["border-" .. side .. "-style"]
+    if not patterned_border_styles[style] then
+        return nil
+    end
+    ---@type RuleStyle
+    local spec = { style = style, phase = phase }
+    local calculated = td_contents["td_border" .. side .. "_calculated"]
+    if calculated then
+        spec.full = 2 * calculated
+        spec.edge = side
+    elseif style == "double" and (side == "top" or side == "bottom") then
+        -- mitered corners with double borders on the left and right
+        -- (outer corners only, collapsed edges cross other borders)
+        spec.outer = side == "top" and "top" or "bottom"
+        spec.corner_start = double_corner(td_contents, "left")
+        spec.corner_end = double_corner(td_contents, "right")
+    end
+    return spec
+end
+
 -- ![Table cell](../img/cell.svg)
 
 -- Width calculation is now finished, we can typeset the table
@@ -1388,6 +1433,12 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
     local v, vlist, hlist
     local fill = { width = 0, stretch = 2 ^ 16, stretch_order = 3 }
     local td_contents
+    -- top of the row in the table area, for the pattern of dashed and
+    -- dotted vertical borders
+    local row_y = (current_row - 1) * self.rowsep
+    for r = 1, current_row - 1 do
+        row_y = row_y + (rowheightarea[r] or 0)
+    end
     current_column = 0
     for _, td in ipairs(tr_contents) do
         current_column = current_column + 1
@@ -1422,6 +1473,11 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         end
         -- alignments of a colspan cell come from its first column
         local thiscolumn = current_column
+        -- left edge of the cell, for the pattern of horizontal borders
+        local cell_x = (thiscolumn - 1) * self.colsep
+        for c = 1, thiscolumn - 1 do
+            cell_x = cell_x + (self.colwidths[c] or 0)
+        end
 
         current_column_width = 0
         for s = current_column, current_column + colspan - 1 do
@@ -1519,7 +1575,8 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
                 0,
                 td_contents["border-left-color"],
                 "borderleft",
-                "vertical"
+                "vertical",
+                border_rule_style(td_contents, "left", row_y + td_bordertop)
             )
             local stop = node.tail(start)
             stop.next = g
@@ -1541,7 +1598,8 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
                 0,
                 td_contents["border-right-color"],
                 "borderright",
-                "vertical"
+                "vertical",
+                border_rule_style(td_contents, "right", row_y + td_bordertop)
             )
             g.next = rule
         end
@@ -1617,7 +1675,8 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
                 0,
                 td_contents["border-top-color"],
                 "border top",
-                "horizontal"
+                "horizontal",
+                border_rule_style(td_contents, "top", cell_x)
             )
             -- rule is: whatsit, rule, whatsit
             node.tail(rule).next = hlist
@@ -1631,7 +1690,8 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
                 0,
                 td_contents["border-bottom-color"],
                 "border bottom",
-                "horizontal"
+                "horizontal",
+                border_rule_style(td_contents, "bottom", cell_x)
             )
             hlist.next = rule
         end
@@ -2848,6 +2908,55 @@ function tabular:reformat_head()
     return tmp1[1], tmp2[1]
 end
 
+-- Precedence of the border styles on a shared edge of equal width (CSS 2.1,
+-- 17.6.2.1). A missing style is solid in Td.
+local border_style_rank = {
+    double = 8,
+    solid = 7,
+    dashed = 6,
+    dotted = 5,
+    ridge = 4,
+    outset = 3,
+    groove = 2,
+    inset = 1,
+}
+
+-- Settles style and color of the shared edge between side `side_a` of cell
+-- `a` (left or above) and side `side_b` of cell `b` with the widths `wa`
+-- and `wb`. Without dashed, dotted or double borders each cell keeps its own
+-- color as before. Otherwise the winner as in CSS sets style and color for
+-- both cells: the wider border, then the style after border_style_rank, then
+-- the cell to the left or above.
+---@param a table
+---@param side_a string
+---@param wa integer
+---@param b table
+---@param side_b string
+---@param wb integer
+---@return nil
+local function shared_edge_style(a, side_a, wa, b, side_b, wb)
+    local style_a, style_b = "border-" .. side_a .. "-style", "border-" .. side_b .. "-style"
+    local sa, sb = a[style_a] or "solid", b[style_b] or "solid"
+    if wa == 0 and wb == 0 then
+        return
+    end
+    if not (patterned_border_styles[sa] or patterned_border_styles[sb]) then
+        return
+    end
+    local a_wins
+    if wa ~= wb then
+        a_wins = wa > wb
+    else
+        a_wins = (border_style_rank[sa] or 0) >= (border_style_rank[sb] or 0)
+    end
+    local color_a, color_b = "border-" .. side_a .. "-color", "border-" .. side_b .. "-color"
+    if a_wins then
+        b[style_b], b[color_b] = a[style_a], a[color_a]
+    else
+        a[style_a], a[color_a] = b[style_b], b[color_b]
+    end
+end
+
 -- Resolves border conflicts for `border-collapse="collapse"` by setting
 -- the heavier border on each shared edge and zeroing the loser. The style
 -- hidden (as in CSS) removes the border of both cells.
@@ -2871,6 +2980,7 @@ local function adjust_border(tbl)
                 if td_borderright == 0 then
                     col["border-right-color"] = nxt["border-left-color"]
                 end
+                shared_edge_style(col, "right", td_borderright, nxt, "left", td_borderleft)
             end
             for _, nxt in ipairs(col.nextrow) do
                 local td_borderbottom = tex.sp(col["border-bottom"] or 0) or 0
@@ -2887,6 +2997,7 @@ local function adjust_border(tbl)
                 if td_borderbottom == 0 then
                     col["border-bottom-color"] = nxt["border-top-color"]
                 end
+                shared_edge_style(col, "bottom", td_borderbottom, nxt, "top", td_bordertop)
             end
         end
     end

@@ -1022,6 +1022,101 @@ function M.boxit(box)
     return box
 end
 
+---@class RuleStyle
+---@field style string CSS border style; only dashed, dotted and double differ from a solid bar.
+---@field phase integer Position of the start of the bar in sp, measured along the bar from a common origin (the table), so that dashes of adjacent bars line up.
+---@field full? integer Width of the whole line in sp, when the bar is only one half of it (collapsed table borders).
+---@field edge? "top"|"bottom"|"left"|"right" Side of the bar where the middle of the whole line is, with `full`.
+---@field outer? "top"|"bottom" Outer side of a horizontal double bar with corners.
+---@field corner_start? integer Width in sp of the double border that meets a horizontal double bar at its start (left), for a mitered corner.
+---@field corner_end? integer Width in sp of the double border that meets the bar at its end (right).
+
+-- Returns the PDF instructions (without color) for a dashed, dotted or
+-- double bar in the box of size wd × ht (bp) drawn by colorbar. The line
+-- is `spec.full` wide and centered on `spec.edge` if given, everything
+-- outside of the box is clipped. So both halves of a collapsed table border
+-- make up one line. The pattern starts at the origin of `spec.phase`.
+-- A horizontal double bar with `corner_start` or `corner_end` meets a
+-- vertical double border at that end: its outer line reaches the outer
+-- line of the vertical border, its inner line stops at the inner one, as
+-- the vertical bars start below the horizontal bars.
+---@param wd number
+---@param ht number
+---@param orientation? "horizontal"|"vertical" nil is vertical (as in colorbar)
+---@param spec RuleStyle
+---@return string
+local function styled_bar_pdfstring(wd, ht, orientation, spec)
+    local horizontal = orientation == "horizontal"
+    -- the box in local coordinates (see colorbar)
+    local y0 = publisher.options.tablerulefix and -ht or 0
+    local thickness = horizontal and ht or wd
+    local fw = spec.full and sp_to_bp(spec.full) or thickness
+    -- middle of the line across the bar
+    local c
+    if spec.edge == "top" then
+        c = y0 + ht
+    elseif spec.edge == "bottom" then
+        c = y0
+    elseif spec.edge == "left" then
+        c = 0
+    elseif spec.edge == "right" then
+        c = wd
+    elseif horizontal then
+        c = y0 + ht / 2
+    else
+        c = wd / 2
+    end
+    local ret = { string.format("%g %g %g %g re W n", 0, y0, wd, ht) }
+    if spec.style == "double" then
+        local t = fw / 3
+        local lo, hi = c - fw / 2, c + fw / 2 - t
+        if horizontal and spec.outer then
+            local a, b = sp_to_bp(spec.corner_start or 0), sp_to_bp(spec.corner_end or 0)
+            -- outer line, inner line and the gap between them
+            local outer, inner, gap_lo, gap_hi = hi, lo, y0, hi
+            if spec.outer == "bottom" then
+                outer, inner, gap_lo, gap_hi = lo, hi, lo + t, y0 + ht
+            end
+            ret[#ret + 1] = string.format("0 %g %g %g re", outer, wd, t)
+            ret[#ret + 1] = string.format("%g %g %g %g re", 2 * a / 3, inner, wd - 2 * a / 3 - 2 * b / 3, t)
+            -- the outer lines of the vertical borders up to the outer line
+            if a > 0 then
+                ret[#ret + 1] = string.format("0 %g %g %g re", gap_lo, a / 3, gap_hi - gap_lo)
+            end
+            if b > 0 then
+                ret[#ret + 1] = string.format("%g %g %g %g re", wd - b / 3, gap_lo, b / 3, gap_hi - gap_lo)
+            end
+            ret[#ret + 1] = "f"
+        elseif horizontal then
+            ret[#ret + 1] = string.format("0 %g %g %g re 0 %g %g %g re f", lo, wd, t, hi, wd, t)
+        else
+            ret[#ret + 1] = string.format("%g %g %g %g re %g %g %g %g re f", lo, y0, t, ht, hi, y0, t, ht)
+        end
+    else
+        local dash, period, origin
+        if spec.style == "dashed" then
+            dash = string.format("[%g %g]", 3 * fw, 2 * fw)
+            period, origin = 5 * fw, 0
+        else
+            -- round dots, the first one touches the origin
+            dash = string.format("1 J [0 %g]", 2 * fw)
+            period, origin = 2 * fw, fw / 2
+        end
+        local phase = (sp_to_bp(spec.phase) - origin) % period
+        local path
+        if horizontal then
+            path = string.format("0 %g m %g %g l", c, wd, c)
+        else
+            -- from top to bottom
+            path = string.format("%g %g m %g %g l", c, y0 + ht, c, y0)
+        end
+        ret[#ret + 1] = string.format("%g w %s %g d %s S", fw, dash, phase, path)
+    end
+    return table.concat(ret, " ")
+end
+
+local styled_bars = { dashed = true, dotted = true, double = true }
+
 -- Builds a colored bar (hrule wrapped in an hbox) with the given metrics.
 ---@param wd integer Width in sp.
 ---@param ht integer Height in sp (above baseline).
@@ -1029,8 +1124,9 @@ end
 ---@param color string|integer Color name or index.
 ---@param origin? string Origin tag for `setprop` (debugging).
 ---@param orientation? "horizontal"|"vertical" Defaults to horizontal.
+---@param style? RuleStyle Dashed, dotted or double instead of solid (table cells).
 ---@return Node hbox
-function M.colorbar(wd, ht, dp, color, origin, orientation)
+function M.colorbar(wd, ht, dp, color, origin, orientation, style)
     local colorname = color
     if color == "-" then
         -- ok, ignore
@@ -1053,7 +1149,9 @@ function M.colorbar(wd, ht, dp, color, origin, orientation)
         local data = "q " .. colors_module.colors[colorname].pdfstring
         local rule_width_bp, rule_length_bp
 
-        if not publisher.options.tablerulefix then
+        if style and styled_bars[style.style] then
+            data = data .. " " .. styled_bar_pdfstring(wd_bp, ht_bp, orientation, style) .. " Q "
+        elseif not publisher.options.tablerulefix then
             if orientation == "horizontal" then
                 -- draw horizontal line
                 rule_width_bp = ht_bp

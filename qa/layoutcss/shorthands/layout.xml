@@ -5,7 +5,7 @@
          cells. Every line names the expected result, nothing red may
          appear. A Td border without a style is drawn solid, a td border in
          HTML needs a style (as in CSS). One warning is expected (border
-         style dashed is drawn solid). -->
+         style groove is drawn solid). -->
     <Pageformat width="120mm" height="200mm"/>
     <SetGrid width="5mm" height="5mm"/>
 
@@ -25,6 +25,7 @@
         td.attr { border-style: none }
         td.cc { color: green; border: 1pt solid currentcolor }
         td.dashed { border: 1pt dashed green }
+        td.groove { border: 1pt groove green }
         td.width { border-right: 2pt }
         td.pad { padding-left: 20mm }
         td.pad.x { padding: 1mm }
@@ -51,7 +52,8 @@
                 <Tr><Td class="none"><Paragraph><Value>no frame (border-style: none)</Value></Paragraph></Td></Tr>
                 <Tr><Td class="attr" border-top="1pt" border-top-color="green"><Paragraph><Value>green line on top (attribute beats style none)</Value></Paragraph></Td></Tr>
                 <Tr><Td class="cc"><Paragraph><Value>green text and frame (currentcolor)</Value></Paragraph></Td></Tr>
-                <Tr><Td class="dashed"><Paragraph><Value>green frame (dashed, drawn solid)</Value></Paragraph></Td></Tr>
+                <Tr><Td class="dashed"><Paragraph><Value>green dashed frame</Value></Paragraph></Td></Tr>
+                <Tr><Td class="groove"><Paragraph><Value>green frame (groove, drawn solid)</Value></Paragraph></Td></Tr>
                 <Tr><Td class="width"><Paragraph><Value>black line right (border-right: 2pt)</Value></Paragraph></Td></Tr>
                 <Tr><Td class="pad x" border-left="0.5pt"><Paragraph><Value>1mm padding left (more specific padding)</Value></Paragraph></Td></Tr>
                 <Tr><Td class="padlong" border-left="0.5pt"><Paragraph><Value>10mm padding left (later padding-left)</Value></Paragraph></Td></Tr>
