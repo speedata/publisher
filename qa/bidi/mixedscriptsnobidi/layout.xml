@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<!-- Runs of several scripts in a paragraph with bidi="no".
+	     1 and 2: Latin in Arabic has another direction, so the text is
+	     shaped as one right-to-left segment (Latin reversed, word order
+	     of the Arabic kept). Splitting by script placed the runs from
+	     left to right.
+	     3: Latin and Bengali are both left-to-right, so they are split
+	     (Bengali conjuncts as in harfbuzz/mixedscripts) and stay in this
+	     order in the right-to-left paragraph. -->
+	<LoadFontfile name="amiri" filename="amiri-subset.ttf" />
+	<LoadFontfile name="beng" filename="bengali-subset.ttf">
+		<Fallback filename="texgyreheros-regular.otf" />
+	</LoadFontfile>
+
+	<DefineFontfamily name="amiri" fontsize="12" leading="18">
+		<Regular fontface="amiri" />
+	</DefineFontfamily>
+	<DefineFontfamily name="beng" fontsize="12" leading="16">
+		<Regular fontface="beng" />
+	</DefineFontfamily>
+
+	<Record element="data">
+		<PlaceObject>
+			<Textblock width="15">
+				<Paragraph fontfamily="amiri" bidi="no">
+					<Value>العاشر ليونيكود (Unicode Conference)، الذي سيعقد في 10-12 آذار 1997 مبدينة</Value>
+				</Paragraph>
+				<Paragraph fontfamily="amiri" bidi="no" direction="rtl">
+					<Value>العاشر ليونيكود (Unicode Conference)، الذي سيعقد في 10-12 آذار 1997 مبدينة</Value>
+				</Paragraph>
+				<Paragraph fontfamily="beng" bidi="no" direction="rtl">
+					<Value>A: একমাত্ৰ পুত্ৰকে</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>

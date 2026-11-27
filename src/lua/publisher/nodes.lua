@@ -1858,6 +1858,24 @@ function M.split_by_script(str)
     return runs
 end
 
+-- Horizontal direction of each script, as HarfBuzz derives it.
+---@type table<string, string>
+local script_direction_cache = {}
+
+---@param script string ISO 15924 tag.
+---@return string direction `"ltr"` or `"rtl"`.
+local function script_direction(script)
+    local dir = script_direction_cache[script]
+    if not dir then
+        local buf = publisher.harfbuzz.Buffer.new()
+        buf:set_script(publisher.harfbuzz.Script.new(script))
+        buf:guess_segment_properties()
+        dir = tostring(buf:get_direction())
+        script_direction_cache[script] = dir
+    end
+    return dir
+end
+
 -- Top-level entry point: turns a string `str` plus `parameter` (font,
 -- color, decoration, ...) into a node list shaped with HarfBuzz.
 ---@param str string Text segment.
@@ -1969,9 +1987,32 @@ function M.mknodes(str, parameter, _origin, bidi_offset)
         local itemized = {}
         for _, seg in ipairs(segments) do
             local runs = M.split_by_script(seg[2])
+            local level = seg[3]
+            if runs and not seg[1] and not level then
+                -- Without bidi, HarfBuzz used to take the direction of the
+                -- whole segment from its first script. The runs stay
+                -- together if they all have this direction: they get one
+                -- embedding level, so they end up in one dir node like the
+                -- segment before. Mixed directions (Latin in Arabic) are
+                -- shaped as one segment, as without the split.
+                local dir = script_direction(runs[1][2])
+                for j = 2, #runs do
+                    if script_direction(runs[j][2]) ~= dir then
+                        runs = nil
+                        break
+                    end
+                end
+                if runs then
+                    if dir == "rtl" then
+                        level = 1
+                    else
+                        level = paralevel == 1 and 2 or 0
+                    end
+                end
+            end
             if runs then
                 for _, run in ipairs(runs) do
-                    itemized[#itemized + 1] = { seg[1], run[1], seg[3], run[2] }
+                    itemized[#itemized + 1] = { seg[1], run[1], level, run[2] }
                 end
             else
                 itemized[#itemized + 1] = seg
