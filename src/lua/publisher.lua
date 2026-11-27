@@ -2198,7 +2198,7 @@ do
                         and startlink.subtype == M.pdf_start_link_whatsit
                     then
                         local action = assert(startlink.action)
-                        action.data = action.data .. "/F 2" .. string.format("/P %s 0 R ", page)
+                        action.data = action.data .. string.format("/P %s 0 R ", page)
                         linkobject = { obj = M.attribute_helpers.getprop(head, "linkobjnum"), page = page }
                     end
                 end

@@ -35,6 +35,22 @@ function M.get(index)
     return hyperlinks[index]
 end
 
+-- Returns the annotation dictionary entries of the hyperlink at the given
+-- index for a `pdf_start_link` action. PDF/A requires the F key with the
+-- Print flag for every link (ISO 19005-3, 6.3.2), PDF/UA documents get it
+-- too. The format is read when the page is shipped out, so an AttachFile
+-- (switching to PDF/A-3) after the link still counts.
+---@param options table Publisher options.
+---@param index integer
+---@return string data
+function M.annotation_data(options, index)
+    local data = tostring(hyperlinks[index])
+    if options.format == "PDF/A-3" or options.format == "PDF/UA" then
+        data = data .. "/F 4"
+    end
+    return data
+end
+
 -- Returns the most recently added hyperlink entry.
 ---@return string|table|nil
 function M.last()

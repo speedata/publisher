@@ -112,7 +112,7 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
     local set_attrs = publisher.attribute_helpers.set_attributes
     local default_stack = publisher.defaultcolorstack
     local opt_format = publisher.options.format
-    local links_get = links_module.get
+    local links_annotation_data = links_module.annotation_data
     local node_new = node.new
     local node_insert_before = node.insert_before
     local node_insert_after = node.insert_after
@@ -368,7 +368,7 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                     linklevel = linklevel + 1
                     -- 3 = user
                     local ai = publisher.structure_tree.get_action_node(3)
-                    ai.data = tostring(links_get(assert(hl)))
+                    ai.data = links_annotation_data(publisher.options, assert(hl))
                     local stl = node_new("whatsit", "pdf_start_link")
                     stl.action = ai
                     stl.width = -1073741824

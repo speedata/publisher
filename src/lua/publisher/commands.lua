@@ -113,8 +113,7 @@ function commands.a(layoutxml, dataxml)
             c = tab[1].contents
         end
         local ai = publisher.structure_tree.get_action_node(3)
-        local data = links_module.get(hyperlink_index)
-        ai.data = tostring(data)
+        ai.data = links_module.annotation_data(publisher.options, hyperlink_index)
 
         local stl = node.new("whatsit", "pdf_start_link")
         stl.action = ai
